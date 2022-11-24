@@ -42,7 +42,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "Edit",
             "Team" => "Edit",
             "Independent Activity" => "Edit",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "Edit"
         ];
 
         $courseCreatorUiPermissions = [
@@ -70,7 +71,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "Edit",
             "Team" => "Edit",
             "Independent Activity" => "Edit",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "Edit"
         ];
 
         $memberUiPermissions = [
@@ -98,7 +100,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "View",
             "Team" => "View",
             "Independent Activity" => "View",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "View"
         ];
 
         $selfRegisteredUiPermissions = [
@@ -126,7 +129,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "Edit",
             "Team" => "Edit",
             "Independent Activity" => "Edit",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "View"
         ];
 
         $roleTypes = OrganizationRoleType::whereIn('name', ['admin', 'course_creator', 'member', 'self_registered'])->get();
