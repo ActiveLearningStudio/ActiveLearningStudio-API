@@ -72,22 +72,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
-        if ($is_updated) {
-            $project = $this->model->find($id);
-
-            $project->searchable();
-
-            foreach ($project->playlists as $playlist)
-            {
-                $playlist->searchable();
-
-                foreach ($playlist->activities as $activity)
-                {
-                    $activity->searchable();
-                }
-            }
-        }
-
         return $is_updated;
     }
 

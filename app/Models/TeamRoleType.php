@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TeamRoleType extends Model
 {
-    use Searchable;
-
     /**
      * The attributes that are mass assignable.
      *

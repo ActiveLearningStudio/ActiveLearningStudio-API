@@ -92,10 +92,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     {
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
-        if ($is_updated) {
-            $this->model->where('id', $id)->searchable();
-        }
-
         return $is_updated;
     }
 
