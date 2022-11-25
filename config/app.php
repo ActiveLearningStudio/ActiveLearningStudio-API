@@ -189,7 +189,8 @@ return [
          * Custom Service Providers
          */
         App\Providers\QueueMonitorProvider::class,
-        Superbalist\LaravelPrometheusExporter\PrometheusServiceProvider::class
+
+        Laravel\Passport\PassportServiceProvider::class,
     ],
 
     /*
@@ -241,8 +242,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Prometheus' => Superbalist\LaravelPrometheusExporter\PrometheusFacade::class
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class
 
     ],
 

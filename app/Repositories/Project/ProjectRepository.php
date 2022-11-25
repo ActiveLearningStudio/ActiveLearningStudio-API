@@ -72,22 +72,6 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
-        if ($is_updated) {
-            $project = $this->model->find($id);
-
-            $project->searchable();
-
-            foreach ($project->playlists as $playlist)
-            {
-                $playlist->searchable();
-
-                foreach ($playlist->activities as $activity)
-                {
-                    $activity->searchable();
-                }
-            }
-        }
-
         return $is_updated;
     }
 
@@ -594,34 +578,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             throw new GeneralException('Invalid Library value provided.');
         }
         $project->update(['indexing' => $index]);
-        $this->indexProjects([$project->id]);
         return 'Library status changed successfully!';
-    }
-
-    /**
-     * @param $projects
-     * Indexing of the projects
-     */
-    public function indexProjects($projects): void
-    {
-        if (empty($projects)) {
-            return;
-        }
-        // first get the collection of playlists - needed in activities update
-        $playlists = Playlist::whereIn('project_id', $projects)->get('id');
-
-        // search-able is needed as on collections update observer will not get fired
-        // so searchable will updated the elastic search index via scout package
-        // update directly on query builder
-        $this->model->whereIn('id', $projects)->searchable();
-
-        // to fire observer update should be done on each single instance of models
-        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
-        // prepare the query builder from collections and perform update
-        Playlist::whereIn('project_id', $projects)->searchable();
-
-        // update related activities by getting keys of parent playlists
-        Activity::whereIn('playlist_id', $playlists->modelKeys())->searchable();
     }
 
     /**

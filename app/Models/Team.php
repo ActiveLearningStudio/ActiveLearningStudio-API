@@ -3,14 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\GlobalScope;
-use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
 
 class Team extends Model
 {
-    use SoftDeletes, Searchable, CustomSearch, GlobalScope;
+    use SoftDeletes, GlobalScope;
 
     /**
      * The attributes that are mass assignable.
@@ -84,23 +82,6 @@ class Team extends Model
         }
 
         return null;
-    }
-
-    /**
-     * Get the attributes to be indexed in Elasticsearch
-     */
-    public function toSearchableArray()
-    {
-        $searchable = [
-            'team_id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'indexing' => $this->indexing,
-            'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
-            'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
-        ];
-
-        return $searchable;
     }
 
     /**
