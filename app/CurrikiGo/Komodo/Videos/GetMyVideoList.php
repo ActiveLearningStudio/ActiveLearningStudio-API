@@ -28,18 +28,13 @@ class GetMyVideoList
 
     /**
      * Fetch a my videos list from Komodo
-     * @param object $setting, array $getParam
-     * @return array
-     * @throws GeneralException
+     * @param $setting array, $getParam array
+     * @return json object
      */
     public function fetch($setting, $getParam)
     {
         $response = $this->komodoClient->run(new GetMyVideoListCommand($setting, $getParam));
-        if ( $response) {
-            return $response;
-        } else {
-            throw new GeneralException('No Record Found!');
-        }
+        return $response->json();
     }
 
 }
