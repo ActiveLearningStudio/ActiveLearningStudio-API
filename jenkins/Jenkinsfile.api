@@ -1,6 +1,6 @@
 node("currikidev") {
     def app
-    //def cron
+    def cron
       
     
     
@@ -10,28 +10,25 @@ node("currikidev") {
     
     stage('Build image') {         
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
-        //cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron .")
+        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1 .")
     } 
     stage('Test image') {           
         app.inside { 
                 sh 'echo "Api Tests passed"'        
         }    
-       /* cron.inside { 
+       cron.inside { 
                 sh 'echo "Cron Tests passed"'        
         }
-        */
     } 
     stage('Push image') {	
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 app.push("${env.BUILD_NUMBER}")            
                 app.push("${tag}")
         }
-        /*
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                 cron.push("${env.BUILD_NUMBER}")            
                 cron.push("${tag}")
         }
-        */
     }
     
 
@@ -45,7 +42,7 @@ node("currikidev") {
                         stage ("${node}") {
                                 echo 'Copy'
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-api" 
-                                //sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
+                                sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
                                 echo 'Copy completed'
                         }
                     }
