@@ -10,7 +10,6 @@
     "require": {
         "php": "^7.3|^8.0",
         "doctrine/dbal": "^2.10",
-        "fideloper/proxy": "^4.2",
         "gnello/laravel-mattermost-driver": "^1.2",
         "google/apiclient": "^2.7",
         "guzzlehttp/guzzle": "^7.0.1",
