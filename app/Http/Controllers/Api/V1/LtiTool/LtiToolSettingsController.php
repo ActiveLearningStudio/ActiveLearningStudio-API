@@ -112,7 +112,6 @@ class LtiToolSettingsController extends Controller
      * @param StoreLtiToolSettingRequest $request
      * @param Organization $suborganization
      * @return LtiToolSettingResource
-     * @throws GeneralException
      */
     public function store(StoreLtiToolSettingRequest $request, Organization $suborganization)
     {
@@ -129,17 +128,11 @@ class LtiToolSettingsController extends Controller
             'tool_secret_key',
             'tool_content_selection_url'
         ]);
-        $checkDuplicate = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($data['organization_id'], $data['media_source_id']);
-        if ( empty($checkDuplicate) ) {
-            $parse = parse_url($data['tool_url']);
-            $data['tool_domain'] = $parse['host'];
-            $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
-            $response = $this->ltiToolSettingRepository->create($data);
-            return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
-        } else {
-            $mediaName = $checkDuplicate->mediaSources->name;
-            throw new GeneralException('You have already created ' . $mediaName . ' settings!');
-        }
+        $parse = parse_url($data['tool_url']);
+        $data['tool_domain'] = $parse['host'];
+        $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
+        $response = $this->ltiToolSettingRepository->create($data);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
         
     }
 
