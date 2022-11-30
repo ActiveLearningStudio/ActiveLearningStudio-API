@@ -46,6 +46,13 @@
                 "name": "global",
                 "display_name": "My Org + Parent and Child Org"
             }
-        ]
+        ],
+        "msteam_client_id" : null,
+        "msteam_secret_id" : null,
+        "msteam_tenant_id" : null,
+        "msteam_secret_id_expiry": null,
+        "msteam_project_visibility": true,
+        "msteam_playlist_visibility": false,
+        "msteam_activity_visibility": false
     }
 }

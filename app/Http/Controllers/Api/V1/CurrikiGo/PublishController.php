@@ -22,6 +22,9 @@ use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\CurrikiGo\Canvas\Course as CanvasCourse;
+use App\Http\Requests\V1\CurrikiGo\CreateAssignmentRequest;
+use App\Http\Requests\V1\CurrikiGo\PublishMoodlePlaylistRequest;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -75,13 +78,13 @@ class PublishController extends Controller
      *   ]
      * }
      *
-     * @param PublishPlaylistRequest $publishRequest
+     * @param PublishMoodlePlaylistRequest $publishRequest
      * @param Project $project
      * @param Playlist $playlist
      * @return Response
      */
     // TODO: need to add 200 response
-    public function playlistToMoodle(PublishPlaylistRequest $publishRequest, Project $project, Playlist $playlist)
+    public function playlistToMoodle(PublishMoodlePlaylistRequest $publishRequest, Project $project, Playlist $playlist)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -167,13 +170,19 @@ class PublishController extends Controller
             $canvasClient = new Client($lmsSettings);
             $canvasPlaylist = new CanvasPlaylist($canvasClient);
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
-            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter]);
+            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter], $publishRequest->creation_type, $publishRequest->canvas_course_id);
 
             if ($outcome) {
                 return response([
                     'playlist' => $outcome,
                 ], 200);
-            } else {
+            } 
+            elseif ($outcome == false) {
+                return response([
+                    'errors' => ['Something went wrong while publishing.'],
+                ], 400);
+            } 
+            else {
                 return response([
                     'errors' => ['Failed to send playlist to canvas.'],
                 ], 500);
@@ -254,6 +263,68 @@ class PublishController extends Controller
             } else {
                 return response([
                     'errors' => ['Failed to send playlist to Safari Montage.'],
+                ], 500);
+            }
+        }
+
+        return response([
+            'errors' => ['You are not authorized to perform this action.'],
+        ], 403);
+    }
+
+    /**
+     * Publish Activity to Canvas.
+     *
+     * Publish the specified playlist to Canvas.
+     *
+     * @urlParam project required The Id of the project Example: 1
+     * @urlParam playlist required The Id of the playlist Example: 1
+     * @urlParam activity required The Id of the activity Example: 1
+     * @bodyParam setting_id int The Id of the LMS setting Example: 1
+     * @bodyParam counter int The counter for uniqueness of the title Example: 1
+     *
+     * @responseFile responses/curriki-go/assignment-to-canvas.json
+     *
+     * @response 400 {
+     *   "errors": [
+     *     "Invalid project or activity Id."
+     *   ]
+     * }
+     *
+     * @response 403 {
+     *   "errors": [
+     *     "You are not authorized to perform this action."
+     *   ]
+     * }
+     *
+     * @response  500 {
+     *   "errors": [
+     *     "Failed to send activity to Canvas."
+     *   ]
+     * }
+     *
+     * @param courseId
+     * @param CreateAssignmentRequest $publishRequest
+     * @return Response
+     */
+    public function activityToCanvas($courseId, CreateAssignmentRequest $publishRequest)
+    {
+        $project = Activity::find($publishRequest->curriki_activity_id)->playlist->project;
+        if (Gate::forUser(auth()->user())->allows('publish-to-lms', $project)) {
+            // User can publish
+            $lmsSettings = $this->lmsSettingRepository->find($publishRequest['setting_id']);
+            $canvasClient = new Client($lmsSettings);
+            $easyUpload = new CanvasCourse($canvasClient);
+
+            $outcome = $easyUpload->createActivity($courseId, $publishRequest->assignment_group_id, $publishRequest->assignment_name, $publishRequest->curriki_activity_id);
+
+            if ($outcome) {
+                return response([
+                    'Activity' => $outcome,
+                ], 200);
+            } else {
+                return response([
+                    'errors' => ['Failed to Publish to canvas.'],
                 ], 500);
             }
         }

@@ -363,7 +363,6 @@ class AjaxController extends Controller
             }
         }
 
-
         // Order dependencies by weight
         $orderedDependencies = array();
         for ($i = 1, $s = count($dependencies); $i <= $s; $i++) {
