@@ -8,7 +8,8 @@ node("currikidev") {
         checkout scm    
     }  
     
-    stage('Build image') {         
+    stage('Build image') {        
+        echo "${api-env}" > .api-env 
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}")
         cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron .")
     } 
