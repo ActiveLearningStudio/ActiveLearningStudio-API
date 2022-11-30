@@ -9,9 +9,9 @@ node("currikidev") {
     }  
     
     stage('Build image') {        
-        writeFile file: 'apienv.txt', text: "${apienv}"
-        sh 'ls -l apienv.txt'
-        sh 'cat apienv.txt'
+        writeFile file: '.env', text: "${apienv}"
+        sh 'ls -l .env'
+        sh 'cat .env'
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}")
         cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron .")
     } 

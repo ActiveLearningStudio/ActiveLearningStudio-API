@@ -79,7 +79,10 @@ COPY ./php.ini /usr/local/etc/php/
 
 #RUN chown -R 1000 /var/www/html
 
-
+RUN composer install
+RUN php /var/www/html/artisan optimize
+RUN php /var/www/html/artisan config:cache
+RUN php /var/www/html/artisan test
 COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
