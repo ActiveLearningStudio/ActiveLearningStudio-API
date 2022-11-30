@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class GenerateFailedJobsUuidSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class GenerateFailedJobsUuidSeeder extends Seeder
         DB::table('failed_jobs')->whereNull('uuid')->cursor()->each(function ($job) {
             DB::table('failed_jobs')
                 ->where('id', $job->id)
-                ->update(['uuid' => (string) Illuminate\Support\Str::uuid()]);
+                ->update(['uuid' => (string) Str::uuid()]);
         });
     }
 }

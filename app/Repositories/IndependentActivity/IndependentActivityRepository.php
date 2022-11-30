@@ -13,7 +13,6 @@ use App\Models\AuthorTag;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
-use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchPostgreSqlResource;
@@ -33,7 +32,6 @@ use RecursiveDirectoryIterator;
 
 class IndependentActivityRepository extends BaseRepository implements IndependentActivityRepositoryInterface
 {
-    private $h5pElasticsearchFieldRepository;
     private $subjectRepository;
     private $educationLevelRepository;
     private $client;
@@ -43,14 +41,12 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * IndependentActivityRepository constructor.
      *
      * @param IndependentActivity $model
-     * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
      * @param SubjectRepositoryInterface $subjectRepository
      * @param EducationLevelRepositoryInterface $educationLevelRepository
      * @param H5pContentRepositoryInterface $h5pContentRepository
      */
     public function __construct(
         IndependentActivity $model,
-        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
         SubjectRepositoryInterface $subjectRepository,
         EducationLevelRepositoryInterface $educationLevelRepository,
         H5pContentRepositoryInterface $h5pContentRepository
@@ -58,7 +54,6 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
-        $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
         $this->subjectRepository = $subjectRepository;
         $this->educationLevelRepository = $educationLevelRepository;
         $this->h5pContentRepository = $h5pContentRepository;

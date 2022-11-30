@@ -24,7 +24,6 @@
                             "shared": true,
                             "is_public": false,
                             "starter_project": false,
-                            "elasticsearch": false,
                             "organization_id": null,
                             "organization_visibility_type_id": null,
                             "cloned_from": 1,
