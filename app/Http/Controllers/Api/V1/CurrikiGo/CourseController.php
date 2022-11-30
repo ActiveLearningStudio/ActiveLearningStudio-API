@@ -116,17 +116,23 @@ class CourseController extends Controller
         $canvasCourse = new CanvasCourse($canvasClient);
         $outcome = $canvasCourse->fetchAllCourses();
 
-        if ($outcome) {
+        if (!is_int($outcome)) {
             return response([
                 'response_code' => 200,
                 'response_message' => 'Fetched all the courses',
                 'data' => $outcome,
             ], 200);
-        } else {
+        } elseif ($outcome === 401 || $outcome === 403) {
             return response([
-                'response_code' => 200,
-                'response_message' => 'No Courses found',
+                'response_code' => $outcome,
+                'response_message' => 'Canvas token is invalid, expired or missing permission to create a course',
                 'data' => $outcome,
+            ], $outcome);
+        }else {
+            return response([
+                'response_code' => $outcome,
+                'response_message' => 'No Courses found',
+                'data' => [],
             ], 200);
         }
     }
