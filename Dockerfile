@@ -85,6 +85,7 @@ RUN composer install
 RUN php /var/www/html/artisan optimize
 RUN php /var/www/html/artisan config:cache
 RUN php /var/www/html/artisan test
+RUN cat /var/www/html/.env
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
 
