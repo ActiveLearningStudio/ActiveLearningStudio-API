@@ -9,7 +9,7 @@ node("currikidev") {
     }  
     
     stage('Build image') {        
-        writeFile file: 'apienv.txt', text: "${api-env}"
+        writeFile file: 'apienv.txt', text: "${apienv}"
         sh 'ls -l apienv.txt'
         sh 'cat apienv.txt'
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}")
