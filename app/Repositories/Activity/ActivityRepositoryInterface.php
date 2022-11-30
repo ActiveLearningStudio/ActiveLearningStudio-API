@@ -28,14 +28,6 @@ interface ActivityRepositoryInterface extends EloquentRepositoryInterface
     public function advanceSearchForm($data, $authUser = null);
 
     /**
-     * Get the H5P Elasticsearch Field Values.
-     *
-     * @param Object $h5pContent
-     * @return array
-     */
-    public function getH5pElasticsearchFields($h5pContent);
-
-    /**
      * To clone a playlist and associated activities
      *
      * @param Playlist $playlist

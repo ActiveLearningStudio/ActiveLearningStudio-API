@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterElasticsearchToActivitiesTable extends Migration
+class DropElasticSearchColFromActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AlterElasticsearchToActivitiesTable extends Migration
      */
     public function up()
     {
-        Schema::table('activities', function (Blueprint $table) {
-            $table->boolean('elasticsearch')->default(false)->change();
-        });
+        if (Schema::hasColumn('activities', 'elasticsearch')) {
+            Schema::table('activities', function (Blueprint $table) {
+                $table->dropColumn('elasticsearch');
+            });
+        }
+        
     }
 
     /**
