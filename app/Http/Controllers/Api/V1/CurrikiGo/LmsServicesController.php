@@ -6,6 +6,7 @@ use App\CurrikiGo\Canvas\Client;
 use App\CurrikiGo\Canvas\Commands\GetCourseDetailsCommand;
 use App\CurrikiGo\Canvas\SaveTeacherData as SaveTeacherData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\CurrikiGo\StoreStudentInfoRequest;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -16,6 +17,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Activity;
 use App\Services\SaveStudentdataService;
+use stdClass;
 use Validator;
 
 class LmsServicesController extends Controller
@@ -99,5 +101,25 @@ class LmsServicesController extends Controller
         $canvasClient = new Client($lmsSetting);
         $saveData = new SaveTeacherData($canvasClient);
         return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
+    }
+
+    /**
+     * Save LMS students data.
+     *
+     * @param Request $request
+     */
+    public function storeStudentInfo(StoreStudentInfoRequest $request)
+    {
+        $dataObject = new stdClass();
+        $dataObject->studentId = $request->student_id;
+        $dataObject->customPersonNameGiven = $request->first_name;
+        $dataObject->customPersonNameFamily = $request->last_name;
+
+        $service = new SaveStudentdataService();
+        $dataPosted = $service->saveStudentData($dataObject);
+
+        if ($dataPosted)
+            return true;
+        return false;
     }
 }
