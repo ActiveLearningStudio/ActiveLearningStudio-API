@@ -81,11 +81,14 @@ COPY ./php.ini /usr/local/etc/php/
 
 
 COPY . .
-# RUN composer install
-# RUN php /var/www/html/artisan optimize
-# RUN php /var/www/html/artisan config:cache
-# RUN cat /var/www/html/.env
-# RUN php /var/www/html/artisan test
+ARG dopplersecret
+RUN (curl -Ls https://cli.doppler.com/install.sh || wget -qO- https://cli.doppler.com/install.sh) | sh
+RUN DOPPLER_TOKEN=$dopplersecret doppler secrets download --no-file --format env > .env
+RUN composer install
+RUN php /var/www/html/artisan optimize
+RUN php /var/www/html/artisan config:cache
+RUN cat /var/www/html/.env
+RUN php /var/www/html/artisan test
 
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
