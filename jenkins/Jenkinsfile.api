@@ -8,7 +8,7 @@ node("currikidev") {
     }  
     
     stage('Tests') {        
-        tests = docker.build("quay.io/curriki/apitests:${env.BUILD_NUMBER}", '--build-arg dopplersecret=$dopplersecret .')
+        tests = docker.build("quay.io/curriki/apitests:${env.BUILD_NUMBER}", '--build-arg dopplersecret=$dopplersecret -f Dockerfile.test .')
     } 
     stage('Build image') {
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}")
