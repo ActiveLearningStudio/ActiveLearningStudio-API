@@ -1,0 +1,106 @@
+name: '11. CurrikiGo Course'
+description: |-
+
+  APIs for fetching courses from LMSs
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/go/canvas/projects/{project_id}/fetch'
+    metadata:
+      title: 'Fetch a Course'
+      description: 'Fetch a Course from Canvas'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 3024
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of the project Example 1'
+        required: true
+        example: harum
+        type: string
+        custom: []
+    queryParameters: []
+    bodyParameters:
+      setting_id:
+        name: setting_id
+        description: 'The Id of the LMS setting Example 1'
+        required: false
+        example: 2
+        type: integer
+        custom: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Validation error"
+            ]
+          }
+        headers: []
+        description: '400'
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You are not authorized to perform this action."
+            ]
+          }
+        headers: []
+        description: '403'
+      -
+        status: 200
+        content: "{\r\n    \"project\": {\r\n        \"course\": \"How to build a playlist in CurrikiStudio\",\r\n        \"playlists\": [\r\n            \"Playlist 1\",\r\n            \"Playlist 2\",\r\n            \"Playlist 3\",\r\n            \"Playlist 4\"\r\n        ]\r\n    }\r\n}\r\n"
+        headers: []
+        description: '200'
+    responseFields: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/go/{lms}/projects/{project_id}/fetch'
+    metadata:
+      title: 'Fetch a Course from Generic'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      lms:
+        name: lms
+        description: ''
+        required: true
+        example: atque
+        type: string
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 3024
+        type: integer
+        custom: []
+    queryParameters: []
+    bodyParameters:
+      setting_id:
+        name: setting_id
+        description: ''
+        required: true
+        example: dolor
+        type: string
+        custom: []
+    responses: []
+    responseFields: []
