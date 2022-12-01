@@ -793,7 +793,7 @@ class IndependentActivityController extends Controller
     public function getH5pResourceSettingsShared(IndependentActivity $independent_activity)
     {
         // 3 is for indexing approved - see IndependentActivity Model @indexing property
-        if ($independent_activity->shared || ($independent_activity->indexing === (int)config('constants.indexing-approved'))) {
+        if ($independent_activity->shared) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();
