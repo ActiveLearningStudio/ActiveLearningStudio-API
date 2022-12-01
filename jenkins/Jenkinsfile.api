@@ -1,24 +1,26 @@
 node("currikidev") {
     def app
     def cron
-      
-    
-    
+    def tests
+
     stage('Clone repository') {               
         checkout scm    
     }  
     
-    stage('Build image') {        
-        app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", '--build-arg dopplersecret=$dopplersecret .')
+    stage('Tests') {        
+        tests = docker.build("quay.io/curriki/apitests:${env.BUILD_NUMBER}", '--build-arg dopplersecret=$dopplersecret .')
+    } 
+    stage('Build image') {
+        app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}")
         cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron .")
     } 
-    stage('Test image') {           
-        app.inside { 
-                sh 'echo "Api Tests passed"'        
-        }    
-        cron.inside { 
-                sh 'echo "Cron Tests passed"'        
-        }    
+    stage('Test image') {
+        app.inside {
+                sh 'echo "Api Tests passed"'
+        }
+        cron.inside {
+                sh 'echo "Cron Tests passed"'
+        }
     } 
     stage('Push image') {	
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
