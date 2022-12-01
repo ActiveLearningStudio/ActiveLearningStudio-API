@@ -58,4 +58,13 @@ class LmsSettingRepository extends BaseRepository implements LmsSettingRepositor
         return null;
 
     }
+    /**
+     * @param integer $clientId
+     * @param string $userEmail
+     * 
+     * @return string
+     */
+    public function getOrganization($clientId, $userEmail){
+        return $this->model->where('lti_client_id', $clientId)->where('lms_login_id', $userEmail)->first();
+    }
 }
