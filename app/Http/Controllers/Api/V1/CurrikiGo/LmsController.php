@@ -105,7 +105,7 @@ class LmsController extends Controller
             $service->saveStudentData($data);
         }
 
-        $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
+        $lmsSetting = $this->lmsSettingRepository->getOrganization($data->issuerClient, $request->user_email);
         $lms_organization_id = null;
 
         if ($lmsSetting) {
