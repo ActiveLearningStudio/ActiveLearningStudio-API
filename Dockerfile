@@ -87,6 +87,7 @@ RUN chmod 777 -R /var/www/html/storage
 RUN (curl -Ls https://cli.doppler.com/install.sh || wget -qO- https://cli.doppler.com/install.sh) | sh
 RUN DOPPLER_TOKEN=$dopplersecret doppler secrets download --no-file --format env > .env
 RUN composer install
+RUN php /var/www/html/artisan passport:install
 RUN php /var/www/html/artisan config:cache
 RUN cat /var/www/html/.env
 RUN ls /var/www/html
