@@ -83,6 +83,7 @@ COPY ./php.ini /usr/local/etc/php/
 COPY . .
 RUN apt-get install gnupg -y
 ARG dopplersecret
+RUN chmod 777 -R /var/www/html/storage
 RUN (curl -Ls https://cli.doppler.com/install.sh || wget -qO- https://cli.doppler.com/install.sh) | sh
 RUN DOPPLER_TOKEN=$dopplersecret doppler secrets download --no-file --format env > .env
 RUN composer install
