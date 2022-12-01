@@ -1,0 +1,34 @@
+name: '17. Organization Permission Type API'
+description: |-
+
+  APIs for Organization Permission Types
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/permissions
+    metadata:
+      title: 'Get All Organization Permission Type'
+      description: 'Get a list of the organization permission type.'
+      authenticated: true
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      query:
+        name: query
+        description: 'Query to search organization permission types against'
+        required: true
+        example: edit
+        type: string
+        custom: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 25,\r\n            \"name\": \"activity:edit\",\r\n            \"display_name\": \"Edit Activity\",\r\n            \"feature\": \"Activity\"\r\n        },\r\n        {\r\n            \"id\": 43,\r\n            \"name\": \"group:edit\",\r\n            \"display_name\": \"Edit Group\",\r\n            \"feature\": \"Group\"\r\n        },\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"organization:edit\",\r\n            \"display_name\": \"Edit Organization\",\r\n            \"feature\": \"Organization\"\r\n        },\r\n        {\r\n            \"id\": 19,\r\n            \"name\": \"playlist:edit\",\r\n            \"display_name\": \"Edit Playlist\",\r\n            \"feature\": \"Playlist\"\r\n        },\r\n        {\r\n            \"id\": 10,\r\n            \"name\": \"project:edit\",\r\n            \"display_name\": \"Edit Project\",\r\n            \"feature\": \"Project\"\r\n        },\r\n        {\r\n            \"id\": 31,\r\n            \"name\": \"team:edit\",\r\n            \"display_name\": \"Edit Team\",\r\n            \"feature\": \"Team\"\r\n        },\r\n        {\r\n            \"id\": 57,\r\n            \"name\": \"user:edit\",\r\n            \"display_name\": \"Edit User\",\r\n            \"feature\": \"User\"\r\n        }\r\n    ]\r\n}"
+        headers: []
+        description: '200'
+    responseFields: []

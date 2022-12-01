@@ -1,0 +1,544 @@
+name: '18. Organization API'
+description: |-
+
+  APIs for Organization
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/organization/get-by-domain
+    metadata:
+      title: 'Get By Domain'
+      description: 'Get organization by domain'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      domain:
+        name: domain
+        description: 'Organization domain to get data for'
+        required: true
+        example: curriki
+        type: string
+        custom: []
+    responses:
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "domain": [
+                "The selected domain is invalid."
+              ]
+            }
+          }
+        headers: []
+        description: '422'
+      -
+        status: 200
+        content: "{\r\n    \"organization\": {\r\n        \"id\": 16,\r\n        \"name\": \"nassau\",\r\n        \"description\": \"nassau\",\r\n        \"image\": \"/storage/organizations/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n        \"favicon\": \"/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n        \"domain\": \"nassau\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: '200'
+    responseFields: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/organizations/search
+    metadata:
+      title: 'Search organization'
+      description: 'Search organization by name'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    queryParameters: []
+    bodyParameters:
+      query:
+        name: query
+        description: 'Organization name to get data for'
+        required: true
+        example: curriki
+        type: string
+        custom: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+              "message": "Unable to read key from file file://D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\storage\\oauth-public.key",
+              "exception": "LogicException",
+              "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\league\\oauth2-server\\src\\CryptKey.php",
+              "line": 67,
+              "trace": [
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php",
+                      "line": 275,
+                      "function": "__construct",
+                      "class": "League\\OAuth2\\Server\\CryptKey",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php",
+                      "line": 256,
+                      "function": "makeCryptKey",
+                      "class": "Laravel\\Passport\\PassportServiceProvider",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php",
+                      "line": 873,
+                      "function": "Laravel\\Passport\\{closure}",
+                      "class": "Laravel\\Passport\\PassportServiceProvider",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php",
+                      "line": 758,
+                      "function": "build",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php",
+                      "line": 851,
+                      "function": "resolve",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php",
+                      "line": 694,
+                      "function": "resolve",
+                      "class": "Illuminate\\Foundation\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Application.php",
+                      "line": 836,
+                      "function": "make",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\passport\\src\\PassportServiceProvider.php",
+                      "line": 304,
+                      "function": "make",
+                      "class": "Illuminate\\Foundation\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "function": "Laravel\\Passport\\{closure}",
+                      "class": "Laravel\\Passport\\PassportServiceProvider",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\RequestGuard.php",
+                      "line": 58,
+                      "function": "call_user_func"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\GuardHelpers.php",
+                      "line": 60,
+                      "function": "user",
+                      "class": "Illuminate\\Auth\\RequestGuard",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php",
+                      "line": 63,
+                      "function": "check",
+                      "class": "Illuminate\\Auth\\RequestGuard",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Auth\\Middleware\\Authenticate.php",
+                      "line": 42,
+                      "function": "authenticate",
+                      "class": "Illuminate\\Auth\\Middleware\\Authenticate",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Auth\\Middleware\\Authenticate",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 103,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+                      "line": 723,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+                      "line": 698,
+                      "function": "runRouteWithinStack",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+                      "line": 662,
+                      "function": "runRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php",
+                      "line": 651,
+                      "function": "dispatchToRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php",
+                      "line": 167,
+                      "function": "dispatch",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 128,
+                      "function": "Illuminate\\Foundation\\Http\\{closure}",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php",
+                      "line": 31,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php",
+                      "line": 40,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TrimStrings",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php",
+                      "line": 27,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php",
+                      "line": 86,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\app\\Http\\Middleware\\Cors.php",
+                      "line": 40,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "App\\Http\\Middleware\\Cors",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\fideloper\\proxy\\src\\TrustProxies.php",
+                      "line": 57,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 167,
+                      "function": "handle",
+                      "class": "Fideloper\\Proxy\\TrustProxies",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php",
+                      "line": 103,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php",
+                      "line": 142,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php",
+                      "line": 111,
+                      "function": "sendRequestThroughRouter",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php",
+                      "line": 299,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php",
+                      "line": 287,
+                      "function": "callLaravelOrLumenRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php",
+                      "line": 89,
+                      "function": "makeApiCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php",
+                      "line": 45,
+                      "function": "makeResponseCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php",
+                      "line": 35,
+                      "function": "makeResponseCallIfConditionsPass",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php",
+                      "line": 222,
+                      "function": "__invoke",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php",
+                      "line": 179,
+                      "function": "iterateThroughStrategies",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php",
+                      "line": 116,
+                      "function": "fetchResponses",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php",
+                      "line": 123,
+                      "function": "processRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php",
+                      "line": 80,
+                      "function": "extractEndpointsInfoFromLaravelApp",
+                      "class": "Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php",
+                      "line": 56,
+                      "function": "extractEndpointsInfoAndWriteToDisk",
+                      "class": "Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php",
+                      "line": 55,
+                      "function": "get",
+                      "class": "Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php",
+                      "line": 36,
+                      "function": "handle",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php",
+                      "line": 40,
+                      "function": "Illuminate\\Container\\{closure}",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php",
+                      "line": 93,
+                      "function": "unwrapIfClosure",
+                      "class": "Illuminate\\Container\\Util",
+                      "type": "::"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php",
+                      "line": 37,
+                      "function": "callBoundMethod",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php",
+                      "line": 653,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php",
+                      "line": 136,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\symfony\\console\\Command\\Command.php",
+                      "line": 298,
+                      "function": "execute",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php",
+                      "line": 121,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Command\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\symfony\\console\\Application.php",
+                      "line": 1040,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\symfony\\console\\Application.php",
+                      "line": 301,
+                      "function": "doRunCommand",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\symfony\\console\\Application.php",
+                      "line": 171,
+                      "function": "doRun",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php",
+                      "line": 94,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php",
+                      "line": 129,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "D:\\wamp64\\www\\ActiveLearningStudio-API-laravel-8\\artisan",
+                      "line": 37,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Console\\Kernel",
+                      "type": "->"
+                  }
+              ]
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
