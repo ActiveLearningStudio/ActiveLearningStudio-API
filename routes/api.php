@@ -317,7 +317,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('go/lms/organizations', 'CurrikiGo\LmsController@organizations');
     Route::get('go/lms/teams', 'CurrikiGo\LmsController@teams');
     Route::post('go/passLtiCourseDetails', 'CurrikiGo\LmsServicesController@saveLtiTeachersData');
-    Route::post('go/store-student-info', 'CurrikiGo\LmsServicesController@storeStudentInfo');
     // LTI Playlist
     Route::get('playlists/{playlist}/lti', 'PlaylistController@loadLti');
     // xAPI Statments

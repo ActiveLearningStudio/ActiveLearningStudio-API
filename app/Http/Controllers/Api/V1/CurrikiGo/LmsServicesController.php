@@ -92,34 +92,15 @@ class LmsServicesController extends Controller
     public function saveLtiTeachersData(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)
     {
         // Save student Data for VIV if check is enabled
-        if (config('student-data.save_student_data') && $request->isLearner) {
+        if (config('student-data.save_student_data')) {
             $service = new SaveStudentdataService();
             $service->saveStudentData($request);
         }
-
-        $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
-        $canvasClient = new Client($lmsSetting);
-        $saveData = new SaveTeacherData($canvasClient);
-        return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
-    }
-
-    /**
-     * Save LMS students data.
-     *
-     * @param Request $request
-     */
-    public function storeStudentInfo(StoreStudentInfoRequest $request)
-    {
-        $dataObject = new stdClass();
-        $dataObject->studentId = $request->student_id;
-        $dataObject->customPersonNameGiven = $request->first_name;
-        $dataObject->customPersonNameFamily = $request->last_name;
-
-        $service = new SaveStudentdataService();
-        $dataPosted = $service->saveStudentData($dataObject);
-
-        if ($dataPosted)
-            return true;
-        return false;
+        return true;
+        //Commenting out the below code for now as this is useless because we did save this data on deeplink launch
+        // $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
+        // $canvasClient = new Client($lmsSetting);
+        // $saveData = new SaveTeacherData($canvasClient);
+        // return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
     }
 }
