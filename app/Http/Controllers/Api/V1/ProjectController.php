@@ -391,7 +391,7 @@ class ProjectController extends Controller
     public function loadShared(Project $project)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($project->shared || ($project->indexing === 3)) {
+        if ($project->shared) {
             return response([
                 'project' => $this->projectRepository->getProjectForPreview($project),
             ], 200);
