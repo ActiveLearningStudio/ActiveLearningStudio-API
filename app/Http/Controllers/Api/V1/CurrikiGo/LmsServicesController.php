@@ -103,11 +103,13 @@ class LmsServicesController extends Controller
     public function saveLtiTeachersData(Request $request, GoogleClassroomRepositoryInterface $googleClassroomRepository, UserRepositoryInterface $userRepository)
     {
         // Save student Data for VIV if check is enabled
-        if (config('student-data.save_student_data')) {
+        if (config('student-data.save_student_data') && $request->isLearner) {
             $service = new SaveStudentdataService();
             $service->saveStudentData($request);
-            return true;
         }
-        return false;
+        $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
+        $canvasClient = new Client($lmsSetting);
+        $saveData = new SaveTeacherData($canvasClient);
+        return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
     }
 }
