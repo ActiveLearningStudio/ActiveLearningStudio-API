@@ -95,12 +95,8 @@ class LmsServicesController extends Controller
         if (config('student-data.save_student_data')) {
             $service = new SaveStudentdataService();
             $service->saveStudentData($request);
+            return true;
         }
-        return true;
-        //Commenting out the below code for now as this is useless because we did save this data on deeplink launch
-        // $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
-        // $canvasClient = new Client($lmsSetting);
-        // $saveData = new SaveTeacherData($canvasClient);
-        // return $saveData->saveData($request, $googleClassroomRepository, $userRepository);
+        return false;
     }
 }
