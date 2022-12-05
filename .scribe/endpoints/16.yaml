@@ -1,0 +1,600 @@
+name: '29. Admin/LMS Settings'
+description: |-
+
+  APIs for lms settings on admin panel.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/lms-settings'
+    metadata:
+      groupName: '29. Admin/LMS Settings'
+      groupDescription: |-
+
+        APIs for lms settings on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All LMS Settings for listing.'
+      description: 'Returns the paginated response with pagination links (DataTables are fully supported - All Params).'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 19
+      suborganization: '1'
+    queryParameters:
+      start:
+        name: start
+        description: 'Offset for getting the paginated response, Default 0.'
+        required: false
+        example: '0'
+        type: string
+        custom: []
+      length:
+        name: length
+        description: 'Limit for getting the paginated records, Default 25.'
+        required: false
+        example: '25'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      start: '0'
+      length: '25'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"lms_url\": \"https://canvas2.curriki.org\",\r\n            \"lms_access_token\": \"282tzGgLDzJOQA1mJPunRArzDvJFdUp4tLNiGqh8jhvQ7oJzPBhIaUp2h5LF6cXg\",\r\n            \"site_name\": \"Curriki Canvas Site #2\",\r\n            \"lms_name\": \"canvas\",\r\n            \"lms_access_key\": null,\r\n            \"lms_access_secret\": null,\r\n            \"description\": \"Curriki Canvas Site 2\",\r\n            \"user_id\": 3,\r\n            \"created_at\": \"2020-08-27T18:38:27.000000Z\",\r\n            \"updated_at\": \"2020-08-27T18:38:27.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"lti_client_id\": null,\r\n            \"lms_login_id\": null,\r\n            \"user\": {\r\n                \"id\": 3,\r\n                \"name\": \"Abby _\",\r\n                \"email\": \"abby@curriki.org\",\r\n                \"email_verified_at\": \"2020-09-11T23:52:44.000000Z\",\r\n                \"created_at\": \"2020-04-06T20:47:21.000000Z\",\r\n                \"updated_at\": \"2020-10-19T10:44:21.000000Z\",\r\n                \"first_name\": \"Abby\",\r\n                \"last_name\": \"_\",\r\n                \"organization_name\": \"\",\r\n                \"job_title\": \"\",\r\n                \"address\": null,\r\n                \"phone_number\": null,\r\n                \"organization_type\": null,\r\n                \"website\": null,\r\n                \"deleted_at\": null,\r\n                \"role\": null,\r\n                \"gapi_access_token\": \"{\\\"token_type\\\":\\\"Bearer\\\",\\\"access_token\\\":\\\"ya29.a0AfH6SMA9EL2ZjzTyPOIv3cgdm7VZ6JHJ3WHgqaaYZJY4X5mKhq417RjMKiCOS36tu1E3sOwNALtVBTamNE_XyNLeDak-xZuU4lAtLV1Ap0Gi19AN10vpj5Sg57AJ3KgrT4G3THYkGF3y0BZ4r38QhdAvydlpkfn_KwCZBQ\\\",\\\"scope\\\":\\\"email profile https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.courses openid https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.courses.readonly https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/userinfo.email https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.topics https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.coursework.me https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.coursework.students https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/userinfo.profile\\\",\\\"login_hint\\\":\\\"AJDLj6LgfEhLCFgVLEzicO4eYW1YOkD2Ocu__Xw4RutMMX9v-B-BEo_pAMXjGBSn6gx8S9fToe9FpA7M_OwrbGosxzx3LBuA28SCV2kIKwPd_qmJ2ctCRP4\\\",\\\"expires_in\\\":3599,\\\"id_token\\\":\\\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE0MzA3NzE2NTQwNTMzODE4OTQzIiwiaGQiOiJjdXJyaWtpLm9yZyIsImVtYWlsIjoiYWJieUBjdXJyaWtpLm9yZyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiSXBlejh3cm5uUmU3Y3p6U1NidFlJdyIsIm5hbWUiOiJBYmJ5IFJvc3MiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2cwYUVyeDRwUE1ZOVRPQXJiZ01KX3ZybHdsSzB6SEdBNVp3dFlVPXM5Ni1jIiwiZ2l2ZW5fbmFtZSI6IkFiYnkiLCJmYW1pbHlfbmFtZSI6IlJvc3MiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYwMDM3NDQ4NywiZXhwIjoxNjAwMzc4MDg3LCJqdGkiOiI3NmUzNjU5M2I1NWEwYjhkMDBlZDZiODRmMmFmMmRiZmVkNDFhN2RhIn0.i9YToGr1CNLtk6zHX2f6dmP4PGB5ibyxFOFisPRvxe1YZvenGpyEh3MlSMkURvHzo2RGmYGkdhpJYHtn2b_TOqbsNsx61DUE4BTME5O_4-VcR-c_YDYFn6K3MpsrYLbSxDKTgdSJbA56B8-s726QzcFEixkU5mtaK5gbO4Zb32U94qF1_ziJ5XcEtaJt1kBY8oY15d3ubXJl-zLyh-fB9K4mqssqqWABbLAtJQycfx5x-9ks6iVHYXq-_tdnfadm7HBYROlcYzKc7VJkOAP5z-e05Zqx9C1NUXpW_-gFwiHazbC7_N_-UihSej2m3qULtIdgZMtT6fid4_LftXc38Q\\\",\\\"session_state\\\":{\\\"extraQueryParams\\\":{\\\"authuser\\\":\\\"1\\\"}},\\\"first_issued_at\\\":1600374485776,\\\"expires_at\\\":1600378084776,\\\"idpId\\\":\\\"google\\\"}\",\r\n                \"hubspot\": true,\r\n                \"subscribed\": true,\r\n                \"subscribed_ip\": \"192.168.96.10\",\r\n                \"membership_type_id\": 2,\r\n                \"temp_password\": null\r\n            },\r\n            \"organization\": {\r\n                \"id\": 1,\r\n                \"name\": \"Curriki Studio\",\r\n                \"description\": \"Curriki Studio, default organization.\",\r\n                \"domain\": \"currikistudio\",\r\n                \"parent_id\": null,\r\n                \"image\": null,\r\n                \"created_at\": null,\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null,\r\n                \"self_registration\": false,\r\n                \"account_id\": \"test123\",\r\n                \"api_key\": \"test\",\r\n                \"unit_path\": \"path\"\r\n            }\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"lms_url\": \"https://canvas2.curriki.org\",\r\n            \"lms_access_token\": \"282tzGgLDzJOQA1mJPunRArzDvJFdUp4tLNiGqh8jhvQ7oJzPBhIaUp2h5LF6cXg\",\r\n            \"site_name\": \"Curriki Canvas Site #2\",\r\n            \"lms_name\": \"canvas\",\r\n            \"lms_access_key\": null,\r\n            \"lms_access_secret\": null,\r\n            \"description\": \"Curriki Canvas Site 2\",\r\n            \"user_id\": 726,\r\n            \"created_at\": \"2020-08-27T18:38:27.000000Z\",\r\n            \"updated_at\": \"2020-08-27T18:38:27.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"lti_client_id\": null,\r\n            \"lms_login_id\": null,\r\n            \"user\": {\r\n                \"id\": 726,\r\n                \"name\": \"Ayesha Jaleel\",\r\n                \"email\": \"muhammadqamar111@gmail.com\",\r\n                \"email_verified_at\": \"2020-09-11T23:56:57.000000Z\",\r\n                \"created_at\": \"2020-08-05T15:45:11.000000Z\",\r\n                \"updated_at\": \"2020-09-18T15:40:02.000000Z\",\r\n                \"first_name\": \"ayesha\",\r\n                \"last_name\": \"jaleel\",\r\n                \"organization_name\": \"\",\r\n                \"job_title\": \"\",\r\n                \"address\": null,\r\n                \"phone_number\": null,\r\n                \"organization_type\": null,\r\n                \"website\": null,\r\n                \"deleted_at\": null,\r\n                \"role\": null,\r\n                \"gapi_access_token\": \"{\\\"token_type\\\":\\\"Bearer\\\",\\\"access_token\\\":\\\"ya29.a0AfH6SMAL6MLPZFPPhVHV_T0I4NoKnQvgjZde3NVh9EN_iEIr9hZWv9z1l7kg2gEDKL4ytQQPZc4vfjWwibQoFX35kfBZK8IW4oFkloCWGVjUiVQpIv-l3b0_WZA_vrBtiX__rDAbbcsK5f_qQ6Q46PlNYwZpFrSb5sg63w\\\",\\\"scope\\\":\\\"email profile https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/userinfo.email https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.coursework.me openid https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.courses.readonly https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/userinfo.profile https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.courses https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.coursework.students https:\\\\/\\\\/www.googleapis.com\\\\/auth\\\\/classroom.topics\\\",\\\"login_hint\\\":\\\"AJDLj6LgfEhLCFgVLEzicO4eYW1YEG1H6Z_EdBO9DcPh7Mh4zecJPEER1aZQlAuK9EACWTStds1zX0LniLDNBCxyVGW-meWH65rQ5EKowzaeeKw9Whrf0AI\\\",\\\"expires_in\\\":3599,\\\"id_token\\\":\\\"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiODNmMTgwMjNhODU1NTg3Zjk0MmU3NTEwMjI1MTEyMDg4N2Y3MjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODk4MTQzOTM5ODM0LTlpb3VpMmk5Z2hncm1jZ21ndGcwaDZyc2Y4M2QwdDBjLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA2NzA0NTczOTgxNzI2MTQ5NDI5IiwiZW1haWwiOiJtdWhhbW1hZHFhbWFyMTExQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiS0JIT3JpdWJyQ0xyTVkzS01MN3lYdyIsIm5hbWUiOiJNdWhhbW1hZCBRYW1hciIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS0vQU9oMTRHaDNkcnhWRkQtb2xCRHRHc2JzWC1OOUJXdVNUYmlkcHpNTF9IUDkxZz1zOTYtYyIsImdpdmVuX25hbWUiOiJNdWhhbW1hZCIsImZhbWlseV9uYW1lIjoiUWFtYXIiLCJsb2NhbGUiOiJlbiIsImlhdCI6MTYwMDQ0MzYwMiwiZXhwIjoxNjAwNDQ3MjAyLCJqdGkiOiJhZjI1NWI0Y2I5Y2FiMTcwZDc4ZTIzMjljNDU5OTM3MjlmYTA4MTY2In0.JTX2lWgOkyPpdvhP4ueLDR6zw0cY4reT6lK4HgOFJR4sGdhfsclDqD1Tw0r6XfTQQ_AjMnYz9cn-xGH5QyRShu9gGizCt3MeDFU62QiV9wyAgsSeXBxaL0eVD4Jt8eWg0pduaga9424Ov7iEJYT6owtwlPO0FZi9pROjOA9vbj9GUXEEwr-Qejv9UKxKhiZbnQhpyk9PCs5K9eTTdTTFUbNennRb4ZLPKVAek1PXQBMkQBOiH7gf6ycPUd-4HI9wHgj4ARqMpKIGpx-L3J7lod94M-0yRnvlzklivJay9EFvY31xQw1EbB0RcTkMBO9QppIkDGQ9ZxWQyhP1gt4FRA\\\",\\\"session_state\\\":{\\\"extraQueryParams\\\":{\\\"authuser\\\":\\\"0\\\"}},\\\"first_issued_at\\\":1600443602681,\\\"expires_at\\\":1600447201681,\\\"idpId\\\":\\\"google\\\"}\",\r\n                \"hubspot\": true,\r\n                \"subscribed\": true,\r\n                \"subscribed_ip\": \"172.18.0.12\",\r\n                \"membership_type_id\": 2,\r\n                \"temp_password\": null\r\n            },\r\n            \"organization\": {\r\n                \"id\": 1,\r\n                \"name\": \"Curriki Studio\",\r\n                \"description\": \"Curriki Studio, default organization.\",\r\n                \"domain\": \"currikistudio\",\r\n                \"parent_id\": null,\r\n                \"image\": null,\r\n                \"created_at\": null,\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null,\r\n                \"self_registration\": false,\r\n                \"account_id\": \"test123\",\r\n                \"api_key\": \"test\",\r\n                \"unit_path\": \"path\"\r\n            }\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"https://www.currikistudio.org/api/v1/admin/lms-settings?page=1\",\r\n        \"last\": \"https://www.currikistudio.org/api/v1/admin/lms-settings?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"https://www.currikistudio.org/api/v1/admin/lms-settings\",\r\n        \"per_page\": \"25\",\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganizations/{suborganization_id}/lms-settings'
+    metadata:
+      groupName: '29. Admin/LMS Settings'
+      groupDescription: |-
+
+        APIs for lms settings on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create LMS Setting'
+      description: 'Creates the new lms setting in database.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 17
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 17
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      lms_url:
+        name: lms_url
+        description: 'Valid LMS URL.'
+        required: true
+        example: 'https://google.com'
+        type: url
+        custom: []
+      lms_access_token:
+        name: lms_access_token
+        description: 'Min 20 characters LMS Access Token.'
+        required: true
+        example: abcafdgd343asgretgdasgadsfsdfdasgdagsadf
+        type: string
+        custom: []
+      site_name:
+        name: site_name
+        description: 'Site Name.'
+        required: true
+        example: 'Moodle Curriki'
+        type: string
+        custom: []
+      lti_client_id:
+        name: lti_client_id
+        description: 'LTI Client ID for reference.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      lms_login_id:
+        name: lms_login_id
+        description: 'LMS Login ID for reference.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      user_id:
+        name: user_id
+        description: 'Valid ID of existing user.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      lms_name:
+        name: lms_name
+        description: 'LMS name for which setting is being configured.'
+        required: false
+        example: Moodle
+        type: string
+        custom: []
+      lms_access_key:
+        name: lms_access_key
+        description: 'Access key for LMS.'
+        required: false
+        example: fdaskfasdkjghadskljgh54r325
+        type: string
+        custom: []
+      lms_access_secret:
+        name: lms_access_secret
+        description: 'Secret key is required if Access Key is provided.'
+        required: true
+        example: fasdjhjke4wh54354326
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Brief description.'
+        required: true
+        example: 'Create LMS Setting for providing access to Moodle.'
+        type: text
+        custom: []
+      published:
+        name: published
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: doloremque
+        type: string
+        custom: []
+      project_visibility:
+        name: project_visibility
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        custom: []
+      playlist_visibility:
+        name: playlist_visibility
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
+      activity_visibility:
+        name: activity_visibility
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        custom: []
+    cleanBodyParameters:
+      lms_url: 'https://google.com'
+      lms_access_token: abcafdgd343asgretgdasgadsfsdfdasgdagsadf
+      site_name: 'Moodle Curriki'
+      lti_client_id: '1'
+      lms_login_id: '1'
+      user_id: 1
+      lms_name: Moodle
+      lms_access_key: fdaskfasdkjghadskljgh54r325
+      lms_access_secret: fasdjhjke4wh54354326
+      description: 'Create LMS Setting for providing access to Moodle.'
+      published: false
+      organization_id: doloremque
+      project_visibility: true
+      playlist_visibility: false
+      activity_visibility: true
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Setting created successfully!",
+            "data": ["Created Setting Data Array"]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Unable to create setting, please try again later!"
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/lms-settings/{id}'
+    metadata:
+      groupName: '29. Admin/LMS Settings'
+      groupDescription: |-
+
+        APIs for lms settings on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get LMS Setting'
+      description: 'Get the specified lms setting data.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 16
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The Id of a lms setting'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 16
+      id: '1'
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": {\r\n        \"id\": 1,\r\n        \"lms_url\": \"https://canvas2.curriki.org\",\r\n        \"lms_access_token\": \"282tzGgLDzJOQA1mJPunRArzDvJFdUp4tLNiGqh8jhvQ7oJzPBhIaUp2h5LF6cXg\",\r\n        \"site_name\": \"Curriki Canvas Site #2\",\r\n        \"lti_client_id\": null,\r\n        \"lms_login_id\": null,\r\n        \"lms_name\": \"canvas\",\r\n        \"lms_access_key\": null,\r\n        \"lms_access_secret\": null,\r\n        \"description\": \"Curriki Canvas Site 2\",\r\n        \"user_id\": 3,\r\n        \"user\": {\r\n            \"id\": 3,\r\n            \"name\": \"Abby _\",\r\n            \"email\": \"abby@curriki.org\",\r\n            \"first_name\": \"Abby\",\r\n            \"last_name\": \"_\",\r\n            \"job_title\": \"\",\r\n            \"organization_type\": null,\r\n            \"is_admin\": false,\r\n            \"organization_name\": \"\"\r\n        },\r\n        \"organization\": {\r\n            \"id\": 1,\r\n            \"name\": \"Curriki Studio\",\r\n            \"description\": \"Curriki Studio, default organization.\",\r\n            \"domain\": \"currikistudio\",\r\n            \"parent_id\": null,\r\n            \"image\": null,\r\n            \"created_at\": null,\r\n            \"updated_at\": null,\r\n            \"deleted_at\": null,\r\n            \"self_registration\": false,\r\n            \"account_id\": \"test123\",\r\n            \"api_key\": \"test\",\r\n            \"unit_path\": \"path\"\r\n        }\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/suborganizations/{suborganization_id}/lms-settings/{id}'
+    metadata:
+      groupName: '29. Admin/LMS Settings'
+      groupDescription: |-
+
+        APIs for lms settings on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update LMS Setting'
+      description: 'Updates the lms setting in database.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The Id of a lms setting'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 6
+      id: '1'
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      lms_url:
+        name: lms_url
+        description: 'Valid LMS URL.'
+        required: true
+        example: 'https://google.com'
+        type: url
+        custom: []
+      lms_access_token:
+        name: lms_access_token
+        description: 'Min 20 characters LMS Access Token.'
+        required: true
+        example: abcafdgd343asgretgdasgadsfsdfdasgdagsadf
+        type: string
+        custom: []
+      site_name:
+        name: site_name
+        description: 'Site Name.'
+        required: true
+        example: 'Moodle Curriki'
+        type: string
+        custom: []
+      lti_client_id:
+        name: lti_client_id
+        description: 'LTI Client ID for reference.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      lms_login_id:
+        name: lms_login_id
+        description: 'LMS Login ID for reference.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      user_id:
+        name: user_id
+        description: 'Valid ID of existing user.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      lms_name:
+        name: lms_name
+        description: 'LMS name for which setting is being configured.'
+        required: false
+        example: Moodle
+        type: string
+        custom: []
+      lms_access_key:
+        name: lms_access_key
+        description: 'Access key for LMS.'
+        required: false
+        example: fdaskfasdkjghadskljgh54r325
+        type: string
+        custom: []
+      lms_access_secret:
+        name: lms_access_secret
+        description: 'Secret key is required if Access Key is provided.'
+        required: true
+        example: fasdjhjke4wh54354326
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Brief description.'
+        required: true
+        example: 'Create LMS Setting for providing access to Moodle.'
+        type: text
+        custom: []
+      published:
+        name: published
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: a
+        type: string
+        custom: []
+      project_visibility:
+        name: project_visibility
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
+      playlist_visibility:
+        name: playlist_visibility
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        custom: []
+      activity_visibility:
+        name: activity_visibility
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        custom: []
+    cleanBodyParameters:
+      lms_url: 'https://google.com'
+      lms_access_token: abcafdgd343asgretgdasgadsfsdfdasgdagsadf
+      site_name: 'Moodle Curriki'
+      lti_client_id: '1'
+      lms_login_id: '1'
+      user_id: 1
+      lms_name: Moodle
+      lms_access_key: fdaskfasdkjghadskljgh54r325
+      lms_access_secret: fasdjhjke4wh54354326
+      description: 'Create LMS Setting for providing access to Moodle.'
+      published: true
+      organization_id: a
+      project_visibility: false
+      playlist_visibility: true
+      activity_visibility: true
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "LMS setting data updated successfully!",
+            "data": ["Updated LMS setting data array"]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Unable to update LMS setting, please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/suborganizations/{suborganization_id}/lms-settings/{id}'
+    metadata:
+      groupName: '29. Admin/LMS Settings'
+      groupDescription: |-
+
+        APIs for lms settings on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Delete LMS Setting'
+      description: 'Deletes the lms setting from database.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The Id of a lms setting'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 15
+      id: '1'
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "LMS setting deleted successfully!",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Unable to delete LMS setting, please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             ActivityTypeSeeder::class,
-            H5pElasticsearchFieldsTableSeeder::class,
             MembershipTypeSeeder::class,
             OrganizationSeeder::class,
             OrganizationRoleTypeSeeder::class,

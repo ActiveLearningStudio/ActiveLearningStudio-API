@@ -1,0 +1,334 @@
+name: '24. Education Level'
+description: |-
+
+  APIs for education level management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/education-levels'
+    metadata:
+      groupName: '24. Education Level'
+      groupDescription: |-
+
+        APIs for education level management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Education Level'
+      description: 'Get a list of all education level.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 3
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 3
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      size:
+        name: size
+        description: 'Must not be greater than 255.'
+        required: false
+        example: 16
+        type: integer
+        custom: []
+      query:
+        name: query
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: lrriuxtlznmkmjwzfiewr
+        type: string
+        custom: []
+      order_by_column:
+        name: order_by_column
+        description: 'Must be one of <code>order</code> or <code>name</code>.'
+        required: false
+        example: order
+        type: string
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: 'Must be one of <code>asc</code>, <code>desc</code>, <code>ASC</code>, or <code>DESC</code>.'
+        required: false
+        example: ASC
+        type: string
+        custom: []
+    cleanBodyParameters:
+      size: 16
+      query: lrriuxtlznmkmjwzfiewr
+      order_by_column: order
+      order_by_type: ASC
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Grade A\",\r\n            \"order\": 1,\r\n            \"organization_id\" : \"1\",\r\n            \"created_at\": \"2022-01-07T13:51:38.000000Z\",\r\n            \"updated_at\": \"2022-01-07T13:51:38.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Grade B\",\r\n            \"order\": 1,\r\n            \"organization_id\" : \"2\",\r\n            \"created_at\": \"2022-01-07T13:51:56.000000Z\",\r\n            \"updated_at\": \"2022-01-07T13:51:56.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/education-levels?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/education-levels?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/education-levels\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganizations/{suborganization_id}/education-levels'
+    metadata:
+      groupName: '24. Education Level'
+      groupDescription: |-
+
+        APIs for education level management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Education Level'
+      description: 'Create a new education level.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 8
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 8
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Education Level name.'
+        required: true
+        example: 'Special Education'
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'at what order it should appear.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 14
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      name: 'Special Education'
+      order: 1
+      organization_id: 14
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Could not create education level. Please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 201
+        content: "{\r\n    \"education-level\": {\r\n        \"id\": 1,\r\n        \"name\": \"Grade A\",\r\n        \"order\": \"1\",\r\n        \"organization_id\" : \"1\",\r\n        \"created_at\": \"2022-01-07T13:51:56.000000Z\",\r\n        \"updated_at\": \"2022-01-07T13:51:56.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/education-levels/{id}'
+    metadata:
+      groupName: '24. Education Level'
+      groupDescription: |-
+
+        APIs for education level management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Education Level'
+      description: 'Get the specified education level.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the education level.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      EducationLevel:
+        name: EducationLevel
+        description: 'The Id of a Education Level item'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 12
+      id: 12
+      suborganization: '1'
+      EducationLevel: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"education-level\": {\r\n        \"id\": 1,\r\n        \"name\": \"Grade A\",\r\n        \"order\": \"1\",\r\n        \"organization_id\" : \"1\",\r\n        \"created_at\": \"2022-01-07T13:51:56.000000Z\",\r\n        \"updated_at\": \"2022-01-07T13:51:56.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/suborganizations/{suborganization_id}/education-levels/{id}'
+    metadata:
+      groupName: '24. Education Level'
+      groupDescription: |-
+
+        APIs for education level management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Education Level'
+      description: 'Remove the specified education level.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the education level.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      educationLevel:
+        name: educationLevel
+        description: 'The Id of a education level item'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 19
+      id: 19
+      suborganization: '1'
+      educationLevel: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Education Level has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete education level."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

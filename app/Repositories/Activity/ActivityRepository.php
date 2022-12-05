@@ -10,7 +10,6 @@ use App\Models\Organization;
 use App\Models\CurrikiGo\LmsSetting;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
-use App\Repositories\H5pElasticsearchField\H5pElasticsearchFieldRepositoryInterface;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchResource;
@@ -31,7 +30,6 @@ use App\Models\H5pBrightCoveVideoContents;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
-    private $h5pElasticsearchFieldRepository;
     private $subjectRepository;
     private $educationLevelRepository;
     private $client;
@@ -40,20 +38,17 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      * ActivityRepository constructor.
      *
      * @param Activity $model
-     * @param H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository
      * @param SubjectRepositoryInterface $subjectRepository
      * @param EducationLevelRepositoryInterface $educationLevelRepository
      */
     public function __construct(
         Activity $model,
-        H5pElasticsearchFieldRepositoryInterface $h5pElasticsearchFieldRepository,
         SubjectRepositoryInterface $subjectRepository,
         EducationLevelRepositoryInterface $educationLevelRepository
     )
     {
         parent::__construct($model);
         $this->client = new \GuzzleHttp\Client();
-        $this->h5pElasticsearchFieldRepository = $h5pElasticsearchFieldRepository;
         $this->subjectRepository = $subjectRepository;
         $this->educationLevelRepository = $educationLevelRepository;
     }
@@ -156,99 +151,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         }
 
         return $projects;
-    }
-
-    /**
-     * Get the advance elasticsearch request
-     *
-     * @param array $data
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
-    public function advanceElasticsearchForm($data)
-    {
-
-        $counts = [];
-        $projectIds = [];
-        $organizationParentChildrenIds = [];
-
-        if (isset($data['searchType']) && $data['searchType'] === 'showcase_projects') {
-            $organization = $data['orgObj'];
-            $organizationParentChildrenIds = resolve(OrganizationRepositoryInterface::class)->getParentChildrenOrganizationIds($organization);
-        }
-
-        if (isset($data['userIds']) && !empty($data['userIds'])) {
-            $userIds = $data['userIds'];
-
-            $projectIds = Project::whereHas('users', function (Builder $query) use ($userIds) {
-                $query->whereIn('id', $userIds);
-            })->pluck('id')->toArray();
-        }
-
-        if (isset($data['author']) && !empty($data['author'])) {
-            $author = $data['author'];
-
-            $authorProjectIds = Project::whereHas('users', function (Builder $query) use ($author) {
-                $query->where('first_name', 'like', '%' . $author . '%')
-                        ->orWhere('last_name', 'like', '%' . $author . '%')
-                        ->orWhere('email', 'like', '%' . $author . '%');
-            })->pluck('id')->toArray();
-
-            if (empty($authorProjectIds)) {
-                if (empty($projectIds)) {
-                    $projectIds = [0];
-                }
-            } else {
-                $projectIds = array_merge($projectIds, $authorProjectIds);
-            }
-        }
-
-        if (isset($data['userIds']) && !empty($data['userIds']) && empty($projectIds)) {
-            $projectIds = [0];
-        }
-
-        $searchResultQuery = $this->model->searchForm()
-            ->searchType(Arr::get($data, 'searchType', 0))
-            ->organizationParentChildrenIds($organizationParentChildrenIds)
-            ->query(Arr::get($data, 'query', 0))
-            ->join(Project::class, Playlist::class)
-            ->aggregate('count_by_index', [
-                'terms' => [
-                    'field' => '_index',
-                ]
-            ])
-            ->organizationIds(Arr::get($data, 'organizationIds', []))
-            ->organizationVisibilityTypeIds(Arr::get($data, 'organizationVisibilityTypeIds', []))
-            ->type(Arr::get($data, 'type', 0))
-            ->startDate(Arr::get($data, 'startDate', 0))
-            ->endDate(Arr::get($data, 'endDate', 0))
-            ->indexing(Arr::get($data, 'indexing', []))
-            ->subjectIds(Arr::get($data, 'subjectIds', []))
-            ->educationLevelIds(Arr::get($data, 'educationLevelIds', []))
-            ->projectIds($projectIds)
-            ->h5pLibraries(Arr::get($data, 'h5pLibraries', []))
-            ->negativeQuery(Arr::get($data, 'negativeQuery', 0))
-            ->sort('created_at', "desc")
-            ->from(Arr::get($data, 'from', 0))
-            ->size(Arr::get($data, 'size', 10));
-
-        if (isset($data['model']) && !empty($data['model'])) {
-            $searchResultQuery = $searchResultQuery->postFilter('term', ['_index' => $data['model']]);
-        }
-
-        $searchResult = $searchResultQuery->execute();
-
-        $aggregations = $searchResult->aggregations();
-        $countByIndex = $aggregations->get('count_by_index');
-
-        if (isset($countByIndex['buckets'])) {
-            foreach ($countByIndex['buckets'] as $indexData) {
-                $counts[$indexData['key']] = $indexData['doc_count'];
-            }
-        }
-
-        $counts['total'] = array_sum($counts);
-
-        return (SearchResource::collection($searchResult->models()))->additional(['meta' => $counts]);
     }
 
     /**
@@ -475,51 +377,6 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
         $counts['total'] = array_sum($counts);
 
         return (SearchPostgreSqlResource::collection($results))->additional(['meta' => $counts]);
-    }
-
-    /**
-     * Get the H5P Elasticsearch Field Values.
-     *
-     * @param Object $h5pContent
-     * @return array
-     */
-    public function getH5pElasticsearchFields($h5pContent)
-    {
-        $h5pElasticsearchFieldsArray = [];
-
-        if (isset($h5pContent) && $h5pContent['parameters']) {
-            $parameters = json_decode($h5pContent['parameters'], true);
-
-            $h5pElasticsearchFields = $this->h5pElasticsearchFieldRepository->model->where([
-                ['library_id', '=', $h5pContent['library_id']],
-                ['indexed', '=', true],
-            ])->get();
-
-            foreach ($h5pElasticsearchFields as $h5pElasticsearchField) {
-                $h5pElasticsearchFieldArray = explode('.group.nested.array.', $h5pElasticsearchField->path);
-
-                if (count($h5pElasticsearchFieldArray) > 1) {
-                    $h5pElasticsearchFieldValueArrays = Arr::get($parameters, $h5pElasticsearchFieldArray[0]);
-
-                    if (is_array($h5pElasticsearchFieldValueArrays)) {
-                        foreach ($h5pElasticsearchFieldValueArrays as $h5pElasticsearchFieldValueArray) {
-                            if (isset($h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]])) {
-                                $h5pElasticsearchFieldValue = $h5pElasticsearchFieldValueArray[$h5pElasticsearchFieldArray[1]];
-                                $h5pElasticsearchFieldsArray[$h5pElasticsearchField->path][] = $h5pElasticsearchFieldValue;
-                            }
-                        }
-                    }
-                } else {
-                    $h5pElasticsearchFieldValue = Arr::get($parameters, $h5pElasticsearchField->path, null);
-
-                    if ($h5pElasticsearchFieldValue !== null) {
-                        $h5pElasticsearchFieldsArray[$h5pElasticsearchField->path] = $h5pElasticsearchFieldValue;
-                    }
-                }
-            }
-        }
-
-        return $h5pElasticsearchFieldsArray;
     }
 
     /**

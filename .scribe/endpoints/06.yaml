@@ -1,0 +1,1665 @@
+name: '22. Team'
+description: |-
+
+  APIs for team management
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/teams/invite
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Invite Team'
+      description: 'Invite a team member while creating a team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id:
+        name: id
+        description: 'The ID of a user'
+        required: true
+        example: 1.0
+        type: number
+        custom: []
+      email:
+        name: email
+        description: 'The email corresponded to the user'
+        required: true
+        example: abby@curriki.org
+        type: string
+        custom: []
+    cleanBodyParameters:
+      id: 1.0
+      email: abby@curriki.org
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "invited": true
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "invited": false
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/invite-member'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Invite Team Member'
+      description: 'Invite a team member to the team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 13
+        type: integer
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      team_id: 13
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'The email of the user'
+        required: true
+        example: abby@curriki.org
+        type: string
+        custom: []
+      role_id:
+        name: role_id
+        description: ''
+        required: true
+        example: accusantium
+        type: string
+        custom: []
+    cleanBodyParameters:
+      email: abby@curriki.org
+      role_id: accusantium
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "User has been invited to the team successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to invite user to the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to invite user to the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/teams/{team_id}/invite-members'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Invite Team Members'
+      description: 'Invite a bundle of users to the team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 13
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 6
+      team_id: 13
+      suborganization: '1'
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      users:
+        name: users
+        description: 'The array of the users'
+        required: true
+        example:
+          - occaecati
+        type: 'string[]'
+        custom: []
+      note:
+        name: note
+        description: ''
+        required: false
+        example: voluptatum
+        type: string
+        custom: []
+      'users[].id':
+        name: 'users[].id'
+        description: ''
+        required: true
+        example: assumenda
+        type: string
+        custom: []
+      'users[].role_id':
+        name: 'users[].role_id'
+        description: ''
+        required: true
+        example: ab
+        type: string
+        custom: []
+      'users[].email':
+        name: 'users[].email'
+        description: 'Must be a valid email address.'
+        required: true
+        example: lshields@example.org
+        type: string
+        custom: []
+    cleanBodyParameters:
+      users:
+        - occaecati
+      note: voluptatum
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Users have been invited to the team successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to invite users to the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to invite users to the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/remove'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Team Member'
+      description: 'remove a team member to the team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      team_id: 7
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id:
+        name: id
+        description: 'The Id of the user'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: false
+        example: kertzmann.william@example.com
+        type: string
+        custom: []
+    cleanBodyParameters:
+      id: 1
+      email: kertzmann.william@example.com
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "User has been removed from the team successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to remove user from the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to remove user from the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/add-projects'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Add Projects to the Team'
+      description: 'Add projects to the team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 13
+        type: integer
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      team_id: 13
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      ids:
+        name: ids
+        description: 'The list of the project Ids to add'
+        required: true
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+    cleanBodyParameters:
+      ids:
+        - 1
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Projects have been added to the team successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to add projects to the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to add projects to the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/remove-project'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Project from the Team'
+      description: 'Remove a project from the team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 8
+        type: integer
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      team_id: 8
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id:
+        name: id
+        description: 'The Id of the project to remove'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      id: 1
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project has been removed from the team successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to remove project from the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to remove project from the team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/projects/{project_id}/add-members'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Add Members to the Team Project'
+      description: 'Add members to a specified project of specified team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      team_id: 4
+      project_id: 1
+      team: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      ids:
+        name: ids
+        description: 'The list of the member Ids to add'
+        required: true
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+    cleanBodyParameters:
+      ids:
+        - 1
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Members have been added to the team project successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to add members to the team project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to add members to the team project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/teams/{team_id}/projects/{project_id}/remove-member'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Member from the Team Project'
+      description: 'Remove member from a specified project of specified team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      team_id: 19
+      project_id: 12
+      team: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id:
+        name: id
+        description: 'The Id of the member to remove'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address.'
+        required: false
+        example: roel.brakus@example.com
+        type: string
+        custom: []
+    cleanBodyParameters:
+      id: 1
+      email: roel.brakus@example.com
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Member has been removed from the team project successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 403
+        content: |-
+          {
+            "errors": [
+              "You do not have permission to remove member from the team project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to remove member from the team project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/get-teams'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Organization Teams'
+      description: 'Get a list of the teams of an Organization.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 1
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/get-admin-teams'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Organization Teams for Admin'
+      description: 'Get a list of the teams of an Organization.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 11
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 11
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      query:
+        name: query
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: donfqkldnwshl
+        type: string
+        custom: []
+      order_by_column:
+        name: order_by_column
+        description: 'Must be one of <code>name</code> or <code>created_at</code>.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: 'Must be one of <code>asc</code> or <code>desc</code>.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Must not be greater than 100.'
+        required: false
+        example: 24
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      query: donfqkldnwshl
+      order_by_column: created_at
+      order_by_type: desc
+      size: 24
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/team/{team_id}/team-permissions'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get User Team Permissions'
+      description: "Get the logged-in user's team permissions in the suborganization."
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 12
+      team_id: 9
+      suborganization: '1'
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"teamPermissions\": {\r\n        \"activeRole\": \"admin\",\r\n        \"roleId\": 1,\r\n        \"Team\": [\r\n            \"team:add-team-user\",\r\n            \"team:remove-team-user\",\r\n            \"team:add-project\",\r\n            \"team:remove-project\",\r\n            \"team:add-member-project\",\r\n            \"team:remove-member-project\",\r\n            \"team:add-playlist\",\r\n            \"team:edit-playlist\",\r\n            \"team:delete-playlist\",\r\n            \"team:add-activity\",\r\n            \"team:edit-activity\",\r\n            \"team:delete-activity\",\r\n            \"team:share-project\",\r\n            \"team:share-activity\",\r\n            \"team:share-playlist\",\r\n            \"team:assign-team-role\"\r\n        ]\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/suborganization/{suborganization_id}/team/{team_id}/update-team-member-role'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Team Member Role'
+      description: 'Update the specified user role of a team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 13
+        type: integer
+        custom: []
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 13
+      team_id: 19
+      suborganization: '1'
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'The id of a user'
+        required: true
+        example: '12'
+        type: inetger
+        custom: []
+      role_id:
+        name: role_id
+        description: 'The id of a team role'
+        required: true
+        example: '1'
+        type: inetger
+        custom: []
+    cleanBodyParameters:
+      user_id: '12'
+      role_id: '1'
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update team member role."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/teams'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Teams'
+      description: 'Get a list of the teams of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 12
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/teams'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Team'
+      description: 'Create a new team in storage for a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 3
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 3
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      name:
+        name: name
+        description: 'Name of a team'
+        required: true
+        example: 'Test Team'
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Description of a team'
+        required: true
+        example: 'This is a test team.'
+        type: string
+        custom: []
+      users:
+        name: users
+        description: ''
+        required: false
+        example:
+          - []
+        type: 'object[]'
+        custom: []
+      projects:
+        name: projects
+        description: 'Must not have more than 1 items.'
+        required: false
+        example: v
+        type: object
+        custom: []
+      note:
+        name: note
+        description: 'Must not be greater than 200 characters.'
+        required: false
+        example: fych
+        type: string
+        custom: []
+      noovo_group_title:
+        name: noovo_group_title
+        description: 'Title of a Noovo Group'
+        required: false
+        example: Test_Group
+        type: string
+        custom: []
+      'users[].id':
+        name: 'users[].id'
+        description: ''
+        required: true
+        example: dignissimos
+        type: string
+        custom: []
+      'users[].role_id':
+        name: 'users[].role_id'
+        description: ''
+        required: true
+        example: eum
+        type: string
+        custom: []
+      'users[].email':
+        name: 'users[].email'
+        description: 'Must be a valid email address.'
+        required: true
+        example: carmella41@example.com
+        type: string
+        custom: []
+    cleanBodyParameters:
+      organization_id: 4
+      name: 'Test Team'
+      description: 'This is a test team.'
+      users:
+        -
+          id: dignissimos
+          role_id: eum
+          email: carmella41@example.com
+      projects: v
+      note: fych
+      noovo_group_title: Test_Group
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Could not create team. Please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 201
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/teams/{id}'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Team'
+      description: 'Get the specified team detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the team.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 7
+      id: 7
+      suborganization: '1'
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/suborganization/{suborganization_id}/teams/{id}'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Team'
+      description: 'Update the specified team of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the team.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 9
+      id: 1
+      suborganization: '1'
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Name of a team'
+        required: true
+        example: 'Test Team'
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Description of a team'
+        required: true
+        example: 'This is a test team.'
+        type: string
+        custom: []
+      noovo_group_title:
+        name: noovo_group_title
+        description: 'Title of a Noovo Group'
+        required: false
+        example: Test_Group
+        type: string
+        custom: []
+    cleanBodyParameters:
+      name: 'Test Team'
+      description: 'This is a test team.'
+      noovo_group_title: Test_Group
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/suborganization/{suborganization_id}/teams/{id}'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Team'
+      description: 'Remove the specified team of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the team.'
+        required: true
+        example: 11
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 2
+      id: 11
+      suborganization: '1'
+      team: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Team has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete team."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/teams/{team_id}/projects/{project_id}/export-projects-to-noovo'
+    metadata:
+      groupName: '22. Team'
+      groupDescription: |-
+
+        APIs for team management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Push Project to Noovo'
+      description: 'script to push project from curriki to noovo mapped device.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+      team_id:
+        name: team_id
+        description: 'The ID of the team.'
+        required: true
+        example: 17
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 8
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      team:
+        name: team
+        description: 'The Id of a team'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 2
+      team_id: 17
+      project_id: 8
+      suborganization: '1'
+      team: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Indexing request for this team has been made successfully!"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 404
+        content: |-
+          {
+            "message": "No query results for model [Team] Id"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Noovo Client id or group id is missing.",
+              "Team must be finalized before requesting the indexing."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

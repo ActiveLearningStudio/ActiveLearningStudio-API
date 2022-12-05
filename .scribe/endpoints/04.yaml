@@ -1,0 +1,1073 @@
+name: '4. Playlist'
+description: |-
+
+  APIs for playlist management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/playlists/{playlist_id}/load-shared'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Shared Playlist'
+      description: 'Get the specified shared playlist of a Project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      playlist_id: 14
+      playlist: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "No shareable Project found."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/playlists/{playlist_id}/load-shared-playlist'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Shared Playlist'
+      description: 'Get the specified shared playlist detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 20
+        type: integer
+        custom: []
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 20
+      playlist_id: 1
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "No shareable Playlist found."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/shared-playlists'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Shared Playlists of a Project'
+      description: 'Get the list of shared playlists detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 8
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 8
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "No shareable Playlist found."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/projects/{project_id}/playlists/reorder'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Reorder Playlists'
+      description: 'Reorder playlists of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 4
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      playlists:
+        name: playlists
+        description: 'Playlists of a project'
+        required: true
+        example:
+          - repellat
+        type: 'string[]'
+        custom: []
+    cleanBodyParameters:
+      playlists:
+        - repellat
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"playlists\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Math Playlist\",\r\n            \"order\": 0,\r\n            \"is_public\": true,\r\n            \"gcr_playlist_visibility\": true,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Audio Record\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Audio Record content\",\r\n                    \"shared\": true,\r\n                    \"order\": 0,\r\n                    \"thumb_url\": \"/storage/activities/3vVpHHh75MJHOV6a6iZdy13luBaiNn1SrniYpBbQ.png\",\r\n                    \"subject_id\": \"Career & Technical Education\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19430,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"record\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"record\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                        \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                    \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Language Arts\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Language Arts content\",\r\n                    \"shared\": true,\r\n                    \"order\": 1,\r\n                    \"thumb_url\": \"/storage/activities/w2LXV4VMPgccjJyZbs16wSzglX1s58K5NFfFp7ed.png\",\r\n                    \"subject_id\": \"Language Arts\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19431,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"fghfhg\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"fghfhg\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                        \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                    \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n            \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Music Playlist\",\r\n            \"order\": 1,\r\n            \"is_public\": false,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [],\r\n            \"created_at\": \"2020-09-16T18:21:29.000000Z\",\r\n            \"updated_at\": \"2020-09-16T18:21:29.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/projects/{project_id}/playlists/{playlist_id}/clone'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Clone Playlist'
+      description: 'Clone a playlist of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 18
+        type: integer
+        custom: []
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 18
+      playlist_id: 9
+      project: '1'
+      playlist: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Playlist is being cloned|duplicated in background!"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Not a Public Playlist."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/playlists'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Playlists'
+      description: 'Get a list of the playlists of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 13
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 13
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"playlists\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Math Playlist\",\r\n            \"order\": 0,\r\n            \"is_public\": true,\r\n            \"gcr_playlist_visibility\": true,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Audio Record\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Audio Record content\",\r\n                    \"shared\": true,\r\n                    \"order\": 0,\r\n                    \"thumb_url\": \"/storage/activities/3vVpHHh75MJHOV6a6iZdy13luBaiNn1SrniYpBbQ.png\",\r\n                    \"subject_id\": \"Career & Technical Education\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19430,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"record\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"record\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                        \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                    \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Language Arts\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Language Arts content\",\r\n                    \"shared\": true,\r\n                    \"order\": 1,\r\n                    \"thumb_url\": \"/storage/activities/w2LXV4VMPgccjJyZbs16wSzglX1s58K5NFfFp7ed.png\",\r\n                    \"subject_id\": \"Language Arts\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19431,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"fghfhg\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"fghfhg\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                        \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                    \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n            \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Music Playlist\",\r\n            \"order\": 1,\r\n            \"is_public\": false,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [],\r\n            \"created_at\": \"2020-09-16T18:21:29.000000Z\",\r\n            \"updated_at\": \"2020-09-16T18:21:29.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/projects/{project_id}/playlists'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Playlist'
+      description: 'Create a new playlist of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 20
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project Example 1'
+        required: true
+        example: eos
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 20
+      project: eos
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'The title of a playlist'
+        required: true
+        example: 'Math Playlist'
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'The order number of a playlist'
+        required: false
+        example: 0
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      title: 'Math Playlist'
+      order: 0
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Could not create playlist. Please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 201
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/playlists/{id}'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Playlist'
+      description: 'Get the specified playlist of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 7
+      id: 15
+      project: '1'
+      playlist: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid project or playlist id."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/projects/{project_id}/playlists/{id}'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Playlist'
+      description: 'Update the specified playlist of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 20
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 20
+      id: 12
+      project: '1'
+      playlist: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'The title of a playlist'
+        required: true
+        example: 'Math Playlist'
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'The order number of a playlist'
+        required: false
+        example: 0
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      title: 'Math Playlist'
+      order: 0
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid project or playlist id."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update playlist."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/projects/{project_id}/playlists/{id}'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Playlist'
+      description: 'Remove the specified playlist of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 19
+      id: 15
+      project: '1'
+      playlist: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Playlist has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid project or playlist id."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete playlist."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/playlists/{playlist_id}/search-preview'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Playlist Search Preview'
+      description: 'Get the specified playlist search preview.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 17
+        type: integer
+        custom: []
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 17
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 17
+      playlist_id: 17
+      suborganization: '1'
+      playlist: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+            "message": [
+              "Playlist is not available."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/playlists/{playlist_id}/share'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Share playlist'
+      description: 'Share the specified playlist of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 14
+      playlist_id: 12
+      playlist: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to share playlist."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/playlists/{playlist_id}/remove-share'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Share playlist'
+      description: 'Remove Share the specified playlist of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 8
+        type: integer
+        custom: []
+      playlist:
+        name: playlist
+        description: 'The Id of a playlist'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 7
+      playlist_id: 8
+      playlist: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to remove share playlist."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/playlists/{playlist_id}/lti'
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Lti Playlist'
+      description: 'Get the lti playlist of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      playlist_id:
+        name: playlist_id
+        description: 'The ID of the playlist.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project Example 1'
+        required: true
+        example: animi
+        type: string
+        custom: []
+    cleanUrlParameters:
+      playlist_id: 15
+      project: animi
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

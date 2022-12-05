@@ -1,0 +1,432 @@
+name: '9. Activity Type'
+description: |-
+
+  APIs for activity type management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/activity-types/{activityType_id}/items'
+    metadata:
+      groupName: '9. Activity Type'
+      groupDescription: |-
+
+        APIs for activity type management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Activity Type Items'
+      description: 'Get a list of activity items of the specified activity type.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      activityType_id:
+        name: activityType_id
+        description: 'The ID of the activityType.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      activityType:
+        name: activityType
+        description: 'The Id of a activity type'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      activityType_id: 6
+      activityType: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 52,\r\n            \"title\": \"Spoken Answers\",\r\n            \"description\": \"Voice recognition activity that the learner can answered with their own voice.\",\r\n            \"order\": 3,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.SpeakTheWords 1.3\",\r\n            \"image\": \"/storage/uploads/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"769\",\r\n            \"demo_video_id\": \"https://youtu.be/lgzsJDcMvPI\"\r\n        },\r\n        {\r\n            \"id\": 50,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/uploads/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\"\r\n        },\r\n        {\r\n            \"id\": 51,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/uploads/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"767\",\r\n            \"demo_video_id\": \"https://youtu.be/JLYtQpB0JmY\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-types'
+    metadata:
+      groupName: '9. Activity Type'
+      groupDescription: |-
+
+        APIs for activity type management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Activity Types'
+      description: 'Get a list of the activity types.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 10
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 10
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"activityTypes\": [\r\n        {\r\n            \"id\": 7,\r\n            \"title\": \"Audio\",\r\n            \"order\": 0,\r\n            \"image\": \"/storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n            \"organization_id\": 1,\r\n            \"activityItems\": [\r\n                {\r\n                    \"id\": 52,\r\n                    \"title\": \"Spoken Answers\",\r\n                    \"description\": \"Voice recognition activity that the learner can answered with their own voice.\",\r\n                    \"order\": 3,\r\n                    \"activity_type_id\": 7,\r\n                    \"type\": \"h5p\",\r\n                    \"h5pLib\": \"H5P.SpeakTheWords 1.3\",\r\n                    \"image\": \"/storage/uploads/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png\",\r\n                    \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"deleted_at\": null,\r\n                    \"demo_activity_id\": \"769\",\r\n                    \"demo_video_id\": \"https://youtu.be/lgzsJDcMvPI\",\r\n                    \"organization_id\": 1\r\n                },\r\n                {\r\n                    \"id\": 50,\r\n                    \"title\": \"Audio Recorder\",\r\n                    \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n                    \"order\": 1,\r\n                    \"activity_type_id\": 7,\r\n                    \"type\": \"h5p\",\r\n                    \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n                    \"image\": \"/storage/uploads/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n                    \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"deleted_at\": null,\r\n                    \"demo_activity_id\": \"768\",\r\n                    \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n                    \"organization_id\": 1\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-10T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-10T01:16:52.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 8,\r\n            \"title\": \"Informational\",\r\n            \"order\": 0,\r\n            \"image\": \"/storage/uploads/O8M6MvWrdtqrZSczhzzbTdCCDulrKxLJslYTzcwL.png\",\r\n            \"activityItems\": [\r\n                {\r\n                    \"id\": 54,\r\n                    \"title\": \"Dialog Cards\",\r\n                    \"description\": \"Create great interactive language learning resources\",\r\n                    \"order\": 2,\r\n                    \"activity_type_id\": 8,\r\n                    \"type\": \"h5p\",\r\n                    \"h5pLib\": \"H5P.Dialogcards 1.8\",\r\n                    \"image\": \"/storage/uploads/GPrWdvREEixWnQtKtTO0RsBY5cg0XznBoozygcy6.png\",\r\n                    \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"updated_at\": \"2020-09-28T08:56:13.000000Z\",\r\n                    \"deleted_at\": null,\r\n                    \"demo_activity_id\": \"732\",\r\n                    \"demo_video_id\": \"https://youtu.be/Fh5zrkWgAjk\",\r\n                    \"organization_id\": 1\r\n                },\r\n                {\r\n                    \"id\": 57,\r\n                    \"title\": \"Summary\",\r\n                    \"description\": \"Create challenges where the learner chooses statements to reach the correct conclusion.\",\r\n                    \"order\": 5,\r\n                    \"activity_type_id\": 8,\r\n                    \"type\": \"h5p\",\r\n                    \"h5pLib\": \"H5P.Summary 1.10\",\r\n                    \"image\": \"/storage/uploads/rFvefEi5bNmj14yDW6WTnirkUm8TY3eu4PgKz1Gi.png\",\r\n                    \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n                    \"deleted_at\": null,\r\n                    \"demo_activity_id\": \"762\",\r\n                    \"demo_video_id\": \"https://youtu.be/EuXbu4Y4EkU\",\r\n                    \"organization_id\": 1\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-10T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-10T01:16:52.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-types'
+    metadata:
+      groupName: '9. Activity Type'
+      groupDescription: |-
+
+        APIs for activity type management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Activity Type'
+      description: 'Create a new activity type.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 4
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Activity Item Title.'
+        required: true
+        example: Audio
+        type: string
+        custom: []
+      image:
+        name: image
+        description: 'Valid Image.'
+        required: true
+        example: at
+        type: image
+        custom: []
+      order:
+        name: order
+        description: 'At what order it should appear.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 5
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      title: Audio
+      image: at
+      order: 1
+      organization_id: 5
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Could not create activity type. Please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"id\": 7,\r\n    \"title\": \"Audio\",\r\n    \"order\": 0,\r\n    \"image\": \"/storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n    \"organization_id\": 1,\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 52,\r\n            \"title\": \"Spoken Answers\",\r\n            \"description\": \"Voice recognition activity that the learner can answered with their own voice.\",\r\n            \"order\": 3,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.SpeakTheWords 1.3\",\r\n            \"image\": \"/storage/uploads/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"769\",\r\n            \"demo_video_id\": \"https://youtu.be/lgzsJDcMvPI\"\r\n        },\r\n        {\r\n            \"id\": 50,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/uploads/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n            \"organization_id\": 1\r\n        },\r\n        {\r\n            \"id\": 51,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/uploads/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"767\",\r\n            \"demo_video_id\": \"https://youtu.be/JLYtQpB0JmY\",\r\n            \"organization_id\": 1\r\n        }\r\n    ],\r\n    \"created_at\": \"2020-09-10T01:16:52.000000Z\",\r\n    \"updated_at\": \"2020-09-10T01:16:52.000000Z\"\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-types/{id}'
+    metadata:
+      groupName: '9. Activity Type'
+      groupDescription: |-
+
+        APIs for activity type management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Activity Type'
+      description: 'Get the specified activity type.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the activity type.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      activityType:
+        name: activityType
+        description: 'The Id of a activity type'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 14
+      id: 9
+      suborganization: '1'
+      activityType: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"id\": 7,\r\n    \"title\": \"Audio\",\r\n    \"order\": 0,\r\n    \"image\": \"/storage/uploads/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n    \"organization_id\": 1,\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 52,\r\n            \"title\": \"Spoken Answers\",\r\n            \"description\": \"Voice recognition activity that the learner can answered with their own voice.\",\r\n            \"order\": 3,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.SpeakTheWords 1.3\",\r\n            \"image\": \"/storage/uploads/7iyRffLSS9QdFKCazDuDetl6WPk4BQP8tEP2eeuJ.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"769\",\r\n            \"demo_video_id\": \"https://youtu.be/lgzsJDcMvPI\"\r\n        },\r\n        {\r\n            \"id\": 50,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/uploads/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n            \"organization_id\": 1\r\n        },\r\n        {\r\n            \"id\": 51,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activity_type_id\": 7,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/uploads/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"created_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"updated_at\": \"2020-09-12T01:16:52.000000Z\",\r\n            \"deleted_at\": null,\r\n            \"demo_activity_id\": \"767\",\r\n            \"demo_video_id\": \"https://youtu.be/JLYtQpB0JmY\",\r\n            \"organization_id\": 1\r\n        }\r\n    ],\r\n    \"created_at\": \"2020-09-10T01:16:52.000000Z\",\r\n    \"updated_at\": \"2020-09-10T01:16:52.000000Z\"\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-types/{id}'
+    metadata:
+      groupName: '9. Activity Type'
+      groupDescription: |-
+
+        APIs for activity type management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Activity Type'
+      description: 'Remove the specified activity type.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the activity type.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      activityType:
+        name: activityType
+        description: 'The Id of a activity type'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 9
+      id: 14
+      suborganization: '1'
+      activityType: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Activity type has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "message": [
+              "Failed to delete activity type."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/activity-types/upload-thumb
+    metadata:
+      groupName: '9. Activity Type'
+      groupDescription: |-
+
+        APIs for activity type management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Upload Thumbnail'
+      description: 'Upload thumbnail image for a activity type'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      image:
+        name: image
+        description: 'Must be an image.'
+        required: true
+        example: null
+        type: file
+        custom: []
+      thumb:
+        name: thumb
+        description: 'Thumbnail image'
+        required: true
+        example: ea
+        type: image
+        custom: []
+    cleanBodyParameters:
+      thumb: ea
+    fileParameters:
+      image: null
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "thumbUrl": "/storage/activity-types/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid image."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
