@@ -720,7 +720,7 @@ class ActivityController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Activity not found."
+     *     "Activity is not shareable."
      *   ]
      * }
      *
@@ -750,7 +750,7 @@ class ActivityController extends Controller
         }
 
         return response([
-            'errors' => ['Activity not found.']
+            'errors' => ['Activity is not shareable.']
         ], 400);
     }
 

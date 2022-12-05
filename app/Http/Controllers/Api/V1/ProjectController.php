@@ -380,7 +380,7 @@ class ProjectController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "No shareable Project found."
+     *     "Project is not shareable."
      *   ]
      * }
      *
@@ -398,7 +398,7 @@ class ProjectController extends Controller
         }
 
         return response([
-            'errors' => ['No shareable Project found.'],
+            'errors' => ['Project is not shareable.'],
         ], 400);
     }
 
