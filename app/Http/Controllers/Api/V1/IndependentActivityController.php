@@ -783,7 +783,7 @@ class IndependentActivityController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Independent Activity not found."
+     *     "Independent Activity is not shareable."
      *   ]
      * }
      *
@@ -812,7 +812,7 @@ class IndependentActivityController extends Controller
         }
 
         return response([
-            'errors' => ['Independent Activity not found.']
+            'errors' => ['Independent Activity is not shareable.']
         ], 400);
     }
 
