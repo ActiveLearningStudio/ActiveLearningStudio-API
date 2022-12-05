@@ -8,6 +8,12 @@ endpoints:
       - POST
     uri: api/register
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: Register
       description: ''
       authenticated: false
@@ -16,7 +22,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       first_name:
         name: first_name
@@ -74,6 +82,16 @@ endpoints:
         example: currikistudio
         type: string
         custom: []
+    cleanBodyParameters:
+      first_name: John
+      last_name: Doe
+      email: john.doe@currikistudio.org
+      password: Password123
+      organization_name: Curriki
+      organization_type: Nonprofit
+      job_title: Developer
+      domain: currikistudio
+    fileParameters: []
     responses:
       -
         status: 201
@@ -82,7 +100,8 @@ endpoints:
             "message": "You are one step away from building the world's most immersive learning experiences with CurrikiStudio!"
           }
         headers: []
-        description: '201'
+        description: ''
+        custom: []
       -
         status: 500
         content: |-
@@ -92,13 +111,25 @@ endpoints:
             ]
           }
         headers: []
-        description: '500'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/login
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: Login
       description: ''
       authenticated: false
@@ -107,7 +138,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       email:
         name: email
@@ -130,6 +163,11 @@ endpoints:
         example: curriki
         type: string
         custom: []
+    cleanBodyParameters:
+      email: john.doe@currikistudio.org
+      password: Password123
+      domain: curriki
+    fileParameters: []
     responses:
       -
         status: 400
@@ -140,7 +178,8 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 400
         content: |-
@@ -150,7 +189,8 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 400
         content: |-
@@ -160,18 +200,31 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/admin/login
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Admin Login'
       description: ''
       authenticated: false
@@ -180,7 +233,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       email:
         name: email
@@ -200,9 +255,14 @@ endpoints:
         name: domain
         description: ''
         required: false
-        example: ducimus
+        example: vel
         type: string
         custom: []
+    cleanBodyParameters:
+      email: john.doe@currikistudio.org
+      password: Password123
+      domain: vel
+    fileParameters: []
     responses:
       -
         status: 400
@@ -213,7 +273,8 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 500
         content: |-
@@ -223,7 +284,8 @@ endpoints:
             ]
           }
         headers: []
-        description: '500'
+        description: ''
+        custom: []
       -
         status: 500
         content: |-
@@ -233,18 +295,31 @@ endpoints:
             ]
           }
         headers: []
-        description: '500'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/login/google
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Login with Google'
       description: ''
       authenticated: false
@@ -253,13 +328,15 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       domain:
         name: domain
         description: ''
         required: true
-        example: accusantium
+        example: quidem
         type: string
         custom: []
       tokenId:
@@ -360,6 +437,23 @@ endpoints:
         example: google
         type: string
         custom: []
+    cleanBodyParameters:
+      domain: quidem
+      tokenId: eyJhbGciOiJSUzI1NiIsImtpZCI6IjJjNmZh...
+      tokenObj:
+        token_type: Bearer
+        access_token: ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...
+        scope: 'email profile ...'
+        login_hint: AJDLj6JUa8yxXrhHdWRHIV0...
+        expires_in: 3599
+        id_token: eyJhbGciOiJSUzI1NiIsImtpZCI6I...
+        session_state:
+          extraQueryParams:
+            authuser: '0'
+        first_issued_at: 1601535932504
+        expires_at: 1601539531504
+        idpId: google
+    fileParameters: []
     responses:
       -
         status: 400
@@ -370,18 +464,31 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/login/sso
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Login with LTI SSO 1.0'
       description: ''
       authenticated: false
@@ -390,7 +497,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       sso_info:
         name: sso_info
@@ -399,6 +508,9 @@ endpoints:
         example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
         type: string
         custom: []
+    cleanBodyParameters:
+      sso_info: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
+    fileParameters: []
     responses:
       -
         status: 400
@@ -409,18 +521,31 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/login/lti-sso
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Login with LTI SSO'
       description: ''
       authenticated: false
@@ -429,7 +554,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       sso_info:
         name: sso_info
@@ -438,6 +565,9 @@ endpoints:
         example: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
         type: string
         custom: []
+    cleanBodyParameters:
+      sso_info: dXNlcl9rZXk9YWFobWFkJnVzZXJfZW1haWw9YXFlZWwuYWhtYWQlNDB...
+    fileParameters: []
     responses:
       -
         status: 400
@@ -448,18 +578,31 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/login/wordpress-sso
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Wordpress SSO: Execute wordpress sso authentication'
       description: ''
       authenticated: false
@@ -468,67 +611,46 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       clientId:
         name: clientId
         description: 'Client id for the integration: 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta'
         required: true
-        example: non
+        example: quia
         type: string
         custom: []
       code:
         name: code
         description: 'Temporary token for sso : 7PwnyVuYIWJtdKYIzvxBpo5wFAizj12F6WU8qFta'
         required: true
-        example: illo
+        example: vero
         type: string
         custom: []
+    cleanBodyParameters:
+      clientId: quia
+      code: vero
+    fileParameters: []
     responses: []
     responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/login/wordpress-sso-settings/{clientId}'
-    metadata:
-      title: 'Get Wordpress SSO default settings'
-      description: 'Wordpress SSO: Get default settings for a particular wordpress sso integration'
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      clientId:
-        name: clientId
-        description: ''
-        required: true
-        example: voluptatibus
-        type: string
-        custom: []
-      client:
-        name: client
-        description: 'Id for the integration'
-        required: true
-        example: 7
-        type: integer
-        custom: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 404
-        content: '{"errors":["Unable to find default LMS setting with your client id."]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-        description: null
-    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - GET
     uri: 'api/oauth/{provider}/redirect'
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Oaut Redirect'
       description: ''
       authenticated: false
@@ -541,28 +663,46 @@ endpoints:
         name: provider
         description: ''
         required: true
-        example: soluta
+        example: voluptatem
         type: string
         custom: []
+    cleanUrlParameters:
+      provider: voluptatem
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
     responses:
       -
         status: 404
         content: '- Redirect'
         headers: []
-        description: '404'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - GET
     uri: 'api/oauth/{provider}/callback'
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: 'Oaut oauthCallBack'
       description: ''
       authenticated: false
@@ -575,28 +715,44 @@ endpoints:
         name: provider
         description: ''
         required: true
-        example: dicta
+        example: amet
         type: string
         custom: []
+    cleanUrlParameters:
+      provider: amet
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
     responses:
       -
         status: 404
         content: '- Redirect back'
         headers: []
-        description: '404'
+        description: ''
+        custom: []
       -
         status: 200
         content: "{\r\n    \"user\": {\r\n        \"id\": 1,\r\n        \"first_name\": \"John\",\r\n        \"last_name\": \"Doe\",\r\n        \"email\": \"john.doe@currikistudio.org\",\r\n        \"organization_name\": \"Curriki\",\r\n        \"organization_type\": null,\r\n        \"job_title\": \"Developer\",\r\n        \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n        \"phone_number\": \"+1234567890\",\r\n        \"website\": \"www.currikistudio.org\",\r\n        \"subscribed\": true\r\n    },\r\n    \"access_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9...\"\r\n}\r\n"
         headers: []
-        description: '200'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/forgot-password
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: ''
+      subgroup: null
+      subgroupDescription: null
       title: |-
         Forgot Password
 
@@ -608,7 +764,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       email:
         name: email
@@ -617,6 +775,9 @@ endpoints:
         example: john.doe@currikistudio.org
         type: string
         custom: []
+    cleanBodyParameters:
+      email: john.doe@currikistudio.org
+    fileParameters: []
     responses:
       -
         status: 200
@@ -625,7 +786,8 @@ endpoints:
             "message": "Password reset email has been sent. Please follow the instructions."
           }
         headers: []
-        description: '200'
+        description: ''
+        custom: []
       -
         status: 400
         content: |-
@@ -635,13 +797,23 @@ endpoints:
             ]
           }
         headers: []
-        description: '400'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/reset-password
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: ''
+      subgroup: null
+      subgroupDescription: null
       title: |-
         Reset Password
 
@@ -653,7 +825,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       token:
         name: token
@@ -683,6 +857,12 @@ endpoints:
         example: Password123
         type: string
         custom: []
+    cleanBodyParameters:
+      token: ya29.a0AfH6SMBx-CIZfKRorxn8xPugO...
+      email: john.doe@currikistudio.org
+      password: Password123
+      password_confirmation: Password123
+    fileParameters: []
     responses:
       -
         status: 200
@@ -691,7 +871,8 @@ endpoints:
             "message": "Password has been reset successfully."
           }
         headers: []
-        description: '200'
+        description: ''
+        custom: []
       -
         status: 401
         content: |-
@@ -699,13 +880,23 @@ endpoints:
             "error": "Invalid request."
           }
         headers: []
-        description: '401'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/verify-email
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: ''
+      subgroup: null
+      subgroupDescription: null
       title: |-
         Verify an Email Address
 
@@ -717,7 +908,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters:
       id:
         name: id
@@ -747,6 +940,12 @@ endpoints:
         example: 1599754915
         type: integer
         custom: []
+    cleanBodyParameters:
+      id: 1
+      hash: 9e0f70124a2a88d5435...
+      signature: 467fbe9a00e7d367553f...
+      expires: 1599754915
+    fileParameters: []
     responses:
       -
         status: 204
@@ -754,13 +953,25 @@ endpoints:
           {
           }
         headers: []
-        description: '204'
+        description: ''
+        custom: []
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
   -
     httpMethods:
       - POST
     uri: api/logout
     metadata:
+      groupName: '1. Authentication'
+      groupDescription: |-
+
+        APIs for Authentication
+      subgroup: null
+      subgroupDescription: null
       title: Logout
       description: ''
       authenticated: false
@@ -769,8 +980,12 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
     responses:
       -
         status: 200
@@ -779,36 +994,11 @@ endpoints:
             "message": "You have been successfully logged out."
           }
         headers: []
-        description: '200'
-    responseFields: []
-  -
-    httpMethods:
-      - GET
-    uri: 'api/checkemail/{email}'
-    metadata:
-      title: 'Check if email is already registered'
-      description: ''
-      authenticated: false
-      custom: []
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      email:
-        name: email
-        description: 'address to be checked: currikiuser@curriki.org'
-        required: false
-        example: fuga
-        type: string
+        description: ''
         custom: []
-    queryParameters: []
-    bodyParameters: []
-    responses:
-      -
-        status: 200
-        content: '{"exists":false,"message":"Email is not registered"}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-        description: null
     responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
