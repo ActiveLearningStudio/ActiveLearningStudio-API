@@ -1055,7 +1055,7 @@ class SuborganizationController extends Controller
      * @responseFile responses/organization/update-media-source.json
      *
      * @response {
-     *    'message' => 'Media sources has been updated successfully.',
+     *    'message' => 'Media sources have been updated successfully.',
      * }
      *
      * @response 500 {
@@ -1086,7 +1086,7 @@ class SuborganizationController extends Controller
 
         if ($result) {
             return response([
-                'message' => 'Media sources has been updated successfully.',
+                'message' => 'Media sources have been updated successfully.',
                 'mediaSources' => $suborganization->mediaSources,
             ], 200);
         }
