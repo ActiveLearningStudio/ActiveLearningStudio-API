@@ -65,7 +65,7 @@ RUN cat /var/www/html/.env
 RUN php /var/www/html/artisan passport:install
 RUN php /var/www/html/artisan config:cache
 
-RUN php /var/www/html/artisan test
+#RUN php /var/www/html/artisan test
 
 
 #COPY ./entrypoint.api.sh ./
