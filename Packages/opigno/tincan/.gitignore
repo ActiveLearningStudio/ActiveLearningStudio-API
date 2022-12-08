@@ -1,0 +1,18 @@
+tests/config/config.php
+
+# Third party libraries
+phpdoc.xml
+phpunit.xml
+php.ini
+
+# buildables
+vendor
+composer.lock
+sample/vendor
+sample/composer.lock
+doc/api
+doc/coverage
+
+# wild
+todo.md
+
