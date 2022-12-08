@@ -3,20 +3,24 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use App\User;
+use App\Models\Project;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProjectTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, HasFactory;
     
     /** @test Function to create project*/
     public function createProject()
     {
         // This step will mock the user session using user factory
-        $user = $this->actingAs(factory('App\User')->create(), 'api');
+        $user = $this->actingAs(User::factory()->create(), 'api');
+        
 
         // It will create the object of project
-        $project = factory('App\Models\Project')->make();
+        $project = Project::factory()->make();
 
         // Post request to the create project route should return 201 status
         $response = $this->withSession(['banned' => false])
@@ -33,10 +37,10 @@ class ProjectTest extends TestCase
     /** @test function for mandatory title*/
     public function projectRequiresTitle()
     {
-        $this->actingAs(factory('App\User')->create(),'api');
+        $this->actingAs(User::factory()->create(),'api');
 
         // Make project object with title as null
-        $project = factory('App\Models\Project')->make(['name' => null]);
+        $project = Project::factory()->make(['name' => null]);
 
         // API call should return the name validation error message
         $this->withSession(['banned' => false])
@@ -50,9 +54,9 @@ class ProjectTest extends TestCase
     /** @test  function for mandatory description*/
     public function projectRequiresDescription()
     {
-        $this->actingAs(factory('App\User')->create(),'api');
+        $this->actingAs(User::factory()->create(),'api');
 
-        $project = factory('App\Models\Project')->make(['description' => null]);
+        $project = Project::factory()->make(['description' => null]);
 
         $this->withSession(['banned' => false])
             ->post(
@@ -65,9 +69,9 @@ class ProjectTest extends TestCase
     /** @test  function for mandatory thumb url*/
     public function projectRequiresThumbUrl()
     {
-        $this->actingAs(factory('App\User')->create(),'api');
+        $this->actingAs(User::factory()->create(),'api');
 
-        $project = factory('App\Models\Project')->make(['thumb_url' => null]);
+        $project = Project::factory()->make(['thumb_url' => null]);
 
         $this->withSession(['banned' => false])
             ->post(
@@ -80,9 +84,9 @@ class ProjectTest extends TestCase
     /** @test function for mandatory organization visibilty id*/
     public function projectRequiresOrganizationVisibilityTypeId()
     {
-        $this->actingAs(factory('App\User')->create(),'api');
+        $this->actingAs(User::factory()->create(),'api');
 
-        $project = factory('App\Models\Project')->make(['organization_visibility_type_id' => null]);
+        $project = Project::factory()->make(['organization_visibility_type_id' => null]);
 
         $this->withSession(['banned' => false])
             ->post(
@@ -96,7 +100,7 @@ class ProjectTest extends TestCase
     public function unauthenticatedUsersCannotCreateNewProject()
     {
         // Given we have a project object
-        $project = factory('App\Models\Project')->make();
+        $project = Project::factory()->make();
         // When unauthenticated user submits post request to create project endpoint
         // He should be retrun the 401 authorization status code
         $this->postJson(

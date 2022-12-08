@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
-    use SoftDeletes, GlobalScope;
+    use SoftDeletes, GlobalScope, HasFactory;
 
     /**
      * The attributes that are mass assignable.

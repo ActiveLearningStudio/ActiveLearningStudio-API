@@ -17,10 +17,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 use App\Repositories\User\UserRepositoryInterface;
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope, HasRelationships;
+    use HasApiTokens, Notifiable, SoftDeletes, GlobalScope, HasRelationships, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -323,4 +325,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany('App\Models\IndependentActivity');
     }
+
 }
