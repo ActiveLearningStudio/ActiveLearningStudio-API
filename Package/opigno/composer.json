@@ -1,5 +1,5 @@
 {
-    "name": "rusticisoftware/tincan",
+    "name": "opigno/tincan",
     "type": "library",
     "description": "Experience API (Tin Can API) Library",
     "homepage": "http://rusticisoftware.github.io/TinCanPHP/",
@@ -11,6 +11,9 @@
         "e-learning",
         "scorm"
     ],
+    "replace": {
+        "rusticisoftware/tincan": "*"
+    },
     "license": "Apache-2.0",
     "authors": [
         {
@@ -24,7 +27,7 @@
         "issues": "https://github.com/RusticiSoftware/TinCanPHP/issues"
     },
     "require": {
-        "php": "~5.5 || ^7.0.3",
+        "php": "~5.5 || ^7 || ^8",
         "ext-openssl": "*",
         "namshi/jose": "^7.2.1",
         "willdurand/negotiation": "^2.0"

@@ -16,11 +16,10 @@
 */
 
 namespace TinCan;
-// use \CustomWilldurand\LanguageNegotiator;
+
 class LanguageMap extends Map
 {
     public function getNegotiatedLanguageString ($acceptLanguage = null) {
-        $negotiator = new RemoteLRS;
         $negotiator = new \Negotiation\LanguageNegotiator();
         if ($acceptLanguage === null) {
             //
