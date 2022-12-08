@@ -1131,6 +1131,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content
             'thumb_url' => $newThumbUrl,
+            'description' => $independentActivity->description,
             'shared' => $playlist->project->shared,
         ];
 
