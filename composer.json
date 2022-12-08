@@ -21,9 +21,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "maatwebsite/excel": "^3.1",
-        "madnest/madzipper": "^1.1",
-        "willdurand/negotiation": "3.0",
-        "opigno/tincan": "^1.1"
+        "madnest/madzipper": "^1.1"
     },
     "require-dev": {
         "knuckleswtf/scribe": "^4.7",
@@ -51,6 +49,8 @@
     "autoload": {
         "psr-4": {
             "Djoudi\\LaravelH5p\\": "H5P/laravel-h5p/src/LaravelH5p",
+            "TinCan\\": "Packages/opigno/tincan/src",
+            "CustomWilldurand\\": "Packages/Negotiation/src/Negotiation",
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
