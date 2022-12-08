@@ -21,7 +21,7 @@ class UpdateAllowedOrganizationVisibilityTypesSeeder extends Seeder
                 ->update(['display_name' => 'Protected']);
 
             $affected = DB::table('organization_visibility_types')
-                ->where('name', $global->id)
+                ->where('id', $global->id)
                 ->update(['display_name' => 'My Organization']);
 
             $affected = DB::table('allowed_organization_visibility_types')

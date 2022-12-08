@@ -745,7 +745,10 @@ class SuborganizationController extends Controller
      */
     public function getVisibilityTypes()
     {
-        return OrganizationVisibilityTypeResource::collection(OrganizationVisibilityType::all());
+        $organizationVisibilityTypes = OrganizationVisibilityType::where('name', '<>' ,'protected')
+                                    ->get();
+
+        return OrganizationVisibilityTypeResource::collection($organizationVisibilityTypes);
     }
 
     /**
