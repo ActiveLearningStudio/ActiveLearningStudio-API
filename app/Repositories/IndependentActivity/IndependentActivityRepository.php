@@ -1121,16 +1121,17 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      */
     public function moveToPlaylist($independentActivity, $playlist, $token)
     {
-        $newThumbUrl = cloneIndependentActivityThumbnail($independentActivity->thumb_url, "independent-activities", "activities");
+        //$newThumbUrl = cloneIndependentActivityThumbnail($independentActivity->thumb_url, "independent-activities", "activities");
 
         $activity_data = [
             'title' => $independentActivity->title,
+            'description' => $independentActivity->description,
             'type' => $independentActivity->type,
             'content' => $independentActivity->content,
             'playlist_id' => $playlist->id,
             'order' => $this->getOrder($playlist->id) + 1,
             'h5p_content_id' => $independentActivity->h5p_content_id, // Move the content
-            'thumb_url' => $newThumbUrl,
+            'thumb_url' => $independentActivity->thumb_url,
             'shared' => $playlist->project->shared,
         ];
 
