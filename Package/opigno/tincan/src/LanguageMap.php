@@ -16,11 +16,11 @@
 */
 
 namespace TinCan;
-
+use Negotiation\LanguageNegotiator;
 class LanguageMap extends Map
 {
     public function getNegotiatedLanguageString ($acceptLanguage = null) {
-        $negotiator = new \Negotiation\LanguageNegotiator();
+        $negotiator = new LanguageNegotiator();
         if ($acceptLanguage === null) {
             //
             // include the q=0 on * because of an issue in the library not picking up
