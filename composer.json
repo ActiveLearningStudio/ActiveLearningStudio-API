@@ -49,8 +49,8 @@
     "autoload": {
         "psr-4": {
             "Djoudi\\LaravelH5p\\": "H5P/laravel-h5p/src/LaravelH5p",
-            "TinCan\\": "Package/opigno/src",
-            "CustomWilldurand\\": "Package/Negotiation/src/Negotiation",
+            "TinCan\\": "Package/opigno/tincan/src",
+            "willdurand\\": "Package/willdurand/negotiation/src",
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
