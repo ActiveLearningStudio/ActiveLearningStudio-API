@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
@@ -158,7 +158,7 @@ if (!function_exists('xAPIFormatDuration')) {
     {
         $rawDuration = str_replace(array('PT', 'S'), '', $duration);
         if ($formatValue) {
-            $seconds = round($rawDuration);
+            $seconds = round((int)$rawDuration);
             $formatted = sprintf('%02d:%02d', ($seconds / 60 % 60), $seconds % 60);
             if (($seconds / 3600) >= 1) {
                 $formatted = sprintf('%02d:%02d:%02d', ($seconds / 3600), ($seconds / 60 % 60), $seconds % 60);
