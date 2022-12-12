@@ -28,7 +28,7 @@ class AddEssayFifteenSemanticsSeeder extends Seeder
                             'restricted' => 0,
                             'fullscreen' => 0,
                             'preloaded_js' => 'scripts/essay.js,scripts/inputfield.js',
-                            'preloaded_css' => 'css/essay.css',
+                            'preloaded_css' => 'styles/essay.css',
                             'drop_library_css' => '',
                             'semantics' => $this->getSemantics(),
                             'tutorial_url' => ' ',
