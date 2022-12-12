@@ -1,4 +1,4 @@
- <?php
+<?php
 
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
