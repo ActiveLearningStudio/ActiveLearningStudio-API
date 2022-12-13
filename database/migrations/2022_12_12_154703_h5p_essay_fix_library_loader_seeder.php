@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class H5PEssayFixLibraryLoaderSeeder extends Migration
+class H5pEssayFixLibraryLoaderSeeder extends Migration
 {
     /**
      * Run the migrations.
