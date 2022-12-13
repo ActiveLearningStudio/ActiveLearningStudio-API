@@ -13,7 +13,10 @@ class H5pBranchingQuestionEditor extends Migration
      */
     public function up()
     {
-        //
+        \Artisan::call('db:seed', [
+            '--class' => H5pBranchingQuestionEditorSeeder::class,
+            '--force' => true
+        ]);
     }
 
     /**

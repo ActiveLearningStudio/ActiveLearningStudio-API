@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class H5pBranchingQuestionEditor extends Seeder
+class H5pBranchingQuestionEditorSeeder extends Seeder
 {
     /**
      * Run the database seeds.
