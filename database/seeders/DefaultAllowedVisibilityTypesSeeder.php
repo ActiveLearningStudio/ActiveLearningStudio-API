@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Organization;
 use App\Models\OrganizationVisibilityType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DefaultAllowedVisibilityTypesSeeder extends Seeder
 {
