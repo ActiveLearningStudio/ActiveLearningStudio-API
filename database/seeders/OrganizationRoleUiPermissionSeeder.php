@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\OrganizationRoleType;
 use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationRoleUiPermissionSeeder extends Seeder
 {

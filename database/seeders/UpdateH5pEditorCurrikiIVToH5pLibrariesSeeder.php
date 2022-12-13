@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UpdateH5pEditorCurrikiIVToH5pLibrariesSeeder extends Seeder
 {
