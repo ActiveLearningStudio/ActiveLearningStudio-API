@@ -14,7 +14,7 @@ class H5PEssayLibraryLoaderSeeder extends Seeder
         $h5pFibLibParams = ['name' => "H5P.Essay", "major_version" => 1, "minor_version" => 5];
         $h5pFibLib = DB::table('h5p_libraries')->where($h5pFibLibParams)->first();
         if ($h5pFibLib) {
-            DB::table('h5p_libraries')->where($h5pEssayLibParams)->update(['preloaded_js' => 'scripts/essay.js,scripts/inputfield.js','preloaded_css' => 'scripts/essay.js',]);
+            DB::table('h5p_libraries')->where($h5pEssayLibParams)->update(['preloaded_js' => 'scripts/essay.js,scripts/inputfield.js','preloaded_css' => 'styles/essay.css']);
         }
     }
 }
