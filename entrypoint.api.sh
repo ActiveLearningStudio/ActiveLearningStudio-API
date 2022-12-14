@@ -2,7 +2,7 @@
 
 php /var/www/html/artisan config:cache
 php /var/www/html/artisan storage:link
-if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage/oauth-public.key ]]; then php /var/www/html/artisan passport:install; fi
+# if [[ ! -e /var/www/html/storage/oauth-private.key || ! -e /var/www/html/storage/oauth-public.key ]]; then php /var/www/html/artisan passport:install; fi
 
 # php /var/www/html/artisan migrate --force
 
@@ -24,5 +24,5 @@ cd /var/www/html && git log --graph -10 --decorate --pretty > /var/www/html/publ
 # chmod 777 -R /var/www/html/storage &
 touch /var/www/html/health.ok
 
-apache2ctl -D FOREGROUND
-# exec "$@"
+# apache2ctl -D FOREGROUND
+exec "$@"
