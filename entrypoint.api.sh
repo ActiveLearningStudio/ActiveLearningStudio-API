@@ -25,3 +25,4 @@ cd /var/www/html && git log --graph -10 --decorate --pretty > /var/www/html/publ
 touch /var/www/html/health.ok
 
 apache2ctl -D FOREGROUND
+# exec "$@"
