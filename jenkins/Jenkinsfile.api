@@ -42,6 +42,8 @@ node("currikidev") {
                                 echo 'Copy'
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-api" 
                                 sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-migrate" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-queue" 
                                 echo 'Copy completed'
                         }
                     }
