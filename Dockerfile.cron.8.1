@@ -75,7 +75,7 @@ RUN touch /var/log/cron.log
 
 ARG H5P_BRANCH
 ENV H5P_BRANCH=$H5PBRANCH
-RUN git clone -b $H5P_BRANCH https://github.com/ActiveLearningStudio/H5P.Distribution.git h5pcode
+RUN git clone -b develop https://github.com/ActiveLearningStudio/H5P.Distribution.git h5pcode
 
 COPY . .
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
