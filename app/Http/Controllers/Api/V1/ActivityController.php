@@ -720,7 +720,7 @@ class ActivityController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Activity not found."
+     *     "Activity is not shareable."
      *   ]
      * }
      *
@@ -730,7 +730,7 @@ class ActivityController extends Controller
     public function getH5pResourceSettingsShared(Activity $activity)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($activity->shared || ($activity->playlist->project->indexing === (int)config('constants.indexing-approved'))) {
+        if ($activity->shared) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor($content = null, 'preview');
@@ -750,7 +750,7 @@ class ActivityController extends Controller
         }
 
         return response([
-            'errors' => ['Activity not found.']
+            'errors' => ['Activity is not shareable.']
         ], 400);
     }
 

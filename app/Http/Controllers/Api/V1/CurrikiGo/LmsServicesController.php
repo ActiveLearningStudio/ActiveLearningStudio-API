@@ -107,7 +107,6 @@ class LmsServicesController extends Controller
             $service = new SaveStudentdataService();
             $service->saveStudentData($request);
         }
-
         $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $request->issuerClient);
         $canvasClient = new Client($lmsSetting);
         $saveData = new SaveTeacherData($canvasClient);

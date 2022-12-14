@@ -1055,7 +1055,7 @@ class SuborganizationController extends Controller
      * @responseFile responses/organization/update-media-source.json
      *
      * @response {
-     *    'message' => 'Media sources has been updated successfully.',
+     *    'message' => 'Media sources have been updated successfully.',
      * }
      *
      * @response 500 {
@@ -1076,7 +1076,8 @@ class SuborganizationController extends Controller
             foreach ($request->media_source_ids as $row) {
                 $postData[$row['media_source_id']] = [
                     'h5p_library' => (isset($row['h5p_library']))? $row['h5p_library'] : NULL,
-                    'lti_tool_settings_status' => (isset($row['lti_tool_settings_status']))? $row['lti_tool_settings_status'] : 0
+                    'lti_tool_settings_status' => (isset($row['lti_tool_settings_status']))? $row['lti_tool_settings_status'] : 0,
+                    'media_sources_show_status' => (isset($row['media_sources_show_status']))? $row['media_sources_show_status'] : 0
                 ];
             }
         }
@@ -1085,7 +1086,7 @@ class SuborganizationController extends Controller
 
         if ($result) {
             return response([
-                'message' => 'Media sources has been updated successfully.',
+                'message' => 'Media sources have been updated successfully.',
                 'mediaSources' => $suborganization->mediaSources,
             ], 200);
         }

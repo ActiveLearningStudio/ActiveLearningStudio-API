@@ -34,12 +34,26 @@ class StoreLtiToolSettingRequest extends FormRequest
             'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'lti_version' => 'required|max:20',
-            'media_source_id' => 'required|exists:media_sources,id',
+            'media_source_id' => 'required|exists:media_sources,id|unique:lti_tool_settings,media_source_id,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key,NULL,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_content_selection_url' => 'nullable|url|max:255',
             'user_id' => 'required|exists:users,id',
             'organization_id' => 'required|exists:organizations,id'
+        ];
+    }
+
+    /**
+     * Set the custom validation message that apply to the request.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'media_source_id.required' => 'The Tool Type field is required.',
+            'media_source_id.exists' => 'The selected Tool Type is invalid.',
+            'media_source_id.unique' => 'The Tool Type has already been taken.'
         ];
     }
 }

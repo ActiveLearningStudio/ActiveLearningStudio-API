@@ -338,6 +338,16 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'video:view'
                     ],
                     "None" => []
+                ],
+                "Record a Video" => [
+                    "View" => [
+                        'record-video:view'
+                    ],
+                    "Edit" => [
+                        'record-video:view',
+                        'record-video:edit'
+                    ],
+                    "None" => []
                 ]
             ]
         ];

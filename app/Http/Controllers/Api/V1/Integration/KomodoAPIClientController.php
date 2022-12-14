@@ -14,6 +14,7 @@ use App\CurrikiGo\Komodo\Videos\GetMyVideoList;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\KomodoAPISettingRequest;
 use App\Repositories\MediaSources\MediaSourcesInterface;
+use Auth;
 
 class KomodoAPIClientController extends Controller
 {
@@ -36,21 +37,24 @@ class KomodoAPIClientController extends Controller
      * Get the specified Komodo API setting data. Using inside H5p Curriki Interactive Video
      *
      * @bodyParam organization_id required int The Id of a suborganization Example: 1
-     * @bodyParam page required string Mean pagination or page number Example: 1
-     * @bodyParam per_page required string Mean record per page Example: 10next page and so on
+     * @bodyParam page required int Mean pagination or page number Example: 1
+     * @bodyParam per_page required int Mean record per page Example: 10
      * @bodyParam search optional string Mean search record by video title Example: Wildlife
      *
      * @responseFile responses/komodo/komodo-videos.json
      *
-     * @response 500 {
-     *   "errors": [
-     *     "Unable to find Komodo API settings!"
-     *   ]
+     * @response 401 {
+     *   "errors": "Unauthorized"
+     * }
+     * @response 403 {
+     *   "errors": "Forbidden"
+     * }
+     * @response 404 {
+     *   "errors": "User not found"
      * }
      *
      * @param KomodoAPISettingRequest $request
-     * @return object $response
-     * @throws GeneralException
+     * @return json object $response
      */
     public function getMyVideosList(KomodoAPISettingRequest $request)
     {
@@ -60,17 +64,22 @@ class KomodoAPIClientController extends Controller
             'per_page',
             'search'
         ]);
+        $apiSettings = [];
+        $apiSettings['logged_user_email'] = Auth::user()->email;
         $videoMediaSources = getVideoMediaSources();
-      $mediaSourcesId = $this->mediaSourcesRepository->getMediaSourceIdByName($videoMediaSources['komodo']);
-      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $mediaSourcesId);
-        if ($ltiRowResult) {
-            // Implement Command Design Pattern to access Komodo API
-            unset($getParam['organization_id']);
-            $client = new Client($ltiRowResult);
-            $instance = new GetMyVideoList($client);
-            $response = $instance->fetch($ltiRowResult, $getParam);
-            return $response;
+        $mediaSourcesId = $this->mediaSourcesRepository->getMediaSourceIdByName($videoMediaSources['komodo']);
+        $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $mediaSourcesId);
+        if ( !empty($ltiRowResult) ) {
+            $apiSettings['tool_secret_key'] = $ltiRowResult->tool_secret_key;
+        } else {
+            $apiSettings['tool_secret_key'] = config('komodo.api_key');
         }
-        throw new GeneralException('Unable to find Komodo API settings!');
+
+        // Implement Command Design Pattern to access Komodo API
+        unset($getParam['organization_id']);
+        $client = new Client();
+        $instance = new GetMyVideoList($client);
+        $response = $instance->fetch($apiSettings, $getParam);
+        return $response;
     }
 }

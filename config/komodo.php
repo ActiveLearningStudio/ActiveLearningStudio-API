@@ -14,5 +14,12 @@ return [
     | Komodo API Base Url
     |--------------------------------------------------------------------------
     */
-    'api_base_url' => env('Komodo_API_BASE_URL', 'https://api.komododecks.com/api/curriki/v1')
+    'api_base_url' => env('Komodo_API_BASE_URL', 'https://api.komododecks.com/api/curriki/v1'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Komodo API Key
+    |--------------------------------------------------------------------------
+    */
+    'api_key' => env('Komodo_API_KEY', 'd527cf59cd2242aab04498a44aac9843013d7a12')
 ];
