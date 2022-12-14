@@ -16,8 +16,8 @@ if [ "$nr_enabled" -eq "1" ]; then
   sed -i -e "s/newrelic.appname =.*/newrelic.appname = \"\Curriki-API $nr_name\"/" /usr/local/etc/php/conf.d/newrelic.ini
 fi
 
-h5p_branch=$(printenv H5P_BRANCH);
-git clone -b $h5p_branch https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/h5p-dist
+# h5p_branch=$(printenv H5P_BRANCH);
+# git clone -b $h5p_branch https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/h5p-dist
 
 cd /var/www/html && git log --graph -10 --decorate --pretty > /var/www/html/public/log.txt
 cp -rf /tmp/h5p-dist/* /var/www/html/storage/app/public/h5p/
