@@ -3,19 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Http\Request;
-use Laravel\Scout\Searchable;
 use App\Models\Traits\GlobalScope;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
-use ElasticScoutDriverPlus\CustomSearch;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
-use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Project extends Model
 {
-    use SoftDeletes, Searchable, CustomSearch, GlobalScope;
+    use SoftDeletes, GlobalScope, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -44,33 +41,6 @@ class Project extends Model
      */
     public static $status = [1 => 'DRAFT' , 2 => 'FINISHED'];
     public static $indexing = [1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'];
-
-    /**
-     * Get the attributes to be indexed in Elasticsearch
-     */
-    public function toSearchableArray()
-    {
-        $searchableArray = [
-            'organization_id' => $this->organization_id,
-            'organization_visibility_type_id' => $this->organization_visibility_type_id,
-            'project_id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'indexing' => $this->indexing,
-            'created_at' => $this->created_at ? $this->created_at->toAtomString() : '',
-            'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : ''
-        ];
-
-        return $searchableArray;
-    }
-
-    /**
-     * Get the search request
-     */
-    public static function searchForm(): SearchRequestBuilder
-    {
-        return new SearchRequestBuilder(new static(), new SearchFormQueryBuilder());
-    }
 
     /**
      * Get the users for the project

@@ -114,39 +114,11 @@ class ProjectRepository extends BaseRepository
             $projects = $this->model->whereIn('id', $data['index_projects']);
             $projects->update(['indexing' => $data['index']]);
 
-            // index the selected projects
-            $this->indexProjects($data['index_projects'] ?? []);
             return 'Indexes updated successfully!';
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             throw new GeneralException('Unable to update indexes, please try again later!');
         }
-    }
-
-    /**
-     * @param $projects
-     * Indexing of the projects
-     */
-    public function indexProjects($projects): void
-    {
-        if (empty($projects)) {
-            return;
-        }
-        // first get the collection of playlists - needed in activities update
-        $playlists = $this->playlistModel->whereIn('project_id', $projects)->get('id');
-
-        // search-able is needed as on collections update observer will not get fired
-        // so searchable will updated the elastic search index via scout package
-        // update directly on query builder
-        $this->model->whereIn('id', $projects)->searchable();
-
-        // to fire observer update should be done on each single instance of models
-        // $projects->each->update(); can do for firing observers on each model object - might need for elastic search
-        // prepare the query builder from collections and perform update
-        $this->playlistModel->whereIn('project_id', $projects)->searchable();
-
-        // update related activities by getting keys of parent playlists
-        $this->activityModel->whereIn('playlist_id', $playlists->modelKeys())->searchable();
     }
 
     /**
@@ -170,7 +142,6 @@ class ProjectRepository extends BaseRepository
             throw new GeneralException('Invalid Library value provided.');
         }
         $project->update(['indexing' => $index]);
-        $this->indexProjects([$project->id]);
         return 'Library status changed successfully!';
     }
 

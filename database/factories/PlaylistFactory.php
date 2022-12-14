@@ -1,13 +1,27 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace Database\Factories;
 
 use App\Models\Playlist;
-use Faker\Generator as Faker;
+use App\Models\Project;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(Playlist::class, function (Faker $faker) {
-    return [
-        'title' => $faker->sentence,
-        'project_id' => factory('App\Models\Project')->create()->id,
-    ];
-});
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Project>
+ */
+class PlaylistFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        return [
+            'title' => $this->faker->sentence,
+            'project_id' => Project::factory()->create()->id,
+        ];
+    }
+}
