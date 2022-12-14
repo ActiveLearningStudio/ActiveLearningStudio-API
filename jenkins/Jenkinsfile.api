@@ -1,16 +1,15 @@
 node("currikidev") {
     def app
     def cron
-      
-    
-    
+    def tests
+
     stage('Clone repository') {               
         checkout scm    
     }  
     
     stage('Build image') {         
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
-        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1 .")
+        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=$h5pbranch .")
     } 
     stage('Test image') {           
         app.inside { 
@@ -43,6 +42,8 @@ node("currikidev") {
                                 echo 'Copy'
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-api" 
                                 sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-migrate" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-queue" 
                                 echo 'Copy completed'
                         }
                     }
