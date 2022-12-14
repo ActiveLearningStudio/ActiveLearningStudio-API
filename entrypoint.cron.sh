@@ -13,7 +13,7 @@ if [ "$nr_enabled" -eq "1" ]; then
   sed -i -e "s/newrelic.appname =.*/newrelic.appname = \"\Curriki-API-Cron $nr_name\"/" /usr/local/etc/php/conf.d/newrelic.ini
 fi
 
-cp -rf /var/www/html/h5p-code/* /var/www/html/storage/app/public/h5p/
+cp -rf /var/www/html/h5pcode/* /var/www/html/storage/app/public/h5p/
 chmod 777 -R /var/www/html/storage &
 
 service cron start &
