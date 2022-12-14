@@ -13,15 +13,7 @@ if [ "$nr_enabled" -eq "1" ]; then
   sed -i -e "s/newrelic.appname =.*/newrelic.appname = \"\Curriki-API-Cron $nr_name\"/" /usr/local/etc/php/conf.d/newrelic.ini
 fi
 
-cp -rf /var/www/html/h5p-code/* /var/www/html/storage/app/public/h5p/
-chmod 777 -R /var/www/html/storage &
 
-service cron start &
+php /var/www/html/artisan queue:work --timeout=0
 
-touch /var/www/html/health.ok
-php /var/www/html/artisan queue:work --timeout=0 &
-
-
-apache2ctl -D FOREGROUND
-# while true; do sleep 1000000000000; done
  

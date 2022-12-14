@@ -20,8 +20,8 @@ fi
 # git clone -b $h5p_branch https://github.com/ActiveLearningStudio/H5P.Distribution.git /tmp/h5p-dist
 
 cd /var/www/html && git log --graph -10 --decorate --pretty > /var/www/html/public/log.txt
-cp -rf /tmp/h5p-dist/* /var/www/html/storage/app/public/h5p/
-chmod 777 -R /var/www/html/storage &
+# cp -rf /tmp/h5p-dist/* /var/www/html/storage/app/public/h5p/
+# chmod 777 -R /var/www/html/storage &
 touch /var/www/html/health.ok
 
 apache2ctl -D FOREGROUND
