@@ -57,14 +57,6 @@ class H5pLibrary extends Model
         return intval($usage['libraries']);
     }
 
-    /**
-     * Get the fields for the library.
-     */
-    public function fields()
-    {
-        return $this->hasMany('App\Models\H5pElasticsearchField', 'library_id');
-    }
-
     public function content()
     {
         return $this->hasOne(H5pContent::class, 'library_id');

@@ -4,15 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Laravel\Scout\Searchable;
-use ElasticScoutDriverPlus\CustomSearch;
-use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
 use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Playlist extends Model
 {
-    use SoftDeletes, Searchable, CustomSearch;
+    use SoftDeletes, HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -25,35 +22,6 @@ class Playlist extends Model
         'shared',
         'order'
     ];
-
-    /**
-     * Get the attributes to be indexed in Elasticsearch
-     */
-    public function toSearchableArray()
-    {
-        $searchableArray = [
-            'title' => $this->title,
-            'project_id' => $this->project_id,
-            'created_at' => $this->created_at ? $this->created_at->toAtomString() : null,
-            'updated_at' => $this->updated_at ? $this->updated_at->toAtomString() : null
-        ];
-
-        if ($this->project) {
-            $searchableArray['indexing'] = $this->project->indexing;
-            $searchableArray['organization_id'] = $this->project->organization_id;
-            $searchableArray['organization_visibility_type_id'] = $this->project->organization_visibility_type_id;
-        }
-
-        return $searchableArray;
-    }
-
-    /**
-     * Get the search request
-     */
-    public static function searchForm(): SearchRequestBuilder
-    {
-        return new SearchRequestBuilder(new static(), new SearchFormQueryBuilder());
-    }
 
     /**
      * Get the project that owns the playlist

@@ -45,10 +45,6 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
     {
         $is_updated = $this->model->where('id', $id)->update($attributes);
 
-        if ($is_updated) {
-            $this->model->where('id', $id)->searchable();
-        }
-
         return $is_updated;
     }
 

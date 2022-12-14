@@ -9,16 +9,16 @@ node("currikidev") {
     }  
     
     stage('Build image') {         
-        app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}")
-        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron .")
+        app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
+        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1 .")
     } 
     stage('Test image') {           
         app.inside { 
                 sh 'echo "Api Tests passed"'        
         }    
-        cron.inside { 
+       cron.inside { 
                 sh 'echo "Cron Tests passed"'        
-        }    
+        }
     } 
     stage('Push image') {	
         docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
@@ -48,7 +48,7 @@ node("currikidev") {
                     }
                 } else {
                     stage ("${node}") {
-                        echo "currikiscde is offline"
+                        echo "${node} is offline"
                         exit 1
                     }
                 }
