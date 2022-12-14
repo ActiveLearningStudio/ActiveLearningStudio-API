@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Services\LearnerRecordStoreServiceInterface;
 use Illuminate\Http\Request;
 use App\Exceptions\GeneralException;
-use \TinCan\RemoteLRS;
 use \TinCan\Statement;
 use \TinCan\Agent;
 use \TinCan\Verb;
@@ -14,6 +13,7 @@ use \TinCan\Extensions;
 use \TinCan\LRSResponse;
 use \TinCan\ActivityDefinition;
 use App\CurrikiGo\LRS\InteractionFactory;
+use \TinCan\RemoteLRS;
 
 /**
  * Learner Record Store Service class
@@ -34,7 +34,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      */
     function __construct()
     {
-        $this->service = new \TinCan\RemoteLRS(
+        $this->service = new RemoteLRS(
             config('xapi.lrs_remote_url'),
             config('xapi.xapi_version'),
             config('xapi.lrs_username'),

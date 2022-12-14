@@ -1,0 +1,65 @@
+name: '18. Organization API'
+description: |-
+
+  APIs for Organization
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/organization/get-by-domain
+    metadata:
+      groupName: '18. Organization API'
+      groupDescription: |-
+
+        APIs for Organization
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get By Domain'
+      description: 'Get organization by domain'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      domain:
+        name: domain
+        description: 'Organization domain to get data for'
+        required: true
+        example: curriki
+        type: string
+        custom: []
+    cleanBodyParameters:
+      domain: curriki
+    fileParameters: []
+    responses:
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "domain": [
+                "The selected domain is invalid."
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"organization\": {\r\n        \"id\": 16,\r\n        \"name\": \"nassau\",\r\n        \"description\": \"nassau\",\r\n        \"image\": \"/storage/organizations/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n        \"favicon\": \"/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n        \"domain\": \"nassau\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

@@ -3,6 +3,8 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
+use App\User;
+use App\Models\Playlist;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PlaylistTest extends TestCase
@@ -12,8 +14,8 @@ class PlaylistTest extends TestCase
     /** @test function to create playlist*/
     public function createPlaylist()
     {
-        $user = $this->actingAs(factory('App\User')->create(), 'api');
-        $playlist = factory('App\Models\Playlist')->make();
+        $user = $this->actingAs(User::factory()->create(), 'api');
+        $playlist = Playlist::factory()->make();
         
         $response = $this->withSession(['banned' => false])
                         ->postJson(
@@ -27,9 +29,9 @@ class PlaylistTest extends TestCase
     /** @test function to mandatory title for playlist*/
     public function playlistRequiresTitle()
     {
-        $this->actingAs(factory('App\User')->create(),'api');
+        $this->actingAs(User::factory()->create(),'api');
 
-        $playlist = factory('App\Models\Playlist')->make(['title' => null]);
+        $playlist = Playlist::factory()->make(['title' => null]);
         
         $this->withSession(['banned' => false])
             ->post(
@@ -43,7 +45,7 @@ class PlaylistTest extends TestCase
     public function unauthenticatedUsersCannotCreateANewPlaylist()
     {
         // Given we have a playlist object
-        $playlist = factory('App\Models\Playlist')->make();
+        $playlist = Playlist::factory()->make();
         // When unauthenticated user submits post request to create playlist endpoint
         $this->postJson(
                 '/v1/projects/' . $playlist->project_id . '/playlists',
@@ -56,10 +58,10 @@ class PlaylistTest extends TestCase
     public function authorizedUserCanUpdateThePlaylist() 
     {
         // Given we have a signed in user
-        $this->actingAs(factory('App\User')->create(),'api');
+        $this->actingAs(User::factory()->create(),'api');
 
         // And a playlist which is created by the user
-        $playlist = factory('App\Models\Playlist')->create();
+        $playlist = Playlist::factory()->create();
         $playlist->title = "Updated Title";
         
         // When the user hit's the endpoint to update the playlist

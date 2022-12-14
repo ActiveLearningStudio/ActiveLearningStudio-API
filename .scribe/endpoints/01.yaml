@@ -1,0 +1,1456 @@
+name: '2. User'
+description: |-
+
+  APIs for user management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/users/notifications/{notification}/download-export'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Download Exported Project'
+      description: 'Download the specific notification project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification:
+        name: notification
+        description: 'The notification.'
+        required: true
+        example: sit
+        type: string
+        custom: []
+      notification_id:
+        name: notification_id
+        description: 'Current id of a notification'
+        required: true
+        example: '123'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      notification: sit
+      notification_id: '123'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Notification has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Not an export notification.",
+              "Link has expired.",
+              "Notification with provided id does not exists."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/organizations
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All User Organizations'
+      description: 'Get a list of the users organizations'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Curriki Studio\",\r\n            \"description\": \"Curriki Studio, default organization.\",\r\n            \"image\": \"/storage/organizations/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n            \"favicon\": \"/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n            \"domain\": \"currikistudio\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/subscribe
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Accept Terms'
+      description: 'Accept Terms and Privacy Policy.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to subscribe."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"user\": {\r\n      \"id\": 1,\r\n      \"first_name\": \"John\",\r\n      \"last_name\": \"Doe\",\r\n      \"email\": \"john.doe@currikistudio.org\",\r\n      \"organization_name\": \"Curriki\",\r\n      \"organization_type\": null,\r\n      \"job_title\": \"Developer\",\r\n      \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n      \"phone_number\": \"+1234567890\",\r\n      \"website\": \"www.currikistudio.org\",\r\n      \"subscribed\": true,\r\n      \"organization_role\": \"Admin\",\r\n      \"organization_role_id\": 1,\r\n      \"organization_joined_at\": \"2022-10-12\",\r\n      \"projects_count\": 5,\r\n      \"groups_count\": 1,\r\n      \"teams_count\": 2\r\n    },\r\n    \"message\": \"User has been created successfully.\"\r\n }"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/me
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Authenticated User'
+      description: 'Get the authenticated user detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to get user detail."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"user\": {\r\n      \"id\": 1,\r\n      \"first_name\": \"John\",\r\n      \"last_name\": \"Doe\",\r\n      \"email\": \"john.doe@currikistudio.org\",\r\n      \"organization_name\": \"Curriki\",\r\n      \"organization_type\": null,\r\n      \"job_title\": \"Developer\",\r\n      \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n      \"phone_number\": \"+1234567890\",\r\n      \"website\": \"www.currikistudio.org\",\r\n      \"subscribed\": true,\r\n      \"organization_role\": \"Admin\",\r\n      \"organization_role_id\": 1,\r\n      \"organization_joined_at\": \"2022-10-12\",\r\n      \"projects_count\": 5,\r\n      \"groups_count\": 1,\r\n      \"teams_count\": 2\r\n    },\r\n    \"message\": \"User has been created successfully.\"\r\n }"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/notifications
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All User Notifications'
+      description: 'Get a list of the users unread notification'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"notifications\": [\r\n        {\r\n            \"id\": \"afff2365-a4f3-48ab-8d53-6d958a9e3ab3\",\r\n            \"type\": \"App\\\\Notifications\\\\CloneNotification\",\r\n            \"notifiable_type\": \"App\\\\User\",\r\n            \"notifiable_id\": 1243,\r\n            \"data\": {\r\n                \"message\": \"Project(26 Project 2) has been duplicated successfully\"\r\n            },\r\n            \"read_at\": null,\r\n            \"created_at\": \"2020-10-16T13:46:33.000000Z\",\r\n            \"updated_at\": \"2020-10-16T13:46:33.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/users/notifications/export-list'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All User Export list'
+      description: 'Get a list of the users exported project'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'Id of an organization.'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 4
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      size:
+        name: size
+        description: 'Limit for getting the paginated records, Default 25.'
+        required: false
+        example: 25
+        type: integer
+        custom: []
+      days_limit:
+        name: days_limit
+        description: 'limit for getting the exported project records, Default 10.'
+        required: false
+        example: '?days_limit=5'
+        type: Days
+        custom: []
+    cleanBodyParameters:
+      size: 25
+      days_limit: '?days_limit=5'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"id\": \"681e9e03-6601-4752-a360-5037f0401bba\",\r\n\t\t\t\"project\": \"Metrics Project\",\r\n\t\t\t\"created_at\": \"14-Jun-2022\",\r\n\t\t\t\"will_expire_on\": \"24-Jun-2022\",\r\n\t\t\t\"link\": \"/api/storage/exports/projects-62a877f9af025.zip\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"id\": \"21f86165-698f-4c7e-ac8a-7ddace3fca73\",\r\n\t\t\t\"project\": \"Pro Micro\",\r\n\t\t\t\"created_at\": \"09-Jun-2022\",\r\n\t\t\t\"will_expire_on\": \"19-Jun-2022\",\r\n\t\t\t\"link\": \"/api/storage/exports/projects-62a1f02f43a7b.zip\"\r\n\t\t}\r\n\t],\r\n    \"links\": {\r\n\t\t\"first\": \"suborganization/1/users/notifications/export-list?size=10&page=1\",\r\n\t\t\"last\": \"suborganization/1/users/notifications/export-list?size=10&page=1\",\r\n\t\t\"prev\": null,\r\n\t\t\"next\": null\r\n\t},\r\n    \"meta\": {\r\n\t\t\"current_page\": 1,\r\n\t\t\"from\": 1,\r\n\t\t\"last_page\": 1,\r\n\t\t\"path\": \"suborganization/1/users/notifications/export-list\",\r\n\t\t\"per_page\": \"10\",\r\n\t\t\"to\": 2,\r\n\t\t\"total\": 2\r\n\t}\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/users/notifications/export-list-independent-activities'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All User Export list'
+      description: 'Get a list of the users exported project'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 20
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'Id of an organization.'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 20
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      size:
+        name: size
+        description: 'Limit for getting the paginated records, Default 25.'
+        required: false
+        example: 25
+        type: integer
+        custom: []
+      days_limit:
+        name: days_limit
+        description: 'limit for getting the exported project records, Default 10.'
+        required: false
+        example: '?days_limit=5'
+        type: Days
+        custom: []
+    cleanBodyParameters:
+      size: 25
+      days_limit: '?days_limit=5'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n\t\"data\": [\r\n\t\t{\r\n\t\t\t\"id\": \"e66ce14f-e8c0-4fcd-8e9c-0a53453c6da0\",\r\n\t\t\t\"project\": \"Test new Drag 1.14\",\r\n\t\t\t\"created_at\": \"17-Jun-2022\",\r\n\t\t\t\"will_expire_on\": \"27-Jun-2022\",\r\n\t\t\t\"link\": \"storage/exports/independent_activity-62ac5c287b011.zip\",\r\n\t\t\t\"organization_id\": 1\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"id\": \"e1ef3916-645e-40ed-81b3-0143d9fc19f6\",\r\n\t\t\t\"project\": \"Taurus 10 Jun 2022 edited-COPY edited\",\r\n\t\t\t\"created_at\": \"17-Jun-2022\",\r\n\t\t\t\"will_expire_on\": \"27-Jun-2022\",\r\n\t\t\t\"link\": \"storage/exports/independent_activity-62ac5c2566576.zip\",\r\n\t\t\t\"organization_id\": 1\r\n\t\t}\r\n\t],\r\n\t\r\n    \"links\": {\r\n\t\t\"first\": \"suborganization/1/users/notifications/export-list-independent-activities?size=10&page=1\",\r\n\t\t\"last\": \"suborganization/1/users/notifications/export-list-independent-activities?size=10&page=1\",\r\n\t\t\"prev\": null,\r\n\t\t\"next\": null\r\n\t},\r\n    \"meta\": {\r\n\t\t\"current_page\": 1,\r\n\t\t\"from\": 1,\r\n\t\t\"last_page\": 1,\r\n\t\t\"path\": \"suborganization/1/users/notifications/export-list-independent-activities\",\r\n\t\t\"per_page\": \"10\",\r\n\t\t\"to\": 2,\r\n\t\t\"total\": 2\r\n\t}\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/notifications/read-all
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Read All Notifications'
+      description: 'Read all notifications of the specified user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to read notifications."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"notifications\": [\r\n        {\r\n            \"id\": \"afff2365-a4f3-48ab-8d53-6d958a9e3ab3\",\r\n            \"type\": \"App\\\\Notifications\\\\CloneNotification\",\r\n            \"notifiable_type\": \"App\\\\User\",\r\n            \"notifiable_id\": 1243,\r\n            \"data\": {\r\n                \"message\": \"Project(26 Project 2) has been duplicated successfully\"\r\n            },\r\n            \"read_at\": null,\r\n            \"created_at\": \"2020-10-16T13:46:33.000000Z\",\r\n            \"updated_at\": \"2020-10-16T13:46:33.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/users/notifications/{notification}/read'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Read Notification'
+      description: 'Read notification of the specified user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification:
+        name: notification
+        description: 'The notification.'
+        required: true
+        example: itaque
+        type: string
+        custom: []
+      notification_id:
+        name: notification_id
+        description: 'Current id of a notification'
+        required: true
+        example: '123'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      notification: itaque
+      notification_id: '123'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to read notification."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"notifications\": [\r\n        {\r\n            \"id\": \"afff2365-a4f3-48ab-8d53-6d958a9e3ab3\",\r\n            \"type\": \"App\\\\Notifications\\\\CloneNotification\",\r\n            \"notifiable_type\": \"App\\\\User\",\r\n            \"notifiable_id\": 1243,\r\n            \"data\": {\r\n                \"message\": \"Project(26 Project 2) has been duplicated successfully\"\r\n            },\r\n            \"read_at\": null,\r\n            \"created_at\": \"2020-10-16T13:46:33.000000Z\",\r\n            \"updated_at\": \"2020-10-16T13:46:33.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/users/notifications/{notification}/delete'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Delete Notification'
+      description: 'Remove the specified notification from storage.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      notification:
+        name: notification
+        description: 'The notification.'
+        required: true
+        example: magni
+        type: string
+        custom: []
+      notification_id:
+        name: notification_id
+        description: 'Current id of a notification'
+        required: true
+        example: '123'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      notification: magni
+      notification_id: '123'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Notification has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete notification."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/search
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Users for Team'
+      description: 'Get a list of the users for Team.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      search:
+        name: search
+        description: 'Search string for User'
+        required: true
+        example: Abby
+        type: string
+        custom: []
+    cleanBodyParameters:
+      search: Abby
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"users\": [\r\n        {\r\n            \"id\": 1,\r\n            \"first_name\": \"John\",\r\n            \"last_name\": \"Doe\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"first_name\": \"Jane\",\r\n            \"last_name\": \"Doe\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/users/search'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Organization Users'
+      description: 'Get a list of the organization users.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 11
+        type: integer
+        custom: []
+      Organization:
+        name: Organization
+        description: $suborganization
+        required: false
+        example: suscipit
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 11
+      Organization: suscipit
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      search:
+        name: search
+        description: 'Search string for User'
+        required: true
+        example: Abby
+        type: string
+        custom: []
+    cleanBodyParameters:
+      search: Abby
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"users\": [\r\n        {\r\n            \"id\": 1,\r\n            \"first_name\": \"John\",\r\n            \"last_name\": \"Doe\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"first_name\": \"Jane\",\r\n            \"last_name\": \"Doe\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/users/check'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Check Organization User'
+      description: 'Check if organization user exist in specific organization or not.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      Organization:
+        name: Organization
+        description: $suborganization
+        required: false
+        example: natus
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 9
+      Organization: natus
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      organization_id:
+        name: organization_id
+        description: 'Organization Id'
+        required: true
+        example: '1'
+        type: inetger
+        custom: []
+      user_id:
+        name: user_id
+        description: 'User id'
+        required: true
+        example: '1'
+        type: inetger
+        custom: []
+    cleanBodyParameters:
+      organization_id: '1'
+      user_id: '1'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "invited": true,
+            "message": "Success"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "invited": false,
+            "message": "error"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/users/check-email'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Check User Email'
+      description: 'Check if user email exist in the instance.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 3
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 3
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        name: email
+        description: 'The email of a user'
+        required: true
+        example: john.doe@currikistudio.org
+        type: string
+        custom: []
+    cleanBodyParameters:
+      email: john.doe@currikistudio.org
+    fileParameters: []
+    responses:
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The user already exists in the organization."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"user\": {\r\n      \"id\": 1,\r\n      \"first_name\": \"John\",\r\n      \"last_name\": \"Doe\",\r\n      \"email\": \"john.doe@currikistudio.org\",\r\n      \"organization_name\": \"Curriki\",\r\n      \"organization_type\": null,\r\n      \"job_title\": \"Developer\",\r\n      \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n      \"phone_number\": \"+1234567890\",\r\n      \"website\": \"www.currikistudio.org\",\r\n      \"subscribed\": true,\r\n      \"organization_role\": \"Admin\",\r\n      \"organization_role_id\": 1,\r\n      \"organization_joined_at\": \"2022-10-12\",\r\n      \"projects_count\": 5,\r\n      \"groups_count\": 1,\r\n      \"teams_count\": 2\r\n    },\r\n    \"message\": \"User has been created successfully.\"\r\n }"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/users/update-password
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Password'
+      description: 'Update password of the specified user in storage.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      current_password:
+        name: current_password
+        description: 'Current password of a user'
+        required: true
+        example: Password123
+        type: string
+        custom: []
+      password:
+        name: password
+        description: 'New password to be set for a user'
+        required: true
+        example: Password321
+        type: string
+        custom: []
+      password_confirmation:
+        name: password_confirmation
+        description: 'Password confirmation of new password'
+        required: true
+        example: Password321
+        type: string
+        custom: []
+    cleanBodyParameters:
+      current_password: Password123
+      password: Password321
+      password_confirmation: Password321
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Password has been updated successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid request."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update password."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Users'
+      description: 'Get a list of the users.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"users\": [\r\n        {\r\n            \"id\": 1,\r\n            \"first_name\": \"John\",\r\n            \"last_name\": \"Doe\",\r\n            \"email\": \"john.doe@currikistudio.org\",\r\n            \"organization_name\": \"Curriki\",\r\n            \"organization_type\": null,\r\n            \"job_title\": \"Developer\",\r\n            \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n            \"phone_number\": \"+1234567890\",\r\n            \"website\": \"www.currikistudio.org\",\r\n            \"subscribed\": true\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"first_name\": \"Jane\",\r\n            \"last_name\": \"Doe\",\r\n            \"email\": \"jane.doe@currikistudio.org\",\r\n            \"organization_name\": \"Curriki\",\r\n            \"organization_type\": null,\r\n            \"job_title\": \"Manager\",\r\n            \"address\": \"20660 Stevens Creek Blvd #333, Cupertino, CA 95014\",\r\n            \"phone_number\": \"+1234567891\",\r\n            \"website\": \"www.currikistudio.org\",\r\n            \"subscribed\": true\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/users/{id}'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get User'
+      description: 'Get the specified user detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the user.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      user:
+        name: user
+        description: 'The Id of a user'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      id: 4
+      user: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"user\": {\r\n      \"id\": 1,\r\n      \"first_name\": \"John\",\r\n      \"last_name\": \"Doe\",\r\n      \"email\": \"john.doe@currikistudio.org\",\r\n      \"organization_name\": \"Curriki\",\r\n      \"organization_type\": null,\r\n      \"job_title\": \"Developer\",\r\n      \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n      \"phone_number\": \"+1234567890\",\r\n      \"website\": \"www.currikistudio.org\",\r\n      \"subscribed\": true,\r\n      \"organization_role\": \"Admin\",\r\n      \"organization_role_id\": 1,\r\n      \"organization_joined_at\": \"2022-10-12\",\r\n      \"projects_count\": 5,\r\n      \"groups_count\": 1,\r\n      \"teams_count\": 2\r\n    },\r\n    \"message\": \"User has been created successfully.\"\r\n }"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/users/{id}'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update User'
+      description: 'Update the specified user in storage.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the user.'
+        required: true
+        example: 16
+        type: integer
+        custom: []
+      user:
+        name: user
+        description: 'The Id of a user'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      id: 16
+      user: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      first_name:
+        name: first_name
+        description: 'First name of a user'
+        required: true
+        example: John
+        type: string
+        custom: []
+      last_name:
+        name: last_name
+        description: 'Last name of a user'
+        required: true
+        example: Doe
+        type: string
+        custom: []
+      organization_name:
+        name: organization_name
+        description: 'Organization name of a user'
+        required: false
+        example: Curriki
+        type: string
+        custom: []
+      organization_type:
+        name: organization_type
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: goptjjngm
+        type: string
+        custom: []
+      website:
+        name: website
+        description: 'Website url of a user'
+        required: false
+        example: www.currikistudio.org
+        type: string
+        custom: []
+      job_title:
+        name: job_title
+        description: 'Job title of a user'
+        required: false
+        example: Developer
+        type: string
+        custom: []
+      address:
+        name: address
+        description: 'Address of a user'
+        required: false
+        example: '20660 Stevens Creek Blvd #332, Cupertino, CA 95014'
+        type: string
+        custom: []
+      phone_number:
+        name: phone_number
+        description: 'Phone number of a user'
+        required: false
+        example: '+1234567890'
+        type: string
+        custom: []
+    cleanBodyParameters:
+      first_name: John
+      last_name: Doe
+      organization_name: Curriki
+      organization_type: goptjjngm
+      website: www.currikistudio.org
+      job_title: Developer
+      address: '20660 Stevens Creek Blvd #332, Cupertino, CA 95014'
+      phone_number: '+1234567890'
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update profile."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"user\": {\r\n      \"id\": 1,\r\n      \"first_name\": \"John\",\r\n      \"last_name\": \"Doe\",\r\n      \"email\": \"john.doe@currikistudio.org\",\r\n      \"organization_name\": \"Curriki\",\r\n      \"organization_type\": null,\r\n      \"job_title\": \"Developer\",\r\n      \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n      \"phone_number\": \"+1234567890\",\r\n      \"website\": \"www.currikistudio.org\",\r\n      \"subscribed\": true,\r\n      \"organization_role\": \"Admin\",\r\n      \"organization_role_id\": 1,\r\n      \"organization_joined_at\": \"2022-10-12\",\r\n      \"projects_count\": 5,\r\n      \"groups_count\": 1,\r\n      \"teams_count\": 2\r\n    },\r\n    \"message\": \"User has been created successfully.\"\r\n }"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/users/{id}'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Delete User'
+      description: 'Remove the specified user from storage.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: 'The ID of the user.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      user:
+        name: user
+        description: 'The Id of a user'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      id: 4
+      user: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "User has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete profile."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+    uri: 'api/v1/suborganizations/{suborganization_id}/update-user-detail'
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Organization User Detail'
+      description: 'Update user detail in storage.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 11
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 11
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: ''
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      first_name:
+        name: first_name
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: txurazbklwenpbckkn
+        type: string
+        custom: []
+      last_name:
+        name: last_name
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: x
+        type: string
+        custom: []
+      email:
+        name: email
+        description: 'Must be a valid email address. Must not be greater than 255 characters.'
+        required: true
+        example: onikolaus@example.net
+        type: string
+        custom: []
+      job_title:
+        name: job_title
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: rxdwpzokifrgztyjlijhu
+        type: string
+        custom: []
+      role_id:
+        name: role_id
+        description: ''
+        required: true
+        example: 12
+        type: integer
+        custom: []
+      password:
+        name: password
+        description: ''
+        required: false
+        example: ':(x/Yq^>;}.Z,g*Q'
+        type: string
+        custom: []
+      organization_name:
+        name: organization_name
+        description: ''
+        required: false
+        example: expedita
+        type: string
+        custom: []
+      organization_type:
+        name: organization_type
+        description: ''
+        required: false
+        example: eveniet
+        type: string
+        custom: []
+      website:
+        name: website
+        description: ''
+        required: false
+        example: vitae
+        type: string
+        custom: []
+      address:
+        name: address
+        description: ''
+        required: false
+        example: nemo
+        type: string
+        custom: []
+    cleanBodyParameters:
+      user_id: 6
+      first_name: txurazbklwenpbckkn
+      last_name: x
+      email: onikolaus@example.net
+      job_title: rxdwpzokifrgztyjlijhu
+      role_id: 12
+      password: ':(x/Yq^>;}.Z,g*Q'
+      organization_name: expedita
+      organization_type: eveniet
+      website: vitae
+      address: nemo
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update user."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"user\": {\r\n      \"id\": 1,\r\n      \"first_name\": \"John\",\r\n      \"last_name\": \"Doe\",\r\n      \"email\": \"john.doe@currikistudio.org\",\r\n      \"organization_name\": \"Curriki\",\r\n      \"organization_type\": null,\r\n      \"job_title\": \"Developer\",\r\n      \"address\": \"20660 Stevens Creek Blvd #332, Cupertino, CA 95014\",\r\n      \"phone_number\": \"+1234567890\",\r\n      \"website\": \"www.currikistudio.org\",\r\n      \"subscribed\": true,\r\n      \"organization_role\": \"Admin\",\r\n      \"organization_role_id\": 1,\r\n      \"organization_joined_at\": \"2022-10-12\",\r\n      \"projects_count\": 5,\r\n      \"groups_count\": 1,\r\n      \"teams_count\": 2\r\n    },\r\n    \"message\": \"User has been created successfully.\"\r\n }"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/users/report/basic
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Users Basic Report'
+      description: 'Returns the paginated response of the users with basic reporting.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      size:
+        name: size
+        description: 'Limit for getting the paginated records, Default 25.'
+        required: false
+        example: 25
+        type: integer
+        custom: []
+      query:
+        name: query
+        description: 'For getting the search records by name and email.'
+        required: false
+        example: Test
+        type: string
+        custom: []
+    cleanBodyParameters:
+      size: 25
+      query: Test
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"current_page\": 1,\r\n    \"data\": [\r\n        {\r\n            \"id\": 1242,\r\n            \"first_name\": \"123security\",\r\n            \"last_name\": \"products\",\r\n            \"email\": \"wirelessproducts.wl@gmail.com\",\r\n            \"projects_count\": 2,\r\n            \"playlists_count\": 9,\r\n            \"activities_count\": 60\r\n        },\r\n        {\r\n            \"id\": 824,\r\n            \"first_name\": \"168xoso\",\r\n            \"last_name\": \"com\",\r\n            \"email\": \"168xosocom@gmail.com\",\r\n            \"projects_count\": 2,\r\n            \"playlists_count\": 9,\r\n            \"activities_count\": 60\r\n        }\r\n    ],\r\n    \"first_page_url\": \"https://currikistudio.org/api/api/api/v1/admin/users/report/basic?page=1\",\r\n    \"from\": 1,\r\n    \"last_page\": 816,\r\n    \"last_page_url\": \"https://currikistudio.org/api/api/api/v1/admin/users/report/basic?page=816\",\r\n    \"next_page_url\": \"https://currikistudio.org/api/api/api/v1/admin/users/report/basic?page=2\",\r\n    \"path\": \"https://currikistudio.org/api/api/api/v1/admin/users/report/basic\",\r\n    \"per_page\": \"2\",\r\n    \"prev_page_url\": null,\r\n    \"to\": 2,\r\n    \"total\": 1632\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/projects/shared
+    metadata:
+      groupName: '2. User'
+      groupDescription: |-
+
+        APIs for user management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Shared Projects'
+      description: 'Get a list of the shared projects of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: ''
+        required: true
+        example: 12
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      user_id: 12
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"gcr_project_visibility\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832384\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

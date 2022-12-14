@@ -9,8 +9,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Laravel\Passport\Passport;
-use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Encoding\CannotDecodeContent;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Token\InvalidTokenStructure;
+use Lcobucci\JWT\Token\Parser;
+use Lcobucci\JWT\Token\UnsupportedHeaderFound;
+use Lcobucci\JWT\UnencryptedToken;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -73,20 +77,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function parseToken($accessToken)
     {
-        $key_path = Passport::keyPath('oauth-public.key');
-        $parseTokenKey = file_get_contents($key_path);
+        $parser = new Parser(new JoseEncoder());
 
-        $token = (new Parser())->parse((string) $accessToken);
-
-        $signer = new Sha256();
-
-        if ($token->verify($signer, $parseTokenKey)) {
-            $userId = $token->getClaim('sub');
-
-            return $userId;
-        } else {
-            return false;
+        try {
+            $token = $parser->parse($accessToken);
+        } catch (CannotDecodeContent | InvalidTokenStructure | UnsupportedHeaderFound $e) {
+            echo 'Oh no, an error: ' . $e->getMessage();
         }
+        assert($token instanceof UnencryptedToken);
+
+        return $token->claims()->get('sub');
     }
 
     /**

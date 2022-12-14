@@ -1,0 +1,483 @@
+name: '8. Activity Item'
+description: |-
+
+  APIs for activity item management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization}/activity-items'
+    metadata:
+      groupName: '8. Activity Item'
+      groupDescription: |-
+
+        APIs for activity item management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Activity Items'
+      description: 'Get a list of the activity items.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization:
+        name: suborganization
+        description: 'The suborganization.'
+        required: true
+        example: asperiores
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization: asperiores
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"demo_activity_id\": \"760\",\r\n            \"demo_video_id\": \"https://youtu.be/O73ikb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-items'
+    metadata:
+      groupName: '8. Activity Item'
+      groupDescription: |-
+
+        APIs for activity item management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Activity Item'
+      description: 'Create a new activity item.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 6
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      title:
+        name: title
+        description: 'Activity Item Title.'
+        required: true
+        example: Audio
+        type: string
+        custom: []
+      description:
+        name: description
+        description: ''
+        required: true
+        example: molestiae
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'At what order it should appear.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      activity_type_id:
+        name: activity_type_id
+        description: ''
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      type:
+        name: type
+        description: ''
+        required: true
+        example: optio
+        type: string
+        custom: []
+      h5pLib:
+        name: h5pLib
+        description: ''
+        required: true
+        example: temporibus
+        type: string
+        custom: []
+      image:
+        name: image
+        description: 'Valid Image.'
+        required: true
+        example: numquam
+        type: image
+        custom: []
+      demo_activity_id:
+        name: demo_activity_id
+        description: ''
+        required: true
+        example: autem
+        type: string
+        custom: []
+      demo_video_id:
+        name: demo_video_id
+        description: ''
+        required: true
+        example: delectus
+        type: string
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 5
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      title: Audio
+      description: molestiae
+      order: 1
+      activity_type_id: 19
+      type: optio
+      h5pLib: temporibus
+      image: numquam
+      demo_activity_id: autem
+      demo_video_id: delectus
+      organization_id: 5
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid activity type id."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Could not create activity item. Please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 201
+        content: "{\r\n    \"activityItem\": {\r\n        \"id\": 1,\r\n        \"title\": \"Audio Recorder\",\r\n        \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n        \"order\": 1,\r\n        \"activityType\": {\r\n            \"id\": 1,\r\n            \"title\": \"Audio\",\r\n            \"order\": 0,\r\n            \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        \"type\": \"h5p\",\r\n        \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n        \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n        \"demo_activity_id\": \"768\",\r\n        \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n        \"organization_id\": 1,\r\n        \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n        \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-items/{id}'
+    metadata:
+      groupName: '8. Activity Item'
+      groupDescription: |-
+
+        APIs for activity item management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Activity Item'
+      description: 'Get the specified activity item.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 17
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the activity item.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      activityItem:
+        name: activityItem
+        description: 'The Id of a activity item'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 17
+      id: 14
+      suborganization: '1'
+      activityItem: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"activityItem\": {\r\n        \"id\": 1,\r\n        \"title\": \"Audio Recorder\",\r\n        \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n        \"order\": 1,\r\n        \"activityType\": {\r\n            \"id\": 1,\r\n            \"title\": \"Audio\",\r\n            \"order\": 0,\r\n            \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        \"type\": \"h5p\",\r\n        \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n        \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n        \"demo_activity_id\": \"768\",\r\n        \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n        \"organization_id\": 1,\r\n        \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n        \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/suborganizations/{suborganization_id}/activity-items/{id}'
+    metadata:
+      groupName: '8. Activity Item'
+      groupDescription: |-
+
+        APIs for activity item management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Activity Item'
+      description: 'Remove the specified activity item.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 18
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the activity item.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      activityItem:
+        name: activityItem
+        description: 'The Id of a activity item'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 18
+      id: 15
+      suborganization: '1'
+      activityItem: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Activity item has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete activity item."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/get-activity-items'
+    metadata:
+      groupName: '8. Activity Item'
+      groupDescription: |-
+
+        APIs for activity item management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Activity Items with pagination and search'
+      description: 'Get a list of the activity items.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 20
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 20
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"demo_activity_id\": \"760\",\r\n            \"demo_video_id\": \"https://youtu.be/O73ikb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/activity-items/upload-thumb
+    metadata:
+      groupName: '8. Activity Item'
+      groupDescription: |-
+
+        APIs for activity item management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Upload Thumbnail'
+      description: 'Upload thumbnail image for a activity item'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      image:
+        name: image
+        description: 'Must be an image.'
+        required: true
+        example: null
+        type: file
+        custom: []
+      thumb:
+        name: thumb
+        description: 'Thumbnail image'
+        required: true
+        example: rerum
+        type: image
+        custom: []
+    cleanBodyParameters:
+      thumb: rerum
+    fileParameters:
+      image: null
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "thumbUrl": "/storage/activity-items/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Invalid image."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

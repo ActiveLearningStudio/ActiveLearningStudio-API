@@ -1,0 +1,309 @@
+name: '27. Admin/Queues'
+description: |-
+
+  APIs for queues monitoring on admin panel.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/queue-monitor/jobs
+    metadata:
+      groupName: '27. Admin/Queues'
+      groupDescription: |-
+
+        APIs for queues monitoring on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Jobs'
+      description: 'Returns the pending or failed jobs paginated response with pagination links (DataTables are fully supported - All Params).'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      filter:
+        name: filter
+        description: '1 for pending jobs, 2 for failed. Default 1.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      page:
+        name: page
+        description: 'Offset for getting the paginated response, Default 1.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Limit for getting the paginated records, Default 10.'
+        required: false
+        example: '10'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      filter: '1'
+      page: '1'
+      size: '10'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 128,\r\n            \"payload\": \"CloneProject\",\r\n            \"queue\": \"default\",\r\n            \"time\": \"1 day ago\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception\": \"N/A\"\r\n        },\r\n        {\r\n            \"id\": 129,\r\n            \"payload\": \"CloneProject\",\r\n            \"queue\": \"default\",\r\n            \"time\": \"1 day ago\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception\": \"Unable to clone project\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1\",\r\n        \"last\": \"https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": null,\r\n        \"last_page\": 1,\r\n        \"path\": \"https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs\",\r\n        \"per_page\": \"2\",\r\n        \"to\": null,\r\n        \"total\": 0\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/queue-monitor/jobs/retry/all
+    metadata:
+      groupName: '27. Admin/Queues'
+      groupDescription: |-
+
+        APIs for queues monitoring on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Retry All Failed Jobs'
+      description: 'Retry All Failed Jobs'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "All failed jobs has been pushed back onto the queue!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/queue-monitor/jobs/forget/all
+    metadata:
+      groupName: '27. Admin/Queues'
+      groupDescription: |-
+
+        APIs for queues monitoring on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Delete All Failed Jobs'
+      description: 'Delete All Failed Jobs'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "All failed jobs deleted successfully!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/queue-monitor/jobs/retry/{job}'
+    metadata:
+      groupName: '27. Admin/Queues'
+      groupDescription: |-
+
+        APIs for queues monitoring on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Retry Specific Failed Job'
+      description: 'Retry failed job by ID.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      job:
+        name: job
+        description: 'The integer Id of a job.'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      job: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "The failed job [1] has been pushed back onto the queue!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/queue-monitor/jobs/forget/{job}'
+    metadata:
+      groupName: '27. Admin/Queues'
+      groupDescription: |-
+
+        APIs for queues monitoring on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Delete Specific Failed Job'
+      description: 'Delete failed job by ID.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      job:
+        name: job
+        description: 'The integer Id of a job.'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      job: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Failed job deleted successfully!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/queue-monitor
+    metadata:
+      groupName: '27. Admin/Queues'
+      groupDescription: |-
+
+        APIs for queues monitoring on admin panel.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Queues Logs'
+      description: 'Returns the paginated response with pagination links (DataTables are fully supported - All Params).'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      filter:
+        name: filter
+        description: '1 for running jobs, 2 for failed, 3 for completed. Default all.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      page:
+        name: page
+        description: 'Offset for getting the paginated response, Default 1.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Limit for getting the paginated records, Default 10.'
+        required: false
+        example: '10'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      filter: '1'
+      page: '1'
+      size: '10'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 128,\r\n            \"job_id\": \"376471\",\r\n            \"name\": \"CloneProject\",\r\n            \"queue\": \"default\",\r\n            \"started_at\": \"23 hours ago\",\r\n            \"is_finished\": true,\r\n            \"time_elapsed\": \"8.22 s\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception_message\": null\r\n        },\r\n        {\r\n            \"id\": 127,\r\n            \"job_id\": \"376470\",\r\n            \"name\": \"CloneActivity\",\r\n            \"queue\": \"default\",\r\n            \"started_at\": \"23 hours ago\",\r\n            \"is_finished\": true,\r\n            \"time_elapsed\": \"8.17 s\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception_message\": null\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor?page=1\",\r\n        \"last\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor?page=9\",\r\n        \"prev\": null,\r\n        \"next\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor?page=2\"\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 9,\r\n        \"path\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor\",\r\n        \"per_page\": \"2\",\r\n        \"to\": 2,\r\n        \"total\": 17\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

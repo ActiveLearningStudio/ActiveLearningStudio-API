@@ -4,7 +4,12 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Arr;
 use Laravel\Passport\Passport;
-use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Encoding\CannotDecodeContent;
+use Lcobucci\JWT\Encoding\JoseEncoder;
+use Lcobucci\JWT\Token\InvalidTokenStructure;
+use Lcobucci\JWT\Token\Parser;
+use Lcobucci\JWT\Token\UnsupportedHeaderFound;
+use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 
 if (!function_exists('clone_thumbnail')) {
@@ -84,15 +89,16 @@ if (!function_exists('get_user_id_by_token')) {
      */
     function get_user_id_by_token($token)
     {
-        error_reporting(0);
-        $key_path = Passport::keyPath('oauth-public.key');
-        $parseTokenKey = file_get_contents($key_path);
-        $token = (new Parser())->parse((string)$token);
-        $signer = new Sha256();
-        if ($token->verify($signer, $parseTokenKey)) {
-            return (int)$token->getClaim('sub');
+        $parser = new Parser(new JoseEncoder());
+
+        try {
+            $token = $parser->parse($token);
+        } catch (CannotDecodeContent | InvalidTokenStructure | UnsupportedHeaderFound $e) {
+            echo 'Oh no, an error: ' . $e->getMessage();
         }
-        return false;
+        assert($token instanceof UnencryptedToken);
+
+        return $token->claims()->get('sub');
     }
 }
 
@@ -152,7 +158,7 @@ if (!function_exists('xAPIFormatDuration')) {
     {
         $rawDuration = str_replace(array('PT', 'S'), '', $duration);
         if ($formatValue) {
-            $seconds = round($rawDuration);
+            $seconds = round((int)$rawDuration);
             $formatted = sprintf('%02d:%02d', ($seconds / 60 % 60), $seconds % 60);
             if (($seconds / 3600) >= 1) {
                 $formatted = sprintf('%02d:%02d:%02d', ($seconds / 3600), ($seconds / 60 % 60), $seconds % 60);

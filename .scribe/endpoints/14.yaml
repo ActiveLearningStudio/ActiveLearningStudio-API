@@ -1,0 +1,936 @@
+name: '13. Search'
+description: |-
+
+  APIs for search management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/search
+    metadata:
+      groupName: '13. Search'
+      groupDescription: |-
+
+        APIs for search management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Deep Linking Search'
+      description: 'Search projects, playlists and activities for deep linking'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      organization_id:
+        name: organization_id
+        description: 'The Id of a organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Query to search.'
+        required: false
+        example: test
+        type: string
+        custom: []
+      sort:
+        name: sort
+        description: 'Field to sort by.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Order to sort by.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: 'Index where the pagination start from.'
+        required: false
+        example: '0'
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Number of records to return.'
+        required: false
+        example: 10
+        type: integer
+        custom: []
+    cleanQueryParameters:
+      organization_id: '1'
+      query: test
+      sort: created_at
+      order: desc
+      from: '0'
+      size: 10
+    bodyParameters:
+      searchType:
+        name: searchType
+        description: 'Must be one of <code>my_projects</code>, <code>showcase_projects</code>, <code>org_projects</code>, or <code>lti_search</code>.'
+        required: true
+        example: my_projects
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: fejgktmyoexuldmymt
+        type: string
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 2
+        type: integer
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: svhxgaiyahabvfhocvz
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
+        required: false
+        example: '1'
+        type: object
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Must be a valid date.'
+        required: false
+        example: '2022-12-05T09:02:28'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
+        required: false
+        example: '2082-02-15'
+        type: string
+        custom: []
+      userIds:
+        name: userIds
+        description: ''
+        required: false
+        example:
+          - 18
+        type: 'integer[]'
+        custom: []
+      author:
+        name: author
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: cl
+        type: string
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: ''
+        required: false
+        example:
+          - dolorem
+        type: object
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: ''
+        required: false
+        example:
+          - 13
+        type: 'integer[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: ''
+        required: false
+        example:
+          - 20
+        type: 'integer[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: ''
+        required: false
+        example:
+          - 11
+        type: 'integer[]'
+        custom: []
+      model:
+        name: model
+        description: 'Must be one of <code>activities</code>, <code>playlists</code>, or <code>projects</code>.'
+        required: false
+        example: activities
+        type: string
+        custom: []
+      sort:
+        name: sort
+        description: 'Must be one of <code>created_at</code>.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Must be one of <code>asc</code> or <code>desc</code>.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: ''
+        required: false
+        example: 12
+        type: integer
+        custom: []
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 20
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      searchType: my_projects
+      query: fejgktmyoexuldmymt
+      organization_id: 2
+      negativeQuery: svhxgaiyahabvfhocvz
+      indexing: '1'
+      startDate: '2022-12-05T09:02:28'
+      endDate: '2082-02-15'
+      userIds:
+        - 18
+      author: cl
+      h5pLibraries:
+        - dolorem
+      subjectIds:
+        - 13
+      educationLevelIds:
+        - 20
+      authorTagsIds:
+        - 11
+      model: activities
+      sort: created_at
+      order: desc
+      from: 12
+      size: 20
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": {
+              "query": [
+                "The query field is required."
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"projects\": {\r\n        \"979\": {\r\n            \"id\": 979,\r\n            \"thumb_url\": \"/storage/uploads/5f10830df0dcf.png\",\r\n            \"title\": \"Exploring Our National Parks\",\r\n            \"description\": \"Explore America’s national parks. Discover our most treasured places. From science to the arts, service learning to teacher training, America’s national parks teach invaluable lessons about our planet, our history, and ourselves. These incredible places, and all that they offer beyond the boundaries of the national parks, are the catalysts for inspiring a new generation of park enthusiasts. The National Park Foundation is dedicated to utilizing these powerful learning environments that can provide in-depth, real-world learning experiences, to nurture a deep connection between the next generation and America's national parks.\",\r\n            \"model\": \"Project\",\r\n            \"user\": null,\r\n            \"playlists\": {\r\n                \"2174\": {\r\n                    \"id\": 2174,\r\n                    \"thumb_url\": \"/storage/uploads/5f10830df0dcf.png\",\r\n                    \"title\": \"Exploring Yosemite\",\r\n                    \"model\": \"Playlist\",\r\n                    \"user\": null,\r\n                    \"activities\": {\r\n                        \"9990\": {\r\n                            \"id\": 9990,\r\n                            \"thumb_url\": \"/storage/uploads/5f10831d961f8.jpeg\",\r\n                            \"title\": \"\",\r\n                            \"model\": \"Activity\",\r\n                            \"user\": null\r\n                        },\r\n                        \"9991\": {\r\n                            \"id\": 9991,\r\n                            \"thumb_url\": \"/storage/uploads/5f108329c36e2.jpeg\",\r\n                            \"title\": \"\",\r\n                            \"model\": \"Activity\",\r\n                            \"user\": null\r\n                        },\r\n                        \"9992\": {\r\n                            \"id\": 9992,\r\n                            \"thumb_url\": \"/storage/uploads/5f10833529209.jpeg\",\r\n                            \"title\": \"\",\r\n                            \"model\": \"Activity\",\r\n                            \"user\": null\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }        \r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/search/advanced
+    metadata:
+      groupName: '13. Search'
+      groupDescription: |-
+
+        APIs for search management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Advance search'
+      description: 'Advance search for projects, playlists and activities having indexing approved'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      organization_id:
+        name: organization_id
+        description: 'The Id of a organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Query to search.'
+        required: false
+        example: test
+        type: string
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Terms that should not exist.'
+        required: false
+        example: badword
+        type: string
+        custom: []
+      userIds:
+        name: userIds
+        description: 'of user ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Start date for search by date range.'
+        required: false
+        example: '2020-04-30 00:00:00'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'End date for search by date range.'
+        required: false
+        example: '2020-04-30 23:59:59'
+        type: string
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: 'of subject ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: 'of education level ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: 'of author tags ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: 'of h5p libraries to match.'
+        required: false
+        example:
+          - iste
+        type: 'string[]'
+        custom: []
+      model:
+        name: model
+        description: 'Index to filter by.'
+        required: false
+        example: activities
+        type: string
+        custom: []
+      sort:
+        name: sort
+        description: 'Field to sort by.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Order to sort by.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: 'Index where the pagination start from.'
+        required: false
+        example: '0'
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Number of records to return.'
+        required: false
+        example: 10
+        type: integer
+        custom: []
+    cleanQueryParameters:
+      organization_id: '1'
+      query: test
+      negativeQuery: badword
+      userIds:
+        - 1
+      startDate: '2020-04-30 00:00:00'
+      endDate: '2020-04-30 23:59:59'
+      subjectIds:
+        - 1
+      educationLevelIds:
+        - 1
+      authorTagsIds:
+        - 1
+      h5pLibraries:
+        - iste
+      model: activities
+      sort: created_at
+      order: desc
+      from: '0'
+      size: 10
+    bodyParameters:
+      searchType:
+        name: searchType
+        description: 'Must be one of <code>my_projects</code>, <code>showcase_projects</code>, <code>org_projects</code>, or <code>lti_search</code>.'
+        required: true
+        example: org_projects
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: cvqrbfveohykgwshwlywao
+        type: string
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: bllym
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
+        required: false
+        example: 'null'
+        type: object
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Must be a valid date.'
+        required: false
+        example: '2022-12-05T09:02:28'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
+        required: false
+        example: '2094-05-09'
+        type: string
+        custom: []
+      userIds:
+        name: userIds
+        description: ''
+        required: false
+        example:
+          - 1
+        type: 'integer[]'
+        custom: []
+      author:
+        name: author
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: cnkvax
+        type: string
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: ''
+        required: false
+        example:
+          - et
+        type: object
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: ''
+        required: false
+        example:
+          - 16
+        type: 'integer[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: ''
+        required: false
+        example:
+          - 13
+        type: 'integer[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: ''
+        required: false
+        example:
+          - 19
+        type: 'integer[]'
+        custom: []
+      model:
+        name: model
+        description: 'Must be one of <code>activities</code>, <code>playlists</code>, or <code>projects</code>.'
+        required: false
+        example: projects
+        type: string
+        custom: []
+      sort:
+        name: sort
+        description: 'Must be one of <code>created_at</code>.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Must be one of <code>asc</code> or <code>desc</code>.'
+        required: false
+        example: asc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: ''
+        required: false
+        example: 5
+        type: integer
+        custom: []
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 7
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      searchType: org_projects
+      query: cvqrbfveohykgwshwlywao
+      organization_id: 15
+      negativeQuery: bllym
+      indexing: 'null'
+      startDate: '2022-12-05T09:02:28'
+      endDate: '2094-05-09'
+      userIds:
+        - 1
+      author: cnkvax
+      h5pLibraries:
+        - et
+      subjectIds:
+        - 16
+      educationLevelIds:
+        - 13
+      authorTagsIds:
+        - 19
+      model: projects
+      sort: created_at
+      order: asc
+      from: 5
+      size: 7
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": {
+              "userIds": [
+                "The user Ids must be an array."
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 9999,\r\n            \"thumb_url\": \"/storage/uploads/5f1083871600f.png\",\r\n            \"title\": \"\",\r\n            \"model\": \"Activity\",\r\n            \"user\": null,\r\n            \"created_at\": \"2020-07-29T20:51:30.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 999,\r\n            \"thumb_url\": \"/storage/uploads/5ef42a8dc4386.png\",\r\n            \"title\": \"About The National Parks\",\r\n            \"model\": \"Playlist\",\r\n            \"user\": null,\r\n            \"created_at\": \"2020-07-29T20:51:30.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 999,\r\n            \"thumb_url\": \"/storage/uploads_tmp/UDixgGgVAnNYNMikT8Qic7q0WR0SSA54lOqL9u6t.png\",\r\n            \"title\": \"Algebra 1 ACPS Curriki Resources\",\r\n            \"description\": \"Algebra 1 ACPS Curriki Resources\",\r\n            \"favored\": false,\r\n            \"model\": \"Project\",\r\n            \"user\": null,\r\n            \"created_at\": \"2020-07-29T20:51:30.000000Z\"\r\n        }\r\n    ],\r\n    \"meta\": {\r\n        \"activities\": 1,\r\n        \"playlists\": 1,\r\n        \"projects\": 1,\r\n        \"total\": 3\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/search/independent-activities
+    metadata:
+      groupName: '13. Search'
+      groupDescription: |-
+
+        APIs for search management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Independent Activities search'
+      description: 'Search for independent activities'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      searchType:
+        name: searchType
+        description: 'It can be my_activities, showcase_activities, org_activities'
+        required: true
+        example: my_activities
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'It can be one of the indexing options'
+        required: false
+        example: 'null'
+        type: string
+        custom: []
+      author:
+        name: author
+        description: 'The user name to filter by'
+        required: false
+        example: Abby
+        type: string
+        custom: []
+      organization_id:
+        name: organization_id
+        description: 'The Id of a organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Query to search.'
+        required: false
+        example: test
+        type: string
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Terms that should not exist.'
+        required: false
+        example: badword
+        type: string
+        custom: []
+      userIds:
+        name: userIds
+        description: 'of user ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Start date for search by date range.'
+        required: false
+        example: '2020-04-30 00:00:00'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'End date for search by date range.'
+        required: false
+        example: '2020-04-30 23:59:59'
+        type: string
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: 'of subject ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: 'of education level ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: 'of author tags ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: 'of h5p libraries to match.'
+        required: false
+        example:
+          - ut
+        type: 'string[]'
+        custom: []
+      sort:
+        name: sort
+        description: 'Field to sort by.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Order to sort by.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: 'Index where the pagination start from.'
+        required: false
+        example: '0'
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Number of records to return.'
+        required: false
+        example: 10
+        type: integer
+        custom: []
+    cleanQueryParameters:
+      searchType: my_activities
+      indexing: 'null'
+      author: Abby
+      organization_id: '1'
+      query: test
+      negativeQuery: badword
+      userIds:
+        - 1
+      startDate: '2020-04-30 00:00:00'
+      endDate: '2020-04-30 23:59:59'
+      subjectIds:
+        - 1
+      educationLevelIds:
+        - 1
+      authorTagsIds:
+        - 1
+      h5pLibraries:
+        - ut
+      sort: created_at
+      order: desc
+      from: '0'
+      size: 10
+    bodyParameters:
+      searchType:
+        name: searchType
+        description: 'Must be one of <code>my_activities</code>, <code>showcase_activities</code>, <code>org_activities</code>, or <code>lti_search</code>.'
+        required: true
+        example: showcase_activities
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: e
+        type: string
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: thxtualhdntreegq
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
+        required: false
+        example: '1'
+        type: object
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Must be a valid date.'
+        required: false
+        example: '2022-12-05T09:02:30'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
+        required: false
+        example: '2107-02-17'
+        type: string
+        custom: []
+      userIds:
+        name: userIds
+        description: ''
+        required: false
+        example:
+          - 20
+        type: 'integer[]'
+        custom: []
+      author:
+        name: author
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mmfeijegxf
+        type: string
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: ''
+        required: false
+        example:
+          - necessitatibus
+        type: object
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: ''
+        required: false
+        example:
+          - 18
+        type: 'integer[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: ''
+        required: false
+        example:
+          - 7
+        type: 'integer[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: ''
+        required: false
+        example:
+          - 12
+        type: 'integer[]'
+        custom: []
+      sort:
+        name: sort
+        description: 'Must be one of <code>created_at</code>.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Must be one of <code>asc</code> or <code>desc</code>.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: ''
+        required: false
+        example: 4
+        type: integer
+        custom: []
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 15
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      searchType: showcase_activities
+      query: e
+      organization_id: 4
+      negativeQuery: thxtualhdntreegq
+      indexing: '1'
+      startDate: '2022-12-05T09:02:30'
+      endDate: '2107-02-17'
+      userIds:
+        - 20
+      author: mmfeijegxf
+      h5pLibraries:
+        - necessitatibus
+      subjectIds:
+        - 18
+      educationLevelIds:
+        - 7
+      authorTagsIds:
+        - 12
+      sort: created_at
+      order: desc
+      from: 4
+      size: 15
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": {
+              "userIds": [
+                "The user Ids must be an array."
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"thumb_url\": null,\r\n            \"title\": \"title\",\r\n            \"created_at\": \"2022-04-27 23:51:58\",\r\n            \"user\": {\r\n                \"email\": \"abby@curriki.org\",\r\n                \"first_name\": \"Abby\",\r\n                \"id\": 3,\r\n                \"last_name\": \"_\"\r\n            },\r\n            \"organization\": {\r\n                \"id\": 1,\r\n                \"name\": \"org name 1\",\r\n                \"description\": \"org description 1\",\r\n                \"image\": \"/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg\"\r\n            }\r\n        }\r\n    ],\r\n    \"meta\": {\r\n        \"total\": 1\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

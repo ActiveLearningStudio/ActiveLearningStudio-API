@@ -1,0 +1,2115 @@
+name: '3. Project'
+description: |-
+
+  APIs for project management
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/load-shared'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Shared Project'
+      description: 'Get the specified shared project detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 9
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "No shareable Project found."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 201
+        content: "{\r\n    \"project\": {\r\n        \"id\": 1,\r\n        \"organization_id\": 1,\r\n        \"organization_visibility_type_id\": 4,\r\n        \"name\": \"The Science of Golf\",\r\n        \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n        \"thumb_url\": \"/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png\",\r\n        \"shared\": false,\r\n        \"gcr_project_visibility\": true,\r\n        \"starter_project\": false,\r\n        \"order\": null,\r\n        \"status\": 1,\r\n        \"status_text\": \"DRAFT\",\r\n        \"indexing\": null,\r\n        \"indexing_text\": \"NOT REQUESTED\",\r\n        \"created_at\": \"2020-04-30T20:03:12.000000Z\",\r\n        \"updated_at\": \"2020-09-17T09:44:27.000000Z\"\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/search-preview'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Project Search Preview'
+      description: 'Get the specified project search preview.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 4
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 4
+      project_id: 4
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"project\": {\r\n        \"id\": 2459,\r\n        \"name\": \"Teach for America: High School Science\",\r\n        \"description\": \"This project consists of two playlists serving as exemplar high school science digital learning instruction.\",\r\n        \"thumb_url\": \"https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280\",\r\n        \"shared\": false,\r\n        \"indexing\": null,\r\n        \"indexing_text\": \"NOT REQUESTED\",\r\n        \"created_at\": \"2021-05-03T15:41:08.000000Z\",\r\n        \"updated_at\": \"2021-05-03T15:41:08.000000Z\",\r\n        \"playlists\": [\r\n            {\r\n                \"id\": 5078,\r\n                \"title\": \"The Smallest Unit of Life: The Cell\",\r\n                \"project_id\": 2459,\r\n                \"created_at\": \"2021-05-03T15:41:11.000000Z\",\r\n                \"updated_at\": \"2021-05-03T15:41:11.000000Z\",\r\n                \"activities\": [\r\n                    {\r\n                        \"id\": 23090,\r\n                        \"title\": \"What You'll Explore\",\r\n                        \"type\": \"h5p\",\r\n                        \"thumb_url\": \"https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280\",\r\n                        \"library_name\": \"H5P.Accordion 1.0\"\r\n                    },\r\n                    {\r\n                        \"id\": 23091,\r\n                        \"title\": \"History of Cell Theory\",\r\n                        \"type\": \"h5p\",\r\n                        \"thumb_url\": \"https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280\",\r\n                        \"library_name\": \"H5P.Column 1.11\"\r\n                    }\r\n                ]\r\n            },\r\n            {\r\n                \"id\": 5079,\r\n                \"title\": \"Understanding the Atom\",\r\n                \"project_id\": 2459,\r\n                \"created_at\": \"2021-05-03T15:41:15.000000Z\",\r\n                \"updated_at\": \"2021-05-03T15:41:15.000000Z\",\r\n                \"activities\": [\r\n                    {\r\n                        \"id\": 23097,\r\n                        \"title\": \"Build an Atom\",\r\n                        \"type\": \"h5p\",\r\n                        \"thumb_url\": \"https://images.pexels.com/photos/593158/pexels-photo-593158.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=1&amp;fit=crop&amp;h=200&amp;w=280\",\r\n                        \"library_name\": \"H5P.IFrameEmbed 1.0\"\r\n                    }\r\n                ]\r\n            }\r\n        ]\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/upload-thumb'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Upload thumbnail'
+      description: 'Upload thumbnail image for a project'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 9
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      thumb:
+        name: thumb
+        description: 'Thumbnail image to upload'
+        required: true
+        example: (binary)
+        type: image
+        custom: []
+      project_id:
+        name: project_id
+        description: ''
+        required: false
+        example: 19
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      thumb: (binary)
+      project_id: 19
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "thumbUrl": "/storage/projects/1fqwe2f65ewf465qwe46weef5w5eqwq.png"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 422
+        content: |-
+          {
+            "message": "The given data was invalid.",
+            "errors": {
+              "thumb": [
+                "The thumb must be an image."
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/recent'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Recent Projects'
+      description: 'Get a list of the recent projects of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 9
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"playlists\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"title\": \"Test Playlist 1\",\r\n                    \"order\": 1,\r\n                    \"created_at\": \"2020-09-10T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-10T19:21:08.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"title\": \"Test Playlist 2\",\r\n                    \"order\": 2,\r\n                    \"created_at\": \"2020-09-11T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-11T19:21:08.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"playlists\": [\r\n                {\r\n                    \"id\": 3,\r\n                    \"title\": \"Test Playlist 3\",\r\n                    \"order\": 1,\r\n                    \"created_at\": \"2020-09-12T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-12T19:21:08.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 4,\r\n                    \"title\": \"Test Playlist 4\",\r\n                    \"order\": 2,\r\n                    \"created_at\": \"2020-09-13T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-13T19:21:08.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/default'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Default Projects'
+      description: 'Get a list of the default projects.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'Id of an organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 7
+      suborganization: '1'
+    queryParameters:
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 10
+        type: integer
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: ''
+        required: false
+        example: 'ASC OR DESC'
+        type: string
+        custom: []
+      order_by_column8:
+        name: order_by_column8
+        description: ''
+        required: false
+        example: 'name, created_at'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      size: 10
+      order_by_type: 'ASC OR DESC'
+      order_by_column8: 'name, created_at'
+    bodyParameters:
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 6
+        type: integer
+        custom: []
+      order_by_column:
+        name: order_by_column
+        description: 'Must be one of <code>id</code>, <code>name</code>, <code>order.status</code>, or <code>created_at</code>.'
+        required: false
+        example: name
+        type: string
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: 'Must be one of <code>asc</code>, <code>desc</code>, <code>ASC</code>, or <code>DESC</code>.'
+        required: false
+        example: asc
+        type: string
+        custom: []
+    cleanBodyParameters:
+      size: 6
+      order_by_column: name
+      order_by_type: asc
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: array
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"playlists\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"title\": \"Test Playlist 1\",\r\n                    \"order\": 1,\r\n                    \"created_at\": \"2020-09-10T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-10T19:21:08.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"title\": \"Test Playlist 2\",\r\n                    \"order\": 2,\r\n                    \"created_at\": \"2020-09-11T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-11T19:21:08.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"playlists\": [\r\n                {\r\n                    \"id\": 3,\r\n                    \"title\": \"Test Playlist 3\",\r\n                    \"order\": 1,\r\n                    \"created_at\": \"2020-09-12T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-12T19:21:08.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 4,\r\n                    \"title\": \"Test Playlist 4\",\r\n                    \"order\": 2,\r\n                    \"created_at\": \"2020-09-13T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-13T19:21:08.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/detail'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Projects Detail'
+      description: 'Get a list of the projects of a user with detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 15
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"playlists\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"title\": \"Test Playlist 1\",\r\n                    \"order\": 1,\r\n                    \"created_at\": \"2020-09-10T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-10T19:21:08.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"title\": \"Test Playlist 2\",\r\n                    \"order\": 2,\r\n                    \"created_at\": \"2020-09-11T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-11T19:21:08.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"playlists\": [\r\n                {\r\n                    \"id\": 3,\r\n                    \"title\": \"Test Playlist 3\",\r\n                    \"order\": 1,\r\n                    \"created_at\": \"2020-09-12T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-12T19:21:08.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 4,\r\n                    \"title\": \"Test Playlist 4\",\r\n                    \"order\": 2,\r\n                    \"created_at\": \"2020-09-13T19:21:08.000000Z\",\r\n                    \"updated_at\": \"2020-09-13T19:21:08.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/favorites'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Favorite Projects of login user'
+      description: 'Get a list of the favorite projects of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      Organization:
+        name: Organization
+        description: $suborganization
+        required: false
+        example: quo
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 19
+      Organization: quo
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 11
+        type: integer
+        custom: []
+      order_by_column:
+        name: order_by_column
+        description: 'Must be one of <code>id</code>, <code>name</code>, <code>order.status</code>, or <code>created_at</code>.'
+        required: false
+        example: name
+        type: string
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: 'Must be one of <code>asc</code>, <code>desc</code>, <code>ASC</code>, or <code>DESC</code>.'
+        required: false
+        example: DESC
+        type: string
+        custom: []
+    cleanBodyParameters:
+      size: 11
+      order_by_column: name
+      order_by_type: DESC
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"gcr_project_visibility\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832384\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/reorder'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Reorder Projects'
+      description: 'Reorder projects of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 14
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      projects:
+        name: projects
+        description: 'Projects of a user'
+        required: true
+        example:
+          - 1
+          - 2
+          - 3
+        type: 'string[]'
+        custom: []
+    cleanBodyParameters:
+      projects:
+        - 1
+        - 2
+        - 3
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"gcr_project_visibility\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832384\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/order'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: "Update Project's Order"
+      description: "Update project's order."
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'Id of the project whose order is to be updated'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 19
+      project_id: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      order:
+        name: order
+        description: 'New order to set for the project'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      order: 1
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project reorder has been successful."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to reorder project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/share'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Share Project'
+      description: 'Share the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 2
+      project_id: 19
+      project: '1'
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to share project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"project\": {\r\n        \"id\": 1,\r\n        \"organization_id\": 1,\r\n        \"organization_visibility_type_id\": 4,\r\n        \"name\": \"The Science of Golf\",\r\n        \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n        \"thumb_url\": \"/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png\",\r\n        \"shared\": false,\r\n        \"gcr_project_visibility\": true,\r\n        \"starter_project\": false,\r\n        \"order\": null,\r\n        \"status\": 1,\r\n        \"status_text\": \"DRAFT\",\r\n        \"indexing\": null,\r\n        \"indexing_text\": \"NOT REQUESTED\",\r\n        \"created_at\": \"2020-04-30T20:03:12.000000Z\",\r\n        \"updated_at\": \"2020-09-17T09:44:27.000000Z\"\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/clone'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Clone Project'
+      description: 'Clone the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 9
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 20
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 9
+      project_id: 20
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      user_id:
+        name: user_id
+        description: 'The Id of a user'
+        required: false
+        example: '1'
+        type: optional
+        custom: []
+    cleanBodyParameters:
+      user_id: '1'
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project is being cloned|duplicated in background!"
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 400
+        content: |-
+          {
+            "errors": [
+              "Not a Public Project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/export'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Export Project'
+      description: 'Export the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 10
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 10
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of an organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 10
+      project_id: 10
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project is being cloned|duplicated in background!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/export-noovo'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Export Noovo Project'
+      description: 'Export the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 3
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 3
+      project_id: 6
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project is being cloned|duplicated in background!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/import'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Import Project'
+      description: 'Import the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 1
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      project:
+        name: project
+        description: ''
+        required: true
+        example: praesentium
+        type: string
+        custom: []
+    cleanBodyParameters:
+      project: praesentium
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project is being cloned|duplicated in background!"
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/remove-share'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Share Project'
+      description: 'Remove share the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 7
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 7
+      project_id: 14
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to remove share project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"project\": {\r\n        \"id\": 1,\r\n        \"name\": \"Test Project\",\r\n        \"description\": \"This is a test project.\",\r\n        \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n        \"shared\": false,\r\n        \"starter_project\": null,\r\n        \"is_public\": true,\r\n        \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n        \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n    }\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{project_id}/favorite'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Favorite/Unfavorite Project'
+      description: 'Favorite/Unfavorite the specified project for a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 1
+      project_id: 6
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "This resource will be removed from your Favorites. You will no longer be able to reuse/remix its contents into your projects."
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/team-projects'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: "Get All Organization Team's Projects"
+      description: "Get a list of the team's projects of an organization."
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 11
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 11
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 10,\r\n            \"organization_id\": 1,\r\n            \"organization_visibility_type_id\": 1,\r\n            \"name\": \"project 1\",\r\n            \"description\": \"test  fffff  rrrr\",\r\n            \"thumb_url\": \"\",\r\n            \"shared\": true,\r\n            \"starter_project\": false,\r\n            \"order\": 2,\r\n            \"status\": 1,\r\n            \"status_text\": \"DRAFT\",\r\n            \"indexing\": null,\r\n            \"is_user_starter\": false,\r\n            \"indexing_text\": \"NOT REQUESTED\",\r\n            \"created_at\": \"2021-08-17T11:15:58.000000Z\",\r\n            \"updated_at\": \"2021-08-17T11:15:58.000000Z\",\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"name\": \"Test User\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"email_verified_at\": \"2021-03-05T15:53:34.000000Z\",\r\n                    \"created_at\": null,\r\n                    \"updated_at\": null,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"User\",\r\n                    \"organization_name\": null,\r\n                    \"job_title\": null,\r\n                    \"address\": null,\r\n                    \"phone_number\": null,\r\n                    \"organization_type\": null,\r\n                    \"website\": null,\r\n                    \"deleted_at\": null,\r\n                    \"role\": null,\r\n                    \"gapi_access_token\": null,\r\n                    \"hubspot\": false,\r\n                    \"subscribed\": false,\r\n                    \"subscribed_ip\": null,\r\n                    \"membership_type_id\": 2,\r\n                    \"pivot\": {\r\n                        \"project_id\": 10,\r\n                        \"user_id\": 1,\r\n                        \"role\": \"owner\",\r\n                        \"created_at\": \"2021-08-17T11:15:58.000000Z\",\r\n                        \"updated_at\": \"2021-08-17T11:15:58.000000Z\"\r\n                    }\r\n                }\r\n            ],\r\n            \"team\": {\r\n                \"id\": 63,\r\n                \"name\": \"Team Test One\",\r\n                \"created_at\": \"2021-08-17T11:15:57.000000Z\",\r\n                \"updated_at\": \"2021-08-17T11:15:57.000000Z\",\r\n                \"deleted_at\": null,\r\n                \"description\": \"desc\",\r\n                \"indexing\": null,\r\n                \"organization_id\": 1,\r\n                \"original_user\": null\r\n            }\r\n        },\r\n        {\r\n            \"id\": 11,\r\n            \"organization_id\": 1,\r\n            \"organization_visibility_type_id\": 1,\r\n            \"name\": \"The Science of Golf\",\r\n            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n            \"thumb_url\": \"\",\r\n            \"shared\": true,\r\n            \"starter_project\": false,\r\n            \"order\": 2,\r\n            \"status\": 1,\r\n            \"status_text\": \"DRAFT\",\r\n            \"indexing\": null,\r\n            \"is_user_starter\": false,\r\n            \"indexing_text\": \"NOT REQUESTED\",\r\n            \"created_at\": \"2021-08-17T11:21:09.000000Z\",\r\n            \"updated_at\": \"2021-08-23T17:17:46.000000Z\",\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"name\": \"Test User 2\",\r\n                    \"email\": \"test2@test.com\",\r\n                    \"email_verified_at\": \"2021-03-05T15:53:34.000000Z\",\r\n                    \"created_at\": null,\r\n                    \"updated_at\": null,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"User 2\",\r\n                    \"organization_name\": null,\r\n                    \"job_title\": null,\r\n                    \"address\": null,\r\n                    \"phone_number\": null,\r\n                    \"organization_type\": null,\r\n                    \"website\": null,\r\n                    \"deleted_at\": null,\r\n                    \"role\": null,\r\n                    \"gapi_access_token\": null,\r\n                    \"hubspot\": false,\r\n                    \"subscribed\": false,\r\n                    \"subscribed_ip\": null,\r\n                    \"membership_type_id\": 2,\r\n                    \"pivot\": {\r\n                        \"project_id\": 11,\r\n                        \"user_id\": 1,\r\n                        \"role\": \"owner\",\r\n                        \"created_at\": \"2021-08-17T11:21:09.000000Z\",\r\n                        \"updated_at\": \"2021-08-17T11:21:09.000000Z\"\r\n                    }\r\n                }\r\n            ],\r\n            \"team\": {\r\n                \"id\": 64,\r\n                \"name\": \"Team 2 Test\",\r\n                \"created_at\": \"2021-08-17T11:21:08.000000Z\",\r\n                \"updated_at\": \"2021-08-17T11:21:08.000000Z\",\r\n                \"deleted_at\": null,\r\n                \"description\": \"desc\",\r\n                \"indexing\": null,\r\n                \"organization_id\": 2,\r\n                \"original_user\": null\r\n            }\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/team-projects?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/team-projects?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/team-projects\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Projects of login user'
+      description: 'Get a list of the projects of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 15
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'Id of an organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 15
+      suborganization: '1'
+    queryParameters:
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 10
+        type: integer
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: ''
+        required: false
+        example: 'ASC OR DESC'
+        type: string
+        custom: []
+      order_by_column8:
+        name: order_by_column8
+        description: ''
+        required: false
+        example: 'name, created_at'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      size: 10
+      order_by_type: 'ASC OR DESC'
+      order_by_column8: 'name, created_at'
+    bodyParameters:
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 12
+        type: integer
+        custom: []
+      order_by_column:
+        name: order_by_column
+        description: 'Must be one of <code>id</code>, <code>name</code>, <code>order.status</code>, or <code>created_at</code>.'
+        required: false
+        example: name
+        type: string
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: 'Must be one of <code>asc</code>, <code>desc</code>, <code>ASC</code>, or <code>DESC</code>.'
+        required: false
+        example: ASC
+        type: string
+        custom: []
+    cleanBodyParameters:
+      size: 12
+      order_by_column: name
+      order_by_type: ASC
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: array
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"gcr_project_visibility\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832384\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization_id}/projects'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Project'
+      description: 'Create a new project in storage for a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 8
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 8
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Name of a project'
+        required: true
+        example: 'Test Project'
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Description of a project'
+        required: true
+        example: 'This is a test project.'
+        type: string
+        custom: []
+      thumb_url:
+        name: thumb_url
+        description: 'Thumbnail Url of a project'
+        required: true
+        example: 'https://images.pexels.com/photos/2832382'
+        type: string
+        custom: []
+      organization_visibility_type_id:
+        name: organization_visibility_type_id
+        description: 'Id of the organization visibility type'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      team_id:
+        name: team_id
+        description: ''
+        required: false
+        example: null
+        type: string
+        custom: []
+    cleanBodyParameters:
+      name: 'Test Project'
+      description: 'This is a test project.'
+      thumb_url: 'https://images.pexels.com/photos/2832382'
+      organization_visibility_type_id: 1
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Could not create project. Please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 201
+        content: "{\r\n    \"project\": {\r\n        \"id\": 1,\r\n        \"organization_id\": 1,\r\n        \"organization_visibility_type_id\": 4,\r\n        \"name\": \"The Science of Golf\",\r\n        \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n        \"thumb_url\": \"/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png\",\r\n        \"shared\": false,\r\n        \"gcr_project_visibility\": true,\r\n        \"starter_project\": false,\r\n        \"order\": null,\r\n        \"status\": 1,\r\n        \"status_text\": \"DRAFT\",\r\n        \"indexing\": null,\r\n        \"indexing_text\": \"NOT REQUESTED\",\r\n        \"created_at\": \"2020-04-30T20:03:12.000000Z\",\r\n        \"updated_at\": \"2020-09-17T09:44:27.000000Z\"\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{id}'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Project'
+      description: 'Get the specified project detail.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 13
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the project.'
+        required: true
+        example: 16
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 13
+      id: 16
+      project: '1'
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: "{\r\n    \"project\": {\r\n        \"id\": 1,\r\n        \"organization_id\": 1,\r\n        \"organization_visibility_type_id\": 4,\r\n        \"name\": \"The Science of Golf\",\r\n        \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n        \"thumb_url\": \"/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png\",\r\n        \"shared\": false,\r\n        \"gcr_project_visibility\": true,\r\n        \"starter_project\": false,\r\n        \"order\": null,\r\n        \"status\": 1,\r\n        \"status_text\": \"DRAFT\",\r\n        \"indexing\": null,\r\n        \"indexing_text\": \"NOT REQUESTED\",\r\n        \"created_at\": \"2020-04-30T20:03:12.000000Z\",\r\n        \"updated_at\": \"2020-09-17T09:44:27.000000Z\"\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{id}'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Project'
+      description: 'Update the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the project.'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 1
+      id: 2
+      project: '1'
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Name of a project'
+        required: true
+        example: 'Test Project'
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Description of a project'
+        required: true
+        example: 'This is a test project.'
+        type: string
+        custom: []
+      thumb_url:
+        name: thumb_url
+        description: 'Thumbnail Url of a project'
+        required: true
+        example: 'https://images.pexels.com/photos/2832382'
+        type: string
+        custom: []
+      organization_visibility_type_id:
+        name: organization_visibility_type_id
+        description: 'Id of the organization visibility type'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      user_id:
+        name: user_id
+        description: ''
+        required: false
+        example: 18
+        type: integer
+        custom: []
+      shared:
+        name: shared
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
+    cleanBodyParameters:
+      name: 'Test Project'
+      description: 'This is a test project.'
+      thumb_url: 'https://images.pexels.com/photos/2832382'
+      organization_visibility_type_id: 1
+      user_id: 18
+      shared: false
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to update project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: "{\r\n    \"project\": {\r\n        \"id\": 1,\r\n        \"organization_id\": 1,\r\n        \"organization_visibility_type_id\": 4,\r\n        \"name\": \"The Science of Golf\",\r\n        \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n        \"thumb_url\": \"/storage/uploads/nN5y8v8zh2ghxrKuHCv5wvJOREFw0Nr27s2DPxWq.png\",\r\n        \"shared\": false,\r\n        \"gcr_project_visibility\": true,\r\n        \"starter_project\": false,\r\n        \"order\": null,\r\n        \"status\": 1,\r\n        \"status_text\": \"DRAFT\",\r\n        \"indexing\": null,\r\n        \"indexing_text\": \"NOT REQUESTED\",\r\n        \"created_at\": \"2020-04-30T20:03:12.000000Z\",\r\n        \"updated_at\": \"2020-09-17T09:44:27.000000Z\"\r\n    }\r\n}"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/suborganization/{suborganization_id}/projects/{id}'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Remove Project'
+      description: 'Remove the specified project of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the project.'
+        required: true
+        example: 14
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'The Id of a project'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 1
+      id: 14
+      suborganization: '1'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Project has been deleted successfully."
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Failed to delete project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/suborganization/{suborganization}/projects/by-ids'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Projects by Ids'
+      description: 'Get the Projects by Ids'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization:
+        name: suborganization
+        description: 'The suborganization.'
+        required: true
+        example: consequatur
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: Projects
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/suborganizations/{suborganization_id}/projects'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Organization Projects'
+      description: 'Get a list of the projects of an organization.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 6
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 6
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      query:
+        name: query
+        description: 'Query to search suborganization against'
+        required: false
+        example: Vivensity
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'Must be one of <code>0</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
+        required: false
+        example: '1'
+        type: string
+        custom: []
+      exclude_starter:
+        name: exclude_starter
+        description: 'Must be one of <code>true</code>.'
+        required: false
+        example: 'true'
+        type: string
+        custom: []
+      starter_project:
+        name: starter_project
+        description: 'Must be one of <code>true</code> or <code>false</code>.'
+        required: false
+        example: 'true'
+        type: string
+        custom: []
+      shared:
+        name: shared
+        description: ''
+        required: false
+        example: true
+        type: boolean
+        custom: []
+      created_from:
+        name: created_from
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2022-12-05'
+        type: string
+        custom: []
+      created_to:
+        name: created_to
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2022-12-05'
+        type: string
+        custom: []
+      updated_from:
+        name: updated_from
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2022-12-05'
+        type: string
+        custom: []
+      updated_to:
+        name: updated_to
+        description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+        required: false
+        example: '2022-12-05'
+        type: string
+        custom: []
+      author_id:
+        name: author_id
+        description: ''
+        required: false
+        example: 10
+        type: integer
+        custom: []
+      order_by_column:
+        name: order_by_column
+        description: 'To sort data with specific column'
+        required: false
+        example: name
+        type: string
+        custom: []
+      order_by_type:
+        name: order_by_type
+        description: 'To sort data in ascending or descending order'
+        required: false
+        example: asc
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Size to show per page records'
+        required: false
+        example: 10
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      query: Vivensity
+      indexing: '1'
+      exclude_starter: 'true'
+      starter_project: 'true'
+      shared: true
+      created_from: '2022-12-05'
+      created_to: '2022-12-05'
+      updated_from: '2022-12-05'
+      updated_to: '2022-12-05'
+      author_id: 10
+      order_by_column: name
+      order_by_type: asc
+      size: 10
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: "{\r\n    \"projects\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"gcr_project_visibility\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Math Project\",\r\n            \"description\": \"This is a test math project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832384\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-07T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-07T19:21:08.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/projects/{project_id}/indexes/{index}'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Project Indexing'
+      description: 'Modify the index value of a project.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      project_id:
+        name: project_id
+        description: 'The ID of the project.'
+        required: true
+        example: 17
+        type: integer
+        custom: []
+      index:
+        name: index
+        description: "New Integer Index Value, 1 => 'REQUESTED', 2 => 'NOT APPROVED', 3 => 'APPROVED'."
+        required: true
+        example: '3'
+        type: string
+        custom: []
+      project:
+        name: project
+        description: 'Project Id.'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      project_id: 17
+      index: '3'
+      project: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Library status changed successfully!",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Invalid index value provided."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/projects/starter/{flag}'
+    metadata:
+      groupName: '3. Project'
+      groupDescription: |-
+
+        APIs for project management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Starter Project Toggle'
+      description: 'Toggle the starter flag of any project'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      flag:
+        name: flag
+        description: ''
+        required: true
+        example: quas
+        type: string
+        custom: []
+    cleanUrlParameters:
+      flag: quas
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      projects:
+        name: projects
+        description: 'Projects Ids array.'
+        required: true
+        example:
+          - 1
+          - 2
+          - 3
+        type: 'string[]'
+        custom: []
+      flag:
+        name: flag
+        description: 'Selected projects remove or make starter.'
+        required: true
+        example: true
+        type: boolean
+        custom: []
+    cleanBodyParameters:
+      projects:
+        - 1
+        - 2
+        - 3
+      flag: true
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Starter Projects status updated successfully!",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Choose at-least one project."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
