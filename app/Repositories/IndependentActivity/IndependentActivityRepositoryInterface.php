@@ -111,9 +111,10 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      * get all independent activities of a user
      * @param $data
      * @param $user
+     * @param $orgs
      * @return mixed
      */
-    public function independentActivities($data, $user);
+    public function independentActivities($data, $user, $orgs);
 
     /**
      * Copy Exisiting independentent activity into a playlist

@@ -25,6 +25,7 @@ class IndependentActivityForDeeplink extends FormRequest
     {
         return [
             'user_email' => 'required|email',
+            'lti_client_id' => 'required',
             'query' => 'string',
             'size' => 'integer|max:100'
         ];
