@@ -33,6 +33,7 @@ class IndependentActivityResource extends JsonResource
             'source_type' => $this->source_type,
             'source_url' => $this->source_url,
             'organization_visibility_type_id' => $this->organization_visibility_type_id,
+            'organization_id' => $this->organization_id,
             'status' => $this->status,
             'status_text' => $this->status_text,
             'indexing' => $this->indexing,
