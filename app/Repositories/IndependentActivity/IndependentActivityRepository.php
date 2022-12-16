@@ -1095,9 +1095,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * Get indep-activities of a user who is launching the deeplink from another LMS
      * @param $data
      * @param $user
+     * @param $orgs
      * @return mixed
      */
-    public function independentActivities($data, $user)
+    public function independentActivities($data, $user, $orgs)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
@@ -1108,7 +1109,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             $query = $query->where('title', 'iLIKE', '%' . $q . '%');
         }
 
-        return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+        return $query->where('user_id', $user)->whereIn('organization_id', $orgs)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
     }
 
      /**
