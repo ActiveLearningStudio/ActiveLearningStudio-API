@@ -107,7 +107,7 @@ class CreateAssignmentCommand implements Command
         $assignment['return_type'] = 'lti_launch_url';
         $assignment['workflow_state'] = 'published';
         $assignment['points_possible'] = 100;
-        $assignment['published'] = true;
+        $assignment['published'] = false;
         $assignment['external_tool_tag_attributes']['url'] = config('constants.curriki-tsugi-host') . "?activity=" . $currikiActivityId;
         return $assignment;
     }
