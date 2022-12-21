@@ -340,6 +340,11 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'display_name' => 'Edit Record a Video',
             'feature' => 'Record a Video'
         ]);
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'record-video:none',
+            'display_name' => 'Edit Record a Video',
+            'feature' => 'Record a Video'
+        ]);
 
         // Interactive Video
         DB::table('organization_permission_types')->insertOrIgnore([
