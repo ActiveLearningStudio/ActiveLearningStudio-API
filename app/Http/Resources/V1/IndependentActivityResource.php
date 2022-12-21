@@ -18,7 +18,7 @@ class IndependentActivityResource extends JsonResource
         $data = [
             'id' => $this->id,
             'title' => $this->title,
-            'type' => $this->type,
+            'type' => $this->h5p_content->library->name,
             'content' => $this->content,
             'description' => $this->description,
             'shared' => $this->shared,
