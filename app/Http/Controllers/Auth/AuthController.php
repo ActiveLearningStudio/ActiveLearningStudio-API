@@ -833,6 +833,7 @@ class AuthController extends Controller
                             $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                             $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                         }
+                        $user['user_organization'] = $organization;
                     }
                 }
 
