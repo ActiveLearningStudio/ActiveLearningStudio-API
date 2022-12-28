@@ -54,6 +54,7 @@ class LtiToolSettingsController extends Controller
      * 
      * @param Request $request
      * @param Organization $suborganization
+     * 
      * @return LtiToolSettingCollection
      */
     public function index(Request $request, Organization $suborganization)
@@ -73,7 +74,7 @@ class LtiToolSettingsController extends Controller
      * @responseFile responses/admin/lti-tool/lti-tool-settings-show.json
      *
      * @param Organization $suborganization
-     * @param $id int
+     * @param $id
      * @return LtiToolSettingResource
      */
     public function show(Organization $suborganization, $id)
@@ -160,7 +161,7 @@ class LtiToolSettingsController extends Controller
      * 
      * @param UpdateLtiToolSettingRequest $request
      * @param Organization $suborganization
-     * @param id int 
+     * @param $id 
      * @return LtiToolSettingResource
      */
     public function update(UpdateLtiToolSettingRequest $request, Organization $suborganization, $id)
@@ -194,7 +195,7 @@ class LtiToolSettingsController extends Controller
      * @urlParam id required The Id of a LTI Tool Settings Example: 1
      * 
      * @param Organization $suborganization
-     * @param $id int
+     * @param $id
      * 
      * @responseFile 200 responses/admin/lti-tool/lti-tool-settings-destory.json
      */
