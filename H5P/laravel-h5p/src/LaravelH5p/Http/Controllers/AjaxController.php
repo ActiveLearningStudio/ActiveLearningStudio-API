@@ -19,7 +19,7 @@ use stdClass;
 
 class AjaxController extends Controller
 {
-    private static $hasWYSIWYGEditor = array(
+    private static $hasWysiwygEditor = array(
         'H5P.CoursePresentation',
         'H5P.InteractiveVideo',
         'H5P.DragQuestion'
@@ -359,7 +359,7 @@ class AjaxController extends Controller
         $dependencies = $validator->getDependencies();
 
         // Load addons for wysiwyg editors
-        if (in_array($machineName, self::$hasWYSIWYGEditor)) {
+        if (in_array($machineName, self::$hasWysiwygEditor)) {
             $addons = $core->h5pF->loadAddons();
             foreach ($addons as $addon) {
                 $key = 'editor-' . $addon['machineName'];
