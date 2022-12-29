@@ -53,6 +53,7 @@ class Playlist
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
         if($response->getStatusCode() === 200 || $response->getStatusCode() === 201){
             $lmsData = json_decode($response->getBody()->getContents());
+            if($lmsData && $lmsData[0]){
             $teacherInfo = new \stdClass();
             $teacherInfo->user_id = null;
             $teacherInfo->id = $lmsData[0]->data->id;
@@ -62,6 +63,7 @@ class Playlist
             $teacherInfo->curriki_teacher_email = null;
             $teacherInfo->curriki_teacher_org = $this->lmsSetting->organization_id;
             $googleClassroomData = $gcrRepo->saveCourseShareToGcClass($teacherInfo);
+        }
         }
         return $response;
     }
