@@ -83,10 +83,11 @@ class CreateAssignmentCommand implements Command
                 'headers' => ['Authorization' => "Bearer {$this->accessToken}"],
                 'json' => ['assignment' => $assignment]
             ])->getBody()->getContents();
-            $response = json_decode($response);
-        } catch (Exception $ex) {
+            return $response = json_decode($response);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            return $response->getStatusCode();
         }
-
         return $response;
     }
 
