@@ -44,7 +44,7 @@ node("currikidev") {
                                 sh """ 
                                 #!/bin/bash
                                 set -ex
-                                echo ${kubeconfig} >> config
+                                echo "${kubeconfig}" >> config
                                 """
                                 sh "export KUBECONFIG=${pwd config}"
                                 sh 'helm upgrade --install curriki charts/curriki --namespace staging'
