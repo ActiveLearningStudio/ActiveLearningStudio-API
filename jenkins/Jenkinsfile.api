@@ -46,8 +46,7 @@ node("currikidev") {
                                 set -ex
                                 echo "${kubeconfig}" >> config
 """
-                                sh 'export KUBECONFIG=$(pwd config)/config'
-                                sh 'helm upgrade --install curriki charts/curriki --namespace staging'
+                                sh 'helm upgrade --install curriki charts/curriki --namespace staging --kubeconfig $(pwd config)/config'
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-api" 
                                 sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-migrate" 
