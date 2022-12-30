@@ -38,7 +38,7 @@ spec:
       volumes:
       - name: tsugi-config
         secret:
-          secretName: tsugi-config
+          secretName: tsugi-env
       - name: tsugi-mod-config
         configMap:
           name: tsugi-mod-config
