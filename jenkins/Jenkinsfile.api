@@ -40,6 +40,14 @@ node("currikidev") {
                     node("${node}") {
                         stage ("${node}") {
                                 echo 'Copy'
+                                sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+                                sh """ 
+                                #!/bin/bash
+                                set -ex
+                                echo ${kubeconfig} >> config
+                                """
+                                sh "export KUBECONFIG=${pwd config}"
+                                sh 'helm upgrade --install curriki charts/curriki --namespace staging'
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-api" 
                                 sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-migrate" 
