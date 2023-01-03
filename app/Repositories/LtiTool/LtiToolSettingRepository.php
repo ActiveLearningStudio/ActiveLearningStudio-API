@@ -35,9 +35,6 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
         $query = $this->model->with(['user', 'organization', 'mediaSources']);
         if (isset($data['query']) && $data['query'] !== '') {
             $query->where(function ($query) use ($data) {
-                $query = $query->whereHas('user', function ($qry) use ($data) {
-                    $qry->where('email', 'iLIKE', '%' . $data['query'] . '%');
-                });
                 $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
                 $query->orWhere('tool_url', 'iLIKE', '%' . $data['query'] . '%');
             });
