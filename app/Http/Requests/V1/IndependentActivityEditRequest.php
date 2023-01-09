@@ -23,6 +23,8 @@ class IndependentActivityEditRequest extends FormRequest
      */
     public function rules()
     {
+        $suborganization = $this->route('suborganization');
+
         return [
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -41,7 +43,7 @@ class IndependentActivityEditRequest extends FormRequest
             'author_tag_id.*' => 'integer|distinct|exists:author_tags,id,deleted_at,NULL',
             'source_type' => 'nullable|string',
             'source_url' => 'nullable|string',
-            'organization_visibility_type_id' => 'required|integer|exists:organization_visibility_types,id',
+            'organization_visibility_type_id' => 'required|integer|exists:allowed_organization_visibility_types,organization_visibility_type_id,organization_id,' . $suborganization->id,
         ];
     }
 }

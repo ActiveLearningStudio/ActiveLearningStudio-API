@@ -61,6 +61,7 @@ class SuborganizationUpdate extends FormRequest
             'tertiary_color' => 'string|nullable|max:255',
             'primary_font_family' => 'string|nullable|max:255',
             'secondary_font_family' => 'string|nullable|max:255',
+            'auto_approve' => 'boolean|nullable',
         ];
     }
 
