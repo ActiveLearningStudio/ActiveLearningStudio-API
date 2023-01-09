@@ -516,6 +516,22 @@ class ProjectController extends Controller
         $this->authorize('update', [Project::class, $project]);
         $data = $projectUpdateRequest->validated();
 
+        // check if request will be auto approve
+        // $allowedVisibilityTypes = $suborganization->allowedVisibilityTypes;
+        // $allowedVisibilityTypesArray = [];
+        // foreach ($allowedVisibilityTypes as $allowedVisibilityType) {
+        //     $allowedVisibilityTypesArray[] = $allowedVisibilityType->pivot->organization_visibility_type_id;
+        // }
+        
+        if (
+            isset($data['indexing']) && 
+            $data['indexing'] === "1" &&
+            $suborganization->auto_approve
+            //in_array($data['organization_visibility_type_id'], $allowedVisibilityTypesArray)
+            ) {
+                $data['indexing'] = config('constants.indexing-approved');
+        }
+
         return \DB::transaction(function () use ($project, $data) {
 
             if (isset($data['user_id'])) {

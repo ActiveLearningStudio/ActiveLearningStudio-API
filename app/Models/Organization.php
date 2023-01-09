@@ -51,7 +51,8 @@ class Organization extends Model
         'msteam_secret_id_expiry',
         'msteam_project_visibility',
         'msteam_playlist_visibility',
-        'msteam_activity_visibility'
+        'msteam_activity_visibility',
+        'auto_approve'
     ];
 
     /**
