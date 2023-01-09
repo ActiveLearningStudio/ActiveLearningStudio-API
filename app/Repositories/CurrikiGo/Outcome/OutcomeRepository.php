@@ -315,6 +315,11 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 preg_match_all('!\d+!', $data['actor'], $matches);
                 if (is_array($matches)) 
                     $actor_id = $matches[0][0];
+
+                $json = json_decode($data['actor']);
+                if($json && $json->account->homePage === config('constants.mst_origin')){
+                    $actor_id = $json->account->name;
+                }    
             }
             if (isset($data['activity'])) {
                 $activity_explode = explode('/', $data['activity']);

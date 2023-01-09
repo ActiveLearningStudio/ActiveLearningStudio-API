@@ -59,5 +59,6 @@ return [
     'canvas_creation_type' => [
         'create_modules' => 'modules',
         'create_assignments' => 'assignments'
-    ]
+    ],
+    'mst_origin' => 'https://teams.microsoft.com'
 ];
