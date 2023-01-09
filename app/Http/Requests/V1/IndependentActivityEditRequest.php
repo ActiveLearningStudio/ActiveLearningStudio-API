@@ -24,7 +24,7 @@ class IndependentActivityEditRequest extends FormRequest
     public function rules()
     {
         $suborganization = $this->route('suborganization');
-        
+
         return [
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -35,7 +35,6 @@ class IndependentActivityEditRequest extends FormRequest
             'h5p_content_id' => 'integer',
             'data' => 'nullable',
             'thumb_url' => 'string',
-            'indexing' => 'integer',
             'subject_id' => 'array',
             'subject_id.*' => 'integer|distinct|exists:subjects,id,deleted_at,NULL',
             'education_level_id' => 'array',
