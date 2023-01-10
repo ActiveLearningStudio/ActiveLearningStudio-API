@@ -14,8 +14,8 @@ class AddActivityTitleFormatToOrganizationTable extends Migration
     public function up()
     {
         Schema::table('organizations', function (Blueprint $table) {
-            $table->string('activity_title_text')->nullable();
-            $table->string('activity_title_placeholder')->nullable();
+            $table->string('activity_title_text')->nullable()->default('Title');
+            $table->string('activity_title_placeholder')->nullable()->default('Give your layout a name...');
         });
     }
 
