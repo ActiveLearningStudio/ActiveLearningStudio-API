@@ -101,7 +101,9 @@ class OrganizationResource extends JsonResource
             'msteam_project_visibility' => $this->msteam_project_visibility,
             'msteam_playlist_visibility' => $this->msteam_playlist_visibility,
             'msteam_activity_visibility' => $this->msteam_activity_visibility,
-            'auto_approve' => $this->auto_approve
+            'auto_approve' => $this->auto_approve,
+            'activity_title_text' => $this->activity_title_text,
+            'activity_title_placeholder' => $this->activity_title_placeholder
         ];
     }
 }
