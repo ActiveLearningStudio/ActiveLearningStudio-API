@@ -51,7 +51,10 @@ class Organization extends Model
         'msteam_secret_id_expiry',
         'msteam_project_visibility',
         'msteam_playlist_visibility',
-        'msteam_activity_visibility'
+        'msteam_activity_visibility',
+        'auto_approve',
+        'activity_title_text',
+        'activity_title_placeholder'
     ];
 
     /**
@@ -170,7 +173,7 @@ class Organization extends Model
     public function mediaSources()
     {
         return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
-                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status', 'media_sources_show_status')
                     ->withTimestamps();
     }
 
@@ -180,7 +183,7 @@ class Organization extends Model
     public function filterBasedMediaSources()
     {
         return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
-                    ->withPivot('h5p_library', 'lti_tool_settings_status')
+                    ->withPivot('h5p_library', 'lti_tool_settings_status', 'media_sources_show_status')
                     ->withTimestamps()
                     ->wherePivot('lti_tool_settings_status', true);
     }

@@ -121,7 +121,7 @@ class ExtractXAPIJSONController extends Controller
                 $playlistTitle = null;
 
                 if ($activity) {
-                    if ($activity->activity_type == config('constants.activity_type.activity')) {
+                    if ($activity->activity_type === config('constants.activity_type.activity')) {
                         $activityId = $activity->id;
                         $activityName = $activity->title;
                         $project = $activity->playlist->project;
@@ -232,16 +232,22 @@ class ExtractXAPIJSONController extends Controller
                     }
                 }
                 // Overriding object name, when we have Questionnaire H5P, and object name is not available.
-                if ($defaultActivityName && ($h5pInteraction
-                    && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Questionnaire/', $h5pInteraction, $matches))) {
-                    $insertData['object_name'] = $matches[0];
-                }
+                if (
+                    $defaultActivityName && 
+                    ($h5pInteraction     && 
+                    in_array($insertData['verb'], ['completed', 'progressed']) &&
+                    preg_match('/^H5P.Questionnaire/', $h5pInteraction, $matches))
+                    ) {
+                        $insertData['object_name'] = $matches[0];
+                    }
                 // need to determine column layout interaction on 'completed'.
-                if (($h5pInteraction
-                    && in_array($insertData['verb'], ['completed', 'progressed']) && preg_match('/^H5P.Column/', $h5pInteraction))) {
-                    $insertData['page'] = $insertData['object_name'];
-                    $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
-                }
+                if (($h5pInteraction &&
+                    in_array($insertData['verb'], ['completed', 'progressed']) &&
+                    preg_match('/^H5P.Column/', $h5pInteraction))
+                    ) {
+                        $insertData['page'] = $insertData['object_name'];
+                        $insertData['page_completed'] = $insertData['verb'] === 'completed' ? true : false;
+                    }
                 $inserted = $lrsStatementsRepository->create($insertData);
 
                 if ($inserted) {

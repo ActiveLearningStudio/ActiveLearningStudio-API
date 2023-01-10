@@ -1,0 +1,93 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-trax
+  labels:
+    app: {{ .Release.Name }}-trax
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-trax
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-trax
+    spec:
+      initContainers:
+        - name: init-container
+          image: quay.io/curriki/trax:latest
+          command: [ "/bin/bash", "-c", "cd /var/www/html/storage && mkdir -p framework/views && mkdir -p framework/sessions && mkdir -p framework/cache/data && mkdir -p framework/testing && mkdir -p logs && mkdir -p app/public" ]
+          volumeMounts:
+            - mountPath: /var/www/html/storage
+              name: trax-storage
+      containers:
+      - name: trax
+        image: quay.io/curriki/trax:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 6900
+        volumeMounts:
+        - name: trax-storage
+          mountPath: /var/www/html/storage
+        - name: trax-env
+          mountPath: /var/www/html/.env
+          subPath: .env
+        envFrom:
+        - secretRef:
+            name: trax-env
+        resources:
+          limits:
+            cpu: 400m
+            memory: 750Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+      volumes:
+      - name: trax-storage
+        emptyDir: {}
+      - name: trax-env
+        secret:
+          secretName: trax-env
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trax-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 6900
+  selector:
+    app: {{ .Release.Name }}-trax
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: trax-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: trax
+  minReplicas: 1
+  maxReplicas: 1
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50

@@ -168,7 +168,7 @@ class PlaylistController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "No shareable Project found."
+     *     "Playlist is not shareable."
      *   ]
      * }
      *
@@ -180,7 +180,7 @@ class PlaylistController extends Controller
     {
         if (!$playlist->project->shared) {
             return response([
-                'errors' => ['No shareable Project found.'],
+                'errors' => ['Playlist is not shareable.'],
             ], 400);
         }
 
@@ -486,7 +486,7 @@ class PlaylistController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "No shareable Playlist found."
+     *     "Playlist is not shareable."
      *   ]
      * }
      *
@@ -497,7 +497,7 @@ class PlaylistController extends Controller
     public function loadSharedPlaylist(Project $project, Playlist $playlist)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
+        if ($project->shared) {
             if($playlist->shared){
                 return response([
                     'playlist' => new PlaylistResource($this->playlistRepository->loadSharedPlaylist($playlist)),
@@ -506,7 +506,7 @@ class PlaylistController extends Controller
         }
 
         return response([
-            'errors' => ['No shareable Playlist found.'],
+            'errors' => ['Playlist is not shareable.'],
         ], 400);
     }
 
@@ -532,14 +532,14 @@ class PlaylistController extends Controller
     public function allSharedPlaylists(Project $project, Playlist $playlist)
     {
         // 3 is for indexing approved - see Project Model @indexing property
-        if ($project->shared || ($project->indexing === Config::get('constants.indexing-approved'))) {
+        if ($project->shared) {
                 return response([
                     'playlist' => PlaylistResource::collection($this->playlistRepository->allSharedPlaylists($project, $playlist)),
                 ], 200);
         }
 
         return response([
-            'errors' => ['No shareable Playlist found.'],
+            'errors' => ['Playlist is not shareable.'],
         ], 400);
     }
 

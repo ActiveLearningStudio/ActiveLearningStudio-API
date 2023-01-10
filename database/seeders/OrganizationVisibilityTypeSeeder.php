@@ -23,13 +23,13 @@ class OrganizationVisibilityTypeSeeder extends Seeder
         DB::table('organization_visibility_types')
             ->updateOrInsert(
                 ['name' => 'protected'],
-                ['display_name' => 'My Organization']
+                ['display_name' => 'Protected']
             );
 
         DB::table('organization_visibility_types')
             ->updateOrInsert(
                 ['name' => 'global'],
-                ['display_name' => 'My Org + Parent and Child Org']
+                ['display_name' => 'My Organization']
             );
 
         DB::table('organization_visibility_types')

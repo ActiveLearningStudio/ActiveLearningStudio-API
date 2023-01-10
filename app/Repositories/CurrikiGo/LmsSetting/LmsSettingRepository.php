@@ -58,4 +58,16 @@ class LmsSettingRepository extends BaseRepository implements LmsSettingRepositor
         return null;
 
     }
+    /**
+     * @param integer $clientId
+     * @param string $userEmail
+     * 
+     * @return string
+     */
+    public function getOrganization($clientId, $userEmail){
+        $data = [];
+        $data['organization_id'] = $this->model->where('lti_client_id', $clientId)->where('lms_login_id', 'ilike', $userEmail)->pluck('organization_id');
+        $data['organization_obj'] = $this->model->where('lti_client_id', $clientId)->where('lms_login_id', 'ilike', $userEmail)->first();
+        return $data;
+    }
 }

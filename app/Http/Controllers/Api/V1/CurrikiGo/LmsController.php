@@ -105,11 +105,11 @@ class LmsController extends Controller
             $service->saveStudentData($data);
         }
 
-        $lmsSetting = $this->lmsSettingRepository->findByField('lti_client_id', $data->issuerClient);
+        $lmsSetting = $this->lmsSettingRepository->getOrganization($data->issuerClient, $request->user_email);
         $lms_organization_id = null;
 
-        if ($lmsSetting) {
-            $lms_organization_id = $lmsSetting->organization_id;
+        if ($lmsSetting && $lmsSetting['organization_obj']) {
+            $lms_organization_id = $lmsSetting['organization_obj']->organization_id;
             $duplicateRecord = $googleClassroomRepository->duplicateRecordValidation($data->courseId, $request->user_email);
             $userExists = $userRepository->findByField('email', $request->user_email);
             if (!$userExists) {
@@ -122,7 +122,7 @@ class LmsController extends Controller
                 $teacherInfo->name = $request->course_name;
                 $teacherInfo->alternateLink = $data->customApiDomainUrl . '/' . $data->courseId;
                 $teacherInfo->curriki_teacher_email = $request->user_email;
-                $teacherInfo->curriki_teacher_org = $lmsSetting->organization_id;
+                $teacherInfo->curriki_teacher_org = $lms_organization_id;
                 $response[] = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
             }
         }
@@ -133,7 +133,7 @@ class LmsController extends Controller
             $request->input('lti_client_id'),
             $request->input('user_email'),
             $searchTerm,
-            $lms_organization_id
+            $lmsSetting['organization_id']
         );
 
         return response([
@@ -182,10 +182,10 @@ class LmsController extends Controller
      */
     public function organizations(OrganizationSearchRequest $request)
     {
-        $verifyValidCall = LmsSetting::where('lti_client_id', $request->ltiClientId)->where('lms_login_id', 'ilike', $request->userEmail)->count();
+        $verifyValidCall = LmsSetting::where('lti_client_id', $request->ltiClientId)->where('lms_login_id', 'ilike', $request->userEmail)->pluck('organization_id');
         if ($verifyValidCall) {
             $user = User::where('email', $request->input('userEmail'))->first();
-            $organizations = OrganizationResource::collection($user->organizations()->with('parent')->get());
+            $organizations = OrganizationResource::collection($user->specificOrganizationsWithClientId($verifyValidCall)->with('parent')->get());
 
             return response([
                 'organizations' => $organizations,
@@ -211,10 +211,10 @@ class LmsController extends Controller
      */
     public function teams(TeamsSearchRequest $request)
     {
-        $verifyValidCall = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->count();
+        $verifyValidCall = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->pluck('organization_id');
         if ($verifyValidCall) {
             $user = User::where('email', $request->input('user_email'))->first();
-            $teams = TeamResource::collection($user->teams()->get());
+            $teams = TeamResource::collection($user->teamsWithOrgs($verifyValidCall)->get());
 
             return response([
                 'teams' => $teams,
@@ -246,9 +246,10 @@ class LmsController extends Controller
      */
     public function independentActivities(IndependentActivityForDeeplink $request)
     {
+        $orgs = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->pluck('organization_id');
         $user = User::where('email', $request->user_email)->first();
         if($user){
-            return  IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id));
+            return IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id, $orgs));
         }
         return response([
             'data' => ['Could not find any independent activity. Please try again later.'],

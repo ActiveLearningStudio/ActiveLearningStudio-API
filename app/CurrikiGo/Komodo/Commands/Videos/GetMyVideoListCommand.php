@@ -35,15 +35,13 @@ class GetMyVideoListCommand implements Command
 
     /**
      * Execute an API request to return my Komodo videos list
-     * @return json object
+     * @return $response mix
      */
     public function execute()
     {
-        $apiUrl = config('komodo.api_base_url') . '/recordings?email='.$this->setting->tool_consumer_key.'&' . http_build_query($this->getParam);
-        $authHeaders = array('Authorization' => ' Bearer ' . $this->setting->tool_secret_key);
+        $apiUrl = config('komodo.api_base_url') . '/recordings?email='.$this->setting['logged_user_email'].'&' . http_build_query($this->getParam);
+        $authHeaders = array('Authorization' => ' Bearer ' . $this->setting['tool_secret_key']);
         $response = Http::withHeaders($authHeaders)->get($apiUrl);
-        if ($response->status() == 200) {
-            return $response->json();
-        }
+        return $response;
     }
 }
