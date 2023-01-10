@@ -52,7 +52,9 @@ class Organization extends Model
         'msteam_project_visibility',
         'msteam_playlist_visibility',
         'msteam_activity_visibility',
-        'auto_approve'
+        'auto_approve',
+        'activity_title_text',
+        'activity_title_placeholder'
     ];
 
     /**
