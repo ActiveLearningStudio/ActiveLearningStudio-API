@@ -20,7 +20,7 @@ class UpdateAllowedOrganizationVisibilityTypesSeeder extends Seeder
 
         $protectedAllowedOrganizationVisibilityTypes = DB::table('allowed_organization_visibility_types')
             ->where('organization_visibility_type_id', $protected->id)
-            ->where('organization_id', '<>', function ($query) use ($global) {
+            ->whereNotIn('organization_id', function ($query) use ($global) {
                 $query->select('organization_id')
                     ->from('allowed_organization_visibility_types')
                     ->where('organization_visibility_type_id', $global->id);
