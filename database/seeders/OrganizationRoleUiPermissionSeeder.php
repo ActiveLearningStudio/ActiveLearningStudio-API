@@ -46,7 +46,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Team" => "Edit",
             "Independent Activity" => "Edit",
             "My Interactive Video" => "None",
-            "Record a Video" => "None"
+            "Record a Video" => "Edit"
         ];
 
         $courseCreatorUiPermissions = [
@@ -75,7 +75,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Team" => "Edit",
             "Independent Activity" => "Edit",
             "My Interactive Video" => "None",
-            "Record a Video" => "None"
+            "Record a Video" => "Edit"
         ];
 
         $memberUiPermissions = [

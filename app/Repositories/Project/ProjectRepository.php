@@ -62,7 +62,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             isset($attributes['organization_visibility_type_id']) &&
             $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
         ) {
-            $attributes['indexing'] = config('constants.indexing-requested');
+            if ($projectObj->organization->auto_approve) {
+                $attributes['indexing'] = config('constants.indexing-approved');
+            } else {
+                $attributes['indexing'] = config('constants.indexing-requested');
+            }
+            
             $attributes['status'] = config('constants.status-finished');
 
             if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {

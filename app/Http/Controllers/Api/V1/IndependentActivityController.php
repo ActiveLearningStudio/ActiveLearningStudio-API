@@ -307,6 +307,7 @@ class IndependentActivityController extends Controller
         return \DB::transaction(function () use ($validated, $independent_activity) {
 
             $attributes = Arr::except($validated, ['data', 'subject_id', 'education_level_id', 'author_tag_id']);
+            
             $is_updated = $this->independentActivityRepository->update($attributes, $independent_activity->id);
 
             if ($is_updated) {
