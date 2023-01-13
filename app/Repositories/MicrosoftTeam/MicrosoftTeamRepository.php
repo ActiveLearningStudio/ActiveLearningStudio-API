@@ -79,8 +79,58 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
-        
+        print_r($responseBody);die;
         return $accessToken = $responseBody['access_token'];
+    }
+
+    /**
+     * @param $code string
+     * @return string
+     */
+    public function getTokenViaCode($request)
+    {
+        
+        $postInput = [
+            'grant_type' => 'authorization_code',
+            'client_id' => $request->clientId,
+            'client_secret' => $request->secretId,
+            'code' => $request->code,
+            'scope' => config('ms-team-configs.scope_for_token'),
+            
+        ];
+        
+        $headers = [
+            'X-header' => 'value'
+        ];
+
+        $response = Http::asForm()->withOptions(["verify"=>false])->post($this->apiURL, $postInput);
+
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
+        return $responseBody;
+    }
+
+    /**
+    * @param $token string 
+    * @param $data array
+    *
+    * return 
+    */
+    public function getSubmission($data)
+    {
+        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions' . $data['submissionId'];
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $data['token']
+        ];
+
+        $response = Http::withHeaders($headers)->get($apiURL);
+  
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
+        
+        return $responseBody;
     }
 
     /**
