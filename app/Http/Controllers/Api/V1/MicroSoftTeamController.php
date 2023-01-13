@@ -7,6 +7,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\GetTokenViaCode;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -106,6 +107,49 @@ class MicroSoftTeamController extends Controller
             return Redirect::to($url);
         }
    
+    }
+
+    /**
+	 * get access_token using code
+	 *
+	 * get access_token using code.
+	 *
+     * @urlParam gid string User id of current logged in user
+     * @bodyParam code string The stringified of the GAPI authorization token JSON object
+     * 
+     * @response {
+     *   "message": "Access token has been saved successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to save the token."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+	 */
+    public function getAccessTokenViaCode(GetTokenViaCode $request)
+    {
+            $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+
+            if ($accessToken && array_key_exists('access_token', $accessToken)) {
+                $request['token'] = $accessToken['access_token'];
+                $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
+                
+                return response([
+                    'status_code' => 200,
+                    'message' => 'Token fetched successfully.',
+                    'access_token' => $accessToken['access_token'],
+                    'assignment_submission' => $getSubmission
+                ], 200);
+            }
+            return response([
+                'status_code' => 424,
+                'errors' => $accessToken['error'],
+                'message' => $accessToken['error_description']
+            ], 500);   
     }
 
     /**

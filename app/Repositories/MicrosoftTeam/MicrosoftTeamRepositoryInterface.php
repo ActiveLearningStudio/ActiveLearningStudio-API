@@ -15,6 +15,18 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     public function getToken($code);
 
     /**
+     * @param $code string
+     * @return string
+     */
+    public function getTokenViaCode($code);
+
+    /**
+     * @param $object
+     * @return string
+     */
+    public function getSubmission($request);
+
+    /**
     * @param $gid int 
     * @return string
     */
