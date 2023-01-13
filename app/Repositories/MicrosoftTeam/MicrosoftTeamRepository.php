@@ -79,7 +79,6 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
-        print_r($responseBody);die;
         return $accessToken = $responseBody['access_token'];
     }
 
