@@ -13,8 +13,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
 {
 
     // Returns several project metrics for the specified user
-    public function getStudentOutcome($actor, $activity)
-    {
+    public function getStudentOutcome($actor, $activity) {
         //$result = $this->getStudentOutcomeData(compact('actor', 'activity'));
         $result = $this->getOutcomeData(compact('actor', 'activity'));
         if (isset($result['errors'])) {
@@ -26,13 +25,12 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         return ['summary' => $result['summary']];
     }
 
-    private function normalizeRow($data)
-    {
+    private function normalizeRow($data) {
         // We're at the top level
         if ($this->checkArr($data)) {
             $result = [];
 
-            foreach ($data as $row) {
+            foreach($data as $row) {
                 $normalizedRow = $this->normalizeRow($row);
                 if ($normalizedRow !== false) {
                     $result[] = $normalizedRow;
@@ -54,11 +52,11 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 foreach ($data['answer'] as $i => $answer) {
                     if ($i === 0) {
                         $res = [
-                            (is_array($answer['response'])) ? 'Quiz Result: ' . $answer['response'][0] : 'Quiz Result: ' . $answer['response']
+                            (is_array($answer['response'])) ? 'Quiz Result: '. $answer['response'][0] : 'Quiz Result: '. $answer['response']
                         ];
                     } else {
                         $res = [
-                            (is_array($answer['response'])) ? 'Response ' . $i . ': ' . $answer['response'][0] : 'Response ' . $i . ': ' . $answer['response']
+                            (is_array($answer['response'])) ? 'Response '. $i .': '. $answer['response'][0] : 'Response '. $i .': '. $answer['response']
                         ];
                     }
                     $answers[] = [
@@ -102,7 +100,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                 } else {
                     $normalizedAnswer = ['score' => $answer['score']];
                 }
-
+                
                 $normalizedAnswer['duration'] = isset($answer['duration']) ? $answer['duration'] : 'N/A';
                 $answers[] = $normalizedAnswer;
             }
@@ -151,18 +149,16 @@ class OutcomeRepository implements OutcomeRepositoryInterface
     }
 
     // Checks if its a normal array or a statement object
-    private function checkArr($array)
-    {
+    private function checkArr($array) {
         return count(array_filter(array_keys($array), 'is_string')) === 0;
     }
 
-    private function getStudentOutcomeData(array $data)
-    {
+    private function getStudentOutcomeData(array $data) {
         $response = [];
         try {
             $service = new LearnerRecordStoreService();
             $submitted = $service->getSubmittedCurrikiStatements($data, 1);
-
+           
             if (count($submitted) > 0) {
                 // Get 'other' activity IRI from the statement
                 // that now has the unique context of the attempt.
@@ -178,7 +174,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                     $attemptIRI = $service->findAttemptIRI($other);
                     $target = $statement->getTarget();
                     $category = $contextActivities->getCategory();
-
+                    
                     if (!empty($category)) {
                         $categoryId = end($category)->getId();
                         $h5pInteraction = explode("/", $categoryId);
@@ -193,16 +189,16 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         $h5pContent = H5pContent::findOrFail($h5pContentId);
                     }
                 }
-
+                
                 if (!empty($attemptIRI) && !empty($h5pContent)) {
-                    $contentParams = json_decode($h5pContent->parameters, true);
+                    $contentParams = json_decode($h5pContent->parameters, true); 
                     $h5pFactory = new H5PLibraryFactory();
                     $h5pLib = $h5pFactory->init($h5pInteraction, $contentParams);
-
+                    
                     if ($h5pLib) {
                         $h5pMeta = $h5pLib->buildMeta();
                     }
-
+                   
                     // UPDATE: We want to accumulate all responses, and each attempt is not a unique attempt anymore.
                     // So, we just check for an attempt, and then keep the search by submission id.
                     // $data['activity'] = $attemptIRI;
@@ -217,7 +213,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                             recursive_array_search_insert($key, $h5pMeta, $summaryRes);
                         }
                     }
-
+                    
                     // Find any interacted/attempted interactions as well
                     $attempted = $service->getAttemptedStatements($data);
                     if ($attempted) {
@@ -231,7 +227,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                             }
                         }
                     }
-
+                   
                     // Get Non-scoring Interactions
                     $nonScoringResponse = [];
                     $interacted = $service->getInteractedResultStatements($data);
@@ -244,7 +240,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                             $position = strpos($key, '::');
                             if (!in_array($key, $answeredIds) || $position !== FALSE) {
                                 $summary = $service->getNonScoringStatementSummary($record);
-                                $summaryRes = new StudentResultResource($summary);
+                                $summaryRes = new StudentResultResource($summary); 
                                 $nonScoringResponse[] = $summaryRes;
                                 $newKey = $key;
                                 if ($position !== FALSE) {
@@ -263,7 +259,7 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                             $answeredIds = array_merge($interactedIds, array_unique($answeredIds));
                         }
                     }
-
+                    
                     // Check for any aggregates completed statements, before finalizing skipped
                     // This happens for Quesionnaire, Interactive Video, Course Presentation
                     $aggregateCompleted = $service->getAggregatesCompletedStatements($data);
@@ -284,14 +280,14 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                         foreach ($skipped as $key => $record) {
                             if (!in_array($key, $answeredIds)) {
                                 $summary = $service->getStatementSummary($record);
-                                $summaryRes = new StudentResultResource($summary);
+                                $summaryRes = new StudentResultResource($summary); 
                                 $response[] = $summaryRes;
                                 $answeredIds[] = $key;
                                 recursive_array_search_insert($key, $h5pMeta, $summaryRes);
                             }
                         }
                     }
-
+                   
                     return [
                         'summary' => $h5pMeta,
                     ];
@@ -312,27 +308,33 @@ class OutcomeRepository implements OutcomeRepositoryInterface
         }
     }
 
-    private function getOutcomeData(array $data)
-    {
+    private function getOutcomeData(array $data) {
         $response = [];
         try {
-            if (isset($data['actor'])) {
-                $json = json_decode($data['actor']);
-                if ($json && $json->account->homePage === config('constants.mst_origin')) {
-                    $actor_id = $json->account->name;
-                } else {
-                    preg_match_all('!\d+!', $data['actor'], $matches);
-                    if (is_array($matches))
-                        $actor_id = $matches[0][0];
-                }
-            }
             if (isset($data['activity'])) {
                 $activity_explode = explode('/', $data['activity']);
                 $activity_id = $activity_explode[4];
                 $submission_id = $activity_explode[6];
             }
 
-            $check_submitted = OutcomeData::isSubmitted($actor_id, $activity_id, $submission_id);
+            if (isset($data['actor']) && $data['actor'] === 'msteams-speedgrader') {    // Special case for msteams integration
+                $actor_id = $data['actor'];
+                $submissionActor = OutcomeData::isSubmittedBySubmissionId($activity_id, $submission_id);
+
+                if ($submissionActor) {
+                    $actor_id = $submissionActor;
+                    $check_submitted = true;
+                } else {
+                    $check_submitted = false;
+                }
+            } else if (isset($data['actor'])) {
+                preg_match_all('!\d+!', $data['actor'], $matches);
+                if (is_array($matches)) 
+                    $actor_id = $matches[0][0];
+
+                $check_submitted = OutcomeData::isSubmitted($actor_id, $activity_id, $submission_id);
+            }
+
             if ($check_submitted) {
                 $result_array = [];
                 $chapters_list = OutcomeData::getUniqueChapters($actor_id, $activity_id, $submission_id);
@@ -345,14 +347,14 @@ class OutcomeRepository implements OutcomeRepositoryInterface
                             foreach ($result as $data) {
                                 $insertData = true;
                                 $title = empty(trim($data->question)) ? $data->object_name : $data->question;
-                                $answer = empty(trim($data->answer)) ? "Quiz Result" : $data->answer;
-                                //    if ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
-                                //        // $title = $data->object_name;
-                                //         $answer = "Quiz Result";
-                                //     } else
+                                $answer = empty(trim($data->answer)) ? "Quiz Result" : $data->answer; 
+                            //    if ($data->verb == 'answered' && empty($data->question) && empty($data->answer) && $data->score_max > 0) {
+                            //        // $title = $data->object_name;
+                            //         $answer = "Quiz Result";
+                            //     } else
                                 if ($data->verb == 'interacted' && empty($data->question) && empty($data->answer)) {
                                     $insertData = false;
-                                }
+                                } 
                                 if ($insertData) {
                                     $answer = preg_replace('/,\s(?=[,])|,$/', '', $answer);
                                     $result_array['children'][] = array(

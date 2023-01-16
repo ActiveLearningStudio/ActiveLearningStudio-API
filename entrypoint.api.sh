@@ -12,7 +12,7 @@ if [ "$nr_enabled" -eq "1" ]; then
   export NR_INSTALL_SILENT=true
   export NR_INSTALL_KEY=$(printenv NR_INSTALL_KEY)
   export nr_name=$(printenv NR_NAME)
-  sh /var/www/html/newrelic-php5-10.3.0.315-linux/newrelic-install install
+  sh /var/www/html/newrelic-php5-10.4.0.316-linux/newrelic-install install
   sed -i -e "s/newrelic.appname =.*/newrelic.appname = \"\Curriki-API $nr_name\"/" /usr/local/etc/php/conf.d/newrelic.ini
 fi
 
