@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Requests\V1\MSTeamCreateClassRequest;
 use App\Http\Requests\V1\MSTeamCreateAssignmentRequest;
 use App\Http\Requests\V1\MSSaveAccessTokenRequest;
+use App\Http\Requests\V1\SubmitAssignmentMst;
 use App\Models\IndependentActivity;
 use App\Models\Playlist;
 use App\Models\Project;
@@ -112,18 +113,15 @@ class MicroSoftTeamController extends Controller
     /**
 	 * get access_token using code
 	 *
-	 * get access_token using code.
-	 *
-     * @urlParam gid string User id of current logged in user
-     * @bodyParam code string The stringified of the GAPI authorization token JSON object
+     * @bodyParam request contains classId, assignmentId, submissionId
      * 
      * @response {
-     *   "message": "Access token has been saved successfully."
+     *   "message": "Token fetched successfully."
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Failed to save the token."
+     *     "Invalid grant."
      *   ]
      * }
      *
@@ -142,7 +140,8 @@ class MicroSoftTeamController extends Controller
                     'status_code' => 200,
                     'message' => 'Token fetched successfully.',
                     'access_token' => $accessToken['access_token'],
-                    'assignment_submission' => $getSubmission
+                    'assignment_submission' => $getSubmission,
+                    'refresh_token' => $accessToken['refresh_token']
                 ], 200);
             }
             return response([
@@ -150,6 +149,39 @@ class MicroSoftTeamController extends Controller
                 'errors' => $accessToken['error'],
                 'message' => $accessToken['error_description']
             ], 500);   
+    }
+
+    /**
+	 * Submit assignment
+	 *
+     * @bodyParam request contains classId, assignmentId, submissionId
+     * 
+     * @response {
+     *   "message": "Turned in successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to Turn in."
+     *   ]
+     * }
+     *
+     * @param SubmitAssignmentMst $request
+     * @return Response
+	 */
+    public function submitAssignment(SubmitAssignmentMst $request)
+    {
+        $submitAssignment = $this->microsoftTeamRepository->submitAssignment($request);
+        if ($submitAssignment['statusCode'] === 200) {
+            return response([
+                'status_code' => $submitAssignment['statusCode'],
+                'message' => 'Turned in successfully. [MST Status => ' . $submitAssignment['status'] . ']'
+            ], 200);
+        }
+        return response([
+            'status_code' => $submitAssignment['error']['code'],
+            'message' => $submitAssignment['error']['message']
+        ], 500);
     }
 
     /**
