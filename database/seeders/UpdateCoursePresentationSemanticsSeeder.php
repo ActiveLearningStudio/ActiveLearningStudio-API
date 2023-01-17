@@ -21,11 +21,7 @@ class UpdateCoursePresentationSemanticsSeeder extends Seeder
                 'semantics' => $this->updatedSemantics()
             ]);
         }
-
-
-
     }
-
     private function updatedSemantics() {
         return '[
             {
