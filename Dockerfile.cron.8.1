@@ -73,12 +73,6 @@ RUN chmod 0644 /etc/cron.d/root
 RUN crontab /etc/cron.d/root
 RUN touch /var/log/cron.log
 
-ARG H5PBRANCH
-ENV H5P_BRANCH=$H5PBRANCH
-RUN echo $H5P_BRANCH
-RUN echo $H5PBRANCH
-RUN git clone -b $H5PBRANCH https://github.com/ActiveLearningStudio/H5P.Distribution.git h5pcode
-
 COPY . .
 
 ARG H5PBRANCH
