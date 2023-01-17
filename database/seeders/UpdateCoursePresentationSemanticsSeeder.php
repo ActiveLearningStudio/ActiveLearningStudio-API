@@ -22,6 +22,7 @@ class UpdateCoursePresentationSemanticsSeeder extends Seeder
             ]);
         }
     }
+    
     private function updatedSemantics() {
         return '[
             {
