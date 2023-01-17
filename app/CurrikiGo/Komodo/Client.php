@@ -10,18 +10,13 @@ use App\CurrikiGo\Komodo\Contracts\Command;
 
 class Client
 {
-    /**
-     * Komodo API Setting object 
-     */
-    private $setting;
     
     /**
      * Create a new Client instance.
-     * @param  object $setting
      */
-    public function __construct($setting)
+    public function __construct()
     {
-        $this->setting = $setting;
+
     }
 
     /**
@@ -31,7 +26,6 @@ class Client
      */
     public function run(Command $command)
     {
-        $command->accessToken = $this->setting->tool_secret_key;
         return $command->execute();
     }
 }

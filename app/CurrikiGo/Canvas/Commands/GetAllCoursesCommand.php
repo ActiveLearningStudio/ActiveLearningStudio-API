@@ -53,7 +53,9 @@ class GetAllCoursesCommand implements Command
                 'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json']
             ])->getBody()->getContents();
             $response = json_decode($response);
-        } catch (Exception $ex) {
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            return $response->getStatusCode();
         }
 
         return $response;

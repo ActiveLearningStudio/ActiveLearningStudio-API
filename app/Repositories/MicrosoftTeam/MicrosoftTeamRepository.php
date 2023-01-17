@@ -79,8 +79,57 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
 
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
-        
         return $accessToken = $responseBody['access_token'];
+    }
+
+    /**
+     * @param $code string
+     * @return string
+     */
+    public function getTokenViaCode($request)
+    {
+        
+        $postInput = [
+            'grant_type' => 'authorization_code',
+            'client_id' => $request->clientId,
+            'client_secret' => $request->secretId,
+            'code' => $request->code,
+            'scope' => config('ms-team-configs.scope_for_token'),
+            
+        ];
+        
+        $headers = [
+            'X-header' => 'value'
+        ];
+
+        $response = Http::asForm()->withOptions(["verify"=>false])->post($this->apiURL, $postInput);
+
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
+        return $responseBody;
+    }
+
+    /**
+    * @param $token string 
+    * @param $data array
+    *
+    * return 
+    */
+    public function getSubmission($data)
+    {
+        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions' . $data['submissionId'];
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $data['token']
+        ];
+
+        $response = Http::withHeaders($headers)->get($apiURL);
+  
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
+        
+        return $responseBody;
     }
 
     /**
@@ -213,6 +262,75 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $returnArr = [
             "code" => 201,
             "message" => "Projcted published successfully",
+        ];
+
+        return json_encode($returnArr);
+    }
+
+    /**
+    * @param $token string
+    * @param $classId string
+    * @param $playlist Playlist
+    * @param $aSyncUrl string
+    */
+    public function createMSTeamAssignmentPlaylist($token, $classId, $playlist, $aSyncUrl)
+    {
+        \Log::info('in createMSTeamAssignment');
+        if(!empty($aSyncUrl)) {
+            $this->checkClassAsyncStatus($aSyncUrl, $token); // Check if class fully functional
+        }
+        
+        $apiURL = $this->landingUrl . 'education/classes/' . $classId . '/assignments';
+        $assignmentDueDays = config('ms-team-configs.assignment_due_days');
+
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+        ];
+
+        $postInput['dueDateTime'] =date('c', strtotime(date('Y-m-d'). ' + ' . $assignmentDueDays . ' days'));
+        
+        $activities = $playlist->activities;
+        foreach($activities as $activity) {
+
+            $postInput['displayName'] = $activity->title;
+            
+            $response = Http::withHeaders($headers)->withOptions(["verify"=>false])
+                                            ->retry(3, 6000)->post($apiURL, $postInput);
+            $responseBody = json_decode($response->getBody(), true);
+            
+            $statusCode = $response->status();
+            if ($statusCode !== 201) {
+                
+                $returnArr = [
+                    "code" => $resourceStatusCode,
+                    "message" => $resourceResponseBody['error']['message'],
+                ];
+
+                return json_encode($returnArr);
+            }
+            //Add link resource
+            $assignmentId = $responseBody['id'];
+            $resourceApiUrl = $this->landingUrl . 'education/classes/' . $classId . '/assignments/' . $assignmentId . '/resources';
+            $postResourceInput = [
+                "distributeForStudentWork" => false,
+                "resource" => [
+                    "displayName" => $activity->title,
+                    "link" => config('constants.front-url') . '/msteams/launch/activity/' . $activity->id . '/class/' . $classId . '/assignment/' . $assignmentId,
+                    "@odata.type" => "#microsoft.graph.educationLinkResource"
+                ]
+            ];
+
+            $responseResource = Http::withHeaders($headers)->withOptions(["verify"=>false])->post($resourceApiUrl, $postResourceInput);
+            $resourceResponseBody = json_decode($responseResource->getBody(), true);
+            $resourceStatusCode = $responseResource->status();
+            
+        }
+        
+        $returnArr = [
+            "code" => 201,
+            "message" => "Playlist published successfully",
         ];
 
         return json_encode($returnArr);

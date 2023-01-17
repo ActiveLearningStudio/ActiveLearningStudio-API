@@ -62,7 +62,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             isset($attributes['organization_visibility_type_id']) &&
             $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
         ) {
-            $attributes['indexing'] = config('constants.indexing-requested');
+            if ($projectObj->organization->auto_approve) {
+                $attributes['indexing'] = config('constants.indexing-approved');
+            } else {
+                $attributes['indexing'] = config('constants.indexing-requested');
+            }
+            
             $attributes['status'] = config('constants.status-finished');
 
             if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
@@ -225,7 +230,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm, $lms_organization_id)
     {
-        return $this->model->where('organization_id', $lms_organization_id)->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+        return $this->model->whereIn('organization_id', $lms_organization_id)->where('name', 'iLIKE', '%' . $searchTerm . '%')->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
             $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
                 $query_lmssetting->where('lti_client_id', $lti_client_id);
                 $query_lmssetting->where('lms_login_id', 'ilike', $user_email);

@@ -20,13 +20,6 @@ use H5PValidator;
 use H5PContentValidator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-//use H5PDevelopment;
-//use H5PDefaultStorage;
-//use H5PEditorEndpoints;
-//use H5PEditorAjax;
-//use H5PEditorAjaxInterface;
-//use H5peditorFile;
-//use H5peditorStorage;
 use Illuminate\Support\Facades\Storage;
 use Djoudi\LaravelH5p\Eloquents\H5pContent;
 use Djoudi\LaravelH5p\Storages\EditorStorage;
@@ -405,23 +398,6 @@ class LaravelH5p
     public static function get_content_settings($content)
     {
         $safe_parameters = self::$core->filterParameters($content);
-//        if (has_action('h5p_alter_filtered_parameters')) {
-//            // Parse the JSON parameters
-//            $decoded_parameters = json_decode($safe_parameters);
-//            /**
-//             * Allows you to alter the H5P content parameters after they have been
-//             * filtered. This hook only fires before view.
-//             *
-//             * @param object &$parameters
-//             * @param string $libraryName
-//             * @param int $libraryMajorVersion
-//             * @param int $libraryMinorVersion
-//             * @since 1.5.3
-//             *
-//             */
-//            // Stringify the JSON parameters
-//            $safe_parameters = json_encode($decoded_parameters);
-//        }
 
         // Getting author's user id
         $author_id = (int)(is_array($content) ? $content['user_id'] : $content->user_id);
@@ -444,23 +420,6 @@ class LaravelH5p
             ),
             'metadata' => isset($content['metadata']) ? $content['metadata'] : ['title' => null]
         );
-
-        // Get preloaded user data for the current user
-        /*if (config('laravel-h5p.h5p_save_content_state') && Auth::check()) {
-            $results = DB::select("
-                SELECT hcud.sub_content_id, hcud.data_id, hcud.data
-                FROM h5p_contents_user_data hcud
-                WHERE user_id = ?
-                AND content_id = ?
-                AND preload = 1
-            ", [Auth::user()->id, $content['id']]);
-
-            if ($results) {
-                foreach ($results as $result) {
-                    $settings['contentUserData'][$result->sub_content_id][$result->data_id] = $result->data;
-                }
-            }
-        }*/
 
         // Get preloaded user data for the current user
         if (isset($_GET['gcuid']) && isset($_GET['submissionid'])) {

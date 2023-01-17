@@ -119,6 +119,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the teams for the user for specific orgs
+     */
+    public function teamsWithOrgs($orgs)
+    {
+        return $this->belongsToMany('App\Models\Team', 'team_user_roles')->whereIn('organization_id', $orgs)->using('App\Models\TeamUserRole')->withPivot('team_role_type_id')->withTimestamps();
+    }
+
+    /**
      * Get the groups for the user
      */
     public function groups()
@@ -191,6 +199,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function organizations()
     {
         return $this->belongsToMany('App\Models\Organization', 'organization_user_roles')->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
+    }
+
+    /**
+     * The organizations that belong to the user specific on client_id only.
+     */
+    public function specificOrganizationsWithClientId($orgs)
+    {
+        return $this->belongsToMany('App\Models\Organization', 'organization_user_roles')->whereIn('organization_id', $orgs)->using('App\Models\OrganizationUserRole')->withPivot('organization_role_type_id')->withTimestamps();
     }
 
     /**

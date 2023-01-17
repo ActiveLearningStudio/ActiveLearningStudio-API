@@ -9,5 +9,6 @@ return [
     'redirect_url' => env('MSTEAMS_REDIRECT_URL'),
     'assignment_due_days' => env('ASSIGNMENT_DUE_DATE_DAYS'),
     'scope' => 'https://graph.microsoft.com/.default',
+    'scope_for_token' => 'https://graph.microsoft.com/User.Read https://graph.microsoft.com/Mail.Read'
 ];
  

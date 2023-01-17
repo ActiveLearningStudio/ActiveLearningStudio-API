@@ -23,4 +23,12 @@ interface LmsSettingRepositoryInterface extends EloquentRepositoryInterface
      * @return string
      */
     public function getActivityGrade($projectId, $activityParam);
+
+    /**
+     * @param integer $clientId
+     * @param string $userEmail
+     * 
+     * @return string
+     */
+    public function getOrganization($clientId, $userEmail);
 }

@@ -1,0 +1,96 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-tsugi
+  labels:
+    app: {{ .Release.Name }}-tsugi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-tsugi
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-tsugi
+    spec:
+      containers:
+      - name: tsugi
+        image: quay.io/curriki/tsugi:stage
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: tsugi-config
+          mountPath: /var/www/html/tsugi/config.php
+          subPath: config.php
+        - name: tsugi-mod-config
+          mountPath: /var/www/html/tsugi/mod/curriki/config.php
+          subPath: config.php
+        resources:
+          limits:
+            cpu: 400m
+            memory: 750Mi
+          requests:
+            cpu: 50m
+            memory: 100Mi
+      volumes:
+      - name: tsugi-config
+        secret:
+          secretName: tsugi-env
+      - name: tsugi-mod-config
+        configMap:
+          name: tsugi-mod-config
+      
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tsugi-mod-config
+data:
+  config.php: |
+    <?php
+    define('CURRIKI_STUDIO_HOST', 'https://stage-k8s.currikistudio.org');
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tsugi-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: {{ .Release.Name }}-tsugi
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: tsugi-autoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: tsugi
+  minReplicas: 1
+  maxReplicas: 1
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50

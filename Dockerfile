@@ -51,8 +51,8 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 WORKDIR /var/www/html
 
 #New Relic
-RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.3.0.315-linux.tar.gz && \
-	tar -xzf newrelic-php5-10.3.0.315-linux.tar.gz
+RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.4.0.316-linux.tar.gz && \
+	tar -xzf newrelic-php5-10.4.0.316-linux.tar.gz
 
 # Copy the PHP configuration file
 COPY ./php.ini /usr/local/etc/php/

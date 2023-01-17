@@ -15,6 +15,18 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     public function getToken($code);
 
     /**
+     * @param $code string
+     * @return string
+     */
+    public function getTokenViaCode($code);
+
+    /**
+     * @param $object
+     * @return string
+     */
+    public function getSubmission($request);
+
+    /**
     * @param $gid int 
     * @return string
     */
@@ -43,6 +55,14 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     * @param $aSyncUrl string
     */
     public function createMSTeamAssignment($token, $classId, $project, $aSyncUrl);
+
+    /**
+    * @param $token string
+    * @param $classId string
+    * @param $playlist Playlist
+    * @param $aSyncUrl string
+    */
+    public function createMSTeamAssignmentPlaylist($token, $classId, $playlist, $aSyncUrl);
 
     /**
     * @param $token string

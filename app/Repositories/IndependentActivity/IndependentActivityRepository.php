@@ -5,7 +5,6 @@ namespace App\Repositories\IndependentActivity;
 use App\Exceptions\GeneralException;
 use App\Models\IndependentActivity;
 use App\Models\Organization;
-use App\Models\Playlist;
 use App\Models\Activity;
 use App\Models\Subject;
 use App\Models\EducationLevel;
@@ -15,16 +14,11 @@ use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
-use App\Http\Resources\V1\SearchPostgreSqlResource;
 use App\Http\Resources\V1\SearchIndependentActivityResource;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use ZipArchive;
 use RecursiveIteratorIterator;
@@ -74,7 +68,12 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             isset($attributes['organization_visibility_type_id']) &&
             $independentActivityObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
         ) {
-            $attributes['indexing'] = config('constants.indexing-requested');
+            if ($independentActivityObj->organization->auto_approve) {
+                $attributes['indexing'] = config('constants.indexing-approved');
+            } else {
+                $attributes['indexing'] = config('constants.indexing-requested');
+            }
+            
             $attributes['status'] = config('constants.status-finished');
 
             if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
@@ -298,13 +297,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      */
     public function clone(Organization $organization, IndependentActivity $independentActivity, $token)
     {
-        $h5p_content = $independentActivity->h5p_content;
-        if ($h5p_content) {
-            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
-            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
-            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        $h5pContent = $independentActivity->h5p_content;
+        if ($h5pContent) {
+            $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5pContent->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5pContent->save(); // this will return true, then we can get id of h5pContent
         }
-        $newH5pContent = $h5p_content->id ?? null;
+        $newH5pContent = $h5pContent->id ?? null;
 
         // copy the content data if exist
         $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
@@ -317,7 +316,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         }
 
         $new_thumb_url = clone_thumbnail($independentActivity->thumb_url, "independent-activities");
-        $independent_activity_data = [
+        $independentActivityData = [
             'title' => ($isDuplicate) ? $independentActivity->title . "-COPY" : $independentActivity->title,
             'type' => $independentActivity->type,
             'content' => $independentActivity->content,
@@ -332,19 +331,19 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             'organization_id' => $organization->id,
             'organization_visibility_type_id' => config('constants.private-organization-visibility-type-id'),
         ];
-        $cloned_activity = $this->create($independent_activity_data);
+        $clonedActivity = $this->create($independentActivityData);
 
-        if ($cloned_activity && count($independentActivity->subjects) > 0) {
-            $cloned_activity->subjects()->attach($independentActivity->subjects);
+        if ($clonedActivity && count($independentActivity->subjects) > 0) {
+            $clonedActivity->subjects()->attach($independentActivity->subjects);
         }
-        if ($cloned_activity && count($independentActivity->educationLevels) > 0) {
-            $cloned_activity->educationLevels()->attach($independentActivity->educationLevels);
+        if ($clonedActivity && count($independentActivity->educationLevels) > 0) {
+            $clonedActivity->educationLevels()->attach($independentActivity->educationLevels);
         }
-        if ($cloned_activity && count($independentActivity->authorTags) > 0) {
-            $cloned_activity->authorTags()->attach($independentActivity->authorTags);
+        if ($clonedActivity && count($independentActivity->authorTags) > 0) {
+            $clonedActivity->authorTags()->attach($independentActivity->authorTags);
         }
 
-        return $cloned_activity['id'];
+        return $clonedActivity['id'];
     }
 
     /**
@@ -631,62 +630,62 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     {
         $zip = new ZipArchive;
 
-        $activity_dir_name = 'independent_activity-'.uniqid();
+        $activityDirName = 'independent_activity-'.uniqid();
 
         $activityTitle = str_replace('/', '-', $independent_activity->title);
 
-        $activity_json_file = '/exports/' . $activity_dir_name .  '/activity.json';
+        $activity_json_file = '/exports/' . $activityDirName .  '/activity.json';
         Storage::disk('public')->put($activity_json_file, $independent_activity);
 
         // Export Subject
-        $activitySubjectJsonFile = '/exports/' . $activity_dir_name . '/activity_subject.json';
+        $activitySubjectJsonFile = '/exports/' . $activityDirName . '/activity_subject.json';
 
         Storage::disk('public')->put($activitySubjectJsonFile, $independent_activity->subjects);
 
         // Export Education level
 
-        $activityEducationLevelJsonFile = '/exports/' . $activity_dir_name . '/activity_education_level.json';
+        $activityEducationLevelJsonFile = '/exports/' . $activityDirName . '/activity_education_level.json';
 
         Storage::disk('public')->put($activityEducationLevelJsonFile, $independent_activity->educationLevels);
 
         // Export Author
 
-        $activityAuthorTagJsonFile = '/exports/' . $activity_dir_name . '/activity_author_tag.json';
+        $activityAuthorTagJsonFile = '/exports/' . $activityDirName . '/activity_author_tag.json';
 
         Storage::disk('public')->put($activityAuthorTagJsonFile, $independent_activity->authorTags);
 
-        $decoded_content = json_decode($independent_activity->h5p_content,true);
+        $decodedContent = json_decode($independent_activity->h5p_content,true);
 
-        $decoded_content['library_title'] = DB::table('h5p_libraries')
-                                                            ->where('id', $decoded_content['library_id'])->value('name');
-        $decoded_content['library_major_version'] = DB::table('h5p_libraries')
-                                                                ->where('id', $decoded_content['library_id'])
+        $decodedContent['library_title'] = DB::table('h5p_libraries')
+                                                            ->where('id', $decodedContent['library_id'])->value('name');
+        $decodedContent['library_major_version'] = DB::table('h5p_libraries')
+                                                                ->where('id', $decodedContent['library_id'])
                                                                 ->value('major_version');
-        $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
-                                                                ->where('id', $decoded_content['library_id'])
+        $decodedContent['library_minor_version'] = DB::table('h5p_libraries')
+                                                                ->where('id', $decodedContent['library_id'])
                                                                 ->value('minor_version');
 
-        $content_json_file = '/exports/'.$activity_dir_name . '/' . $independent_activity->h5p_content_id . '.json';
-        Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
+        $contentJsonFile = '/exports/'.$activityDirName . '/' . $independent_activity->h5p_content_id . '.json';
+        Storage::disk('public')->put($contentJsonFile, json_encode($decodedContent));
 
         if (!empty($independent_activity->thumb_url) && filter_var($independent_activity->thumb_url, FILTER_VALIDATE_URL) == false) {
             $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $independent_activity->thumb_url)));
             $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
             if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
-                $activity_thumbanil_file = '/exports/' . $activity_dir_name . '/' . basename($activity_thumbanil);
+                $activity_thumbanil_file = '/exports/' . $activityDirName . '/' . basename($activity_thumbanil);
                 Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
             }
         }
-        $exported_content_dir_path = 'app/public/exports/' . $activity_dir_name . '/' . $independent_activity->h5p_content_id;
-        $exported_content_dir = storage_path($exported_content_dir_path);
-        \File::copyDirectory( storage_path('app/public/h5p/content/'.$independent_activity->h5p_content_id), $exported_content_dir );
+        $exportedContentDirPath = 'app/public/exports/' . $activityDirName . '/' . $independent_activity->h5p_content_id;
+        $exportedContentDir = storage_path($exportedContentDirPath);
+        \File::copyDirectory( storage_path('app/public/h5p/content/'.$independent_activity->h5p_content_id), $exportedContentDir );
 
         // Get real path for our folder
-        $rootPath = storage_path('app/public/exports/'.$activity_dir_name);
+        $rootPath = storage_path('app/public/exports/'.$activityDirName);
 
         // Initialize archive object
         $zip = new ZipArchive();
-        $fileName = $activity_dir_name.'.zip';
+        $fileName = $activityDirName.'.zip';
         $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Create recursive directory iterator
@@ -713,10 +712,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         // Zip archive will be created only after closing object
         $zip->close();
         // Remove independent activity folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
+        $this->rrmdir(storage_path('app/public/exports/'.$activityDirName));
 
         // Remove independent activity folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$activity_dir_name));
+        $this->rrmdir(storage_path('app/public/exports/'.$activityDirName));
 
         return storage_path('app/public/exports/' . $fileName);
     }
@@ -781,19 +780,19 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                     $content_json = file_get_contents(
                                             storage_path($extracted_folder . '/' . $old_content_id . '.json'));
-                    $h5p_content = json_decode($content_json,true);
-                    $h5p_content['library_id'] = DB::table('h5p_libraries')
-                                                        ->where('name', $h5p_content['library_title'])
-                                                        ->where('major_version',$h5p_content['library_major_version'])
-                                                        ->where('minor_version',$h5p_content['library_minor_version'])
+                    $h5pContent = json_decode($content_json,true);
+                    $h5pContent['library_id'] = DB::table('h5p_libraries')
+                                                        ->where('name', $h5pContent['library_title'])
+                                                        ->where('major_version',$h5pContent['library_major_version'])
+                                                        ->where('minor_version',$h5pContent['library_minor_version'])
                                                         ->value('id');
 
-                    unset($h5p_content["id"], $h5p_content["user_id"], $h5p_content["created_at"], $h5p_content["updated_at"],
-                                                $h5p_content['library_title'], $h5p_content['library_major_version'], $h5p_content['library_minor_version']);
+                    unset($h5pContent["id"], $h5pContent["user_id"], $h5pContent["created_at"], $h5pContent["updated_at"],
+                                                $h5pContent['library_title'], $h5pContent['library_major_version'], $h5pContent['library_minor_version']);
 
-                    $h5p_content['user_id'] = $authUser->id;
+                    $h5pContent['user_id'] = $authUser->id;
 
-                    $new_content = DB::table('h5p_contents')->insert($h5p_content);
+                    $new_content = DB::table('h5p_contents')->insert($h5pContent);
                     $new_content_id = DB::getPdo()->lastInsertId();
 
                     \File::copyDirectory(
@@ -966,13 +965,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      */
     public function copyToPlaylist($independentActivity, $playlist, $token)
     {
-        $h5p_content = $independentActivity->h5p_content;
-        if ($h5p_content) {
-            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
-            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
-            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        $h5pContent = $independentActivity->h5p_content;
+        if ($h5pContent) {
+            $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5pContent->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5pContent->save(); // this will return true, then we can get id of h5pContent
         }
-        $newH5pContent = $h5p_content->id ?? null;
+        $newH5pContent = $h5pContent->id ?? null;
 
         // copy the content data if exist
         $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
@@ -1018,14 +1017,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         DB::transaction(function () use ($independentActivities) {
             foreach ($independentActivities as $independentActivity) {
-                $h5p_content = $this->h5pContentRepository->find($independentActivity->h5p_content_id);
+                $h5pContent = $this->h5pContentRepository->find($independentActivity->h5p_content_id);
 
-                if ($h5p_content) {
-                    $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
-                    $h5p_content->user_id = $independentActivity->user_id; // just add the user id
-                    $h5p_content->save(); // this will return true, then we can get id of h5pContent
+                if ($h5pContent) {
+                    $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
+                    $h5pContent->user_id = $independentActivity->user_id; // just add the user id
+                    $h5pContent->save(); // this will return true, then we can get id of h5pContent
                 }
-                $newH5pContent = $h5p_content->id ?? null;
+                $newH5pContent = $h5pContent->id ?? null;
 
                 // copy the content data if exist
                 $this->copy_content_data($independentActivity->h5p_content_id, $newH5pContent);
@@ -1095,9 +1094,10 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      * Get indep-activities of a user who is launching the deeplink from another LMS
      * @param $data
      * @param $user
+     * @param $orgs
      * @return mixed
      */
-    public function independentActivities($data, $user)
+    public function independentActivities($data, $user, $orgs)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
         $query = $this->model;
@@ -1108,7 +1108,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             $query = $query->where('title', 'iLIKE', '%' . $q . '%');
         }
 
-        return $query->where('user_id', $user)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
+        return $query->where('user_id', $user)->whereIn('organization_id', $orgs)->orderBy('order', 'ASC')->paginate($perPage)->withQueryString();
     }
 
      /**
@@ -1160,13 +1160,13 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      */
     public function convertIntoIndependentActivity($organization, $activity, $token)
     {
-        $h5p_content = $activity->h5p_content;
-        if ($h5p_content) {
-            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
-            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
-            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        $h5pContent = $activity->h5p_content;
+        if ($h5pContent) {
+            $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
+            $h5pContent->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $h5pContent->save(); // this will return true, then we can get id of h5pContent
         }
-        $newH5pContent = $h5p_content->id ?? null;
+        $newH5pContent = $h5pContent->id ?? null;
 
         // copy the content data if exist
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);

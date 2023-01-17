@@ -62,4 +62,13 @@ class OutcomeData extends Model
             return false;
         }
     }
+
+    public static function isSubmittedBySubmissionId($activity_id, $submission_id) {
+        $result = DB::select("select user_id from outcome_data where submission_id = ? AND assignment_id = ? AND verb= ? order by page_order desc", [$submission_id, $activity_id,'submitted-curriki']);
+        if(count($result) > 0) {
+            return $result[0]->user_id;
+        } else {
+            return false;
+        }
+    }
 }
