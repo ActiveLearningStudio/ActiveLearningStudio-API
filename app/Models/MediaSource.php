@@ -18,4 +18,13 @@ class MediaSource extends Model
         'name',
         'media_type'
     ];
+
+    /** 
+    * Detail         Define belongs to many relationship with organization_media_sources table,
+    * @return        Relationship
+    */
+    public function mediaSourcesOrg()
+    {
+        return $this->belongsToMany('App\Models\Organization', 'organization_media_sources');
+    }
 }

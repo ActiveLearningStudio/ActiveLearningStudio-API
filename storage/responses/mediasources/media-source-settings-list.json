@@ -1,0 +1,121 @@
+{
+    "data": [
+        {
+            "id": 2,
+            "name": "YouTube",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 4,
+            "name": "Safari Montage",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 5,
+            "name": "BrightCove",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 6,
+            "name": "Vimeo",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 7,
+            "name": "My device",
+            "media_type": "Image",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 8,
+            "name": "Pexels",
+            "media_type": "Image",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 9,
+            "name": "Safari Montage",
+            "media_type": "Image",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 1,
+            "name": "My device",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": "2022-07-07T15:02:54.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 13,
+            "name": "Komodo",
+            "media_type": "Video",
+            "created_at": "2022-08-01T09:44:58.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 19,
+            "name": "Smithsonian",
+            "media_type": "Image",
+            "created_at": "2022-09-28T08:54:01.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        }
+    ],
+    "links": {
+        "first": "http://curriki-studio-api.local/api/v1/media-source-settings?page=1",
+        "last": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2",
+        "prev": null,
+        "next": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 2,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/media-source-settings?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2",
+                "label": "2",
+                "active": false
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2",
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://curriki-studio-api.local/api/v1/media-source-settings",
+        "per_page": 10,
+        "to": 10,
+        "total": 12
+    }
+}
