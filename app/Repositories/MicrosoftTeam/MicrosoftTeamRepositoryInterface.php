@@ -27,6 +27,12 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     public function getSubmission($request);
 
     /**
+     * @param $object
+     * @return string
+     */
+    public function submitAssignment($request);
+
+    /**
     * @param $gid int 
     * @return string
     */
