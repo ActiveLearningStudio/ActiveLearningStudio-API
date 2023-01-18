@@ -872,7 +872,8 @@ class IndependentActivityController extends Controller
      * 
      * @return download file download for the independent activity XAPI zip download
      */
-    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
+    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) 
+    {
         return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
     }
 

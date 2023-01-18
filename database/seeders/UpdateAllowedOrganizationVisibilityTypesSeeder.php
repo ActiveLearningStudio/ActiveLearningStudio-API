@@ -18,7 +18,15 @@ class UpdateAllowedOrganizationVisibilityTypesSeeder extends Seeder
 
         $global = DB::table('organization_visibility_types')->where('name', 'global')->first();
 
-        DB::transaction(function () use ($protected, $global) {
+        $protectedAllowedOrganizationVisibilityTypes = DB::table('allowed_organization_visibility_types')
+            ->where('organization_visibility_type_id', $protected->id)
+            ->whereNotIn('organization_id', function ($query) use ($global) {
+                $query->select('organization_id')
+                    ->from('allowed_organization_visibility_types')
+                    ->where('organization_visibility_type_id', $global->id);
+            })->get();
+
+        DB::transaction(function () use ($protected, $global, $protectedAllowedOrganizationVisibilityTypes) {
             $affected = DB::table('organization_visibility_types')
                 ->where('id', $protected->id)
                 ->update(['display_name' => 'Protected']);
@@ -27,9 +35,12 @@ class UpdateAllowedOrganizationVisibilityTypesSeeder extends Seeder
                 ->where('id', $global->id)
                 ->update(['display_name' => 'My Organization']);
 
-            $affected = DB::table('allowed_organization_visibility_types')
-                ->where('organization_visibility_type_id', $protected->id)
-                ->update(['organization_visibility_type_id' => $global->id]);
+            foreach ($protectedAllowedOrganizationVisibilityTypes as $protectedAllowedOrganizationVisibilityType) {
+                DB::table('allowed_organization_visibility_types')->insert([
+                    'organization_id' => $protectedAllowedOrganizationVisibilityType->organization_id,
+                    'organization_visibility_type_id' => $global->id
+                ]);
+            }
         });
     }
 }
