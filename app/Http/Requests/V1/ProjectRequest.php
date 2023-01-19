@@ -23,11 +23,13 @@ class ProjectRequest extends FormRequest
      */
     public function rules()
     {
+        $suborganization = $this->route('suborganization');
+        
         return [
             'name' => 'required|string|max:80',
             'description' => 'required|string|max:1000',
             'thumb_url' => 'required',
-            'organization_visibility_type_id' => 'required|exists:allowed_organization_visibility_types,organization_visibility_type_id',
+            'organization_visibility_type_id' => 'required|exists:allowed_organization_visibility_types,organization_visibility_type_id,organization_id,' . $suborganization->id,
             'team_id' => 'nullable|exists:teams,id',
         ];
     }
