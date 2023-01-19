@@ -8,7 +8,7 @@ use Illuminate\Foundation\Http\FormRequest;
  * Description    Validation request class for create media sources
  * class          StoreMediaSource
  */
-class StoreMediaSource extends FormRequest
+class StoreMediaSourceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,6 +31,18 @@ class StoreMediaSource extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:media_sources,name,NULL,id,deleted_at,NULL,media_type,' . $mediaType,
             'media_type' => 'required|in:Video,Image'
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.unique' => 'The name has already been taken with the mentioned media_type.'
         ];
     }
 }

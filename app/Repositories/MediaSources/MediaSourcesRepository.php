@@ -88,10 +88,11 @@ class MediaSourcesRepository extends BaseRepository implements MediaSourcesInter
      */
     public function find($id)
     {
-        if ($setting = $this->model->find($id)) {
+        if ( ctype_digit($id) ) {
+            $setting = $this->model->find($id);
             return $setting;
         }
-        throw new GeneralException('Media Source not found.');
+        throw new GeneralException('Media Source not found!');
     }
 
     /**
@@ -101,11 +102,9 @@ class MediaSourcesRepository extends BaseRepository implements MediaSourcesInter
      */
     public function destroy($id)
     {
-        try {
+        if ( ctype_digit($id) ) {
             $this->find($id)->delete();
             return ['message' => 'Media Source deleted!', 'data' => []];
-        } catch (\Exception $e) {
-            Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to delete media source, please try again later!');
     }
