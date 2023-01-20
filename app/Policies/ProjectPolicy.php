@@ -50,6 +50,12 @@ class ProjectPolicy
             return true;
         }
 
+        // use team permissions instead if the project belongs to a team
+        $team = $project->team;
+        if ($team && $user->hasTeamPermissionTo('team:view-project', $team)) {
+            return true;
+        }
+
         if ($project->organizationVisibilityType && $project->organizationVisibilityType->name === 'global') {
             // get ancestors and children orgs. The project is visible in all these
             // does the user have view rights to any of these?
@@ -65,13 +71,7 @@ class ProjectPolicy
 
         if ($project->organizationVisibilityType && $project->organizationVisibilityType->name === 'protected') {
             // does the user have view rights to the particular org?
-            // use team permissions instead if the project belongs to a team
-            $team = $project->team;
-            if ($team) {
-                return $user->hasTeamPermissionTo('team:view-project', $team);
-            } else {
-                return $user->hasPermissionTo('project:view', $project->organization);
-            }
+            return $user->hasPermissionTo('project:view', $project->organization);
         }
 
         if ($project->organizationVisibilityType && $project->organizationVisibilityType->name === 'private') {
