@@ -139,7 +139,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     */
     public function getSubmission($data)
     {
-        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions' . $data['submissionId'];
+        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions/' . $data['submissionId'];
         $headers = [
             'Content-length' => 0,
             'Content-type' => 'application/json',
