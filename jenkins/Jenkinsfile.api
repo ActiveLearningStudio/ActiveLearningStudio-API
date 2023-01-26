@@ -6,6 +6,21 @@ node("currikidev") {
     stage('Clone repository') {               
         checkout scm    
     }  
+    stage('Deploy Helm') {	
+        echo env.BRANCH_NAME
+        if(env.BRANCH_NAME  == "staging") {
+            echo 'Copy'
+            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+            sh """ 
+            #!/bin/bash
+            set -ex
+            echo "${kubeconfig}" >> kubeconfig
+"""
+            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd config)/kubeconfig'
+        } else {
+            echo 'No Kubernetes deployment'
+        }
+    }
     
     stage('Build image') {         
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
@@ -30,21 +45,7 @@ node("currikidev") {
         }
     }
 
-    stage('Deploy Helm') {	
-        echo env.BRANCH_NAME
-        if(env.BRANCH_NAME  == "staging") {
-            echo 'Copy'
-            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
-            sh """ 
-            #!/bin/bash
-            set -ex
-            echo "${kubeconfig}" >> kubeconfig
-"""
-            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd config)/kubeconfig'
-        } else {
-            echo 'No Kubernetes deployment'
-        }
-    }
+    
     
 
     
