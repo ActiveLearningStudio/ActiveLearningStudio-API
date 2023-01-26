@@ -1,5 +1,8 @@
 *
 !apidoc/
+!public/
+!public/h5p/
+!public/h5p/.gitignore
 !public/projects/
 !public/activities/
 !public/activity-items/

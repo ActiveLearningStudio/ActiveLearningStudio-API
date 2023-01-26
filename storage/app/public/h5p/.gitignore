@@ -1,0 +1,5 @@
+*
+!h5p-core/
+!h5p-editor/
+!laravel-h5p/
+!.gitignore
