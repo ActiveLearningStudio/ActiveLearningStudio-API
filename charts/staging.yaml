@@ -1,0 +1,6 @@
+image:
+  apirepo: quay.io/curriki/api:stage
+  cronrepo: quay.io/curriki/cron:stage
+  clientrepo: quay.io/curriki/client:kube
+  tsugirepo: quay.io/curriki/tsugi:stage
+  traxrepo: quay.io/curriki/trax:kube

@@ -8,13 +8,13 @@ metadata:
 spec:
   tls:
     - hosts:
-      - stage-k8s.currikistudio.org
-      - stage-k8s-api.currikistudio.org
-      - stage-k8s-trax.currikistudio.org
-      - stage-k8s-tsugi.currikistudio.org
+      - stage.currikistudio.org
+      - stage-api.currikistudio.org
+      - stage-trax.currikistudio.org
+      - stage-tsugi.currikistudio.org
       secretName: letsencrypt
   rules:
-  - host: stage-k8s.currikistudio.org
+  - host: stage.currikistudio.org
     http:
       paths:
       - pathType: Prefix
@@ -31,7 +31,7 @@ spec:
             name: api-svc
             port:
               number: 80
-  - host: stage-k8s-api.currikistudio.org
+  - host: stage-api.currikistudio.org
     http:
       paths:
       - pathType: Prefix
@@ -41,7 +41,7 @@ spec:
             name: api-svc
             port:
               number: 80
-  - host: stage-k8s-trax.currikistudio.org
+  - host: stage-trax.currikistudio.org
     http:
       paths:
       - pathType: Prefix
@@ -51,7 +51,7 @@ spec:
             name: trax-svc
             port:
               number: 80
-  - host: stage-k8s-tsugi.currikistudio.org
+  - host: stage-tsugi.currikistudio.org
     http:
       paths:
       - pathType: Prefix
