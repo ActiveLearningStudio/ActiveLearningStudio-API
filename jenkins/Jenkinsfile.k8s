@@ -9,8 +9,10 @@ pipeline {
         CI = 'true'
     }
     stages {
-        stage('Clone repository') {               
-            checkout scm    
+        stage('Clone repository') {     
+            steps {          
+                checkout scm    
+            }
         }
         stage('Build image') { 
             when {
