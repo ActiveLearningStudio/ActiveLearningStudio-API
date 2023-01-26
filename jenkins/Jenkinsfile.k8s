@@ -48,7 +48,7 @@ pipeline {
                 withCredentials([file(credentialsId: kubeconfig, variable: 'kubeconfig')]) {
                     writeFile file: 'kubeconfig', text: readFile(kubeconfig)
                 }
-                sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd config)/kubeconfig'
+                sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig kubeconfig'
             }
             
         }
