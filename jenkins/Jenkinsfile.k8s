@@ -8,12 +8,15 @@ pipeline {
         string(name: 'tag', defaultValue: 'stage', description: 'tag')
 
         string(name: 'node', defaultValue: '', description: 'node')
-        
+
         string(name: 'h5pbranch', defaultValue: '', description: 'h5pbranch')
     }
+    
 
     environment {
         CI = 'true'
+        KUBE_CONFIG = credentials("kubeconfig") 
+
     }
     stages {
         stage('Clone repository') {     
@@ -34,6 +37,22 @@ pipeline {
                 echo "Deploying Code"
                 """
             }
+        }
+        stage('Deploy Helm') {	
+            when {
+                branch 'staging'
+            } 
+            steps {
+                echo 'Copy'
+                sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+                sh """ 
+                #!/bin/bash
+                set -ex
+                echo "${KUBE_CONFIG}" >> kubeconfig
+"""
+                sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd config)/kubeconfig'
+            }
+            
         }
     }
 }
