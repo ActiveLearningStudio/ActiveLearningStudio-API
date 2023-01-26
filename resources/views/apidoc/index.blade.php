@@ -52291,6 +52291,642 @@ response.json()</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/v1/video/get-direct-url</code></p>
 <!-- END_4cfb8c4a4fccb37097325b030f362f0a -->
+<h1>31. Admin/Media Source</h1>
+<p>APIs for media source on admin panel.</p>
+<!-- START_318f6e62a4ca0e1c7b799b72e0f09b251f -->
+<h2>Get All Media Source For Listing.</h2>
+<p>Returns the paginated response with pagination links (DataTables are fully supported - All Params).</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8000/api/v1/media-source-settings?query=Komodo&filter=Video/Image&amp;start=0&amp;length=25" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/media-source-settings"
+);
+
+let params = {
+    "query": "Komodo",
+    "filter": "Video/Image",
+    "start": "0",
+    "length": "25",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8000/api/v1/media-source-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'query'=&gt; 'Komodo',
+            'filter'=&gt; 'Video/Image',
+            'start'=&gt; '0',
+            'length'=&gt; '25',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/media-source-settings'
+params = {
+  'query': 'Komodo',
+  'filter': 'Video/Image',
+  'start': '0',
+  'length': '25',
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 2,
+            "name": "YouTube",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 4,
+            "name": "Safari Montage",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 5,
+            "name": "BrightCove",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 6,
+            "name": "Vimeo",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 7,
+            "name": "My device",
+            "media_type": "Image",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 8,
+            "name": "Pexels",
+            "media_type": "Image",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 9,
+            "name": "Safari Montage",
+            "media_type": "Image",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 1,
+            "name": "My device",
+            "media_type": "Video",
+            "created_at": "2022-05-09T08:18:12.000000Z",
+            "updated_at": "2022-07-07T15:02:54.000000Z",
+            "deleted_at": null
+        },
+        {
+            "id": 13,
+            "name": "Komodo",
+            "media_type": "Video",
+            "created_at": "2022-08-01T09:44:58.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        },
+        {
+            "id": 19,
+            "name": "Smithsonian",
+            "media_type": "Image",
+            "created_at": "2022-09-28T08:54:01.000000Z",
+            "updated_at": null,
+            "deleted_at": null
+        }
+    ],
+    "links": {
+        "first": "http://curriki-studio-api.local/api/v1/media-source-settings?page=1",
+        "last": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2",
+        "prev": null,
+        "next": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 2,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/media-source-settings?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2",
+                "label": "2",
+                "active": false
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/media-source-settings?page=2",
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://curriki-studio-api.local/api/v1/media-source-settings",
+        "per_page": 10,
+        "to": 10,
+        "total": 12
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/media-source-settings</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query</code></td>
+<td>optional</td>
+<td>Media Source Name</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td>optional</td>
+<td>Media Type</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>optional</td>
+<td>Offset for getting the paginated response, Default 0.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>optional</td>
+<td>Limit for getting the paginated records, Default 25.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_318f6e62a4ca0e1c7b799b72e0f09b251f -->
+<!-- START_31421c98d9de23e56c8d0edf26ddc6a501 -->
+<h2>Create Media Source</h2>
+<p>Creates the new media source in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X POST \
+    "http://localhost:8000/api/v1/media-source-settings" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"Komodo","media_type":"Video/Image"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/media-source-settings"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Komodo",
+    "media_type": "Video/Image"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8000/api/v1/media-source-settings',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'https://google.com',
+            'media_type' =&gt; 'Video/Image'
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/media-source-settings'
+payload = {
+    "name": "Komodo",
+    "media_type": "Video/Image"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('POST', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Media Source created successfully!",
+    "data": {
+        "name": "Komodo",
+        "media_type": "Video",
+        "updated_at": "2023-01-10T14:23:57.000000Z",
+        "created_at": "2023-01-10T14:23:57.000000Z",
+        "id": 13
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to create media source, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/v1/media-source-settings</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>required|string|max:255|unique</td>
+<td>required</td>
+<td>Valid media source name like Kaltur or Komodo.</td>
+</tr>
+<tr>
+<td><code>media_type</code></td>
+<td>string</td>
+<td>required|in:Video,Image</td>
+<td>Valid media type like Video or Image.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_31421c98d9de23e56c8d0edf26ddc6a501 -->
+<!-- START_3132422e639abdbb29bc691c5ec85b2884 -->
+<h2>Get Media Source</h2>
+<p>Get the specified media source data.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X GET \
+    -G "http://localhost:8000/api/v1/media-source-settings/13" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/media-source-settings/13"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'http://localhost:8000/api/v1/media-source-settings/13',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/media-source-settings/13'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": {
+        "id": 13,
+        "name": "Komodo",
+        "media_type": "Video",
+        "created_at": "2023-01-10T13:00:26.000000Z",
+        "updated_at": "2023-01-10T13:15:38.000000Z",
+        "deleted_at": null
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/v1/media-source-settings/{id}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>required</td>
+<td>The Id of a media source</td>
+</tr>
+</tbody>
+</table>
+<!-- END_3132422e639abdbb29bc691c5ec85b2884 -->
+<!-- START_312f9925db3ae677f8a4ff918e407fadc2 -->
+<h2>Update Media Source</h2>
+<p>Updates the media source in database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X PUT \
+    "http://localhost:8000/api/v1/media-source-settings/13" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d '{"name":"Komodo","media_type":"Video/Image"}'
+</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/media-source-settings/13"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "name": "Komodo",
+    "media_type": "Video/Image"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;put(
+    'http://localhost:8000/api/v1/media-source-settings/13',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'name' =&gt; 'Komodo',
+            'media_type' =&gt; 'Video/Image'
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/media-source-settings/13'
+payload = {
+    "name": "Komodo",
+    "media_type": "Video/Image"
+}
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('PUT', url, headers=headers, json=payload)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Media Source updated successfully!",
+    "data": {
+        "id": 13,
+        "name": "Komodo",
+        "media_type": "Video",
+        "created_at": "2023-01-10T13:00:26.000000Z",
+        "updated_at": "2023-01-10T13:15:38.000000Z",
+        "deleted_at": null
+    }
+}</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to update media source, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/v1/media-source-settings/{id}</code></p>
+<p><code>PATCH api/v1/media-source-settings/{id}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>required</td>
+<td>The Id of a media source</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required|string|max:255|unique</td>
+<td>Valid media source name.</td>
+</tr>
+<tr>
+<td><code>media_type</code></td>
+<td>string</td>
+<td>required|in:Video,Image</td>
+<td>Valid media type</td>
+</tr>
+</tbody>
+</table>
+<!-- END_312f9925db3ae677f8a4ff918e407fadc2 -->
+<!-- START_31e84ae07c28ce1553fe4f1644eb82cfeb -->
+<h2>Delete Media Source</h2>
+<p>Deletes the media source from database.</p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-bash">curl -X DELETE \
+    "http://localhost:8000/api/v1/media-source-settings/13" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"</code></pre>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/v1/media-source-settings/13"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;delete(
+    'http://localhost:8000/api/v1/media-source-settings/13',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<pre><code class="language-python">import requests
+import json
+
+url = 'http://localhost:8000/api/v1/media-source-settings/13'
+headers = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+response = requests.request('DELETE', url, headers=headers)
+response.json()</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (500):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "errors": [
+        "Unable to delete media source, please try again later!"
+    ]
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/v1/media-source-settings/{id}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>required</td>
+<td>The Id of a media source</td>
+</tr>
+</tbody>
+</table>
+<!-- END_31e84ae07c28ce1553fe4f1644eb82cfeb -->
       </div>
       <div class="dark-box">
                         <div class="lang-selector">

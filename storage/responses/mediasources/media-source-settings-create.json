@@ -1,0 +1,10 @@
+{
+    "message": "Media Source created successfully!",
+    "data": {
+        "name": "Jwt Playerd",
+        "media_type": "Video",
+        "updated_at": "2023-01-10T14:23:57.000000Z",
+        "created_at": "2023-01-10T14:23:57.000000Z",
+        "id": 24
+    }
+}

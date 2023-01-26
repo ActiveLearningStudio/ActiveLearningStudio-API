@@ -239,6 +239,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::put('suborganizations/{suborganization}/update-media-sources', 'SuborganizationController@updateMediaSource')->name('update-media-sources');
         Route::get('media-sources', 'SuborganizationController@mediaSources')->name('media-sources');
 
+        // media-source-settings
+        Route::apiResource('media-source-settings', 'MediaSourceController');
+
         /*********************** NEW ADMIN PANEL ROUTES ************************/
         Route::get('suborganizations/{suborganization}/projects', 'ProjectController@getOrgProjects')->name('suborganizations.get-projects');
         Route::get('projects/{project}/indexes/{index}', 'ProjectController@updateIndex');
