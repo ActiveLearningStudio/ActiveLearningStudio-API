@@ -4,6 +4,13 @@ pipeline {
             label 'currikidev'
         }
     }
+    parameters {
+        string(name: 'tag', defaultValue: 'stage', description: 'tag')
+
+        string(name: 'node', defaultValue: '', description: 'node')
+        
+        string(name: 'h5pbranch', defaultValue: '', description: 'h5pbranch')
+    }
 
     environment {
         CI = 'true'
