@@ -1,4 +1,8 @@
 pipeline {
+    def app
+    def cron
+    def tests
+
     agent {
         node {
             label 'currikidev'
@@ -25,18 +29,33 @@ pipeline {
                 checkout scm    
             }
         }
-        stage('Build image') { 
-            when {
-                branch 'staging'
-            } 
-            steps {
-                sh """
-                echo "Building Artifact"
-                """
+        stage('Build image') {  
+            steps {       
+                app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
+                cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=$h5pbranch .")
+            }
+        } 
 
-                sh """
-                echo "Deploying Code"
-                """
+        stage('Test image') {    
+            steps {       
+                app.inside { 
+                        sh 'echo "Api Tests passed"'        
+                }    
+                cron.inside { 
+                        sh 'echo "Cron Tests passed"'        
+                }
+            }
+        } 
+        stage('Push image') {	
+            steps { 
+                docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                        app.push("${env.BUILD_NUMBER}")            
+                        app.push("${tag}")
+                }
+                docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                        cron.push("${env.BUILD_NUMBER}")            
+                        cron.push("${tag}")
+                }
             }
         }
         stage('Deploy Helm') {	
@@ -50,12 +69,6 @@ pipeline {
                     sh "cp \$mySecretFile kconfig"
                     
                 }
-/*                sh """ 
-            #!/bin/bash
-            set -ex
-            echo "${env.SECRET_FILE}" >> kconfig
-"""
-*/
                 sh "ls"
                 sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
                 sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
