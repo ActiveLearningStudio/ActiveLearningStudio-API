@@ -45,7 +45,8 @@ pipeline {
             } 
             steps {
                 echo 'Copy'
-                sh "cat  ${env.SECRET_FILE}"
+                sh "ls"
+                sh "cat /root/jenkins/workspace/stage-k8s_staging/kubeconfig"
                 sh """ 
             #!/bin/bash
             set -ex
