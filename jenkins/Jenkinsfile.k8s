@@ -2,7 +2,8 @@ node("currikidev") {
     def app
     def cron
     def tests
-
+    env.TAG = 'stage'
+    env.H5P_BRANCH = 'staging'
     parameters {
         string(name: 'tag', defaultValue: 'stage', description: 'tag')
 
@@ -21,46 +22,43 @@ node("currikidev") {
     stage('Clone repository') {               
         checkout scm    
     }  
-    withEnv([H5P_BRANCH = 'staging',
-        TAG = 'stage']) {
-        stage('Build image') {  
-                app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
-                cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=${H5P_BRANCH} .")
-            } 
+    stage('Build image') {  
+            app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
+            cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=${env.H5P_BRANCH} .")
+        } 
 
-            stage('Test image') {    
-                app.inside { 
-                        sh 'echo "Api Tests passed"'        
-                }    
-                cron.inside { 
-                        sh 'echo "Cron Tests passed"'        
-                }
-            } 
-            stage('Push image') {	
-                docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                        app.push("${env.BUILD_NUMBER}")            
-                        app.push("${TAG}")
-                }
-                docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                        cron.push("${env.BUILD_NUMBER}")            
-                        cron.push("${TAG}")
-                }
+        stage('Test image') {    
+            app.inside { 
+                    sh 'echo "Api Tests passed"'        
+            }    
+            cron.inside { 
+                    sh 'echo "Cron Tests passed"'        
             }
-        stage('Deploy Helm') {	
-                echo 'Copy'
+        } 
+        stage('Push image') {	
+            docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                    app.push("${env.BUILD_NUMBER}")            
+                    app.push("${env.TAG}")
+            }
+            docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
+                    cron.push("${env.BUILD_NUMBER}")            
+                    cron.push("${env.TAG}")
+            }
+        }
+    stage('Deploy Helm') {	
+            echo 'Copy'
+            
+            withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
+                sh "cp \$mySecretFile kconfig"
                 
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
-                    sh "cp \$mySecretFile kconfig"
-                    
-                }
-                sh "ls"
-                sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
-                sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
-                
-                sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
-                
+            }
+            sh "ls"
+            sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
+            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+            
+            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
+            
 
-            }
         }
     
     
