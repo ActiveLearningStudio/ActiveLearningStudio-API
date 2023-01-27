@@ -13,6 +13,8 @@ node("currikidev") {
     environment {
         CI = 'true'
         SECRET_FILE = credentials('kubeconfig')
+        H5P_BRANCH = 'staging'
+        TAG = 'stage'
         
 
     }
@@ -21,7 +23,7 @@ node("currikidev") {
     }  
     stage('Build image') {  
             app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
-            cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=$h5pbranch .")
+            cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=${env.H5P_BRANCH} .")
         } 
 
         stage('Test image') {    
@@ -35,11 +37,11 @@ node("currikidev") {
         stage('Push image') {	
             docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                     app.push("${env.BUILD_NUMBER}")            
-                    app.push("${tag}")
+                    app.push("${env.TAG}")
             }
             docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
                     cron.push("${env.BUILD_NUMBER}")            
-                    cron.push("${tag}")
+                    cron.push("${env.TAG}")
             }
         }
     stage('Deploy Helm') {	
