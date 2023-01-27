@@ -4,22 +4,10 @@ node("currikidev") {
     def tests
     env.TAG = 'stage'
     env.H5P_BRANCH = 'staging'
-    parameters {
-        string(name: 'tag', defaultValue: 'stage', description: 'tag')
-
-        string(name: 'node', defaultValue: '', description: 'node')
-
-        string(name: 'h5pbranch', defaultValue: 'staging', description: 'h5pbranch')
-    }
-    environment {
-        CI = 'true'
-        SECRET_FILE = credentials('kubeconfig')
-        H5P_BRANCH = 'staging'
-        TAG = 'stage'
-        
-
-    }
-    stage('Clone repository') {               
+    
+    
+    stage('Clone repository') {      
+        echo env.BRANCH_NAME
         checkout scm    
     }  
     stage('Build image') {  
