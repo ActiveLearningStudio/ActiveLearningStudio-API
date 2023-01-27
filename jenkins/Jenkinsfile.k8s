@@ -46,12 +46,12 @@ pipeline {
             steps {
                 echo 'Copy'
                 sh "cat  ${env.SECRET_FILE}"
-                sh "pwd"
                 sh """ 
             #!/bin/bash
             set -ex
             echo "${env.SECRET_FILE}" >> kubeconfig
 """
+                sh "pwd kubeconfig"
                 sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
                 
                 sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kubeconfig'
