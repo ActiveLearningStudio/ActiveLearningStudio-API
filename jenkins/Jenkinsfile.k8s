@@ -1,86 +1,9 @@
-pipeline {
-    
-
-    agent {
-        node {
-            label 'currikidev'
-        }
-    }
-    parameters {
-        string(name: 'tag', defaultValue: 'stage', description: 'tag')
-
-        string(name: 'node', defaultValue: '', description: 'node')
-
-        string(name: 'h5pbranch', defaultValue: 'staging', description: 'h5pbranch')
-    }
-    
-
-    environment {
-        CI = 'true'
-        SECRET_FILE = credentials('kubeconfig')
-        
-
-    }
-
+node("currikidev") {
     def app
     def cron
     def tests
-    
-    stages {
-        
 
-        stage('Clone repository') {     
-            steps {          
-                checkout scm    
-            }
-        }
-        stage('Build image') {  
-            steps {       
-                app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
-                cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=$h5pbranch .")
-            }
-        } 
-
-        stage('Test image') {    
-            steps {       
-                app.inside { 
-                        sh 'echo "Api Tests passed"'        
-                }    
-                cron.inside { 
-                        sh 'echo "Cron Tests passed"'        
-                }
-            }
-        } 
-        stage('Push image') {	
-            steps { 
-                docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                        app.push("${env.BUILD_NUMBER}")            
-                        app.push("${tag}")
-                }
-                docker.withRegistry('https://quay.io', 'docker-private-credentials') {            
-                        cron.push("${env.BUILD_NUMBER}")            
-                        cron.push("${tag}")
-                }
-            }
-        }
-        stage('Deploy Helm') {	
-            when {
-                branch 'staging'
-            } 
-            steps {
-                echo 'Copy'
-                
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
-                    sh "cp \$mySecretFile kconfig"
-                    
-                }
-                sh "ls"
-                sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
-                sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
-                
-                sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
-            }
-            
-        }
-    }
+    stage('Clone repository') {               
+        checkout scm    
+    } 
 }
