@@ -1,7 +1,5 @@
 pipeline {
-    def app
-    def cron
-    def tests
+    
 
     agent {
         node {
@@ -13,7 +11,7 @@ pipeline {
 
         string(name: 'node', defaultValue: '', description: 'node')
 
-        string(name: 'h5pbranch', defaultValue: '', description: 'h5pbranch')
+        string(name: 'h5pbranch', defaultValue: 'staging', description: 'h5pbranch')
     }
     
 
@@ -24,6 +22,10 @@ pipeline {
 
     }
     stages {
+        def app
+        def cron
+        def tests
+        
         stage('Clone repository') {     
             steps {          
                 checkout scm    
