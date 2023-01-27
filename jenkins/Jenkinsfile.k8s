@@ -46,6 +46,7 @@ pipeline {
             steps {
                 echo 'Copy'
                 sh "cat  ${env.SECRET_FILE}"
+                sh "pwd"
                 sh """ 
             #!/bin/bash
             set -ex
