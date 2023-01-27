@@ -41,6 +41,18 @@ class UpdateAllowedOrganizationVisibilityTypesSeeder extends Seeder
                     'organization_visibility_type_id' => $global->id
                 ]);
             }
+
+            $deleted = DB::table('allowed_organization_visibility_types')
+                ->where('organization_visibility_type_id', $protected->id)
+                ->delete();
+
+            $affected = DB::table('projects')
+                ->where('organization_visibility_type_id', $protected->id)
+                ->update(['organization_visibility_type_id' => $global->id]);
+
+            $affected = DB::table('activities')
+                ->where('organization_visibility_type_id', $protected->id)
+                ->update(['organization_visibility_type_id' => $global->id]);
         });
     }
 }
