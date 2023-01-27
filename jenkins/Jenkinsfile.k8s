@@ -49,7 +49,9 @@ pipeline {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
                     
                     sh '''
+                        echo $mySecretFile
                         echo "$mySecretFile" >> kconfig
+                        
                     '''
                 }
 /*                sh """ 
