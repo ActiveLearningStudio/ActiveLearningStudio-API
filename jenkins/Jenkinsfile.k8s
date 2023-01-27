@@ -20,22 +20,17 @@ node("currikidev") {
         checkout scm    
     }  
     stage('Deploy Helm') {	
-            when {
-                branch 'staging'
-            } 
-            steps {
-                echo 'Copy'
+            echo 'Copy'
+            
+            withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
+                sh "cp \$mySecretFile kconfig"
                 
-                withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
-                    sh "cp \$mySecretFile kconfig"
-                    
-                }
-                sh "ls"
-                sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
-                sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
-                
-                sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
             }
+            sh "ls"
+            sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
+            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+            
+            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
             
         }
     
