@@ -1,10 +1,24 @@
-pipeline {
-    agent { dockerfile true }
-    stages {
-        stage('Test') {
-            steps {
-                sh 'php --version'
-            }
-        }
+node("currikidev") {
+    def app
+    def cron
+    def tests
+
+    parameters {
+        string(name: 'tag', defaultValue: 'stage', description: 'tag')
+
+        string(name: 'node', defaultValue: '', description: 'node')
+
+        string(name: 'h5pbranch', defaultValue: 'staging', description: 'h5pbranch')
     }
+    environment {
+        CI = 'true'
+        SECRET_FILE = credentials('kubeconfig')
+        
+
+    }
+    stage('Clone repository') {               
+        checkout scm    
+    }  
+    
+    
 }
