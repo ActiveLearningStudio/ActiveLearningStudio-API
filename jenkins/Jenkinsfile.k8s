@@ -46,11 +46,18 @@ pipeline {
             steps {
                 echo 'Copy'
                 
-                sh """ 
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
+                    
+                    sh '''
+                        echo "$mySecretFile" >> kconfig
+                    '''
+                }
+/*                sh """ 
             #!/bin/bash
             set -ex
             echo "${env.SECRET_FILE}" >> kconfig
 """
+*/
                 sh "ls"
                 sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
                 sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
