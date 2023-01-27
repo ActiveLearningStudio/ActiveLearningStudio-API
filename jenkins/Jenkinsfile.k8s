@@ -1,9 +1,10 @@
-node("currikidev") {
-    def app
-    def cron
-    def tests
-
-    stage('Clone repository') {               
-        checkout scm    
-    } 
+pipeline {
+    agent { dockerfile true }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'php --version'
+            }
+        }
+    }
 }
