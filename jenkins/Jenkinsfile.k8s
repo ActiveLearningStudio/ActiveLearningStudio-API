@@ -45,14 +45,14 @@ pipeline {
             } 
             steps {
                 echo 'Copy'
-                sh "ls"
-                sh "cat /root/jenkins/workspace/stage-k8s_staging/kubeconfig"
+                
                 sh """ 
             #!/bin/bash
             set -ex
-            echo "${env.SECRET_FILE}" >> kubeconfig
+            echo "${env.SECRET_FILE}" >> kconfig
 """
-                sh "pwd kubeconfig"
+                sh "ls"
+                sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
                 sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
                 
                 sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kubeconfig'
