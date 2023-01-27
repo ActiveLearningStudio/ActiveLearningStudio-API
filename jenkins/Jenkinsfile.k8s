@@ -21,11 +21,14 @@ pipeline {
         
 
     }
+
+    def app
+    def cron
+    def tests
+    
     stages {
-        def app
-        def cron
-        def tests
         
+
         stage('Clone repository') {     
             steps {          
                 checkout scm    
