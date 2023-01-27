@@ -47,12 +47,8 @@ pipeline {
                 echo 'Copy'
                 
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
+                    sh "cp \$mySecretFile kconfig"
                     
-                    sh '''
-                        echo $mySecretFile
-                        echo "$mySecretFile" >> kconfig
-                        
-                    '''
                 }
 /*                sh """ 
             #!/bin/bash
