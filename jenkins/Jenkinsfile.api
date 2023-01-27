@@ -7,7 +7,7 @@ node("currikidev") {
         checkout scm    
     }  
     stage('Deploy Helm') {	
-        echo env.GIT_BRANCH
+        echo env
         if(env.GIT_BRANCH  == "staging") {
             echo 'Copy'
             sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
