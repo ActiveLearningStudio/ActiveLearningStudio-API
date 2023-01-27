@@ -7,6 +7,7 @@ use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Support\Facades\Http;
+use stdClass;
 
 class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRepositoryInterface
 {
@@ -110,6 +111,27 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     }
 
     /**
+     * @param $code string
+     * @return string
+     */
+    public function submitAssignment($data)
+    {        
+        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions/' . $data['submissionId'] . '/submit';
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $data['token']
+        ];
+
+        $response = Http::withHeaders($headers)->post($apiURL);
+        
+        $responseBody = json_decode($response->getBody(), true);
+        $responseBody['statusCode'] = $response->status();
+
+        return $responseBody;
+    }
+
+    /**
     * @param $token string 
     * @param $data array
     *
@@ -117,7 +139,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     */
     public function getSubmission($data)
     {
-        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions' . $data['submissionId'];
+        $apiURL = $this->landingUrl . 'education/classes/' . $data['classId'] . '/assignments/' . $data['assignmentId'] . '/submissions/' . $data['submissionId'];
         $headers = [
             'Content-length' => 0,
             'Content-type' => 'application/json',
