@@ -1,39 +1,10 @@
-node("currikidev") {
-    def app
-    def cron
-    def tests
-
-    parameters {
-        string(name: 'tag', defaultValue: 'stage', description: 'tag')
-
-        string(name: 'node', defaultValue: '', description: 'node')
-
-        string(name: 'h5pbranch', defaultValue: 'staging', description: 'h5pbranch')
-    }
-    environment {
-        CI = 'true'
-        SECRET_FILE = credentials('kubeconfig')
-        
-
-    }
-    stage('Clone repository') {               
-        checkout scm    
-    }  
-    stage('Deploy Helm') {	
-            echo 'Copy'
-            
-            withCredentials([file(credentialsId: 'kubeconfig', variable: 'mySecretFile')]) {
-                sh "cp \$mySecretFile kconfig"
-                
+pipeline {
+    agent { dockerfile true }
+    stages {
+        stage('Test') {
+            steps {
+                sh 'php --version'
             }
-            sh "ls"
-            sh "cat /root/jenkins/workspace/stage-k8s_staging/kconfig"
-            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
-            
-            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
-            
         }
-    
-    
-    
+    }
 }
