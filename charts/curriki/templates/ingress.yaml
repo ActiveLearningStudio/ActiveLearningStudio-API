@@ -24,13 +24,6 @@ spec:
             name: client-svc
             port:
               number: 80
-      - pathType: Prefix
-        path: "/api"
-        backend:
-          service:
-            name: api-svc
-            port:
-              number: 80
   - host: stage-api.currikistudio.org
     http:
       paths:
