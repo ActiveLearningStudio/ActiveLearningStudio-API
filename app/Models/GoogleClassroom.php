@@ -40,6 +40,21 @@ class GoogleClassroom extends Model
     ];
 
     /**
+     * Cascade on delete the user
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::retrieved(function (GoogleClassroom $gclassData) {
+            $gclassData->curriki_teacher_email = strtolower($gclassData->curriki_teacher_email);
+        });
+
+        self::creating(function(GoogleClassroom $gclassData) {
+            $gclassData->curriki_teacher_email = strtolower($gclassData->curriki_teacher_email);
+        });
+    }
+    /**
      * Get the user_id for the teacher
      */
     public function publisherUser()
