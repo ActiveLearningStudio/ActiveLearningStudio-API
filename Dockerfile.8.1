@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install opcache \
     && docker-php-ext-configure pgsql \
     && docker-php-ext-install pdo pdo_pgsql \
+    && docker-php-ext-install sockets \
     && pecl install apcu && docker-php-ext-enable apcu opcache
 
 RUN apt-get install libonig-dev -y
@@ -52,8 +53,10 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 WORKDIR /var/www/html
 
 #New Relic
-RUN wget https://download.newrelic.com/php_agent/release/newrelic-php5-10.4.0.316-linux.tar.gz && \
-	tar -xzf newrelic-php5-10.4.0.316-linux.tar.gz
+RUN export NR_VERSION=$(curl -sS https://download.newrelic.com/php_agent/release/ | sed -n 's/.*>\(.*linux\).tar.gz<.*/\1/p') \
+	&& wget https://download.newrelic.com/php_agent/release/${NR_VERSION}.tar.gz && \
+	tar -xzf ${NR_VERSION}.tar.gz && \
+	mv ${NR_VERSION} newrelic
 
 # Copy the PHP configuration file
 COPY ./php.ini /usr/local/etc/php/
