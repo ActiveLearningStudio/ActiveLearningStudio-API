@@ -82,7 +82,7 @@ ARG H5PBRANCH
 ENV H5P_BRANCH=$H5PBRANCH
 RUN echo $H5P_BRANCH
 RUN echo $H5PBRANCH
-RUN git clone -b $H5PBRANCH https://github.com/edtech-masters/H5P.Distribution.git h5pcode
+RUN git clone -b $H5PBRANCH https://github.com/ActiveLearningStudio/H5P.Distribution.git h5pcode
 
 RUN composer install --no-dev --prefer-dist --optimize-autoloader && \
     composer clear-cache
