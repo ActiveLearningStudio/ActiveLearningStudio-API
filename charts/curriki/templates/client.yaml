@@ -84,6 +84,9 @@ data:
   REACT_MS_APP_ID: "5e0ea881-693a-4f0a-94a7-dcef7b5accd6"
   REACT_MS_TENANT_ID: "75f881ff-c83b-44de-a964-f0f9ee64c60c"
   REACT_DOMAIN_URL: "https://stage.currikistudio.org/"
+  REACT_MS_CLIENT_ID: "96ea8ce4-bf1e-45fd-9171-f562d7cc3c2e"
+  REACT_MS_SECRET: "Qiy8Q~W0wb3Cu4BIuu9UyxBJhGPQhuytxOOI4cds"
+
 
 
 ---
@@ -108,6 +111,8 @@ data:
     REACT_MS_APP_ID=5e0ea881-693a-4f0a-94a7-dcef7b5accd6
     REACT_MS_TENANT_ID=75f881ff-c83b-44de-a964-f0f9ee64c60c
     REACT_DOMAIN_URL=https://stage.currikistudio.org/
+    REACT_MS_CLIENT_ID=96ea8ce4-bf1e-45fd-9171-f562d7cc3c2e
+    REACT_MS_SECRET=Qiy8Q~W0wb3Cu4BIuu9UyxBJhGPQhuytxOOI4cds
 
 
 ---
