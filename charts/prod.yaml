@@ -1,0 +1,7 @@
+image:
+  apirepo: quay.io/curriki/api:prod
+  cronrepo: quay.io/curriki/cron:prod
+  clientrepo: quay.io/curriki/client:prod
+  tsugirepo: quay.io/curriki/tsugi:prod
+  traxrepo: quay.io/curriki/trax:prod
+nfsServer: 0.0.0.0

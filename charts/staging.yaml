@@ -1,6 +1,7 @@
 image:
   apirepo: quay.io/curriki/api:stage
   cronrepo: quay.io/curriki/cron:stage
-  clientrepo: quay.io/curriki/client:kube
+  clientrepo: quay.io/curriki/client:stage
   tsugirepo: quay.io/curriki/tsugi:stage
-  traxrepo: quay.io/curriki/trax:kube
+  traxrepo: quay.io/curriki/trax:stage
+nfsServer: 139.144.231.192

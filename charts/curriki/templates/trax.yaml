@@ -67,7 +67,7 @@ spec:
               path: .env
       - name: nfs-volume
         nfs:
-          server: 139.144.231.192
+          server: {{ .Values.nfsServer }}
           path: /mnt/traxstorage
           readOnly: no
 
