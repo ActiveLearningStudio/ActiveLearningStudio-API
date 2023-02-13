@@ -4,7 +4,7 @@ image:
   cronrepo: quay.io/curriki/cron:stage
   clientrepo: quay.io/curriki/client:kube-stage
   tsugirepo: quay.io/curriki/tsugi:stage
-  traxrepo: quay.io/curriki/trax:stage
+  traxrepo: quay.io/curriki/trax:latest
 nfsServer: 139.144.231.192
 host: stage.currikistudio.org
 volumePath: /mnt/storage
