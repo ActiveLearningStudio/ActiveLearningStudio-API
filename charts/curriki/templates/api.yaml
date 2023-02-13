@@ -14,13 +14,25 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-api
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
       - name: api
-        image: quay.io/curriki/api:stage
+        image: {{ .Values.image.apirepo}} #quay.io/curriki/api:stage
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
         volumeMounts:
         - name: api-env
           mountPath: /var/www/html/.env
@@ -41,15 +53,19 @@ spec:
         - /bin/sh
         - -c
         - |
+          php /var/www/html/artisan storage:link
           apache2ctl -D FOREGROUND
       volumes:
       - name: api-env
         secret:
           secretName: api-env
+          items:
+            - key: api-env-secret
+              path: .env
       - name: nfs-volume
         nfs:
-          server: 192.46.218.167
-          path: /mnt/storage
+          server: {{ .Values.nfsServer }}
+          path: {{ .Values.volumePath }}
           readOnly: no
 
 
@@ -70,14 +86,14 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: api-autoscaler
+  name: {{ .Release.Name }}-api
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: api
-  minReplicas: 1
-  maxReplicas: 1
+    name: {{ .Release.Name }}-api
+  minReplicas: 3
+  maxReplicas: 10
   metrics:
   - type: Resource
     resource:
@@ -109,13 +125,25 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-cron
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
       - name: api
-        image: quay.io/curriki/cron:stage
+        image: {{ .Values.image.cronrepo}}
         imagePullPolicy: Always
         ports:
         - containerPort: 80
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
         volumeMounts:
         - name: api-env
           mountPath: /var/www/html/.env
@@ -129,15 +157,21 @@ spec:
         - /bin/sh
         - -c
         - |
+          php /var/www/html/artisan storage:link
+          service cron start
           apache2ctl -D FOREGROUND
       volumes:
       - name: api-env
         secret:
           secretName: api-env
+          items:
+            - key: api-env-secret
+              path: .env
+
       - name: nfs-volume
         nfs:
-          server: 192.46.218.167
-          path: /mnt/storage
+          server: {{ .Values.nfsServer }}
+          path: {{ .Values.volumePath }}
           readOnly: no
 
 
@@ -147,17 +181,30 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: migrations
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   template:
     spec:
       containers:
       - name: migration
-        image: quay.io/curriki/api:stage
+        image: {{ .Values.image.apirepo}}
         imagePullPolicy: Always
         command: 
         - /bin/sh
         - -c
         - php /var/www/html/artisan migrate --force
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
         volumeMounts:
         - name: api-env
           mountPath: /var/www/html/.env
@@ -172,10 +219,13 @@ spec:
       - name: api-env
         secret:
           secretName: api-env
+          items:
+            - key: api-env-secret
+              path: .env
       - name: nfs-volume
         nfs:
-          server: 192.46.218.167
-          path: /mnt/storage
+          server: {{ .Values.nfsServer }}
+          path: {{ .Values.volumePath }}
           readOnly: no
   backoffLimit: 4
 
@@ -196,10 +246,12 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-queue
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
       - name: queue
-        image: quay.io/curriki/api:stage
+        image: {{ .Values.image.apirepo}}
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -220,8 +272,11 @@ spec:
       - name: api-env
         secret:
           secretName: api-env
+          items:
+            - key: api-env-secret
+              path: .env
       - name: nfs-volume
         nfs:
-          server: 192.46.218.167
-          path: /mnt/storage
+          server: {{ .Values.nfsServer }}
+          path: {{ .Values.volumePath }}
           readOnly: no

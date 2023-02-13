@@ -14,26 +14,38 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-trax
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
     spec:
-      initContainers:
-        - name: init-container
-          image: quay.io/curriki/trax:latest
-          command: [ "/bin/bash", "-c", "cd /var/www/html/storage && mkdir -p framework/views && mkdir -p framework/sessions && mkdir -p framework/cache/data && mkdir -p framework/testing && mkdir -p logs && mkdir -p app/public" ]
-          volumeMounts:
-            - mountPath: /var/www/html/storage
-              name: trax-storage
+      # initContainers:
+      #   - name: init-container
+      #     image: quay.io/curriki/trax:latest
+      #     command: [ "/bin/bash", "-c", "cd /var/www/html/storage && mkdir -p framework/views && mkdir -p framework/sessions && mkdir -p framework/cache/data && mkdir -p framework/testing && mkdir -p logs && mkdir -p app/public" ]
+      #     volumeMounts:
+      #       - mountPath: /var/www/html/storage
+      #         name: trax-storage
       containers:
       - name: trax
-        image: quay.io/curriki/trax:latest
+        image: {{ .Values.image.traxrepo}}
         imagePullPolicy: Always
         ports:
         - containerPort: 6900
+        readinessProbe:
+          tcpSocket:
+            port: 6900
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 6900
+          initialDelaySeconds: 15
+          periodSeconds: 20
         volumeMounts:
-        - name: trax-storage
-          mountPath: /var/www/html/storage
         - name: trax-env
           mountPath: /var/www/html/.env
           subPath: .env
+        - name: nfs-volume
+          mountPath: /var/www/html/storage
         envFrom:
         - secretRef:
             name: trax-env
@@ -45,11 +57,19 @@ spec:
             cpu: 50m
             memory: 100Mi
       volumes:
-      - name: trax-storage
-        emptyDir: {}
+      # - name: trax-storage
+      #   emptyDir: {}
       - name: trax-env
         secret:
           secretName: trax-env
+          items:
+            - key: trax-env-secret
+              path: .env
+      - name: nfs-volume
+        nfs:
+          server: {{ .Values.nfsServer }}
+          path: {{ .Values.traxStorage }}
+          readOnly: no
 
 
 
@@ -70,14 +90,14 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: trax-autoscaler
+  name: {{ .Release.Name }}-trax
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: trax
-  minReplicas: 1
-  maxReplicas: 1
+    name: {{ .Release.Name }}-trax
+  minReplicas: 3
+  maxReplicas: 10
   metrics:
   - type: Resource
     resource:
