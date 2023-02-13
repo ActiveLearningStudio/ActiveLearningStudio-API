@@ -68,7 +68,7 @@ spec:
       - name: nfs-volume
         nfs:
           server: {{ .Values.nfsServer }}
-          path: /mnt/traxstorage
+          path: {{ .Values.traxStorage }}
           readOnly: no
 
 

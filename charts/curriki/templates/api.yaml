@@ -65,7 +65,7 @@ spec:
       - name: nfs-volume
         nfs:
           server: {{ .Values.nfsServer }}
-          path: /mnt/storage
+          path: {{ .Values.volumePath }}
           readOnly: no
 
 
@@ -171,7 +171,7 @@ spec:
       - name: nfs-volume
         nfs:
           server: {{ .Values.nfsServer }}
-          path: /mnt/storage
+          path: {{ .Values.volumePath }}
           readOnly: no
 
 
@@ -225,7 +225,7 @@ spec:
       - name: nfs-volume
         nfs:
           server: {{ .Values.nfsServer }}
-          path: /mnt/storage
+          path: {{ .Values.volumePath }}
           readOnly: no
   backoffLimit: 4
 
@@ -278,5 +278,5 @@ spec:
       - name: nfs-volume
         nfs:
           server: {{ .Values.nfsServer }}
-          path: /mnt/storage
+          path: {{ .Values.volumePath }}
           readOnly: no
