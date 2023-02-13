@@ -2,7 +2,7 @@ namespace: prod
 image:
   apirepo: quay.io/curriki/api:prod
   cronrepo: quay.io/curriki/cron:prod
-  clientrepo: quay.io/curriki/client:prod
+  clientrepo: quay.io/curriki/client:kube-prod
   tsugirepo: quay.io/curriki/tsugi:prod
   traxrepo: quay.io/curriki/trax:prod
 nfsServer: 139.144.231.192
