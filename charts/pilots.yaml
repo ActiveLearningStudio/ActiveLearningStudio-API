@@ -3,7 +3,7 @@ createClusterIssuer: false
 image:
   apirepo: quay.io/curriki/api:studio
   cronrepo: quay.io/curriki/cron:studio
-  clientrepo: quay.io/curriki/client:studio
+  clientrepo: quay.io/curriki/client:kube-studio
   tsugirepo: quay.io/curriki/tsugi:studio
   traxrepo: quay.io/curriki/trax:latest
 nfsServer: 139.144.231.192
