@@ -1,4 +1,5 @@
 namespace: staging
+createClusterIssuer: false
 image:
   apirepo: quay.io/curriki/api:stage
   cronrepo: quay.io/curriki/cron:stage

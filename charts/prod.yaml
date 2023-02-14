@@ -1,4 +1,5 @@
 namespace: prod
+createClusterIssuer: false
 image:
   apirepo: quay.io/curriki/api:prod
   cronrepo: quay.io/curriki/cron:prod
