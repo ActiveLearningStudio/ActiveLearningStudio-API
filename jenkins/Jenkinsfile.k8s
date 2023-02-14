@@ -7,10 +7,12 @@ node("currikidev") {
     env.H5P_BRANCH = ''
     if(env.BRANCH_NAME == "develop") {
         env.H5P_BRANCH = 'develop'
+        env.TAG = 'develop'
     } else if(env.BRANCH_NAME == "staging") {
         env.H5P_BRANCH = 'staging'
     } else if(env.BRANCH_NAME == "master") {
         env.H5P_BRANCH = 'master'
+        env.TAG = 'prod'
     } 
     
     stage('Clone repository') {      
