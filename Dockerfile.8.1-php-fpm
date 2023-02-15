@@ -20,9 +20,10 @@ RUN apt-get update \
 	libfontconfig wkhtmltopdf webp \
 	software-properties-common odbcinst1debian2 apt-utils net-tools xauth \
 	&& pecl install imagick \
-	&& docker-php-ext-install gd gmp pdo_mysql pdo zip exif pcntl mbstring soap sockets \
+    && docker-php-ext-configure pgsql \
+	&& docker-php-ext-install gd gmp pdo_mysql pdo pdo_pgsql zip exif pcntl mbstring soap sockets \
 	&& docker-php-ext-enable opcache imagick \
-	&& docker-php-ext-configure gd      \
+	&& docker-php-ext-configure gd     \
     --with-jpeg \
     --with-freetype \
 	&& apt-get autoclean -y \
