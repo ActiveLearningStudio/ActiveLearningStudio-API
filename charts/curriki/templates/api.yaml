@@ -18,21 +18,62 @@ spec:
         rollme: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
-      - name: api
+      - name: nginx
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.image.apirepo}} #quay.io/curriki/api:stage
         imagePullPolicy: Always
+        command:
+          - /bin/sh
+          - -c
+          - |
+            export nr_name=App && \
+            sh /usr/local/bin/entrypoint.api.sh && \
+            php /var/www/html/artisan storage:link && \
+            nginx -g "daemon off;"
         ports:
-        - containerPort: 80
+          - name: http
+            containerPort: 80
+            protocol: TCP
         readinessProbe:
-          tcpSocket:
-            port: 80
-          initialDelaySeconds: 5
+          failureThreshold: 10
+          initialDelaySeconds: 10
           periodSeconds: 10
-        livenessProbe:
+          successThreshold: 1
           tcpSocket:
-            port: 80
-          initialDelaySeconds: 15
+            port: 9000
+        livenessProbe:
+          initialDelaySeconds: 200
           periodSeconds: 20
+          tcpSocket:
+            port: 9000
+        resources:
+          limits:
+            cpu: 50m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
+      - name: php-fpm
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: {{ .Values.image.apirepo}} #quay.io/curriki/api:stage
+        imagePullPolicy: Always
+        command:
+          - /bin/sh
+          - -c
+          - |
+            export nr_name=App && \
+            sh /usr/local/bin/entrypoint.api.sh && \
+            php /var/www/html/artisan storage:link && \
+            php-fpm -c /etc/php/8.1/fpm/php.ini --fpm-config=/usr/local/etc/php-fpm.conf -F -O
+        resources:
+          limits:
+            cpu: 600m
+            memory: 1500Mi
+          requests:
+            cpu: 350m
+            memory: 800Mi
         volumeMounts:
         - name: api-env
           mountPath: /var/www/html/.env
@@ -49,12 +90,7 @@ spec:
           requests:
             cpu: 350m
             memory: 800Mi
-        command:
-        - /bin/sh
-        - -c
-        - |
-          php /var/www/html/artisan storage:link
-          apache2ctl -D FOREGROUND
+      
       volumes:
       - name: api-env
         secret:
