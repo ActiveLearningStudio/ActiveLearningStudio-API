@@ -60,10 +60,10 @@ spec:
           subPath: .env
         - name: nfs-volume
           mountPath: /var/www/html/storage
-        - name: curriki-cert
+        - name: currikicert
           mountPath: /etc/ssl/curriki.cert
           subPath: curriki.cert
-        - name: curriki-key
+        - name: currikikey
           mountPath: /etc/ssl/curriki.key
           subPath: curriki.key
       - name: php-fpm
@@ -92,10 +92,10 @@ spec:
           subPath: .env
         - name: nfs-volume
           mountPath: /var/www/html/storage
-        - name: curriki-cert
+        - name: currikicert
           mountPath: /etc/ssl/curriki.cert
           subPath: curriki.cert
-        - name: curriki-key
+        - name: currikikey
           mountPath: /etc/ssl/curriki.key
           subPath: curriki.key
         envFrom:
@@ -114,12 +114,12 @@ spec:
           server: {{ .Values.nfsServer }}
           path: {{ .Values.volumePath }}
           readOnly: no
-      - name: curriki-cert
+      - name: currikicert
         configMap:
-          name: curriki-cert
-      - name: curriki-key
+          name: currikicert
+      - name: currikikey
         configMap:
-          name: curriki-key
+          name: currikikey
 
 
 ---

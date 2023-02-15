@@ -81,6 +81,16 @@ ingRules:
             name: api-svc
             port:
               number: 80
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: api-svc
+            port:
+              number: 443
+
+              
   - host: stage-trax.currikistudio.org
     http:
       paths:
@@ -103,3 +113,5 @@ ingRules:
               number: 80
 
     
+
+              
