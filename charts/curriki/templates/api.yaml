@@ -49,10 +49,10 @@ spec:
             port: 9000
         resources:
           limits:
-            cpu: 50m
+            cpu: 100m
             memory: 100Mi
           requests:
-            cpu: 100m
+            cpu: 50m
             memory: 50Mi
       - name: php-fpm
         securityContext:
@@ -83,14 +83,7 @@ spec:
         envFrom:
         - secretRef:
             name: api-env
-        resources:
-          limits:
-            cpu: 600m
-            memory: 1500Mi
-          requests:
-            cpu: 350m
-            memory: 800Mi
-      
+        
       volumes:
       - name: api-env
         secret:
