@@ -7,11 +7,12 @@ php /var/www/html/artisan storage:link
 # php /var/www/html/artisan migrate --force
 
 #New Relilc
-nr_enabled=$(printenv ENABLE_NR);
+
+nr_enabled=$(awk -F= '{print $2}' <<< $(printenv | grep ENABLE_NR));
 if [ "$nr_enabled" -eq "1" ]; then
   export NR_INSTALL_SILENT=true
-  export NR_INSTALL_KEY=$(printenv NR_INSTALL_KEY)
-  export nr_name=$(printenv NR_NAME)
+  export NR_INSTALL_KEY=$(awk -F= '{print $2}' <<< $(printenv | grep NR_INSTALL_KEY))
+  export nr_name=$(awk -F= '{print $2}' <<< $(printenv | grep NR_NAME))
   sh /var/www/html/newrelic/newrelic-install install
   sed -i -e "s/newrelic.appname =.*/newrelic.appname = \"\Curriki-API $nr_name\"/" /usr/local/etc/php/conf.d/newrelic.ini
 fi
