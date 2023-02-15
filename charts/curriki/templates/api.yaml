@@ -54,6 +54,18 @@ spec:
           requests:
             cpu: 50m
             memory: 50Mi
+        volumeMounts:
+        - name: api-env
+          mountPath: /var/www/html/.env
+          subPath: .env
+        - name: nfs-volume
+          mountPath: /var/www/html/storage
+        - name: curriki-cert
+          mountPath: /etc/ssl/curriki.cert
+          subPath: curriki.cert
+        - name: curriki-key
+          mountPath: /etc/ssl/curriki.key
+          subPath: curriki.key
       - name: php-fpm
         securityContext:
           {{- toYaml .Values.securityContext | nindent 12 }}
@@ -80,6 +92,12 @@ spec:
           subPath: .env
         - name: nfs-volume
           mountPath: /var/www/html/storage
+        - name: curriki-cert
+          mountPath: /etc/ssl/curriki.cert
+          subPath: curriki.cert
+        - name: curriki-key
+          mountPath: /etc/ssl/curriki.key
+          subPath: curriki.key
         envFrom:
         - secretRef:
             name: api-env
@@ -96,6 +114,12 @@ spec:
           server: {{ .Values.nfsServer }}
           path: {{ .Values.volumePath }}
           readOnly: no
+      - name: curriki-cert
+        configMap:
+          name: curriki-cert
+      - name: curriki-key
+        configMap:
+          name: curriki-key
 
 
 ---
@@ -108,6 +132,12 @@ spec:
   ports:
   - port: 80
     targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 80
+    protocol: TCP
+    name: https
   selector:
     app: {{ .Release.Name }}-api
 
