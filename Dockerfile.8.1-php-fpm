@@ -12,7 +12,7 @@ WORKDIR /var/www/html
 # Install dependencies
 RUN apt-get update \
 	# gd
-	&& apt-get install -y --no-install-recommends build-essential \
+	&& apt-get install -y --no-install-recommends build-essential apt-transport-https \
     libxml2-dev openssl nginx libfreetype6-dev libjpeg-dev libpng-dev libmagickwand-dev \
 	libwebp-dev zlib1g-dev libzip-dev gcc g++ make vim unzip \
 	git curl jpegoptim optipng pngquant gifsicle locales \
