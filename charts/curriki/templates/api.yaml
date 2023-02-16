@@ -127,7 +127,7 @@ spec:
       - name: h5p-exports
         hostPath:
           path: /h5p_exports/exports
-          type: Directory
+          
 
 
 ---
