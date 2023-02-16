@@ -35,6 +35,8 @@ spec:
           - name: http
             containerPort: 80
             protocol: TCP
+        securityContext:
+          privileged: true
         readinessProbe:
           failureThreshold: 10
           initialDelaySeconds: 10
@@ -73,6 +75,8 @@ spec:
           {{- toYaml .Values.securityContext | nindent 12 }}
         image: {{ .Values.image.apirepo}} #quay.io/curriki/api:stage
         imagePullPolicy: Always
+        securityContext:
+          privileged: true
         command:
           - /bin/sh
           - -c
