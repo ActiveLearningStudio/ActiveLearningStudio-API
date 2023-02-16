@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use DB;
+
 class H5pEditorThreeImageUpdateSeeder extends Seeder
 {
     /**
@@ -44,7 +45,7 @@ class H5pEditorThreeImageUpdateSeeder extends Seeder
         }
     }
 
-            /**
+    /**
      * Insert Dependent Libraries
      * @param $h5pThreeImageLibId
      */
@@ -82,7 +83,7 @@ class H5pEditorThreeImageUpdateSeeder extends Seeder
         ]);
     }
 
-        /**
+    /**
      * Insert Library Language Semantics
      * @param $h5pThreeImageLibId
      */
