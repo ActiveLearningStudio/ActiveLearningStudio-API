@@ -25,8 +25,6 @@ class GetTokenViaCode extends FormRequest
     {
         return [
             'code' => 'required',
-            'clientId' => 'required',
-            'secretId' => 'required',
             'classId' => 'required',
             'assignmentId' => 'required',
             'submissionId' => 'required',
