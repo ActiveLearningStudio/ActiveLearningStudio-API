@@ -52,7 +52,7 @@ class UpgradeH5PThreeImageSeeder extends Seeder
     private function insertDependentLibraries($h5pThreeImageLibId)
     {
         //Preloaded Dependencies
-        $h5pThreeSixtyParams = ['name' => "H5P.ThreeSixty", "major_version" => 0, "minor_version" => 5];
+        $h5pThreeSixtyParams = ['name' => "H5P.ThreeSixty", "major_version" => 0, "minor_version" => 3];
         $h5pThreeSixtyLib = DB::table('h5p_libraries')->where($h5pThreeSixtyParams)->first();
         $h5pThreeSixtyLibId = $h5pThreeSixtyLib->id;
 
