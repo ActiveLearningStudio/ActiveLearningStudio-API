@@ -69,7 +69,7 @@ class UpgradeH5PThreeImageSeeder extends Seeder
 
         DB::table('h5p_libraries_libraries')->insert([
             'library_id' => $h5pThreeImageLibId,
-            'required_library_id' => $h5pEditorRadioGroupLibId,
+            'required_library_id' => $h5pH5PEditorThreeImageId,
             'dependency_type' => 'editor'
         ]);
 
