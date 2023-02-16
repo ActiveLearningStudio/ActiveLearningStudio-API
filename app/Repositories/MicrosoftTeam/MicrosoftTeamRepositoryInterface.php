@@ -48,8 +48,13 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
 
     /**
     * @param $token string 
+    * @return 
+    */
+    public function getUserProfile($token);
+
+    /**
+    * @param $token string 
     * @param $data array
-    *
     * @return int
     */
     public function createMsTeamClass($token, $data);
