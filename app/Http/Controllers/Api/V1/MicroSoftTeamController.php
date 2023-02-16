@@ -8,6 +8,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GetTokenViaCode;
+use App\Http\Requests\V1\GetUserProfileRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
