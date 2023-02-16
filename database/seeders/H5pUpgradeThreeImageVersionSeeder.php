@@ -16,7 +16,7 @@ class H5pUpgradeThreeImageVersionSeeder extends Seeder
     public function run()
     {
         DB::table('activity_items')
-            ->where(['title' => 'Virtual Tour (360)', 'h5pLib' => 'H5P.ThreeImage 0.3'])
+            ->where(['h5pLib' => 'H5P.ThreeImage 0.3'])
             ->update([
                 'h5pLib' => 'H5P.ThreeImage 0.5',
                 'updated_at' => now()
