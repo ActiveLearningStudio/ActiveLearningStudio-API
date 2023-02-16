@@ -92,8 +92,8 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         
         $postInput = [
             'grant_type' => 'authorization_code',
-            'client_id' => $request->clientId,
-            'client_secret' => $request->secretId,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->secretId,
             'code' => $request->code,
             'scope' => config('ms-team-configs.scope_for_token'),
             
@@ -411,6 +411,23 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $response = Http::withHeaders($headers)->get($apiURL);
         $responseBody = json_decode($response->getBody(), true);
         return $responseBody['id'];
+    }
+
+    /**
+     * @param string $token
+     */
+    public function getUserProfile($token)
+    {
+        $apiURL = $this->landingUrl . '/me';
+        $headers = [
+            'Content-length' => 0,
+            'Content-type' => 'application/json',
+            'Authorization' => 'Bearer ' . $token
+        ];
+    
+        $response = Http::withHeaders($headers)->get($apiURL);
+        $responseBody = json_decode($response->getBody(), true);
+        return $responseBody;
     }
 
     /**

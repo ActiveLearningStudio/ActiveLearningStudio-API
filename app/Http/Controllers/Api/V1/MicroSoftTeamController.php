@@ -8,6 +8,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GetTokenViaCode;
+use App\Http\Requests\V1\GetUserProfileRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -241,6 +242,35 @@ class MicroSoftTeamController extends Controller
         return response([
             'classes' => $this->microsoftTeamRepository->getClassesList($token),
         ], 200);
+    }
+
+    /**
+     * Get User profile
+     *
+     * Get User profile of Microsoft Team
+	 
+     * @response  200 {
+     *   "user": Array
+     * }
+     * @return Response
+     */
+    public function getUserPofile(GetUserProfileRequest $request)
+    {
+        $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+
+        if ($accessToken && array_key_exists('access_token', $accessToken)) {
+            $getProfile = $this->microsoftTeamRepository->getUserProfile($accessToken['access_token']);
+
+            if ($getProfile && array_key_exists('displayName', $getProfile)) {
+                return response([
+                    'profile' => $getProfile,
+                ], 200);
+            }
+        }
+
+        return response([
+            'profile' => 'Something went wrong with the login code or token, unable to fetch user profile',
+        ], 400);
     }
 
     /**
