@@ -54,7 +54,6 @@ class ExtractXAPIJSONController extends Controller
             ->where('id', '>', $max_statement_id)
             ->orderby('id', 'ASC')
             ->get();
-
         try {
             $service = new LearnerRecordStoreService();
             foreach ($xapiStatements as $row) {
@@ -281,13 +280,19 @@ class ExtractXAPIJSONController extends Controller
                         }
                     }
                 } catch (Exception $e) {
-                    Log::error('Summary page Cronjob crashed on row id ' . $row->id . ' - ' . $e->getMessage() . ' / Line = ' . $e->getLine());
+                    Log::channel('cronjob')->error('Summary page Cronjob crashed on row id ' . $row->id . ' - ' . $e->getMessage() . ' / Line = ' . $e->getLine());
+                    $errors = true;
                 }
             }
-            \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script ended');
+            if($errors && $errors == true){
+                return response()->json([
+                    'message' => 'LRS cronjob has errors, please check LRS-Cronjob.log file.'
+                ], 404);
+            }
+            Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script ended');
             return 'Extract XAPI JSON Cron run successfully.';
         } catch (Exception $e) {
-            \Log::error($e->getMessage());
+            Log::error($e->getMessage());
         }
     }
 }
