@@ -60,6 +60,8 @@ spec:
           subPath: .env
         - name: nfs-volume
           mountPath: /var/www/html/storage
+        - name: h5p-exports
+          mountPath: /var/www/html/storage/app/public/h5p/exports
         - name: currikicert
           mountPath: /etc/ssl/curriki.cert
           subPath: curriki.cert
@@ -92,6 +94,8 @@ spec:
           subPath: .env
         - name: nfs-volume
           mountPath: /var/www/html/storage
+        - name: h5p-exports
+          mountPath: /var/www/html/storage/app/public/h5p/exports
         - name: currikicert
           mountPath: /etc/ssl/curriki.cert
           subPath: curriki.cert
@@ -120,6 +124,10 @@ spec:
       - name: currikikey
         configMap:
           name: currikikey
+      - name: h5p-exports
+        hostPath:
+          path: /h5p_exports/exports
+          type: Directory
 
 
 ---
