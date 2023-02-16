@@ -244,6 +244,35 @@ class MicroSoftTeamController extends Controller
     }
 
     /**
+     * Get User profile
+     *
+     * Get User profile of Microsoft Team
+	 
+     * @response  200 {
+     *   "user": Array
+     * }
+     * @return Response
+     */
+    public function getUserPofile(GetUserProfileRequest $request)
+    {
+        $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+
+        if ($accessToken && array_key_exists('access_token', $accessToken)) {
+            $getProfile = $this->microsoftTeamRepository->getUserProfile($accessToken['access_token']);
+
+            return response([
+                'profile' => $getProfile,
+            ], 200);
+        } else {
+            return response([
+                'status_code' => 424,
+                'errors' => $accessToken['error'],
+                'message' => $accessToken['error_description']
+            ], 500);
+        }
+    }
+
+    /**
 	 * Create a new Class
 	 *
 	 * Create a new Class/Team into Microsoft Team
