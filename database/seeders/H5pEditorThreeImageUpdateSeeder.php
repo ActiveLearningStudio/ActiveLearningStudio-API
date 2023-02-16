@@ -25,7 +25,7 @@ class H5pEditorThreeImageUpdateSeeder extends Seeder
                           'major_version' => 0,
                           'minor_version' => 5,
                           'patch_version' => 2,
-                          'embed_types' => 'iframe',
+                          'embed_types' => '',
                           'runnable' => 0,
                           'restricted' => 0,
                           'fullscreen' => 0,

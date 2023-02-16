@@ -23,8 +23,8 @@ class H5pUpgradeEditorThreeImagePreloadSeeder extends Seeder
             $h5pThreeImageLibId = $h5pThreeImageLib->id;
     
             DB::table('h5p_libraries_libraries')->insert([
-                'library_id' => $h5pThreeImageLibId,
-                'required_library_id' => $h5pThreeImage->id,
+                'library_id' => $h5pThreeImage->id,
+                'required_library_id' => $h5pThreeImageLibId,
                 'dependency_type' => 'preloaded'
             ]);
         }
