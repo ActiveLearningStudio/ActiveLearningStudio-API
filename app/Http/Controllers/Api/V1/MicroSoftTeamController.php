@@ -131,12 +131,13 @@ class MicroSoftTeamController extends Controller
 	 */
     public function getAccessTokenViaCode(GetTokenViaCode $request)
     {
-            $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+        $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
 
-            if ($accessToken && array_key_exists('access_token', $accessToken)) {
-                $request['token'] = $accessToken['access_token'];
-                $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
-                
+        if ($accessToken && array_key_exists('access_token', $accessToken)) {
+            $request['token'] = $accessToken['access_token'];
+            $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
+
+            if ($getSubmission && array_key_exists('status', $getSubmission)) {
                 return response([
                     'status_code' => 200,
                     'message' => 'Token fetched successfully.',
@@ -145,11 +146,17 @@ class MicroSoftTeamController extends Controller
                     'refresh_token' => $accessToken['refresh_token']
                 ], 200);
             }
+
             return response([
                 'status_code' => 424,
-                'errors' => $accessToken['error'],
-                'message' => $accessToken['error_description']
-            ], 500);   
+                'errors' => $getSubmission['error'],
+            ], 500);
+        }
+        return response([
+            'status_code' => 424,
+            'errors' => $accessToken['error'],
+            'message' => $accessToken['error_description']
+        ], 500);   
     }
 
     /**
