@@ -8,6 +8,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GetTokenViaCode;
+use App\Http\Requests\V1\GetUserProfileRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Requests\V1\MSTeamCreateClassRequest;
 use App\Http\Requests\V1\MSTeamCreateAssignmentRequest;
 use App\Http\Requests\V1\MSSaveAccessTokenRequest;
+use App\Http\Requests\V1\SubmitAssignmentMst;
 use App\Models\IndependentActivity;
 use App\Models\Playlist;
 use App\Models\Project;
@@ -112,18 +114,15 @@ class MicroSoftTeamController extends Controller
     /**
 	 * get access_token using code
 	 *
-	 * get access_token using code.
-	 *
-     * @urlParam gid string User id of current logged in user
-     * @bodyParam code string The stringified of the GAPI authorization token JSON object
+     * @bodyParam request contains classId, assignmentId, submissionId
      * 
      * @response {
-     *   "message": "Access token has been saved successfully."
+     *   "message": "Token fetched successfully."
      * }
      *
      * @response 500 {
      *   "errors": [
-     *     "Failed to save the token."
+     *     "Invalid grant."
      *   ]
      * }
      *
@@ -132,24 +131,65 @@ class MicroSoftTeamController extends Controller
 	 */
     public function getAccessTokenViaCode(GetTokenViaCode $request)
     {
-            $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+        $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
 
-            if ($accessToken && array_key_exists('access_token', $accessToken)) {
-                $request['token'] = $accessToken['access_token'];
-                $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
-                
+        if ($accessToken && array_key_exists('access_token', $accessToken)) {
+            $request['token'] = $accessToken['access_token'];
+            $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
+
+            if ($getSubmission && array_key_exists('status', $getSubmission)) {
                 return response([
                     'status_code' => 200,
                     'message' => 'Token fetched successfully.',
                     'access_token' => $accessToken['access_token'],
-                    'assignment_submission' => $getSubmission
+                    'assignment_submission' => $getSubmission,
+                    'refresh_token' => $accessToken['refresh_token']
                 ], 200);
             }
+
             return response([
                 'status_code' => 424,
-                'errors' => $accessToken['error'],
-                'message' => $accessToken['error_description']
-            ], 500);   
+                'errors' => $getSubmission['error'],
+            ], 500);
+        }
+        return response([
+            'status_code' => 424,
+            'errors' => $accessToken['error'],
+            'message' => $accessToken['error_description']
+        ], 500);   
+    }
+
+    /**
+	 * Submit assignment
+	 *
+     * @bodyParam request contains classId, assignmentId, submissionId
+     * 
+     * @response {
+     *   "message": "Turned in successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to Turn in."
+     *   ]
+     * }
+     *
+     * @param SubmitAssignmentMst $request
+     * @return Response
+	 */
+    public function submitAssignment(SubmitAssignmentMst $request)
+    {
+        $submitAssignment = $this->microsoftTeamRepository->submitAssignment($request);
+        if ($submitAssignment['statusCode'] === 200) {
+            return response([
+                'status_code' => $submitAssignment['statusCode'],
+                'message' => 'Turned in successfully. [MST Status => ' . $submitAssignment['status'] . ']'
+            ], 200);
+        }
+        return response([
+            'status_code' => $submitAssignment['error']['code'],
+            'message' => $submitAssignment['error']['message']
+        ], 500);
     }
 
     /**
@@ -209,6 +249,35 @@ class MicroSoftTeamController extends Controller
         return response([
             'classes' => $this->microsoftTeamRepository->getClassesList($token),
         ], 200);
+    }
+
+    /**
+     * Get User profile
+     *
+     * Get User profile of Microsoft Team
+	 
+     * @response  200 {
+     *   "user": Array
+     * }
+     * @return Response
+     */
+    public function getUserPofile(GetUserProfileRequest $request)
+    {
+        $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+
+        if ($accessToken && array_key_exists('access_token', $accessToken)) {
+            $getProfile = $this->microsoftTeamRepository->getUserProfile($accessToken['access_token']);
+
+            return response([
+                'profile' => $getProfile,
+            ], 200);
+        } else {
+            return response([
+                'status_code' => 424,
+                'errors' => $accessToken['error'],
+                'message' => $accessToken['error_description']
+            ], 500);
+        }
     }
 
     /**
