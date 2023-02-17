@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationPermissionTypeSeeder extends Seeder
 {
@@ -326,5 +327,26 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'display_name' => 'Dashboard Search',
             'feature' => 'Search'
         ]);
+        
+        // Record a Video
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'record-video:view',
+            'display_name' => 'View Record a Video',
+            'feature' => 'Record a Video'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'record-video:edit',
+            'display_name' => 'Edit Record a Video',
+            'feature' => 'Record a Video'
+        ]);
+        
+        // Interactive Video
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'video:view',
+            'display_name' => 'View My Interactive Video',
+            'feature' => 'My Interactive Video'
+        ]);
+
     }
 }

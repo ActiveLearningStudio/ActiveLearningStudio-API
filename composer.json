@@ -21,7 +21,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "maatwebsite/excel": "^3.1",
-        "madnest/madzipper": "^1.1"
+        "madnest/madzipper": "^1.1",
+        "sentry/sentry-laravel": "^3.1"
     },
     "require-dev": {
         "knuckleswtf/scribe": "^4.7",

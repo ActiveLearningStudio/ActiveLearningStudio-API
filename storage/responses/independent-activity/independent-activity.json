@@ -72,6 +72,7 @@
             "membership_type_id": 2,
             "temp_password": null
         },
+        "activity_type": "INDEPENDENT",
         "h5p_content": null
     }
 }

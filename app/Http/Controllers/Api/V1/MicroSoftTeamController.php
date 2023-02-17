@@ -7,6 +7,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\GetTokenViaCode;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -21,6 +22,7 @@ use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Activity;
 use App\Jobs\PublishProject;
+use App\Jobs\PublishPlaylist;
 use App\Jobs\PublishIndependentActivity;
 use App\User;
 use Redirect;
@@ -105,6 +107,49 @@ class MicroSoftTeamController extends Controller
             return Redirect::to($url);
         }
    
+    }
+
+    /**
+	 * get access_token using code
+	 *
+	 * get access_token using code.
+	 *
+     * @urlParam gid string User id of current logged in user
+     * @bodyParam code string The stringified of the GAPI authorization token JSON object
+     * 
+     * @response {
+     *   "message": "Access token has been saved successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to save the token."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+	 */
+    public function getAccessTokenViaCode(GetTokenViaCode $request)
+    {
+            $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
+
+            if ($accessToken && array_key_exists('access_token', $accessToken)) {
+                $request['token'] = $accessToken['access_token'];
+                $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
+                
+                return response([
+                    'status_code' => 200,
+                    'message' => 'Token fetched successfully.',
+                    'access_token' => $accessToken['access_token'],
+                    'assignment_submission' => $getSubmission
+                ], 200);
+            }
+            return response([
+                'status_code' => 424,
+                'errors' => $accessToken['error'],
+                'message' => $accessToken['error_description']
+            ], 500);   
     }
 
     /**
@@ -295,4 +340,38 @@ class MicroSoftTeamController extends Controller
         ], 200);
         
     }
+
+    /**
+	 * Publish playlist
+	 *
+	 * Publish the playlist activities as an assignment
+	 *
+     * @urlParam playlist required The Id of a playlist. Example: 9
+     * @bodyParam classId optional string Id of the class. Example: bebe45d4-d0e6-4085-b418-e98a51db70c3
+     *
+     * @response  200 {
+     *   "message": [
+     *     "Your request to publish playlist [playlist->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
+     *   ]
+     * }
+     * 
+     * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
+     * @param Playlist $playlist
+     * @return Response
+	 */
+    public function publishPlaylist(MSTeamCreateAssignmentRequest $createAssignmentRequest, Playlist $playlist)
+    {
+        $data = $createAssignmentRequest->validated();
+        
+        $classId = isset($data['classId']) ? $data['classId'] : '';
+        
+        // pushed publishing of playlist in background
+        PublishPlaylist::dispatch(auth()->user(), $playlist, $classId)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to publish playlist [$playlist->title] into MS Team has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+        
+    }  
 }

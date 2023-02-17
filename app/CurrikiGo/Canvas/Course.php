@@ -88,13 +88,14 @@ class Course
     {
         $moduleItems = [];
         $courses = $this->canvasClient->run(new GetAllCoursesCommand());
-        if ($courses) {
+        if (!is_int($courses)) {
             foreach ($courses as $key => $item) {
                 $moduleItems[$key]['id'] = $item->id;
                 $moduleItems[$key]['name'] = $item->name;
             }
+            return $moduleItems;
         }
-        return $moduleItems;
+        return $courses;
     }
 
     /**

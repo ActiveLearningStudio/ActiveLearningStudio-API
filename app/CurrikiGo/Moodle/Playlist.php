@@ -20,7 +20,7 @@ class Playlist
         $this->client = new \GuzzleHttp\Client();
     }
 
-    public function send(PlaylistModel $playlist, $data)
+    public function send(PlaylistModel $playlist, $data, $gcrRepo)
     {        
         $organizationId = Project::where('id', $playlist->project_id)->value('organization_id');
         
@@ -51,6 +51,20 @@ class Playlist
             "subject_name" => $subject_name ? : "None"
         ];
         $response = $this->client->request('GET', $web_service_url, ['query' => $rquest_params]);
+        if($response->getStatusCode() === 200 || $response->getStatusCode() === 201){
+            $lmsData = json_decode($response->getBody()->getContents());
+            if($lmsData && $lmsData[0]){
+            $teacherInfo = new \stdClass();
+            $teacherInfo->user_id = null;
+            $teacherInfo->id = $lmsData[0]->data->id;
+            $teacherInfo->name = $lmsData[0]->data->name;
+            $teacherInfo->alternateLink = $this->lmsSetting->lms_url . '/' . $lmsData[0]->data->id;
+            $teacherInfo->alternateLink = substr($teacherInfo->alternateLink, 8);
+            $teacherInfo->curriki_teacher_email = null;
+            $teacherInfo->curriki_teacher_org = $this->lmsSetting->organization_id;
+            $googleClassroomData = $gcrRepo->saveCourseShareToGcClass($teacherInfo);
+        }
+        }
         return $response;
     }
 

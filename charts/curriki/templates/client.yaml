@@ -1,0 +1,132 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-client
+  labels:
+    app: {{ .Release.Name }}-client
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-client
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-client
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+    spec:
+      containers:
+      - name: client
+        image: {{ .Values.image.clientrepo}}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        volumeMounts:
+        - name: client-env-local
+          mountPath: /usr/share/nginx/html/.env
+          subPath: .env
+        - name: client-env-script
+          mountPath: /usr/share/nginx/html/runtime-env.js
+          subPath: runtime-env.js
+        envFrom:
+        - configMapRef:
+            name: client-env
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 10m
+            memory: 20Mi
+          
+      volumes:
+      - name: client-env
+        configMap:
+          name: client-env
+      - name: client-env-local
+        configMap:
+          name: client-env-local
+      - name: client-env-script
+        configMap:
+          name: client-env-script
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-env
+data:
+  {{- with .Values.clientEnvConfigMap }}
+    {{- toYaml . | nindent 2}}
+  {{- end}}
+
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-env-local
+data:
+  .env: {{- .Values.clientEnvLocalConfigMap | toYaml | indent 2 }}
+ 
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-env-script
+data:
+  runtime-env.js: {{- .Values.clientRuntimeConfig | toYaml | indent 2 }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-svc
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: {{ .Release.Name }}-client
+
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}-client
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}-client
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 50

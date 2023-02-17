@@ -1,16 +1,30 @@
 node("currikidev") {
     def app
     def cron
-      
-    
-    
+    def tests
+
     stage('Clone repository') {               
         checkout scm    
     }  
+    stage('Deploy Helm') {	
+        echo env
+        if(env.GIT_BRANCH  == "staging") {
+            echo 'Copy'
+            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+            sh """ 
+            #!/bin/bash
+            set -ex
+            echo "${kubeconfig}" >> kubeconfig
+"""
+            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd config)/kubeconfig'
+        } else {
+            echo 'No Kubernetes deployment'
+        }
+    }
     
     stage('Build image') {         
         app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
-        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1 .")
+        cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=$h5pbranch .")
     } 
     stage('Test image') {           
         app.inside { 
@@ -30,6 +44,8 @@ node("currikidev") {
                 cron.push("${tag}")
         }
     }
+
+    
     
 
     
@@ -40,9 +56,10 @@ node("currikidev") {
                 if(Jenkins.instance.getNode("${node}").toComputer().isOnline()){
                     node("${node}") {
                         stage ("${node}") {
-                                echo 'Copy'
                                 sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-api" 
                                 sh "yes | docker service update --image quay.io/curriki/cron:${tag} currikistack_currikiprod-cron" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-migrate" 
+                                sh "yes | docker service update --image quay.io/curriki/api:${tag} currikistack_currikiprod-queue" 
                                 echo 'Copy completed'
                         }
                     }

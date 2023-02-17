@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\OrganizationRoleType;
 use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class OrganizationRoleUiPermissionSeeder extends Seeder
 {
@@ -44,7 +45,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "Edit",
             "Team" => "Edit",
             "Independent Activity" => "Edit",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "Edit"
         ];
 
         $courseCreatorUiPermissions = [
@@ -72,7 +74,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "Edit",
             "Team" => "Edit",
             "Independent Activity" => "Edit",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "Edit"
         ];
 
         $memberUiPermissions = [
@@ -100,7 +103,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "View",
             "Team" => "View",
             "Independent Activity" => "View",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "None"
         ];
 
         $selfRegisteredUiPermissions = [
@@ -128,7 +132,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Activity" => "Edit",
             "Team" => "Edit",
             "Independent Activity" => "Edit",
-            "My Interactive Video" => "None"
+            "My Interactive Video" => "None",
+            "Record a Video" => "None"
         ];
 
         $roleTypes = OrganizationRoleType::whereIn('name', ['admin', 'course_creator', 'member', 'self_registered'])->get();

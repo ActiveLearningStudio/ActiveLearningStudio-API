@@ -52,7 +52,7 @@ class Playlist
      * @param array $data 
      * @return array
      */
-    public function send(PlaylistModel $playlist, $data, $createAssignment, $canvasCourseId)
+    public function send(PlaylistModel $playlist, $data, $createAssignment, $canvasCourseId, $gcrRepo)
     {
         try {
             $user = Auth::user();
@@ -82,6 +82,17 @@ class Playlist
                 if ($createAssignmentGroup) {
                     foreach ($activities as $activity) {
                         $createAssignment = $this->canvasClient->run(new CreateAssignmentCommand($canvasCourseId, $createAssignmentGroup->id, $activity->title, $activity->id));
+                        if($createAssignment){
+                            $teacherInfo = new \stdClass();
+                            $teacherInfo->user_id = null;
+                            $teacherInfo->id = $canvasCourseId;
+                            $teacherInfo->name = $createAssignment->name;
+                            $teacherInfo->alternateLink = $lmsSettings->lms_url . '/' . $canvasCourseId;
+                            $teacherInfo->alternateLink = substr($teacherInfo->alternateLink, 8);
+                            $teacherInfo->curriki_teacher_email = null;
+                            $teacherInfo->curriki_teacher_org = $lmsSettings->organization_id;
+                            $googleClassroomData = $gcrRepo->saveCourseShareToGcClass($teacherInfo);
+                        }
                     }
                 }
                 $response = 'Assignments published successfully';

@@ -10,7 +10,7 @@ use App\Http\Resources\V1\LtiTool\LtiToolSettingCollection;
 use App\Http\Resources\V1\LtiTool\LtiToolSettingResource;
 use App\Models\LtiTool\LtiToolSetting;
 use App\Models\Organization;
-use App\Repositories\LtiTool\LtiToolSettingRepository;
+use App\Repositories\LtiTool\LtiToolSettingInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
@@ -19,12 +19,11 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 /**
- * @author        Asim Sarwar
- * Date           11-10-2021
- * @group 21.   Admin/Lti Tool Settings
- * 
- * APIs for Lti tool settings on admin panel.
- * The doc block for LTIToolSettingsController will be updated later.
+ * @authenticated
+ *
+ * @group 21. LTI Tool Settings API
+ *
+ * APIs for lti tool settings on admin panel.
  */
 class LtiToolSettingsController extends Controller
 {
@@ -32,26 +31,29 @@ class LtiToolSettingsController extends Controller
 
     /**
      * LtiToolSettingsController constructor.
-     * @param ltiToolSettingRepository $ltiToolSettingRepository
+     *
+     * @param LtiToolSettingInterface $ltiToolSettingRepository
      */
-    public function __construct(LtiToolSettingRepository $ltiToolSettingRepository)
+    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository)
     {
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
     }
 
     /**
-     * Get All LTI Tool Settings for listing.
+     * Get All LTI Tool Settings.
      * 
-     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     * Get a list of the lti tool settings for a user's default organization.
      * 
      * @urlParam $suborganization integer required Id of an organization Example: 1
-     * @queryParam start integer Offset for getting the paginated response, Default 0. Example: 0
-     * @queryParam length integer Limit for getting the paginated records, Default 25. Example: 25
+     * @bodyParam query string Query to search lti tool settings against email or tool_name or tool_url Example: masterdemo@curriki.org or Kaltura API or https://4515783.kaf.kaltura.com
+     * @bodyParam size integer Size to show per page records Example: 10
+     * @bodyParam order_by_column string To sort data with specific column Example: name
+     * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
+     * 
+     * @responseFile responses/admin/lti-tool/lti-tool-settings-list.json
      * 
      * @param Request $request
      * @param Organization $suborganization
-     * 
-     * @responseFile responses/admin/lti-tool/lti-tool-settings
      * 
      * @return LtiToolSettingCollection
      */
@@ -63,20 +65,17 @@ class LtiToolSettingsController extends Controller
 
     /**
      * Get Lti Tool Setting
-     * 
-     * Get the specified lti tool setting data.
-     * 
-     * @urlParam suborganization The Id of suborganization Example: 1
-     * @urlParam id required The Id of a lti_tool_settings table Example: 1
-     * 
-     * @responseFile responses/admin/lti-tool/lti-tool-settings
-     * 
+     *
+     * Get the specified lti tool setting details.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of a lti tool settings Example: 1
+     *
+     * @responseFile responses/admin/lti-tool/lti-tool-settings-show.json
+     *
      * @param Organization $suborganization
      * @param $id
-     * 
      * @return LtiToolSettingResource
-     * 
-     * @throws GeneralException
      */
     public function show(Organization $suborganization, $id)
     {
@@ -85,18 +84,35 @@ class LtiToolSettingsController extends Controller
     }
 
     /**
-     * Create Lti tool Setting
+     * Create Lti tool Settings
      * 
-     * Creates the new lti tool setting in database
+     * Creates the new lti tool settings in database
      * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam user_id int required Logged user id Example: 2
+     * @bodyParam organization_id int required Id of an organization Example: 1
+     * @bodyParam tool_name string required LTI Tool Settings tool name Example: Kaltura API Integration
+     * @bodyParam tool_url string required LTI Tool Settings tool url Example: https://4515783.kaf.kaltura.com
+     * @bodyParam lti_version string required LTI Tool Settings lti version Example: LTI-1p0
+     * @bodyParam media_source_id int required Id of and video media sources Example: 3
+     * @bodyParam tool_description string optional LTI Tool Settings description Example: Kaltura API Testing
+     * @bodyParam tool_custom_parameter string optional LTI Tool Settings custom param Example: embed=true
+     * @bodyParam tool_consumer_key string optional LTI Tool Settings consumer key Example: 4515783
+     * @bodyParam tool_secret_key string optional Required with consumer key. Example: Token
+     * @bodyParam tool_content_selection_url string optional Content ulr Example: https:kaltura.com
+     * @bodyParam tool_content_selection_url string optional Content ulr Example: https:kaltura.com
+     *
+     * @responseFile 200 responses/admin/lti-tool/lti-tool-settings-create.json
      * 
-     * @return LtiToolSettingResource|Application|ResponseFactory|Response
-     * 
+     * @response 500 {
+     *   "errors": [
+     *     "You have already created these settings!"
+     *   ]
+     * }
+     *
      * @param StoreLtiToolSettingRequest $request
      * @param Organization $suborganization
-     * 
-     * @throws GeneralException
+     * @return LtiToolSettingResource
      */
     public function store(StoreLtiToolSettingRequest $request, Organization $suborganization)
     {
@@ -118,23 +134,35 @@ class LtiToolSettingsController extends Controller
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->create($data);
         return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
+        
     }
 
     /**
-     * Lti Tool Setting
+     * Update Lti tool Setting
      * 
-     * Update Lti Tool Setting
+     * Update the specific lti tool settings record
      * 
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @urlParam id required The Id of LTI tool Example: 1
-     * 
-     * @return Application|ResponseFactory|Response
+     * @urlParam id required The Id of a LTI Tool Settings Example: 1
+     * @bodyParam user_id int required Logged user id Example: 2
+     * @bodyParam organization_id int required Id of an organization Example: 1
+     * @bodyParam tool_name string required LTI Tool Settings tool name Example: Kaltura API Integration
+     * @bodyParam tool_url string required LTI Tool Settings tool url Example: https://4515783.kaf.kaltura.com
+     * @bodyParam lti_version string required LTI Tool Settings lti version Example: LTI-1p0
+     * @bodyParam media_source_id int required Id of and video media sources Example: 3
+     * @bodyParam tool_description string optional LTI Tool Settings description Example: Kaltura API Testing
+     * @bodyParam tool_custom_parameter string optional LTI Tool Settings custom param Example: embed=true
+     * @bodyParam tool_consumer_key string optional LTI Tool Settings consumer key Example: 4515783
+     * @bodyParam tool_secret_key string optional Required with consumer key. Example: Token
+     * @bodyParam tool_content_selection_url string optional Content ulr Example: https:kaltura.com
+     * @bodyParam tool_content_selection_url string optional Content ulr Example: https:kaltura.com
+     *
+     * @responseFile 200 responses/admin/lti-tool/lti-tool-settings-update.json
      * 
      * @param UpdateLtiToolSettingRequest $request
      * @param Organization $suborganization
-     * @param $id
-     * 
-     * @throws GeneralException
+     * @param $id 
+     * @return LtiToolSettingResource
      */
     public function update(UpdateLtiToolSettingRequest $request, Organization $suborganization, $id)
     {
@@ -163,15 +191,13 @@ class LtiToolSettingsController extends Controller
      * 
      * Delete Lti Tool Setting
      * 
-     * @urlParam suborganization integer required Id of a suborganization Exp: 1
-     * @urlParam id integer required Id of LTI tool setting Exp: 1
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @urlParam id required The Id of a LTI Tool Settings Example: 1
      * 
      * @param Organization $suborganization
      * @param $id
      * 
-     * @return Application|Factory|View
-     * 
-     * @throws GeneralException
+     * @responseFile 200 responses/admin/lti-tool/lti-tool-settings-destory.json
      */
     public function destroy(Organization $suborganization, $id)
     {

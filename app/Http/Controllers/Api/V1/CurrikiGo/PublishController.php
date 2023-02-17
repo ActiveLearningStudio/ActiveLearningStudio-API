@@ -25,6 +25,8 @@ use Illuminate\Http\Response;
 use App\CurrikiGo\Canvas\Course as CanvasCourse;
 use App\Http\Requests\V1\CurrikiGo\CreateAssignmentRequest;
 use App\Http\Requests\V1\CurrikiGo\PublishMoodlePlaylistRequest;
+use App\Repositories\GoogleClassroom\GoogleClassroomRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -81,10 +83,11 @@ class PublishController extends Controller
      * @param PublishMoodlePlaylistRequest $publishRequest
      * @param Project $project
      * @param Playlist $playlist
+     * @param GoogleClassroomRepositoryInterface $gcrRepo
      * @return Response
      */
     // TODO: need to add 200 response
-    public function playlistToMoodle(PublishMoodlePlaylistRequest $publishRequest, Project $project, Playlist $playlist)
+    public function playlistToMoodle(PublishMoodlePlaylistRequest $publishRequest, Project $project, Playlist $playlist, GoogleClassroomRepositoryInterface $gcrRepo)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -99,19 +102,18 @@ class PublishController extends Controller
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
 
             $moodle_playlist = new MoodlePlaylist($lmsSetting);
-            $response = $moodle_playlist->send($playlist, ['counter' => intval($counter)]);
+            $response = $moodle_playlist->send($playlist, ['counter' => intval($counter)], $gcrRepo);
 
             $code = $response->getStatusCode();
             if ($code == 200) {
-                $outcome = $response->getBody()->getContents();
                 return response([
-                    'data' => json_decode($outcome),
+                    'data' => json_decode($response->getBody()),
                 ], 200);
             }
 
             return response([
                 'errors' => ['Failed to send playlist to Moodle.'],
-            ], 500);
+            ], 400);
         }
 
         return response([
@@ -152,9 +154,10 @@ class PublishController extends Controller
      * @param Project $project
      * @param Playlist $playlist
      * @param PublishPlaylistRequest $publishRequest
+     * @param GoogleClassroomRepositoryInterface $gcrRepo
      * @return Response
      */
-    public function playlistToCanvas(Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest)
+    public function playlistToCanvas(Project $project, Playlist $playlist, PublishPlaylistRequest $publishRequest, GoogleClassroomRepositoryInterface $gcrRepo)
     {
         if ($playlist->project_id !== $project->id) {
             return response([
@@ -170,7 +173,7 @@ class PublishController extends Controller
             $canvasClient = new Client($lmsSettings);
             $canvasPlaylist = new CanvasPlaylist($canvasClient);
             $counter = (isset($data['counter']) ? intval($data['counter']) : 0);
-            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter], $publishRequest->creation_type, $publishRequest->canvas_course_id);
+            $outcome = $canvasPlaylist->send($playlist, ['counter' => $counter], $publishRequest->creation_type, $publishRequest->canvas_course_id, $gcrRepo);
 
             if ($outcome) {
                 return response([
@@ -307,7 +310,7 @@ class PublishController extends Controller
      * @param CreateAssignmentRequest $publishRequest
      * @return Response
      */
-    public function activityToCanvas($courseId, CreateAssignmentRequest $publishRequest)
+    public function activityToCanvas($courseId, CreateAssignmentRequest $publishRequest, GoogleClassroomRepositoryInterface $googleClassroomRepository)
     {
         $project = Activity::find($publishRequest->curriki_activity_id)->playlist->project;
         if (Gate::forUser(auth()->user())->allows('publish-to-lms', $project)) {
@@ -317,20 +320,33 @@ class PublishController extends Controller
             $easyUpload = new CanvasCourse($canvasClient);
 
             $outcome = $easyUpload->createActivity($courseId, $publishRequest->assignment_group_id, $publishRequest->assignment_name, $publishRequest->curriki_activity_id);
+            if(!is_int($outcome)){
+                $teacherInfo = new \stdClass();
+                $teacherInfo->user_id = null;
+                $teacherInfo->id = $courseId;
+                $teacherInfo->name = $outcome->name;
+                $teacherInfo->alternateLink = $lmsSettings->lms_url . '/' . $courseId;
+                $teacherInfo->alternateLink = substr($teacherInfo->alternateLink, 8);
+                $teacherInfo->curriki_teacher_email = null;
+                $teacherInfo->curriki_teacher_org = $lmsSettings->organization_id;
+                $googleClassroomData = $googleClassroomRepository->saveCourseShareToGcClass($teacherInfo);
+            }
 
-            if ($outcome) {
+            if (!is_int($outcome)) {
                 return response([
                     'Activity' => $outcome,
                 ], 200);
-            } else {
+            } else if(($outcome === 401 || $outcome === 403)) {
                 return response([
-                    'errors' => ['Failed to Publish to canvas.'],
+                    'response_code' => $outcome,
+                    'response_message' => 'Canvas token is invalid, expired or missing permission to create a course',
+                    'data' => $outcome,
                 ], 500);
             }
         }
 
         return response([
-            'errors' => ['You are not authorized to perform this action.'],
+            'errors' => ['Something went wrong with the API.'],
         ], 403);
     }
 

@@ -16,11 +16,16 @@ class DefaultAllowedVisibilityTypesSeeder extends Seeder
     public function run()
     {
         $organizations = Organization::all();
-        $allowedVisibilityTypes = OrganizationVisibilityType::whereIn("name", ["private", "protected", "public"])
+        $allowedVisibilityTypes = OrganizationVisibilityType::whereIn("name", 
+                                                                [
+                                                                    "private",
+                                                                    "global",
+                                                                    "public"
+                                                                ]
+                                                            )
                                                             ->pluck("id");
 
         foreach ($organizations as $organization) {
-            
             $organization->allowedVisibilityTypes()->sync($allowedVisibilityTypes);
         }
     }

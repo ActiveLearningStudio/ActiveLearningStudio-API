@@ -83,10 +83,11 @@ class CreateAssignmentCommand implements Command
                 'headers' => ['Authorization' => "Bearer {$this->accessToken}"],
                 'json' => ['assignment' => $assignment]
             ])->getBody()->getContents();
-            $response = json_decode($response);
-        } catch (Exception $ex) {
+            return $response = json_decode($response);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            return $response->getStatusCode();
         }
-
         return $response;
     }
 
@@ -107,7 +108,7 @@ class CreateAssignmentCommand implements Command
         $assignment['return_type'] = 'lti_launch_url';
         $assignment['workflow_state'] = 'published';
         $assignment['points_possible'] = 100;
-        $assignment['published'] = true;
+        $assignment['published'] = false;
         $assignment['external_tool_tag_attributes']['url'] = config('constants.curriki-tsugi-host') . "?activity=" . $currikiActivityId;
         return $assignment;
     }

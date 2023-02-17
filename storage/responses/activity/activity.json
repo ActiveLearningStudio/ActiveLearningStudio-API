@@ -102,6 +102,9 @@
             "updated_at": "2020-09-30T20:24:58.000000Z"
         },
         "created_at": "2020-09-30T20:24:58.000000Z",
-        "updated_at": "2020-09-30T20:24:58.000000Z"
+        "updated_at": "2020-09-30T20:24:58.000000Z",
+        "source_type": "Komodo",
+        "source_url": "https://komododecks.com/recordings/7bZwXgMWomBGHuo1Zpo9",
+        "activity_type": "ACTIVITY"
     }
 }

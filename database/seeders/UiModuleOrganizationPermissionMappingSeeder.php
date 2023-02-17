@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\UiModulePermission;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UiModuleOrganizationPermissionMappingSeeder extends Seeder
 {
@@ -335,6 +336,16 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                 "My Interactive Video" => [
                     "View" => [
                         'video:view'
+                    ],
+                    "None" => []
+                ],
+                "Record a Video" => [
+                    "View" => [
+                        'record-video:view'
+                    ],
+                    "Edit" => [
+                        'record-video:view',
+                        'record-video:edit'
                     ],
                     "None" => []
                 ]

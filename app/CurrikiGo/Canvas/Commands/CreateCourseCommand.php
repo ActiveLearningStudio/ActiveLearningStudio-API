@@ -67,12 +67,12 @@ class CreateCourseCommand implements Command
                 'headers' => ['Authorization' => "Bearer {$this->accessToken}", 'Accept' => 'application/json'],
                 'json' => $this->courseData
             ])->getBody()->getContents();
-            $response = json_decode($response);
+            return $response = json_decode($response);
         } 
-        catch (Exception $ex) {
+        catch (\GuzzleHttp\Exception\ClientException $e) {
+            $response = $e->getResponse();
+            return $response->getStatusCode();
         }
-
-        return $response;
     }
 
     /**

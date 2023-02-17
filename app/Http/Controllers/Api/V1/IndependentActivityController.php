@@ -307,6 +307,7 @@ class IndependentActivityController extends Controller
         return \DB::transaction(function () use ($validated, $independent_activity) {
 
             $attributes = Arr::except($validated, ['data', 'subject_id', 'education_level_id', 'author_tag_id']);
+            
             $is_updated = $this->independentActivityRepository->update($attributes, $independent_activity->id);
 
             if ($is_updated) {
@@ -783,7 +784,7 @@ class IndependentActivityController extends Controller
      *
      * @response 400 {
      *   "errors": [
-     *     "Independent Activity not found."
+     *     "Independent Activity is not shareable."
      *   ]
      * }
      *
@@ -793,7 +794,7 @@ class IndependentActivityController extends Controller
     public function getH5pResourceSettingsShared(IndependentActivity $independent_activity)
     {
         // 3 is for indexing approved - see IndependentActivity Model @indexing property
-        if ($independent_activity->shared || ($independent_activity->indexing === (int)config('constants.indexing-approved'))) {
+        if ($independent_activity->shared) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();
@@ -812,7 +813,7 @@ class IndependentActivityController extends Controller
         }
 
         return response([
-            'errors' => ['Independent Activity not found.']
+            'errors' => ['Independent Activity is not shareable.']
         ], 400);
     }
 
@@ -871,7 +872,8 @@ class IndependentActivityController extends Controller
      * 
      * @return download file download for the independent activity XAPI zip download
      */
-    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) {
+    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) 
+    {
         return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
     }
 

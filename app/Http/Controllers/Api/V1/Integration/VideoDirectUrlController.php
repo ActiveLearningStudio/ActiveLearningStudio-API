@@ -13,9 +13,14 @@ use App\Exceptions\GeneralException;
 class VideoDirectUrlController extends Controller
 {
     /**
+     * Get vimeo,komodo direct
+     * 
      * Get vimeo,komodo direct or playable url
+     * 
      * @param Request $request
+     * 
      * @return string
+     * 
      * @throws GeneralException
      */
     public function getDirectUrl(Request $request) 
@@ -36,9 +41,14 @@ class VideoDirectUrlController extends Controller
     }
 
     /**
+     * Get Vimeo direct
+     * 
      * Get Vimeo direct or playable url
+     * 
      * @param string $url
+     * 
      * @return string $directUrl
+     * 
      * @throws GeneralException
      */
     public function getVimeoDirectUrl($url)

@@ -825,15 +825,17 @@ class AuthController extends Controller
                     $default_lms_setting['lms_login_id'] = $user['email'];
                     $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
 
-                    $organization = $this->organizationRepository->find($newly_created_setting->id);
-                    if ($organization) {
+                    $organization = $this->organizationRepository->find($newly_created_setting->organization_id);
+                    if ($organization && $organization->users()->find($user->id) === null) { // If the user has an existing role, we prefer the one in studio
                         if ($default_lms_setting['role_id']) {
                             $organization->users()->attach($user, ['organization_role_type_id' => $default_lms_setting['role_id']]);
                         } else {
                             $selfRegisteredRole = $organization->roles()->where('name', 'self_registered')->first();
                             $organization->users()->attach($user, ['organization_role_type_id' => $selfRegisteredRole->id]);
                         }
+                        $user['user_organization'] = $organization;
                     }
+                    $user['user_organization'] = $organization;
                 }
 
                 $sso_login = $user->ssoLogin()->where([

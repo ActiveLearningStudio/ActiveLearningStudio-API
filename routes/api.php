@@ -33,6 +33,7 @@ Route::get('ckeditor/browseFiles/', 'Api\V1\CkEditorFileManagerController@browse
 Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(['auth:api', 'verified']);
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 Route::get('microsoft-team/get-access-token', 'Api\V1\MicroSoftTeamController@getAccessToken');
+Route::get('microsoft-team/get-access-token-via-code', 'Api\V1\MicroSoftTeamController@getAccessTokenViaCode');
 
 Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
     Route::get('projects/{project}/load-shared', 'ProjectController@loadShared');
@@ -336,6 +337,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             Route::post('classes', 'MicroSoftTeamController@createMsTeamClass');
             Route::post('classes/assignments', 'MicroSoftTeamController@createMsTeamAssignment');
             Route::post('projects/{project}/publish','MicroSoftTeamController@publishProject');
+            Route::post('playlists/{playlist}/publish','MicroSoftTeamController@publishPlaylist');
             Route::post('activities/{activity}/publish','MicroSoftTeamController@publishIndependentActivity');
         });
 

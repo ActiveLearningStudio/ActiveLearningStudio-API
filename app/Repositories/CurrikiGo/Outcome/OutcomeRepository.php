@@ -311,18 +311,30 @@ class OutcomeRepository implements OutcomeRepositoryInterface
     private function getOutcomeData(array $data) {
         $response = [];
         try {
-            if (isset($data['actor'])) {
-                preg_match_all('!\d+!', $data['actor'], $matches);
-                if (is_array($matches)) 
-                    $actor_id = $matches[0][0];
-            }
             if (isset($data['activity'])) {
                 $activity_explode = explode('/', $data['activity']);
                 $activity_id = $activity_explode[4];
                 $submission_id = $activity_explode[6];
             }
-           
-            $check_submitted = OutcomeData::isSubmitted($actor_id, $activity_id, $submission_id);
+
+            if (isset($data['actor']) && $data['actor'] === 'msteams-speedgrader') {    // Special case for msteams integration
+                $actor_id = $data['actor'];
+                $submissionActor = OutcomeData::isSubmittedBySubmissionId($activity_id, $submission_id);
+
+                if ($submissionActor) {
+                    $actor_id = $submissionActor;
+                    $check_submitted = true;
+                } else {
+                    $check_submitted = false;
+                }
+            } else if (isset($data['actor'])) {
+                preg_match_all('!\d+!', $data['actor'], $matches);
+                if (is_array($matches)) 
+                    $actor_id = $matches[0][0];
+
+                $check_submitted = OutcomeData::isSubmitted($actor_id, $activity_id, $submission_id);
+            }
+
             if ($check_submitted) {
                 $result_array = [];
                 $chapters_list = OutcomeData::getUniqueChapters($actor_id, $activity_id, $submission_id);
