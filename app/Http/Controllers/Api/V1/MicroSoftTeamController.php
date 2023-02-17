@@ -136,14 +136,22 @@ class MicroSoftTeamController extends Controller
             if ($accessToken && array_key_exists('access_token', $accessToken)) {
                 $request['token'] = $accessToken['access_token'];
                 $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
-                
+
+                if($getSubmission && array_key_exists('status', $getSubmission)){
+                    return response([
+                        'status_code' => 200,
+                        'message' => 'Token fetched successfully.',
+                        'access_token' => $accessToken['access_token'],
+                        'assignment_submission' => $getSubmission,
+                        'refresh_token' => $accessToken['refresh_token']
+                    ], 200);
+                }
+
                 return response([
-                    'status_code' => 200,
-                    'message' => 'Token fetched successfully.',
-                    'access_token' => $accessToken['access_token'],
-                    'assignment_submission' => $getSubmission,
-                    'refresh_token' => $accessToken['refresh_token']
-                ], 200);
+                    'status_code' => 424,
+                    'errors' => $getSubmission['error'],
+                ], 500); 
+                
             }
             return response([
                 'status_code' => 424,
