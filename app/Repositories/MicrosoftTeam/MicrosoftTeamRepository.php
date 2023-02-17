@@ -91,8 +91,8 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         
         $postInput = [
             'grant_type' => 'authorization_code',
-            'client_id' => $request->clientId,
-            'client_secret' => $request->secretId,
+            'client_id' => $this->clientId,
+            'client_secret' => $this->secretId,
             'code' => $request->code,
             'scope' => config('ms-team-configs.scope_for_token'),
             
