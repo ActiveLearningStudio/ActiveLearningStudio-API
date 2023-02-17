@@ -1,0 +1,73 @@
+FROM php:8.1-fpm
+
+USER root
+
+ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0" \
+    PHP_OPCACHE_MAX_ACCELERATED_FILES="20000" \
+    PHP_OPCACHE_MEMORY_CONSUMPTION="192" \
+    PHP_OPCACHE_MAX_WASTED_PERCENTAGE="10"
+
+WORKDIR /var/www/html
+
+# Install dependencies
+RUN apt-get update \
+	# gd
+	&& apt-get install -y --no-install-recommends build-essential apt-transport-https libpq-dev \
+    libxml2-dev openssl nginx libfreetype6-dev libjpeg-dev libpng-dev libmagickwand-dev \
+	libwebp-dev zlib1g-dev libzip-dev gcc g++ make vim unzip \
+	git curl jpegoptim optipng pngquant gifsicle locales \
+	libonig-dev wget ca-certificates libcurl4-openssl-dev xvfb libgmp-dev \
+	libfontconfig wkhtmltopdf webp \
+	software-properties-common odbcinst1debian2 apt-utils net-tools xauth \
+	&& pecl install imagick \
+    && docker-php-ext-configure pgsql \
+	&& docker-php-ext-install gd gmp pdo_mysql pdo pdo_pgsql zip exif pcntl mbstring soap sockets \
+	&& docker-php-ext-enable opcache imagick \
+	&& docker-php-ext-configure gd     \
+    --with-jpeg \
+    --with-freetype \
+	&& apt-get autoclean -y \
+	&& apt-get clean \
+	&& rm -rf /tmp/pear/ \
+	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+
+
+#New Relic
+RUN export NR_VERSION=$(curl -sS https://download.newrelic.com/php_agent/release/ | sed -n 's/.*>\(.*linux\).tar.gz<.*/\1/p') \
+	&& wget https://download.newrelic.com/php_agent/release/${NR_VERSION}.tar.gz && \
+	tar -xzf ${NR_VERSION}.tar.gz && \
+	mv ${NR_VERSION} newrelic
+
+RUN usermod -u 1000 www-data
+
+COPY ./scripts/default-nginx.conf /etc/nginx/sites-available/default
+COPY ./scripts/base_nginx.conf /etc/nginx/nginx.conf
+COPY ./scripts/mime.types /etc/nginx/
+COPY ./scripts/php.ini /etc/php/8.1/fpm/
+COPY ./scripts/php.ini /etc/php/8.1/cli/
+COPY ./scripts/php.ini "$PHP_INI_DIR/php.ini"
+COPY ./scripts/base_fpm_www.conf /etc/php/8.1/fpm/pool.d/www.conf
+COPY ./scripts/opcache.ini /etc/php/8.1/fpm/conf.d/opcache.ini
+
+
+
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+COPY ./ ./
+RUN composer install
+RUN composer dump-autoload --optimize
+RUN chmod -Rv 0777 /var/www/html/storage
+
+
+
+COPY ./scripts/entrypoint.api.sh /usr/local/bin/entrypoint.api.sh
+RUN chmod +x /usr/local/bin/entrypoint.api.sh
+
+EXPOSE 80 443 9000 9001
+STOPSIGNAL SIGQUIT
+# Default command
+CMD ["/bin/sh", "-c", "/usr/local/bin/entrypoint.api.sh"]
