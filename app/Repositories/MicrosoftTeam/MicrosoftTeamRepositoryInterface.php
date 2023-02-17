@@ -27,6 +27,12 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
     public function getSubmission($request);
 
     /**
+     * @param $object
+     * @return string
+     */
+    public function submitAssignment($request);
+
+    /**
     * @param $gid int 
     * @return string
     */
@@ -42,8 +48,13 @@ interface MicrosoftTeamRepositoryInterface extends EloquentRepositoryInterface
 
     /**
     * @param $token string 
+    * @return 
+    */
+    public function getUserProfile($token);
+
+    /**
+    * @param $token string 
     * @param $data array
-    *
     * @return int
     */
     public function createMsTeamClass($token, $data);
