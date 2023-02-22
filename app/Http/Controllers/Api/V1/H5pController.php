@@ -99,11 +99,7 @@ class H5pController extends Controller
         }
 
         $parameters = '{"params":{},"metadata":{}}';
-        $display_option_arrary= '"displayOptions": {
-            "export": true,
-            "embed": true
-          }';
-        $display_options = $core->getDisplayOptionsForEdit($display_option_arrary);
+        $display_options = $core->getDisplayOptionsForEdit(NULL);
         $lib = $request->get('libraryName');
         // view Get the file and settings to print from
         $settings = $h5p::get_editor($content = null, $lib);
