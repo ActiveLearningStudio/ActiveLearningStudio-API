@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('organizations', function (Blueprint $table) {
-            $table->bolean('h5p_reuse_option')->nullable()->default(true);
-            $table->bolean('h5p_embed_option')->nullable()->default(true);
+            $table->boolean('h5p_reuse_option')->nullable()->default(true);
+            $table->boolean('h5p_embed_option')->nullable()->default(true);
         });
     }
 
