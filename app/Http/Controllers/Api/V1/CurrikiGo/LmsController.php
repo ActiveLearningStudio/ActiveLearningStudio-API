@@ -246,10 +246,13 @@ class LmsController extends Controller
      */
     public function independentActivities(IndependentActivityForDeeplink $request)
     {
-        $orgs = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->pluck('organization_id');
-        if($orgs){
-            return IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $orgs->user_id, $orgs));
+        $settings = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email);
+        $orgs = $settings->pluck('organization_id');
+        $user = $settings->first();
+        if ($orgs) {
+            return IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->user_id, $orgs));
         }
+
         return response([
             'data' => ['Could not find any independent activity. Please try again later.'],
         ], 400);
