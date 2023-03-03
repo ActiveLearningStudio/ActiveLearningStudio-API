@@ -28,6 +28,7 @@ class GetTokenViaCode extends FormRequest
             'classId' => 'required',
             'assignmentId' => 'required',
             'submissionId' => 'required',
+            'tenantId' => 'required',
         ];
     }
 }
