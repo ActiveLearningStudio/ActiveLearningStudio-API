@@ -89,7 +89,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
      */
     public function getTokenViaCode($request)
     {
-        
+        $apiURL = $this->loginUrl . '/' . $request->tenantId . '/oauth2/v2.0/token';
         $postInput = [
             'grant_type' => 'authorization_code',
             'client_id' => $this->clientId,
@@ -103,7 +103,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
             'X-header' => 'value'
         ];
 
-        $response = Http::asForm()->withOptions(["verify"=>false])->post($this->apiURL, $postInput);
+        $response = Http::asForm()->withOptions(["verify"=>false])->post($apiURL, $postInput);
 
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
