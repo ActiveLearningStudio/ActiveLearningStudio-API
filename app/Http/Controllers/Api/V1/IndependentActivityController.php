@@ -654,7 +654,8 @@ class IndependentActivityController extends Controller
         ));
         $user_data = $user->only(['id', 'name', 'email']);
 
-        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
+        $display_data = $settings['contents']['cid-' . $content['id']]['displayOptions'];
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code, 'display' => $display_data];
         return response([
             'independent-activity' => new H5pIndependentActivityResource($independent_activity, $h5p_data)
         ], 200);
