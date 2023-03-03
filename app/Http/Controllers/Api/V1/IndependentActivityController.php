@@ -654,11 +654,8 @@ class IndependentActivityController extends Controller
         ));
         $user_data = $user->only(['id', 'name', 'email']);
         if($independent_activity->organization_id) {
-            $organization = Organization::find($independent_activity->organization_id);
-            if($organization) {
-                $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $organization->h5p_reuse_option;
-                $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $organization->h5p_embed_option;
-            }
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity->organization->h5p_reuse_option;
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity->organization->h5p_embed_option;
         }
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
