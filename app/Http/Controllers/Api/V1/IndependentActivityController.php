@@ -653,9 +653,14 @@ class IndependentActivityController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
         $user_data = $user->only(['id', 'name', 'email']);
-
-        $display_data = $settings['contents']['cid-' . $content['id']]['displayOptions'];
-        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code, 'display' => $display_data];
+        if($independent_activity->organization_id) {
+            $organization = Organization::find($independent_activity->organization_id);
+            if($organization) {
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $organization->h5p_reuse_option;
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $organization->h5p_embed_option;
+            }
+        }
+        $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
             'independent-activity' => new H5pIndependentActivityResource($independent_activity, $h5p_data)
         ], 200);
