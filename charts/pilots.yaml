@@ -26,7 +26,6 @@ clientEnvConfigMap:
   REACT_MS_TENANT_ID: "75f881ff-c83b-44de-a964-f0f9ee64c60c"
   REACT_DOMAIN_URL: "https://stage.currikistudio.org/"
   REACT_MS_CLIENT_ID: "53fbf60b-ec1b-46da-8c72-6ba022d13631"
-  REACT_MS_SECRET: "qeD8Q~-I9gKcI8uC1.hMryQYEOUspo2nXUT3Iapj"
 clientEnvLocalConfigMap: |
     REACT_APP_PEXEL_API=563492ad6f91700001000001155d7b75f5424ea694b81ce9f867dddf
     REACT_APP_API_URL=https://stage.currikistudio.org/api/api
@@ -44,4 +43,3 @@ clientEnvLocalConfigMap: |
     REACT_MS_TENANT_ID=75f881ff-c83b-44de-a964-f0f9ee64c60c
     REACT_DOMAIN_URL=https://stage.currikistudio.org/
     REACT_MS_CLIENT_ID=53fbf60b-ec1b-46da-8c72-6ba022d13631
-    REACT_MS_SECRET=qeD8Q~-I9gKcI8uC1.hMryQYEOUspo2nXUT3Iapj
