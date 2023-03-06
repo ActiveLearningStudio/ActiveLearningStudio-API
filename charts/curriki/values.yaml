@@ -1,4 +1,4 @@
-namespace: staging
+namespace: default
 image:
   apirepo: nginx
   cronrepo: nginx

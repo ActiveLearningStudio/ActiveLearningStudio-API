@@ -66,9 +66,8 @@ kind: ConfigMap
 metadata:
   name: tsugi-mod-config
 data:
-  config.php: |
-    <?php
-    define('CURRIKI_STUDIO_HOST', 'https://stage.currikistudio.org');
+  config.php: {{- .Values.currikiTsugiHost | toYaml | indent 2 }}
+    
 
 
 ---
