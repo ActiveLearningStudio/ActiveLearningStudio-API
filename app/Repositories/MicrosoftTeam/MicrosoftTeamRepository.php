@@ -418,7 +418,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
      */
     public function getUserProfile($token)
     {
-        $apiURL = $this->landingUrl . '/profile';
+        $apiURL = $this->landingUrl . '/me';
         $headers = [
             'Content-length' => 0,
             'Content-type' => 'application/json',
