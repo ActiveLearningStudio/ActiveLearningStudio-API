@@ -1,8 +1,0 @@
-namespace: default
-image:
-  apirepo: nginx
-  cronrepo: nginx
-  clientrepo: nginx
-  tsugirepo: nginx
-  traxrepo: nginx
-  
