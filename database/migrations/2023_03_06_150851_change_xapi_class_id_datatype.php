@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('class_id', 255)->change();
         });
 
-        DB::statement("CREATE OR REPLACE VIEW public.outcome_data1
+        DB::statement("CREATE OR REPLACE VIEW public.outcome_data
 AS SELECT sq1.user_id,
     sq1.class_id,
     sq1.project_id,
