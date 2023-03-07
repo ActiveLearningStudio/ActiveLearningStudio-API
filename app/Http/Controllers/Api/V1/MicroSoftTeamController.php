@@ -69,7 +69,7 @@ class MicroSoftTeamController extends Controller
 	 *
      * @urlParam gid string User id of current logged in user
      * @bodyParam code string The stringified of the GAPI authorization token JSON object
-     * 
+     *
      * @response {
      *   "message": "Access token has been saved successfully."
      * }
@@ -85,14 +85,14 @@ class MicroSoftTeamController extends Controller
 	 */
     public function getAccessToken(Request $request)
     {
-        if(!empty($request->get('code'))) {  
+        if(!empty($request->get('code'))) {
             $code = $request->get('code');
             $accessToken = $this->microsoftTeamRepository->getToken($code);
-            
+
             $isUpdated = $this->userRepository->update([
                 'msteam_access_token' => $accessToken
             ], $request->get('state'));
-            
+
             if ($isUpdated) {
                 return response([
                     'message' => 'Access token has been saved successfully.',
@@ -105,17 +105,17 @@ class MicroSoftTeamController extends Controller
         } else {
             $gid = $request->get('gid');
             $url = $this->microsoftTeamRepository->getLoginUrl($gid);
-            
+
             return Redirect::to($url);
         }
-   
+
     }
 
     /**
 	 * get access_token using code
 	 *
      * @bodyParam request contains classId, assignmentId, submissionId
-     * 
+     *
      * @response {
      *   "message": "Token fetched successfully."
      * }
@@ -156,39 +156,6 @@ class MicroSoftTeamController extends Controller
             'status_code' => 424,
             'errors' => $accessToken['error'],
             'message' => $accessToken['error_description']
-        ], 500);   
-    }
-
-    /**
-	 * Submit assignment
-	 *
-     * @bodyParam request contains classId, assignmentId, submissionId
-     * 
-     * @response {
-     *   "message": "Turned in successfully."
-     * }
-     *
-     * @response 500 {
-     *   "errors": [
-     *     "Failed to Turn in."
-     *   ]
-     * }
-     *
-     * @param SubmitAssignmentMst $request
-     * @return Response
-	 */
-    public function submitAssignment(SubmitAssignmentMst $request)
-    {
-        $submitAssignment = $this->microsoftTeamRepository->submitAssignment($request);
-        if ($submitAssignment['statusCode'] === 200) {
-            return response([
-                'status_code' => $submitAssignment['statusCode'],
-                'message' => 'Turned in successfully. [MST Status => ' . $submitAssignment['status'] . ']'
-            ], 200);
-        }
-        return response([
-            'status_code' => $submitAssignment['error']['code'],
-            'message' => $submitAssignment['error']['message']
         ], 500);
     }
 
@@ -196,7 +163,7 @@ class MicroSoftTeamController extends Controller
 	 * Submit assignment
 	 *
      * @bodyParam request contains classId, assignmentId, submissionId
-     * 
+     *
      * @response {
      *   "message": "Turned in successfully."
      * }
@@ -263,12 +230,12 @@ class MicroSoftTeamController extends Controller
             'errors' => ['Failed to save the token.'],
         ], 500);
     }
-    
+
     /**
 	 * Get List of Classes
 	 *
 	 * Get List of Microsoft Team Classes
-	 
+
      * @response  200 {
      *   "classes": Array of classes
      * }
@@ -278,7 +245,7 @@ class MicroSoftTeamController extends Controller
     {
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
-        
+
         return response([
             'classes' => $this->microsoftTeamRepository->getClassesList($token),
         ], 200);
@@ -288,7 +255,7 @@ class MicroSoftTeamController extends Controller
      * Get User profile
      *
      * Get User profile of Microsoft Team
-	 
+
      * @response  200 {
      *   "user": Array
      * }
@@ -340,7 +307,7 @@ class MicroSoftTeamController extends Controller
         $authUser = auth()->user();
         $token = $authUser->msteam_access_token;
         $response = json_decode($this->microsoftTeamRepository->createMsTeamClass($token, $data),true);
-        
+
         if($response['code'] === 202) {
             return response([
                 'message' => 'Class have been created successfully',
@@ -348,11 +315,11 @@ class MicroSoftTeamController extends Controller
                 'aSyncUrl'=> $response['aSyncURL'],
             ], 200);
         }
-        
+
         return response([
             'errors' => 'Something went wrong.',
         ], 500);
-        
+
     }
 
     /**
@@ -388,7 +355,7 @@ class MicroSoftTeamController extends Controller
             ], 500);
         }
         $classId = isset($data['classId']) ? $data['classId'] : '';
-        
+
         // pushed publishing of project in background
         PublishProject::dispatch(auth()->user(), $project, $classId)->delay(now()->addSecond());
 
@@ -396,8 +363,8 @@ class MicroSoftTeamController extends Controller
             'message' =>  "Your request to publish project [$project->name] into MS Team has been received and is being processed. <br>
                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
-        
-    }   
+
+    }
 
     /**
 	 * Publish independent activity/activity
@@ -432,7 +399,7 @@ class MicroSoftTeamController extends Controller
             ], 500);
         }
         $classId = isset($data['classId']) ? $data['classId'] : '';
-        
+
         // pushed publishing of Activity in background
         PublishIndependentActivity::dispatch(auth()->user(), $activity, $classId)->delay(now()->addSecond());
 
@@ -440,7 +407,7 @@ class MicroSoftTeamController extends Controller
             'message' =>  "Your request to publish activity [$activity->title] into MS Team has been received and is being processed. <br>
                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
-        
+
     }
 
     /**
@@ -456,7 +423,7 @@ class MicroSoftTeamController extends Controller
      *     "Your request to publish playlist [playlist->name] into MS Team has been received and is being processed.<br>You will be alerted in the notification section in the title bar when complete."
      *   ]
      * }
-     * 
+     *
      * @param MSTeamCreateAssignmentRequest $createAssignmentRequest
      * @param Playlist $playlist
      * @return Response
@@ -464,9 +431,9 @@ class MicroSoftTeamController extends Controller
     public function publishPlaylist(MSTeamCreateAssignmentRequest $createAssignmentRequest, Playlist $playlist)
     {
         $data = $createAssignmentRequest->validated();
-        
+
         $classId = isset($data['classId']) ? $data['classId'] : '';
-        
+
         // pushed publishing of playlist in background
         PublishPlaylist::dispatch(auth()->user(), $playlist, $classId)->delay(now()->addSecond());
 
@@ -474,6 +441,6 @@ class MicroSoftTeamController extends Controller
             'message' =>  "Your request to publish playlist [$playlist->title] into MS Team has been received and is being processed. <br>
                             You will be alerted in the notification section in the title bar when complete.",
         ], 200);
-        
-    }  
+
+    }
 }
