@@ -52,8 +52,11 @@ class GoogleClassroom extends Model
 
         self::creating(function(GoogleClassroom $gclassData) {
             $gclassData->curriki_teacher_email = strtolower($gclassData->curriki_teacher_email);
+            $gclassData->teacher_group_email = strtolower($gclassData->teacher_group_email);
+            $gclassData->course_group_email = strtolower($gclassData->course_group_email);
         });
     }
+    
     /**
      * Get the user_id for the teacher
      */

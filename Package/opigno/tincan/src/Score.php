@@ -173,16 +173,18 @@ class Score implements VersionableInterface, ComparableInterface
      * @return self
      */
     public function setMax($value) {
-        if (isset($this->raw) && $value < $this->raw) {
-            throw new InvalidArgumentException(
-                sprintf("Value must be greater than or equal to 'raw' (%s) [%s]", $this->raw, $value)
-            );
-        }
-        if (isset($this->min) && $value <= $this->min) {
-            throw new InvalidArgumentException(
-                sprintf("Value must be greater than 'min' (%s) [%s]", $this->min, $value)
-            );
-        }
+        //removing the code to avoid the exception with 0 score , it can be revesed if future
+
+        // if (isset($this->raw) && $value < $this->raw) {
+        //     throw new InvalidArgumentException(
+        //         sprintf("Value must be greater than or equal to 'raw' (%s) [%s]", $this->raw, $value)
+        //     );
+        // }
+        // if (isset($this->min) && $value <= $this->min) {
+        //     throw new InvalidArgumentException(
+        //         sprintf("Value must be greater than 'min' (%s) [%s]", $this->min, $value)
+        //     );
+        // }
         $this->max = (float) $value;
         return $this;
     }
