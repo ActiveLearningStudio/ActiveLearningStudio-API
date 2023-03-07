@@ -30,20 +30,18 @@ node("currikidev") {
         }
     }
 
-    stage('Deploy Helm') {	
-        if(env.BRANCH_NAME  == "staging") {
-            echo 'Copy'
-            sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
-            sh """ 
-            #!/bin/bash
-            set -ex
-            echo "${kubeconfig}" >> kubeconfig
+
+    /*stage('Deploy Helm') {	
+        echo 'Copy'
+        sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
+        sh """ 
+        #!/bin/bash
+        set -ex
+        echo "${kubeconfig}" >> kubeconfig
 """
-            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd config)/kubeconfig'
-        } else {
-            echo 'No Kubernetes deployment'
-        }
-    }
+        sh 'helm upgrade --install curriki charts/curriki --namespace staging --kubeconfig $(pwd config)/kubeconfig'
+    }*/
+
     
 
     

@@ -193,6 +193,39 @@ class MicroSoftTeamController extends Controller
     }
 
     /**
+	 * Submit assignment
+	 *
+     * @bodyParam request contains classId, assignmentId, submissionId
+     * 
+     * @response {
+     *   "message": "Turned in successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Failed to Turn in."
+     *   ]
+     * }
+     *
+     * @param SubmitAssignmentMst $request
+     * @return Response
+	 */
+    public function submitAssignment(SubmitAssignmentMst $request)
+    {
+        $submitAssignment = $this->microsoftTeamRepository->submitAssignment($request);
+        if ($submitAssignment['statusCode'] === 200) {
+            return response([
+                'status_code' => $submitAssignment['statusCode'],
+                'message' => 'Turned in successfully. [MST Status => ' . $submitAssignment['status'] . ']'
+            ], 200);
+        }
+        return response([
+            'status_code' => $submitAssignment['error']['code'],
+            'message' => $submitAssignment['error']['message']
+        ], 500);
+    }
+
+    /**
 	 * Save Access Token
 	 *
 	 * Save GraphAPI access token in the database.
