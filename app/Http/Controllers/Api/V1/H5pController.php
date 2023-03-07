@@ -24,7 +24,6 @@ use App\Repositories\Integration\BrightcoveAPISettingRepository;
 use App\Repositories\CurrikiGo\ContentUserDataGo\ContentUserDataGoRepositoryInterface;
 use App\CurrikiGo\Brightcove\Client;
 use App\CurrikiGo\Brightcove\Videos\UpdateVideoTags;
-use App\Models\Organization;
 
 /**
  * @group 12. H5P
@@ -100,14 +99,8 @@ class H5pController extends Controller
         }
 
         $parameters = '{"params":{},"metadata":{}}';
+
         $display_options = $core->getDisplayOptionsForEdit(NULL);
-        if ($request->get('organizationId')) {
-            $organization = Organization::find($request->get('organizationId'));
-            if($organization) {
-                $display_options['export'] = $organization->h5p_reuse_option;
-                $display_options['embed'] = $organization->h5p_embed_option;
-            }
-        }
         $lib = $request->get('libraryName');
         // view Get the file and settings to print from
         $settings = $h5p::get_editor($content = null, $lib);

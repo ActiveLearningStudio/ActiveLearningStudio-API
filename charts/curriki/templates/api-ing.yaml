@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - stage.currikistudio.org
+      - {{.Values.host}}
       secretName: letsencrypt
   rules:
-  - host: stage.currikistudio.org
+  - host: {{.Values.host}}
     http:
       paths:
       - pathType: Prefix

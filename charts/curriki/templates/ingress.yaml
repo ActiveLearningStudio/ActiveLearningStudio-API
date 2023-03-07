@@ -8,49 +8,11 @@ metadata:
 spec:
   tls:
     - hosts:
-      - stage.currikistudio.org
-      - stage-api.currikistudio.org
-      - stage-trax.currikistudio.org
-      - stage-tsugi.currikistudio.org
+      {{- with .Values.ingHosts }}
+        {{- toYaml . | nindent 6}}
+      {{- end}}
       secretName: letsencrypt
   rules:
-  - host: stage.currikistudio.org
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: client-svc
-            port:
-              number: 80
-  - host: stage-api.currikistudio.org
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: api-svc
-            port:
-              number: 80
-  - host: stage-trax.currikistudio.org
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: trax-svc
-            port:
-              number: 80
-  - host: stage-tsugi.currikistudio.org
-    http:
-      paths:
-      - pathType: Prefix
-        path: "/"
-        backend:
-          service:
-            name: tsugi-svc
-            port:
-              number: 80
+  {{- with .Values.ingRules }}
+    {{- toYaml . | nindent 4}}
+  {{- end}}

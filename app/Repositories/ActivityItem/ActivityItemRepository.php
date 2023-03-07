@@ -36,14 +36,13 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
 
         if (isset($data['skipPagination']) && $data['skipPagination'] === 'true') {
             return $query->where('organization_id', $suborganization->id)
-                ->where('is_active', true)
-                ->orderBy('order', 'ASC')
-                ->orderBy('title', 'ASC')
-                ->get();
+                         ->orderBy('order', 'ASC')
+                         ->orderBy('title', 'ASC')
+                         ->get();
         }
         if (isset($data['filter']) && $data['filter'] !== '') {
             $query = $query->whereHas('activityType', function ($qry) use ($data) {
-                $qry->where('id', $data['filter']);
+                $qry->where('id',$data['filter']);
             });
         }
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
@@ -56,10 +55,9 @@ class ActivityItemRepository extends BaseRepository implements ActivityItemRepos
         }
 
         return $query->where('organization_id', $suborganization->id)
-            ->where('is_active', true)
-            ->orderBy('order', 'ASC')
-            ->orderBy('title', 'ASC')
-            ->paginate($perPage)->withQueryString();
+                     ->orderBy('order', 'ASC')
+                     ->orderBy('title', 'ASC')
+                     ->paginate($perPage)->withQueryString();
     }
 
     /**
