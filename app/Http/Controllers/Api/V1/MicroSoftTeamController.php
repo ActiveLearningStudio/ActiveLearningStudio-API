@@ -255,7 +255,10 @@ class MicroSoftTeamController extends Controller
      * Get User profile
      *
      * Get User profile of Microsoft Team
-
+     * 
+     * @bodyParam token required string
+     * @bodyParam tenantId string
+     * 
      * @response  200 {
      *   "user": Array
      * }
