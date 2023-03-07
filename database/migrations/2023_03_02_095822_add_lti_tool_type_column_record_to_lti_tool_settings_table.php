@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Database\Seeders\AddLTIToolTypeColumnRecordToLtiToolSettingsTableSeeder;
+use Database\Seeders\AddLtiToolTypeColumnRecordToLtiToolSettingsTableSeeder;
 
 return new class extends Migration
 {
@@ -13,7 +13,7 @@ return new class extends Migration
     public function up()
     {
         \Artisan::call('db:seed', [
-            '--class' => AddLTIToolTypeColumnRecordToLtiToolSettingsTableSeeder::class,
+            '--class' => AddLtiToolTypeColumnRecordToLtiToolSettingsTableSeeder::class,
             '--force' => true
         ]);
     }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 use App\Models\MediaSource;
-use App\Models\LtiTool\LTIToolType;
+use App\Models\LtiTool\LtiToolType;
 
 class LtiToolSetting extends Model
 {
@@ -80,7 +80,7 @@ class LtiToolSetting extends Model
     */
     public function ltiToolType()
     {
-        return $this->belongsTo(LTIToolType::class, 'lti_tool_type_id', 'id');
+        return $this->belongsTo(LtiToolType::class, 'lti_tool_type_id', 'id');
     }   
 
 }

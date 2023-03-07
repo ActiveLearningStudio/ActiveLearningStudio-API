@@ -82,7 +82,7 @@ class KalturaGeneratedAPIClientController extends Controller
     {
       $getParam = $request->all();
       $videoMediaSources = getVideoMediaSources();
-      $ltiToolTypeId = $this->ltiToolTypeRepo->getLTIToolTypeIdByName($videoMediaSources['kaltura']);
+      $ltiToolTypeId = $this->ltiToolTypeRepo->getLtiToolTypeIdByName($videoMediaSources['kaltura']);
       $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByColumnMatch($getParam['organization_id'], $ltiToolTypeId);
       // Credentials For Kaltura Session
       if ($ltiRowResult) {

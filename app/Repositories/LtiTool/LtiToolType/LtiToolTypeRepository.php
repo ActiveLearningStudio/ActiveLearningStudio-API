@@ -23,7 +23,7 @@ class LtiToolTypeRepository extends BaseRepository implements LTIToolTypeInterfa
      * @param $ltiToolTypeName string
      * @return int
      */
-    public function getLTIToolTypeIdByName($ltiToolTypeName)
+    public function getLtiToolTypeIdByName($ltiToolTypeName)
     {
         $ltiToolTypeRow = $this->model->where('name', $ltiToolTypeName)->first();
         $ltiToolTypeId = !empty($ltiToolTypeRow) ? $ltiToolTypeRow->id : 0;

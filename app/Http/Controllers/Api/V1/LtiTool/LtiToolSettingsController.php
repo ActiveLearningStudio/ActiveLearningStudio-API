@@ -193,7 +193,7 @@ class LtiToolSettingsController extends Controller
      * 
      * @return LtiToolSettingResource
      */
-    public function getLTIToolTypeList()
+    public function getLtiToolTypeList()
     {
         $ltiToolType = $this->ltiToolTypeRepo->all();
         return new LtiToolSettingResource($ltiToolType);

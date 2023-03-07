@@ -12,5 +12,5 @@ interface LtiToolTypeInterface extends EloquentRepositoryInterface
      * @param $ltiToolTypeName string
      * @return int
      */
-    public function getLTIToolTypeIdByName($ltiToolTypeName);
+    public function getLtiToolTypeIdByName($ltiToolTypeName);
 }
