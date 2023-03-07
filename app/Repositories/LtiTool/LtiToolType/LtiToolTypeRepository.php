@@ -5,11 +5,11 @@ namespace App\Repositories\LtiTool\LtiToolType;
 use App\Repositories\BaseRepository;
 use App\Models\LtiTool\LtiToolType;
 
-class LtiToolTypeRepository extends BaseRepository implements LTIToolTypeInterface
+class LtiToolTypeRepository extends BaseRepository implements LtiToolTypeInterface
 {
 
     /**
-     * LTIToolTypeRepository constructor
+     * LtiToolTypeRepository constructor
      * @param LtiToolType $model
      */
     public function __construct(LtiToolType $model)
