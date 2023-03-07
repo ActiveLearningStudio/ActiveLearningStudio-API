@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Repositories\LtiTool;
+namespace App\Repositories\LtiTool\LtiToolType;
 
 use App\Repositories\BaseRepository;
-use App\Models\LtiTool\LTIToolType;
+use App\Models\LtiTool\LtiToolType;
 
-class LTIToolTypeRepository extends BaseRepository implements LTIToolTypeInterface
+class LtiToolTypeRepository extends BaseRepository implements LTIToolTypeInterface
 {
 
     /**
      * LTIToolTypeRepository constructor
-     * @param LTIToolType $model
+     * @param LtiToolType $model
      */
-    public function __construct(LTIToolType $model)
+    public function __construct(LtiToolType $model)
     {
         $this->model = $model;
     }

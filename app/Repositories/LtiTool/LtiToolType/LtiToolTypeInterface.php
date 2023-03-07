@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repositories\LtiTool;
+namespace App\Repositories\LtiTool\LtiToolType;
 
 use App\Repositories\EloquentRepositoryInterface;
 
-interface LTIToolTypeInterface extends EloquentRepositoryInterface
+interface LtiToolTypeInterface extends EloquentRepositoryInterface
 {
     /**
      * To get lti tool type id by name

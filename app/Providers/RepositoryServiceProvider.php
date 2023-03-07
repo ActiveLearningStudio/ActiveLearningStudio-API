@@ -81,8 +81,8 @@ use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepository;
 use App\Repositories\MediaSources\MediaSourcesInterface;
 use App\Repositories\MediaSources\MediaSourcesRepository;
-use App\Repositories\LtiTool\LTIToolTypeInterface;
-use App\Repositories\LtiTool\LTIToolTypeRepository;
+use App\Repositories\LtiTool\LtiToolType\LtiToolTypeInterface;
+use App\Repositories\LtiTool\LtiToolType\LtiToolTypeRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -132,7 +132,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(OrganizationRoleTypeRepositoryInterface::class, OrganizationRoleTypeRepository::class);
         $this->app->bind(MicrosoftTeamRepositoryInterface::class, MicrosoftTeamRepository::class);
         $this->app->bind(MediaSourcesInterface::class, MediaSourcesRepository::class);
-        $this->app->bind(LTIToolTypeInterface::class, LTIToolTypeRepository::class);
+        $this->app->bind(LtiToolTypeInterface::class, LtiToolTypeRepository::class);
     }
 
     /**

@@ -5,7 +5,7 @@ namespace App\Models\LtiTool;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LTIToolType extends Model
+class LtiToolType extends Model
 {
     use SoftDeletes;
     protected $table = 'lti_tool_type';

@@ -17,7 +17,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-use App\Repositories\LtiTool\LTIToolTypeInterface;
+use App\Repositories\LtiTool\LtiToolType\LtiToolTypeInterface;
 
 /**
  * @authenticated
@@ -35,9 +35,9 @@ class LtiToolSettingsController extends Controller
      * LtiToolSettingsController constructor.
      *
      * @param LtiToolSettingInterface $ltiToolSettingRepository
-     * @param LTIToolTypeInterface $ltiToolTypeRepo
+     * @param LtiToolTypeInterface $ltiToolTypeRepo
      */
-    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, LTIToolTypeInterface $ltiToolTypeRepo)
+    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, LtiToolTypeInterface $ltiToolTypeRepo)
     {
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
         $this->ltiToolTypeRepo = $ltiToolTypeRepo;
