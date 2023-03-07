@@ -16,8 +16,8 @@ class AddLtiToolTypeColumnRecordToLtiToolSettingsTableSeeder extends Seeder
     public function run()
     {
         // Get lti tool type id from lti_tool_type table
-        $getLTIToolTypeRow = DB::table('lti_tool_type')->where('name', 'Kaltura')->first();
-        $ltiToolTypeId = ( empty($getLTIToolTypeRow) ) ? 1 : $getLTIToolTypeRow->id;
+        $getLtiToolTypeRow = DB::table('lti_tool_type')->where('name', 'Kaltura')->first();
+        $ltiToolTypeId = ( empty($getLtiToolTypeRow) ) ? 1 : $getLtiToolTypeRow->id;
         // Get media source id from media_sources table
         $conditionAttr = ['name' => 'Kaltura', 'media_type' => 'Video'];
         $getMediaRow = DB::table('media_sources')->where($conditionAttr)->first();
