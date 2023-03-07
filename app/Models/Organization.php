@@ -180,17 +180,6 @@ class Organization extends Model
     }
 
     /**
-     * Get the filter based media sources for the organization
-     */
-    public function filterBasedMediaSources()
-    {
-        return $this->belongsToMany('App\Models\MediaSource', 'organization_media_sources')
-                    ->withPivot('h5p_library', 'lti_tool_settings_status', 'media_sources_show_status')
-                    ->withTimestamps()
-                    ->wherePivot('lti_tool_settings_status', true);
-    }
-
-    /**
      * Get organization IDs for the full tree (ancestors and children) of this org
      */
     public function getOrgTreeAttribute()

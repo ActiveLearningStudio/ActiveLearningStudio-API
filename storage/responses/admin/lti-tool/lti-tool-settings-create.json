@@ -3,18 +3,18 @@
     "data": {
         "user_id": "23",
         "organization_id": "1",
-        "tool_name": "Vimeo Sampled",
-        "tool_url": "https://vimeod.com",
+        "tool_name": "Kaltura Sampled",
+        "tool_url": "https://vimedod.com",
         "lti_version": "LTI-1p0",
-        "media_source_id": "6",
-        "tool_description": "Testing Vimeo API",
-        "tool_consumer_key": "fe62bf490718e403ab6b0e2926a2ce4ffbb11a16d",
-        "tool_secret_key": "8484fae8d7c0903f8deeda1f5bcbc0dad",
-        "tool_domain": "vimeod.com",
-        "tool_content_selection_url": "https://vimeod.com",
-        "updated_at": "2022-11-18T11:48:16.000000Z",
-        "created_at": "2022-11-18T11:48:16.000000Z",
-        "id": 37,
+        "tool_description": "Testing Kaltura API",
+        "tool_consumer_key": "fe62bf490718e403ab6b0e2926a2ce4ffbb11a16dd",
+        "tool_secret_key": "8484fae8d7c0903f8deeda1f5bcbc0dadd",
+        "lti_tool_type_id": "1",
+        "tool_domain": "vimedod.com",
+        "tool_content_selection_url": "https://vimedod.com",
+        "updated_at": "2023-03-03T10:04:15.000000Z",
+        "created_at": "2023-03-03T10:04:15.000000Z",
+        "id": 43,
         "user": {
             "id": 23,
             "name": "asim",
@@ -75,13 +75,17 @@
             "msteam_secret_id_expiry": null,
             "msteam_project_visibility": true,
             "msteam_playlist_visibility": false,
-            "msteam_activity_visibility": false
+            "msteam_activity_visibility": false,
+            "auto_approve": false,
+            "activity_title_text": "Title",
+            "activity_title_placeholder": "Give your layout a name...",
+            "h5p_reuse_option": true,
+            "h5p_embed_option": true
         },
-        "media_sources": {
-            "id": 6,
-            "name": "Vimeo",
-            "media_type": "Video",
-            "created_at": "2022-05-09T08:18:12.000000Z",
+        "lti_tool_type": {
+            "id": 1,
+            "name": "Kaltura",
+            "created_at": "2023-02-27T12:27:51.000000Z",
             "updated_at": null,
             "deleted_at": null
         }

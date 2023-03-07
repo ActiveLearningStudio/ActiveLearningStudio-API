@@ -23,6 +23,7 @@ use App\Repositories\LtiTool\LtiToolSettingInterface;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\LtiTool\KalturaAPISettingRequest;
 use App\Repositories\MediaSources\MediaSourcesInterface;
+use App\Models\LtiTool\LTIToolType;
 
 class KalturaGeneratedAPIClientController extends Controller
 {
@@ -31,7 +32,6 @@ class KalturaGeneratedAPIClientController extends Controller
     protected $kalturaMediaEntryFilter;
     protected $kalturaFilterPager;
     private $ltiToolSettingRepository;
-    private $mediaSourcesRepository;
 
     /**
      * KalturaGeneratedAPIClientController constructor.
@@ -41,11 +41,9 @@ class KalturaGeneratedAPIClientController extends Controller
      * @param KalturaMediaEntryFilter $kMEF
      * @param KalturaFilterPager $kFP
      * @param LtiToolSettingInterface $ltiToolSettingRepository
-     * @param MediaSourcesInterface $mediaSourcesRepository
      */
     public function __construct(KalturaConfiguration $kC, KalturaClient $kClient, KalturaMediaEntryFilter $kMEF,
-        KalturaFilterPager $kFP, LtiToolSettingInterface $ltiToolSettingRepository,
-        MediaSourcesInterface $mediaSourcesRepository
+        KalturaFilterPager $kFP, LtiToolSettingInterface $ltiToolSettingRepository
       )
     {
         $this->kalturaConfiguration = $kC;
@@ -53,7 +51,6 @@ class KalturaGeneratedAPIClientController extends Controller
         $this->kalturaMediaEntryFilter = $kMEF;
         $this->kalturaFilterPager = $kFP;
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
-        $this->mediaSourcesRepository = $mediaSourcesRepository;
     }
 
     /**
@@ -80,15 +77,11 @@ class KalturaGeneratedAPIClientController extends Controller
      */
     public function getMediaEntryList(KalturaAPISettingRequest $request)
     {
-      $getParam = $request->only([
-          'organization_id',
-          'pageSize',
-          'pageIndex',
-          'searchText'
-      ]);
+      $getParam = $request->all();
       $videoMediaSources = getVideoMediaSources();
-      $mediaSourcesId = $this->mediaSourcesRepository->getMediaSourceIdByName($videoMediaSources['kaltura']);
-      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByOrgAndToolType($getParam['organization_id'], $mediaSourcesId);
+      $ltiToolTypeRowRecord = LTIToolType::where('name', $videoMediaSources['kaltura'])->first();
+      $ltiToolTypeId = ( empty($ltiToolTypeRowRecord) ) ? 1 : $ltiToolTypeRowRecord->id;
+      $ltiRowResult = $this->ltiToolSettingRepository->getRowRecordByColumnMatch($getParam['organization_id'], $ltiToolTypeId);
       // Credentials For Kaltura Session
       if ($ltiRowResult) {
         $secret = $ltiRowResult->tool_secret_key;
