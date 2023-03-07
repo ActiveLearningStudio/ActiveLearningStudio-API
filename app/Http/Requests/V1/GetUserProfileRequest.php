@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetTokenViaCode extends FormRequest
+class GetUserProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +25,7 @@ class GetTokenViaCode extends FormRequest
     {
         return [
             'code' => 'required',
-            'classId' => 'required',
-            'assignmentId' => 'required',
-            'submissionId' => 'required',
-            'tenantId' => 'required',
+            'tenantId' => 'required'
         ];
     }
 }

@@ -108,6 +108,7 @@ class ExtractXAPIJSONController extends Controller
                 if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
                     // It maybe an old format statement. Just save verb, object and actor, and move on.
                     $inserted = $lrsStatementsRepository->create($insertData);
+                    \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script failed for some statements' . 'id = ' . $row->id);
                     continue;
                 }
 
