@@ -103,9 +103,7 @@ class OrganizationResource extends JsonResource
             'msteam_activity_visibility' => $this->msteam_activity_visibility,
             'auto_approve' => $this->auto_approve,
             'activity_title_text' => $this->activity_title_text,
-            'activity_title_placeholder' => $this->activity_title_placeholder,
-            'h5p_reuse_option' => $this->h5p_reuse_option,
-            'h5p_embed_option' => $this->h5p_embed_option
+            'activity_title_placeholder' => $this->activity_title_placeholder
         ];
     }
 }

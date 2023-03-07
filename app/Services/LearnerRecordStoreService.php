@@ -691,7 +691,7 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
         ];
         if (!empty($other)) {
             $attempt_pattern = "/\/activity\/(\d*)\/submission\/(.*)\/(\d*)/";
-            $class_pattern = "/\/(gclass|lti)\/(.*)/";
+            $class_pattern = "/\/(gclass|lti)\/(\d*)/";
             $matches = [];
             $class_matches = [];
             // Other regexes saved for later.

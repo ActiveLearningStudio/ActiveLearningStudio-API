@@ -54,9 +54,7 @@ class Organization extends Model
         'msteam_activity_visibility',
         'auto_approve',
         'activity_title_text',
-        'activity_title_placeholder',
-        'h5p_embed_option',
-        'h5p_reuse_option'
+        'activity_title_placeholder'
     ];
 
     /**

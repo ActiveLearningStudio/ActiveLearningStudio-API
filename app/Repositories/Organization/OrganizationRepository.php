@@ -780,7 +780,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             $organizationUsers = $organizationUsers->orderBy($data['order_by_column'], $orderByType);
         }
 
-        $organizationUsers = $organizationUsers->withCount([
+        return $organizationUsers->withCount([
             'projects' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
             },
@@ -790,17 +790,14 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
             'groups' => function ($query) use ($organization) {
                 $query->where('organization_id', $organization->id);
             }
-        ]);
-
-        if (isset($data['query']) && $data['query'] !== '') {
-            $organizationUsers = $organizationUsers->where(function ($query) use ($data) {
+        ])
+            ->when($data['query'] ?? null, function ($query) use ($data) {
                 $query->where('email', 'like', '%' . str_replace("_", "\_", strtolower($data['query'])) . '%');
                 $query->orWhere('first_name', 'iLike', '%' . $data['query'] . '%');
                 $query->orWhere('last_name', 'iLike', '%' . $data['query'] . '%');
-            });
-        }
-    
-        return $organizationUsers->paginate($perPage)->withQueryString();
+                return $query;
+            })
+            ->paginate($perPage)->withQueryString();
     }
 
     /**
