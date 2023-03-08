@@ -510,6 +510,10 @@ class GoogleClassroomController extends Controller
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user_data = null;
+        if($activity->activity_type !== config('constants.activity_type.independent') && $activity->playlist->project->organization) {
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $activity->playlist->project->organization->h5p_reuse_option;
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $activity->playlist->project->organization->h5p_embed_option;
+        }
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
 
         $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
