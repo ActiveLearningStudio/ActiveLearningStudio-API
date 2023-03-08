@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use App\Repositories\LtiTool\LtiToolType\LtiToolTypeInterface;
 
 /**
  * @authenticated
@@ -28,15 +29,18 @@ use Illuminate\View\View;
 class LtiToolSettingsController extends Controller
 {
     private $ltiToolSettingRepository;
+    protected $ltiToolTypeRepo;
 
     /**
      * LtiToolSettingsController constructor.
      *
      * @param LtiToolSettingInterface $ltiToolSettingRepository
+     * @param LtiToolTypeInterface $ltiToolTypeRepo
      */
-    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository)
+    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, LtiToolTypeInterface $ltiToolTypeRepo)
     {
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
+        $this->ltiToolTypeRepo = $ltiToolTypeRepo;
     }
 
     /**
@@ -80,7 +84,7 @@ class LtiToolSettingsController extends Controller
     public function show(Organization $suborganization, $id)
     {
         $setting = $this->ltiToolSettingRepository->find($id);
-        return new LtiToolSettingResource($setting->load('user', 'organization', 'mediaSources'));
+        return new LtiToolSettingResource($setting->load('user', 'organization', 'mediaSources', 'ltiToolType'));
     }
 
     /**
@@ -94,7 +98,7 @@ class LtiToolSettingsController extends Controller
      * @bodyParam tool_name string required LTI Tool Settings tool name Example: Kaltura API Integration
      * @bodyParam tool_url string required LTI Tool Settings tool url Example: https://4515783.kaf.kaltura.com
      * @bodyParam lti_version string required LTI Tool Settings lti version Example: LTI-1p0
-     * @bodyParam media_source_id int required Id of and video media sources Example: 3
+     * @bodyParam lti_tool_type_id int required Id of lti tool type Example: 1
      * @bodyParam tool_description string optional LTI Tool Settings description Example: Kaltura API Testing
      * @bodyParam tool_custom_parameter string optional LTI Tool Settings custom param Example: embed=true
      * @bodyParam tool_consumer_key string optional LTI Tool Settings consumer key Example: 4515783
@@ -116,24 +120,12 @@ class LtiToolSettingsController extends Controller
      */
     public function store(StoreLtiToolSettingRequest $request, Organization $suborganization)
     {
-        $data = $request->only([
-            'user_id',
-            'organization_id',
-            'tool_name',
-            'tool_url',
-            'lti_version',
-            'media_source_id',
-            'tool_description',
-            'tool_custom_parameter',
-            'tool_consumer_key',
-            'tool_secret_key',
-            'tool_content_selection_url'
-        ]);
+        $data = $request->all();
         $parse = parse_url($data['tool_url']);
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->create($data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources', 'ltiToolType'))], 200);
         
     }
 
@@ -149,7 +141,7 @@ class LtiToolSettingsController extends Controller
      * @bodyParam tool_name string required LTI Tool Settings tool name Example: Kaltura API Integration
      * @bodyParam tool_url string required LTI Tool Settings tool url Example: https://4515783.kaf.kaltura.com
      * @bodyParam lti_version string required LTI Tool Settings lti version Example: LTI-1p0
-     * @bodyParam media_source_id int required Id of and video media sources Example: 3
+     * @bodyParam lti_tool_type_id int required Id of lti tool type Example: 1
      * @bodyParam tool_description string optional LTI Tool Settings description Example: Kaltura API Testing
      * @bodyParam tool_custom_parameter string optional LTI Tool Settings custom param Example: embed=true
      * @bodyParam tool_consumer_key string optional LTI Tool Settings consumer key Example: 4515783
@@ -166,24 +158,12 @@ class LtiToolSettingsController extends Controller
      */
     public function update(UpdateLtiToolSettingRequest $request, Organization $suborganization, $id)
     {
-        $data = $request->only([
-            'user_id',
-            'organization_id',
-            'tool_name',
-            'tool_url',
-            'lti_version',
-            'media_source_id',
-            'tool_description',
-            'tool_custom_parameter',
-            'tool_consumer_key',
-            'tool_secret_key',
-            'tool_content_selection_url'
-        ]);
+        $data = $request->all();
         $parse = parse_url($data['tool_url']);
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->update($id, $data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('user', 'organization', 'mediaSources', 'ltiToolType'))], 200);
     }
 
     /**
@@ -207,19 +187,15 @@ class LtiToolSettingsController extends Controller
     /**
      * Get LTI Tool Type List
      *
-     * Get filter based media sources list for specified suborganization.
+     * Get lti tool type list from lti_tool_type table.
      *
-     * @urlParam suborganization required The Id of a suborganization Example: 1
-     *
-     * @responseFile responses/organization/filter-media-source.json
-     *
-     * @param Organization $suborganization
+     * @responseFile 200 responses/admin/lti-tool/lti-tool-type-list.json
      * 
      * @return LtiToolSettingResource
      */
-    public function getLTIToolTypeList(Organization $suborganization)
+    public function getLtiToolTypeList()
     {
-        $ltiToolType = $suborganization->filterBasedMediaSources->where('media_type', 'Video');
+        $ltiToolType = $this->ltiToolTypeRepo->all();
         return new LtiToolSettingResource($ltiToolType);
     }
 }

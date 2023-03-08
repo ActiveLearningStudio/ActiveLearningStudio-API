@@ -32,7 +32,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        $query = $this->model->with(['user', 'organization', 'mediaSources']);
+        $query = $this->model->with(['user', 'organization', 'mediaSources', 'ltiToolType']);
         if (isset($data['query']) && $data['query'] !== '') {
             $query->where(function ($query) use ($data) {
                 $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');
@@ -48,7 +48,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
         }
 
         if (isset($data['filter']) && $data['filter'] > 0) {
-            $query = $query->whereHas('mediaSources', function ($qry) use ($data) {
+            $query = $query->whereHas('ltiToolType', function ($qry) use ($data) {
                 $qry->where('id', $data['filter']);
             });
         }
@@ -130,6 +130,23 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     {
         try {            
             return $this->model->where([['organization_id','=', $orgId],['media_source_id','=', $mediaSourcesId]])->first();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+    }
+
+    /**
+     * To get row record by org and lti_tool_type_id match
+     *
+     * @param $orgId integer
+     * @param $ltiToolTypeId int
+     * @return object
+     * @throws GeneralException
+     */
+    public function getRowRecordByColumnMatch($orgId, $ltiToolTypeId)
+    {
+        try {            
+            return $this->model->where([['organization_id','=', $orgId],['lti_tool_type_id','=', $ltiToolTypeId]])->first();
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
