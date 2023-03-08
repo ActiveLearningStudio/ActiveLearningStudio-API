@@ -338,6 +338,10 @@ class H5pController extends Controller
         $embed = $h5p->get_embed($content, $settings);
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
+        if($activity->playlist->project->organization) {
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $activity->playlist->project->organization->h5p_reuse_option;
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $activity->playlist->project->organization->h5p_embed_option;
+        }
         $user = Auth::user();
 
         if ($user && is_null($visibility)) {
@@ -395,6 +399,10 @@ class H5pController extends Controller
         $embed = $h5p->get_embed($content, $settings);
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
+        if($independent_activity->organization_id) {
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity->organization->h5p_reuse_option;
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity->organization->h5p_embed_option;
+        }
         $user = Auth::user();
 
         if ($user && is_null($visibility)) {
