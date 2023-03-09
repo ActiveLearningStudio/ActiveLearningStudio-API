@@ -510,9 +510,14 @@ class GoogleClassroomController extends Controller
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
         $user_data = null;
-        if($activity->activity_type !== config('constants.activity_type.independent') && $activity->playlist->project->organization) {
+        if ($activity->activity_type !== config('constants.activity_type.independent') && $activity->playlist->project->organization) {
             $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $activity->playlist->project->organization->h5p_reuse_option;
             $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $activity->playlist->project->organization->h5p_embed_option;
+        }
+        else if ($activity->activity_type == config('constants.activity_type.independent')) {
+            $independent_activity_data = $this->independentActivityRepository->find($activity->id);
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity_data->organization->h5p_reuse_option;
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity_data->organization->h5p_embed_option;
         }
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
 
