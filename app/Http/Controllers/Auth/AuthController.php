@@ -764,8 +764,8 @@ class AuthController extends Controller
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function($query) use ($result) {
-                $query->where('lti_client_id', $result['lti_client_id']);
+            $user = User::with(['lmssettingViaEmail' => function($query) use ($result) {
+                $query->where('lti_client_id', $result['lti_client_id'])->latest('created_at')->take(1);
             }])->where('email', 'ilike', $result['email'])->first();
 
             if (!$user) {
@@ -889,8 +889,8 @@ class AuthController extends Controller
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function($query) use ($result) {
-                $query->where('lms_access_key', $result['oauth_consumer_key']);
+            $user = User::with(['lmssettingViaEmail' => function($query) use ($result) {
+                $query->where('lms_access_key', $result['oauth_consumer_key'])->latest('created_at')->take(1);
             }])->where('email', 'ilike', $result['user_email'])->first();
 
             if (!$user) {
