@@ -114,8 +114,8 @@ class MicroSoftTeamController extends Controller
     /**
 	 * get access_token using code
 	 *
-     * @bodyParam request contains classId, assignmentId, submissionId
-     *
+     * @bodyParam request Contains classId, assignmentId, submissionId
+     * 
      * @response {
      *   "message": "Token fetched successfully."
      * }
@@ -126,7 +126,7 @@ class MicroSoftTeamController extends Controller
      *   ]
      * }
      *
-     * @param Request $request
+     * @param GetTokenViaCode $request
      * @return Response
 	 */
     public function getAccessTokenViaCode(GetTokenViaCode $request)
@@ -162,8 +162,8 @@ class MicroSoftTeamController extends Controller
     /**
 	 * Submit assignment
 	 *
-     * @bodyParam request contains classId, assignmentId, submissionId
-     *
+     * @bodyParam request Contains classId, assignmentId, submissionId
+     * 
      * @response {
      *   "message": "Turned in successfully."
      * }
@@ -256,12 +256,14 @@ class MicroSoftTeamController extends Controller
      *
      * Get User profile of Microsoft Team
      * 
-     * @bodyParam token required string
-     * @bodyParam tenantId string
+     * @bodyParam code required
+     * @bodyParam tenantId required
      * 
      * @response  200 {
      *   "user": Array
      * }
+     * 
+     * @param GetUserProfileRequest $request
      * @return Response
      */
     public function getUserPofile(GetUserProfileRequest $request)
