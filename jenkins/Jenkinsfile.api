@@ -30,6 +30,7 @@ node("currikidev") {
         }
     }
 
+
     /*stage('Deploy Helm') {	
         echo 'Copy'
         sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
@@ -40,6 +41,7 @@ node("currikidev") {
 """
         sh 'helm upgrade --install curriki charts/curriki --namespace staging --kubeconfig $(pwd config)/kubeconfig'
     }*/
+
     
 
     

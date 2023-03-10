@@ -898,7 +898,7 @@ class AuthController extends Controller
                 $user = $this->userRepository->create([
                     'first_name' => $result['first_name'],
                     'last_name' => $result['last_name'],
-                    'email' => $result['user_email'],
+                    'email' => strtolower($result['user_email']),
                     'password' => Hash::make($password),
                     'remember_token' => Str::random(64),
                     'email_verified_at' => now(),
@@ -913,7 +913,7 @@ class AuthController extends Controller
                     }
 
                     $default_lms_setting = $default_lms_setting->toArray();
-                    $default_lms_setting['lms_login_id'] = $user['user_email'];
+                    $default_lms_setting['lms_login_id'] = strtolower($user['user_email']);
                     $user->lmssetting()->create($default_lms_setting);
 
                     $user->ssoLogin()->create([
@@ -949,7 +949,7 @@ class AuthController extends Controller
                         ], 404);
                     }
                     $default_lms_setting = $default_lms_setting->toArray();
-                    $default_lms_setting['lms_login_id'] = $user['user_email'];
+                    $default_lms_setting['lms_login_id'] = strtolower($user['user_email']);
                     $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
 
                     $organization = $this->organizationRepository->find($newly_created_setting->id);

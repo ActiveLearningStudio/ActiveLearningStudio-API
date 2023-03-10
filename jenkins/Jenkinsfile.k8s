@@ -7,12 +7,10 @@ node("currikidev") {
     env.H5P_BRANCH = ''
     if(env.BRANCH_NAME == "develop") {
         env.H5P_BRANCH = 'develop'
-        env.TAG = 'develop'
     } else if(env.BRANCH_NAME == "staging") {
         env.H5P_BRANCH = 'staging'
     } else if(env.BRANCH_NAME == "master") {
         env.H5P_BRANCH = 'master'
-        env.TAG = 'prod'
     } 
     
     stage('Clone repository') {      
@@ -21,7 +19,7 @@ node("currikidev") {
         checkout scm    
     }  
     stage('Build image') {  
-            app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1 .")
+            app = docker.build("quay.io/curriki/api:${env.BUILD_NUMBER}", "-f Dockerfile.8.1-php-fpm .")
             cron = docker.build("quay.io/curriki/cron:${env.BUILD_NUMBER}", "-f Dockerfile.cron.8.1  --build-arg H5PBRANCH=${env.H5P_BRANCH} .")
         } 
 
@@ -52,7 +50,7 @@ node("currikidev") {
             }
             sh 'curl https://raw.githubusercontent.com/helm/helm/v3.7.0/scripts/get-helm-3 | DESIRED_VERSION="v3.7.0" bash'
             
-            sh 'helm upgrade --install curriki charts/curriki -f charts/prod.yaml --namespace prod --kubeconfig $(pwd)/kconfig'
+            sh 'helm upgrade --install curriki charts/curriki -f charts/staging.yaml --namespace staging --kubeconfig $(pwd)/kconfig'
             
 
         }
