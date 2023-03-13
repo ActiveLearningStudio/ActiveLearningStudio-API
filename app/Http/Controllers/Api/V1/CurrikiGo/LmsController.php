@@ -213,11 +213,13 @@ class LmsController extends Controller
     {
         $verifyValidCall = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->pluck('organization_id');
         if ($verifyValidCall) {
-            $user = User::where('email', $request->input('user_email'))->first();
-            $teams = TeamResource::collection($user->teamsWithOrgs($verifyValidCall)->get());
+            $user = User::where('email', 'ilike', $request->user_email)->first();
+            if ($user) {
+                $teams = TeamResource::collection($user->teamsWithOrgs($verifyValidCall)->get());
+            }
 
             return response([
-                'teams' => $teams,
+                'teams' => $teams ?? ['Could not find any Team Projects. Please try again later.'],
             ], 200);
         }
         return response([
