@@ -249,7 +249,7 @@ class LmsController extends Controller
         $settings = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email);
         $orgs = $settings->pluck('organization_id');
         $user = $settings->first();
-        if ($orgs) {
+        if ($orgs && $user) {
             return IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->user_id, $orgs));
         }
 
