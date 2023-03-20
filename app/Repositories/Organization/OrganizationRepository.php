@@ -932,7 +932,7 @@ class OrganizationRepository extends BaseRepository implements OrganizationRepos
     {
         return $this->model
             ->when($data['query'] ?? null, function ($query) use ($data) {
-                $query->where('name', 'like', '%' . $data['query'] . '%');
+                $query->where('name', 'ilike', '%' . $data['query'] . '%');
                 return $query;
             })
             ->get();
