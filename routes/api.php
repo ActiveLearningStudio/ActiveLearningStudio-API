@@ -34,6 +34,7 @@ Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 Route::get('microsoft-team/get-access-token', 'Api\V1\MicroSoftTeamController@getAccessToken');
 Route::get('microsoft-team/get-access-token-via-code', 'Api\V1\MicroSoftTeamController@getAccessTokenViaCode');
+Route::get('microsoft-team/get-submission-status', 'Api\V1\MicroSoftTeamController@getSubmissionStatus');
 Route::get('microsoft-team/get-user-profile', 'Api\V1\MicroSoftTeamController@getUserPofile');
 Route::post('microsoft-team/submit-assignment', 'Api\V1\MicroSoftTeamController@submitAssignment');
 
