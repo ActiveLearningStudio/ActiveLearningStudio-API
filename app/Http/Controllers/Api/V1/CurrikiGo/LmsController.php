@@ -213,11 +213,13 @@ class LmsController extends Controller
     {
         $verifyValidCall = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->pluck('organization_id');
         if ($verifyValidCall) {
-            $user = User::where('email', $request->input('user_email'))->first();
-            $teams = TeamResource::collection($user->teamsWithOrgs($verifyValidCall)->get());
+            $user = User::where('email', 'ilike', $request->user_email)->first();
+            if ($user) {
+                $teams = TeamResource::collection($user->teamsWithOrgs($verifyValidCall)->get());
+            }
 
             return response([
-                'teams' => $teams,
+                'teams' => $teams ?? ['Could not find any Team Projects. Please try again later.'],
             ], 200);
         }
         return response([
@@ -246,11 +248,13 @@ class LmsController extends Controller
      */
     public function independentActivities(IndependentActivityForDeeplink $request)
     {
-        $orgs = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email)->pluck('organization_id');
-        $user = User::where('email', strtolower($request->user_email))->first();
-        if($user){
-            return IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->id, $orgs));
+        $settings = LmsSetting::where('lti_client_id', $request->lti_client_id)->where('lms_login_id', 'ilike', $request->user_email);
+        $orgs = $settings->pluck('organization_id');
+        $user = $settings->first();
+        if ($orgs) {
+            return IndependentActivityResource::collection($this->independentActivityRepository->independentActivities($request, $user->user_id, $orgs));
         }
+
         return response([
             'data' => ['Could not find any independent activity. Please try again later.'],
         ], 400);

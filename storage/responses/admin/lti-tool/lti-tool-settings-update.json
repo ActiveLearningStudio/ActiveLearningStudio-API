@@ -1,15 +1,15 @@
 {
     "message": "Lti tool setting updated successfully!",
     "data": {
-        "id": 37,
+        "id": 43,
         "user_id": 23,
         "organization_id": 1,
-        "tool_name": "Vimeo Test",
-        "tool_url": "https://vimeode.com",
-        "tool_domain": "vimeode.com",
+        "tool_name": "Kaltura Test",
+        "tool_url": "https://ks.com",
+        "tool_domain": "ks.com",
         "lti_version": "LTI-1p0",
-        "tool_consumer_key": "fe62bf490718e403ab6b0e2926a2ce4ffbb11a16d",
-        "tool_secret_key": "8484fae8d7c0903f8deeda1f5bcbc0dad",
+        "tool_consumer_key": "test",
+        "tool_secret_key": "test",
         "tool_description": "Testing Vimeo API",
         "tool_custom_parameter": null,
         "tool_content_selection_url": "https://vimeod.com",
@@ -18,10 +18,11 @@
         "tool_enabled_capability": null,
         "tool_icon": null,
         "tool_secure_icon": null,
-        "created_at": "2022-11-18T11:48:16.000000Z",
-        "updated_at": "2022-11-18T11:50:16.000000Z",
+        "created_at": "2023-03-03T10:04:15.000000Z",
+        "updated_at": "2023-03-03T10:06:55.000000Z",
         "deleted_at": null,
-        "media_source_id": 3,
+        "media_source_id": null,
+        "lti_tool_type_id": 1,
         "user": {
             "id": 23,
             "name": "asim",
@@ -82,13 +83,17 @@
             "msteam_secret_id_expiry": null,
             "msteam_project_visibility": true,
             "msteam_playlist_visibility": false,
-            "msteam_activity_visibility": false
+            "msteam_activity_visibility": false,
+            "auto_approve": false,
+            "activity_title_text": "Title",
+            "activity_title_placeholder": "Give your layout a name...",
+            "h5p_reuse_option": true,
+            "h5p_embed_option": true
         },
-        "media_sources": {
-            "id": 3,
+        "lti_tool_type": {
+            "id": 1,
             "name": "Kaltura",
-            "media_type": "Video",
-            "created_at": "2022-05-09T08:18:12.000000Z",
+            "created_at": "2023-02-27T12:27:51.000000Z",
             "updated_at": null,
             "deleted_at": null
         }

@@ -63,7 +63,9 @@ class SuborganizationUpdate extends FormRequest
             'secondary_font_family' => 'string|nullable|max:255',
             'auto_approve' => 'boolean|nullable',
             'activity_title_text' => 'string|nullable|max:255',
-            'activity_title_placeholder' => 'string|nullable|max:255'
+            'activity_title_placeholder' => 'string|nullable|max:255',
+            'h5p_embed_option' => 'boolean|nullable',
+            'h5p_reuse_option' => 'boolean|nullable'
         ];
     }
 

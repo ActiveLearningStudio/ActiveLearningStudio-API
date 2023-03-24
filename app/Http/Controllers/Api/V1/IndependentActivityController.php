@@ -653,7 +653,10 @@ class IndependentActivityController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
         $user_data = $user->only(['id', 'name', 'email']);
-
+        if($independent_activity->organization_id) {
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity->organization->h5p_reuse_option;
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity->organization->h5p_embed_option;
+        }
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         return response([
             'independent-activity' => new H5pIndependentActivityResource($independent_activity, $h5p_data)
@@ -676,6 +679,10 @@ class IndependentActivityController extends Controller
         $embed = $h5p->get_embed($content, $settings);
         $embed_code = $embed['embed'];
         $settings = $embed['settings'];
+        if($independent_activity->organization_id) {
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity->organization->h5p_reuse_option;
+            $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity->organization->h5p_embed_option;
+        }
         $user = Auth::user();
 
         // create event dispatch
@@ -754,6 +761,10 @@ class IndependentActivityController extends Controller
             $embed_code = $embed['embed'];
             $settings = $embed['settings'];
             $user_data = null;
+            if($independent_activity->organization_id) {
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity->organization->h5p_reuse_option;
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity->organization->h5p_embed_option;
+            }
             $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
         }
 
@@ -804,6 +815,10 @@ class IndependentActivityController extends Controller
             $embed_code = $embed['embed'];
             $settings = $embed['settings'];
             $user_data = null;
+            if($independent_activity->organization_id) {
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['export'] = $independent_activity->organization->h5p_reuse_option;
+                $settings['contents']['cid-' . $content['id']]['displayOptions']['embed'] = $independent_activity->organization->h5p_embed_option;
+            }
             $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
 
             return response([
