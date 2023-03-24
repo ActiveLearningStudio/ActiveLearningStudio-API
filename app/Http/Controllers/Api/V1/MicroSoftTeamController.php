@@ -9,6 +9,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\GetTokenViaCode;
 use App\Http\Requests\V1\GetUserProfileRequest;
+use App\Http\Requests\V1\GetMsteamsSubmissionStatusRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
@@ -114,8 +115,8 @@ class MicroSoftTeamController extends Controller
     /**
 	 * get access_token using code
 	 *
-     * @bodyParam request contains classId, assignmentId, submissionId
-     *
+     * @bodyParam request contains code
+     * 
      * @response {
      *   "message": "Token fetched successfully."
      * }
@@ -134,28 +135,53 @@ class MicroSoftTeamController extends Controller
         $accessToken = $this->microsoftTeamRepository->getTokenViaCode($request);
 
         if ($accessToken && array_key_exists('access_token', $accessToken)) {
-            $request['token'] = $accessToken['access_token'];
-            $getSubmission = $this->microsoftTeamRepository->getSubmission($request);
-
-            if ($getSubmission && array_key_exists('status', $getSubmission)) {
-                return response([
-                    'status_code' => 200,
-                    'message' => 'Token fetched successfully.',
-                    'access_token' => $accessToken['access_token'],
-                    'assignment_submission' => $getSubmission,
-                    'refresh_token' => $accessToken['refresh_token']
-                ], 200);
-            }
-
             return response([
-                'status_code' => 424,
-                'errors' => $getSubmission['error'],
-            ], 500);
+                'status_code' => 200,
+                'message' => 'Token fetched successfully.',
+                'access_token' => $accessToken['access_token'],
+                'refresh_token' => $accessToken['refresh_token']
+            ], 200);
         }
         return response([
             'status_code' => 424,
             'errors' => $accessToken['error'],
             'message' => $accessToken['error_description']
+        ], 500);
+    }
+
+    /**
+     * get the status of an msteams submission
+     *
+     * @bodyParam request contains token, classId, assignmentId, submissionId
+     * 
+     * @response {
+     *   "message": "Submission status fetched",
+     *   "submission": {}
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Invalid grant."
+     *   ]
+     * }
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function getSubmissionStatus(GetMsteamsSubmissionStatusRequest $request) {
+        $submission = $this->microsoftTeamRepository->getSubmission($request);
+
+        if ($submission && array_key_exists('status', $submission)) {
+            return response([
+                'status_code' => 200,
+                'message' => 'Submission status fetched',
+                'submission' => $submission,
+            ], 200);
+        }
+
+        return response([
+            'status_code' => 424,
+            'errors' => $submission['error'],
         ], 500);
     }
 
