@@ -53,6 +53,7 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
         $this->loginUrl = config('ms-team-configs.oauth_url');
         $this->apiURL = $this->loginUrl . '/' . $this->tenantId . '/oauth2/v2.0/token';
         $this->landingUrl = config('ms-team-configs.landing_url');
+        $this->callbackUrl = config('app.front_end_url').'/msteams/callback';
     }
 
     /**
@@ -89,21 +90,20 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
      */
     public function getTokenViaCode($request)
     {
-        $apiURL = $this->loginUrl . '/' . $request->tenantId . '/oauth2/v2.0/token';
         $postInput = [
             'grant_type' => 'authorization_code',
             'client_id' => $this->clientId,
             'client_secret' => $this->secretId,
             'code' => $request->code,
             'scope' => config('ms-team-configs.scope_for_token'),
-            
+            'redirect_uri' => $this->callbackUrl,
         ];
         
         $headers = [
             'X-header' => 'value'
         ];
 
-        $response = Http::asForm()->withOptions(["verify"=>false])->post($apiURL, $postInput);
+        $response = Http::asForm()->withOptions(["verify"=>false])->post($this->apiURL, $postInput);
 
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
