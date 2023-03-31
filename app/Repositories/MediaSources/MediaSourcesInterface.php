@@ -13,4 +13,12 @@ interface MediaSourcesInterface extends EloquentRepositoryInterface
      * @return int
      */
     public function getMediaSourceIdByName($mediaSourceName);
+
+    /**
+     * To get media sources by type
+     *
+     * @param $mediaSourceName string
+     * @return object
+     */
+    public function getMediaSourcesByType($mediaSourceType);
 }

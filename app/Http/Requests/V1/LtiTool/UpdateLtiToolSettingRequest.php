@@ -35,7 +35,7 @@ class UpdateLtiToolSettingRequest extends FormRequest
             'tool_name' => 'required|string|max:255|unique:lti_tool_settings,tool_name, ' . $id . ' ,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_url' => 'required|url|max:255|unique:lti_tool_settings,tool_url, ' . $id . ' ,id,deleted_at,NULL,organization_id,' . $orgId,
             'lti_version' => 'required|max:20',
-            'lti_tool_type_id' => 'required|exists:lti_tool_type,id|unique:lti_tool_settings,lti_tool_type_id, ' . $id . ' ,id,deleted_at,NULL,organization_id,' . $orgId,
+            'media_source_id' => 'required|exists:media_sources,id|unique:lti_tool_settings,media_source_id, ' . $id . ' ,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_consumer_key' => 'nullable|string|max:255|unique:lti_tool_settings,tool_consumer_key, ' . $id . ' ,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_secret_key' => 'required_with:tool_consumer_key|max:255|unique:lti_tool_settings,tool_secret_key, ' . $id . ' ,id,deleted_at,NULL,organization_id,' . $orgId,
             'tool_content_selection_url' => 'nullable|url|max:255',
@@ -52,9 +52,9 @@ class UpdateLtiToolSettingRequest extends FormRequest
     public function messages()
     {
         return [
-            'lti_tool_type_id.required' => 'The Tool Type field is required.',
-            'lti_tool_type_id.exists' => 'The selected Tool Type is invalid.',
-            'lti_tool_type_id.unique' => 'The Tool Type has already been taken.'
+            'media_source_id.required' => 'The Tool Type field is required.',
+            'media_source_id.exists' => 'The selected Tool Type is invalid.',
+            'media_source_id.unique' => 'The Tool Type has already been taken.'
         ];
     }
 }
