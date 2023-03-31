@@ -17,7 +17,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
-use App\Repositories\LtiTool\LtiToolType\LtiToolTypeInterface;
+use App\Repositories\MediaSources\MediaSourcesInterface;
 
 /**
  * @authenticated
@@ -29,18 +29,18 @@ use App\Repositories\LtiTool\LtiToolType\LtiToolTypeInterface;
 class LtiToolSettingsController extends Controller
 {
     private $ltiToolSettingRepository;
-    protected $ltiToolTypeRepo;
+    protected $mediaSourceRepo;
 
     /**
      * LtiToolSettingsController constructor.
      *
      * @param LtiToolSettingInterface $ltiToolSettingRepository
-     * @param LtiToolTypeInterface $ltiToolTypeRepo
+     * @param MediaSourcesInterface $mediaSourceRepo
      */
-    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, LtiToolTypeInterface $ltiToolTypeRepo)
+    public function __construct(LtiToolSettingInterface $ltiToolSettingRepository, MediaSourcesInterface $mediaSourceRepo)
     {
         $this->ltiToolSettingRepository = $ltiToolSettingRepository;
-        $this->ltiToolTypeRepo = $ltiToolTypeRepo;
+        $this->mediaSourceRepo = $mediaSourceRepo;
     }
 
     /**
@@ -84,7 +84,7 @@ class LtiToolSettingsController extends Controller
     public function show(Organization $suborganization, $id)
     {
         $setting = $this->ltiToolSettingRepository->find($id);
-        return new LtiToolSettingResource($setting->load('organization', 'mediaSources', 'ltiToolType'));
+        return new LtiToolSettingResource($setting->load('organization', 'mediaSources'));
     }
 
     /**
@@ -125,7 +125,7 @@ class LtiToolSettingsController extends Controller
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->create($data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('organization', 'mediaSources', 'ltiToolType'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('organization', 'mediaSources'))], 200);
         
     }
 
@@ -163,7 +163,7 @@ class LtiToolSettingsController extends Controller
         $data['tool_domain'] = $parse['host'];
         $data['tool_content_selection_url'] = (isset($data['tool_content_selection_url']) && $data['tool_content_selection_url'] != '') ? $data['tool_content_selection_url'] : $data['tool_url'];
         $response = $this->ltiToolSettingRepository->update($id, $data);
-        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('organization', 'mediaSources', 'ltiToolType'))], 200);
+        return response(['message' => $response['message'], 'data' => new LtiToolSettingResource($response['data']->load('organization', 'mediaSources'))], 200);
     }
 
     /**
@@ -195,7 +195,7 @@ class LtiToolSettingsController extends Controller
      */
     public function getLtiToolTypeList()
     {
-        $ltiToolType = $this->ltiToolTypeRepo->all();
-        return new LtiToolSettingResource($ltiToolType);
+        $videoMediaSource = $this->mediaSourceRepo->getMediaSourcesByType('Video');
+        return new LtiToolSettingResource($videoMediaSource);
     }
 }

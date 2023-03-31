@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 use App\Models\MediaSource;
-use App\Models\LtiTool\LtiToolType;
 
 class LtiToolSetting extends Model
 {
@@ -37,8 +36,7 @@ class LtiToolSetting extends Model
         'tool_enabled_capability',
         'tool_icon',
         'tool_secure_icon',
-        'media_source_id',
-        'lti_tool_type_id'
+        'media_source_id'
     ];
 
     /** 
@@ -71,16 +69,6 @@ class LtiToolSetting extends Model
     public function mediaSources()
     {
         return $this->belongsTo(MediaSource::class, 'media_source_id', 'id');
-    }
-
-    /** 
-    * @author        Asim Sarwar
-    * Detail         Define belongs to relationship with lti_tool_type table,
-    * @return        Relationship
-    */
-    public function ltiToolType()
-    {
-        return $this->belongsTo(LtiToolType::class, 'lti_tool_type_id', 'id');
     }   
 
 }
