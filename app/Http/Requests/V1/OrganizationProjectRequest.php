@@ -25,7 +25,7 @@ class OrganizationProjectRequest extends FormRequest
     {
         return [
             'query' => 'string',
-            'indexing' => 'in:0,1,2,3',
+            'indexing' => 'in:0,1,2,3,null',
             'exclude_starter' => 'in:true',
             'starter_project' => 'in:true,false',
             'shared' => 'boolean',

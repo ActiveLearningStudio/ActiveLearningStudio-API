@@ -485,7 +485,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // if specific index projects requested
         if (isset($data['indexing']) && $data['indexing'] !== '0') {
-            $query = $query->where('indexing', $data['indexing']);
+            if ($data['indexing'] === 'null') {
+                $query = $query->whereNull('indexing');
+            } else {
+                $query = $query->where('indexing', $data['indexing']);
+            }
         }
 
         // if starter projects requested
