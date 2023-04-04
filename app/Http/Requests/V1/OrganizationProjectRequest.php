@@ -26,6 +26,7 @@ class OrganizationProjectRequest extends FormRequest
         return [
             'query' => 'string',
             'indexing' => 'in:0,1,2,3,null',
+            'visibility' => 'int|exists:organization_visibility_types,id,id,!' . (int)config('constants.protected-organization-visibility-type-id'),
             'exclude_starter' => 'in:true',
             'starter_project' => 'in:true,false',
             'shared' => 'boolean',

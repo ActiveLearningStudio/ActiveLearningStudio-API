@@ -574,6 +574,11 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             }
         }
 
+        // if specific visibility independent activities requested
+        if (isset($data['visibility'])) {
+            $query = $query->where('organization_visibility_type_id', $data['visibility']);
+        }
+
         // filter by author
         if (isset($data['author_id'])) {
             $query = $query->where(function($qry) use ($data) {

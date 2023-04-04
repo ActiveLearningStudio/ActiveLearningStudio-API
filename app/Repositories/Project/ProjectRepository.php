@@ -492,6 +492,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }
         }
 
+        // if specific visibility projects requested
+        if (isset($data['visibility'])) {
+            $query = $query->where('organization_visibility_type_id', $data['visibility']);
+        }
+
         // if starter projects requested
         if (isset($data['starter_project'])) {
             $query = $query->where('starter_project', $data['starter_project']);

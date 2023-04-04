@@ -111,6 +111,7 @@ class IndependentActivityController extends Controller
      * @urlParam suborganization required The Id of a suborganization Example: 1
      * @bodyParam query string Query to search independent activity against Example: Video
      * @bodyParam indexing string Indexing status of the independent activity Example: 1
+     * @bodyParam visibility integer Visibility status of the independent activity Example: 1
      * @bodyParam size integer Size to show per page records Example: 10
      * @bodyParam order_by_column string To sort data with specific column Example: title
      * @bodyParam order_by_type string To sort data in ascending or descending order Example: asc
