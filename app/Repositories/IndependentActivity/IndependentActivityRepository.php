@@ -567,7 +567,11 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
         // if specific index independent activities requested
         if (isset($data['indexing']) && $data['indexing'] !== '0') {
-            $query = $query->where('indexing', $data['indexing']);
+            if ($data['indexing'] === 'null') {
+                $query = $query->whereNull('indexing');
+            } else {
+                $query = $query->where('indexing', $data['indexing']);
+            }
         }
 
         // filter by author
