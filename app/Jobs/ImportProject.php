@@ -16,7 +16,7 @@ class ImportProject implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-     /**
+    /**
      * @var User
      */
     protected $user;
@@ -25,7 +25,7 @@ class ImportProject implements ShouldQueue
      * @var 
      */
     protected $path;
-    
+
     /**
      * @var
      */
@@ -51,9 +51,10 @@ class ImportProject implements ShouldQueue
     public function handle(ProjectRepositoryInterface $projectRepository)
     {
         try {
-            $projectName = $projectRepository->importProject($this->user, $this->path, $this->organization_id);
+            $importProject = $projectRepository->importProject($this->user, $this->path, $this->organization_id);
+
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
-            $this->user->notify(new ProjectImportNotification($userName, $projectName));
+            $this->user->notify(new ProjectImportNotification($userName, $importProject));
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
         }
