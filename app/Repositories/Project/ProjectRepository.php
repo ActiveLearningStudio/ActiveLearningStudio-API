@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\App;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\V1\ActivityResource;
+use App\Models\Subject;
+use App\Models\EducationLevel;
+use App\Models\AuthorTag;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -762,6 +765,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function importProject($authUser, $path, $suborganization_id, $method_source = "API")
     {
+
         try {
 
             $zip = new ZipArchive;
@@ -776,6 +780,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 $zip->extractTo(storage_path($extracted_folder_name . '/'));
                 $zip->close();
             } else {
+
                 $return_res = [
                     "success" => false,
                     "message" => "Unable to import Project."
@@ -783,6 +788,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 return json_encode($return_res);
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
+
                 if (file_exists(storage_path($extracted_folder_name . '/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name . '/project.json'));
 
@@ -816,6 +822,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                         }
                     }
 
+                    $isMetaDataImported = $this->checkProjectMetaData($extracted_folder_name, $suborganization_id);
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
 
                     if ($method_source !== "command") {
@@ -830,14 +837,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                         return json_encode($return_res);
                     }
 
-                    return $project['name'];
+                    return [
+                        'name' => $project['name'],
+                        'isMetaDataImported' => $isMetaDataImported
+                    ];
                 }
             });
 
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage());
+            Log::error($e);
             \Sentry\captureException($e);
             if ($method_source === "command") {
                 $return_res = [
@@ -1149,5 +1159,89 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
 
         return $query->paginate($data['size'])->withQueryString();
+    }
+
+    /**
+     * Check Missing Meta data
+     *
+     * @param $extracted_folder_name
+     * @param $projectOrganizationId
+     * @return response
+     */
+    private function checkProjectMetaData($extracted_folder_name, $projectOrganizationId)
+    {
+
+        if (file_exists(storage_path($extracted_folder_name . '/playlists'))) {
+            $playlist_directories = scandir(storage_path($extracted_folder_name . '/playlists'));
+
+            for ($i = 0; $i < count($playlist_directories); $i++) { // loop through all playlists
+                if ($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..')
+                    continue;
+
+                $playlist_dir = $playlist_directories[$i];
+                if (file_exists(storage_path($extracted_folder_name . '/playlists/' . $playlist_directories[$i] . '/activities/'))) {
+                    $activitity_directories = scandir(storage_path($extracted_folder_name . '/playlists/' . $playlist_directories[$i] . '/activities/'));
+
+                    for ($j = 0; $j < count($activitity_directories); $j++) { // loop through all activities
+                        if ($activitity_directories[$j] == '.' || $activitity_directories[$j] == '..')
+                            continue;
+
+                        $activity_dir = $activitity_directories[$j];
+                        $activitySubjectPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir .
+                            '/activities/' . $activity_dir . '/activity_subject.json');
+                        if (file_exists($activitySubjectPath)) {
+                            $subjectContent = file_get_contents($activitySubjectPath);
+                            $subjects = json_decode($subjectContent, true);
+
+                            foreach ($subjects as $subject) {
+
+                                $recSubject = Subject::where(['name' => $subject['name'], 'organization_id' => $projectOrganizationId])->first();
+
+                                if (empty($recSubject)) {
+                                    return 404;
+                                }
+
+                            }
+                        }
+
+                        // check Activity Education-Level
+
+                        $activtyEducationPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir . '/activities/' .
+                            $activity_dir . '/activity_education_level.json');
+                        if (file_exists($activtyEducationPath)) {
+                            $educationLevelContent = file_get_contents($activtyEducationPath);
+                            $educationLevels = json_decode($educationLevelContent, true);
+
+                            foreach ($educationLevels as $educationLevel) {
+
+                                $recEducationLevel = EducationLevel::where(['name' => $educationLevel['name'], 'organization_id' => $projectOrganizationId])->first();
+                                if (empty($recEducationLevel)) {
+                                    return 404;
+                                }
+
+                            }
+                        }
+
+                        // check Activity Author-Tag
+
+                        $authorTagPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir .
+                            '/activities/' . $activity_dir . '/activity_author_tag.json');
+                        if (file_exists($authorTagPath)) {
+                            $authorTagContent = file_get_contents($authorTagPath);
+                            $authorTags = json_decode($authorTagContent, true);
+
+                            foreach ($authorTags as $authorTag) {
+                                $recAuthorTag = AuthorTag::where(['name' => $authorTag['name'], 'organization_id' => $projectOrganizationId])->first();
+
+                                if (empty($recAuthorTag)) {
+                                    return 404;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
