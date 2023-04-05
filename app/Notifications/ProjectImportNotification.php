@@ -31,7 +31,6 @@ class ProjectImportNotification extends Notification
     {
         $this->userName = $userName;
         $this->projectName = $projectName;
-        \Log::info($this->projectName['name']);
     }
 
     /**
@@ -74,7 +73,6 @@ class ProjectImportNotification extends Notification
         if ($this->projectName['isMetaDataImported'] === 404)
             $message = $message . " Some meta data has not been imported.";
 
-        \Log::info($message);
         return [
             'message' => $message,
         ];
