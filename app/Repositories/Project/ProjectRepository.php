@@ -774,13 +774,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             if ($method_source === "command") {
                 $source_file = $path;
             }
-            \Log::info('776');
+
             if ($zip->open($source_file) === TRUE) {
                 $extracted_folder_name = "app/public/imports/project-" . uniqid();
                 $zip->extractTo(storage_path($extracted_folder_name . '/'));
                 $zip->close();
             } else {
-                \Log::info('782');
+
                 $return_res = [
                     "success" => false,
                     "message" => "Unable to import Project."
@@ -788,7 +788,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 return json_encode($return_res);
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
-                \Log::info('transaction');
+
                 if (file_exists(storage_path($extracted_folder_name . '/project.json'))) {
                     $project_json = file_get_contents(storage_path($extracted_folder_name . '/project.json'));
 
@@ -1161,6 +1161,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         return $query->paginate($data['size'])->withQueryString();
     }
 
+    /**
+     * Check Missing Meta data
+     *
+     * @param $extracted_folder_name
+     * @param $projectOrganizationId
+     * @return response
+     */
     private function checkProjectMetaData($extracted_folder_name, $projectOrganizationId)
     {
 
@@ -1180,13 +1187,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             continue;
 
                         $activity_dir = $activitity_directories[$j];
-                        //$cloned_activity = $this->activityRepository->importActivity($cloned_playlist, $authUser, $playlist_dir, $activitity_directories[$j], $extracted_folder);
                         $activitySubjectPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir .
                             '/activities/' . $activity_dir . '/activity_subject.json');
                         if (file_exists($activitySubjectPath)) {
                             $subjectContent = file_get_contents($activitySubjectPath);
                             $subjects = json_decode($subjectContent, true);
-                            \Log::info($subjects);
+
                             foreach ($subjects as $subject) {
 
                                 $recSubject = Subject::where(['name' => $subject['name'], 'organization_id' => $projectOrganizationId])->first();
@@ -1198,7 +1204,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             }
                         }
 
-                        // Import Activity Education-Level
+                        // check Activity Education-Level
 
                         $activtyEducationPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir . '/activities/' .
                             $activity_dir . '/activity_education_level.json');
@@ -1216,7 +1222,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                             }
                         }
 
-                        // Import Activity Author-Tag
+                        // check Activity Author-Tag
 
                         $authorTagPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir .
                             '/activities/' . $activity_dir . '/activity_author_tag.json');
