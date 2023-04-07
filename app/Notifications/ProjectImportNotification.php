@@ -71,7 +71,7 @@ class ProjectImportNotification extends Notification
         $message = "Project [$projectTitle] has been imported successfully.";
 
         if ($this->projectName['isMetaDataImported'] === 404)
-            $message = $message . " Some meta data has not been imported.";
+            $message = "The project [$projectTitle] was imported with warnings. Subject, Education Level, or Author Tags did not exist in the target environment. Please review your imported project.";
 
         return [
             'message' => $message,
