@@ -107,13 +107,13 @@ class ExtractXAPIJSONController extends Controller
                         $platform = $context->getPlatform();
                     }
 
-                    // Skip if we don't have the activity.
-                    if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
-                        // It maybe an old format statement. Just save verb, object and actor, and move on.
-                        $inserted = $lrsStatementsRepository->create($insertData);
-                        \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script failed for some statements');
-                        continue;
-                    }
+                // Skip if we don't have the activity.
+                if (empty($groupingInfo['activity']) || empty($groupingInfo['class']) || empty($context)) {
+                    // It maybe an old format statement. Just save verb, object and actor, and move on.
+                    $inserted = $lrsStatementsRepository->create($insertData);
+                    \Log::info(date('Y-m-d h:i:s') . ' - Extract XAPI script failed for some statements' . 'id = ' . $row->id);
+                    continue;
+                }
 
                     $activity = $activityRepository->find($groupingInfo['activity']);
 
