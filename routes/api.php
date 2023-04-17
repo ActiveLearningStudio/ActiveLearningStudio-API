@@ -34,6 +34,7 @@ Route::post('logout', 'Auth\AuthController@logout')->name('logout')->middleware(
 Route::get('checkemail/{email}', 'Auth\AuthController@checkEmail');
 Route::get('microsoft-team/get-access-token', 'Api\V1\MicroSoftTeamController@getAccessToken');
 Route::get('microsoft-team/get-access-token-via-code', 'Api\V1\MicroSoftTeamController@getAccessTokenViaCode');
+Route::get('microsoft-team/get-submission-status', 'Api\V1\MicroSoftTeamController@getSubmissionStatus');
 Route::get('microsoft-team/get-user-profile', 'Api\V1\MicroSoftTeamController@getUserPofile');
 Route::post('microsoft-team/submit-assignment', 'Api\V1\MicroSoftTeamController@submitAssignment');
 
@@ -254,7 +255,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('users/report/basic', 'UserController@reportBasic')->name('users.report.basic');
         // lti-tool-settings
         Route::apiResource('suborganizations/{suborganization}/lti-tool-settings', 'LtiTool\LtiToolSettingsController');
-        Route::get('suborganizations/{suborganization}/lti-tool-type', 'LtiTool\LtiToolSettingsController@getLTIToolTypeList');
+        Route::get('lti-tool-type', 'LtiTool\LtiToolSettingsController@getLtiToolTypeList');
 
         // brightcove-api-settings
         Route::apiResource('suborganizations/{suborganization}/brightcove-api-settings', 'Integration\BrightcoveAPISettingsController');

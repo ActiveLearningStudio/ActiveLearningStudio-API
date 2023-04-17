@@ -166,4 +166,21 @@ class IndependentActivity extends Model
     {
         return self::$status[$this->status] ?? null;
     }
+
+    /**
+     * Get the activity item associated with the independent activity.
+     */
+    public function activityItem()
+    {
+        if ($this->h5pLibrary) {
+            return $this->hasOne(ActivityItem::class, 'organization_id', 'organization_id')
+            ->ofMany([], function ($query) {
+                $h5pLibrary = explode(' ',$this->h5pLibrary);
+                $h5pLibraryName = $h5pLibrary[0];
+                $query->where('h5pLib', 'like', $h5pLibraryName . '%');
+            });
+        }
+
+        return null;
+    }
 }

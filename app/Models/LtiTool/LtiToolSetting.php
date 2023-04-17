@@ -7,7 +7,6 @@ use App\Models\Traits\GlobalScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
-use App\Models\LtiTool\LtiToolTypesConfig;
 use App\Models\MediaSource;
 
 class LtiToolSetting extends Model

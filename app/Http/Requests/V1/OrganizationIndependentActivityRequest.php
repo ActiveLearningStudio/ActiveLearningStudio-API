@@ -25,7 +25,8 @@ class OrganizationIndependentActivityRequest extends FormRequest
     {
         return [
             'query' => 'string',
-            'indexing' => 'in:0,1,2,3',
+            'indexing' => 'in:0,1,2,3,null',
+            'visibility' => 'int|exists:organization_visibility_types,id,id,!' . (int)config('constants.protected-organization-visibility-type-id'),
             'shared' => 'boolean',
             'created_from' => 'date_format:Y-m-d',
             'created_to' => 'date_format:Y-m-d',

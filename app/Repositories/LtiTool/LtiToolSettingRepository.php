@@ -32,7 +32,7 @@ class LtiToolSettingRepository extends BaseRepository implements LtiToolSettingI
     public function getAll($data, $suborganization)
     {
         $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
-        $query = $this->model->with(['user', 'organization', 'mediaSources']);
+        $query = $this->model->with(['organization', 'mediaSources']);
         if (isset($data['query']) && $data['query'] !== '') {
             $query->where(function ($query) use ($data) {
                 $query->orWhere('tool_name', 'iLIKE', '%' . $data['query'] . '%');

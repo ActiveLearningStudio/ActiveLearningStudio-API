@@ -764,8 +764,17 @@ class AuthController extends Controller
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function($query) use ($result) {
-                $query->where('lti_client_id', $result['lti_client_id']);
+            $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
+                    //if default LMS setting not exist!
+                    if (!$default_lms_setting) {
+                        return response([
+                            'errors' => ['LMS is not configured for SSO with CurrikiStudio. Please contact your Admin'],
+                        ], 404);
+                    }
+
+         $user = User::with(['lmssettingViaEmail' => function($query) use ($result, $default_lms_setting) {
+                $query->where('lti_client_id', $result['lti_client_id'])
+                ->where('organization_id', $default_lms_setting['organization_id'])->first();
             }])->where('email', 'ilike', $result['email'])->first();
 
             if (!$user) {
@@ -779,13 +788,6 @@ class AuthController extends Controller
                     'email_verified_at' => now(),
                 ]);
                 if ($user) {
-                    $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
-                    //if default LMS setting not exist!
-                    if (!$default_lms_setting) {
-                        return response([
-                            'errors' => ['Unable to find default LMS setting with your client id.'],
-                        ], 404);
-                    }
                     $default_lms_setting = $default_lms_setting->toArray();
                     $default_lms_setting['lms_login_id'] = $user['email'];
                     $user->lmssetting()->create($default_lms_setting);
@@ -811,16 +813,9 @@ class AuthController extends Controller
                     }
                 }
             } else {
-                if (sizeof($user->lmssetting) > 0) {
-                    $user['user_organization'] = $user->lmssetting[0]->organization;
+                if ($user && $user->lmssettingViaEmail && count($user->lmssettingViaEmail) > 0) {
+                    $user['user_organization'] = $user->lmssettingViaEmail[0]->organization;
                 } else {
-                    $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lti_client_id', $result['lti_client_id']);
-                    //if default LMS setting not exist!
-                    if (!$default_lms_setting) {
-                        return response([
-                            'errors' => ['Unable to find default LMS setting with your client id.'],
-                        ], 404);
-                    }
                     $default_lms_setting = $default_lms_setting->toArray();
                     $default_lms_setting['lms_login_id'] = $user['email'];
                     $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
@@ -889,8 +884,17 @@ class AuthController extends Controller
             $data = $request->validated();
             parse_str(base64_decode($data['sso_info']), $result);
 
-            $user = User::with(['lmssetting' => function($query) use ($result) {
-                $query->where('lms_access_key', $result['oauth_consumer_key']);
+            $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
+                    //if default LMS setting not exist!
+                    if (!$default_lms_setting) {
+                        return response([
+                            'errors' => ['LMS is not configured for SSO with CurrikiStudio. Please contact your Admin'],
+                        ], 404);
+                    }
+
+           $user = User::with(['lmssettingViaEmail' => function($query) use ($result, $default_lms_setting) {
+                $query->where('lms_access_key', $result['oauth_consumer_key'])
+                ->where('organization_id', $default_lms_setting['organization_id'])->first();
             }])->where('email', 'ilike', $result['user_email'])->first();
 
             if (!$user) {
@@ -938,16 +942,9 @@ class AuthController extends Controller
                     }
                 }
             } else {
-                if (sizeof($user->lmssetting) > 0) {
-                    $user['user_organization'] = $user->lmssetting[0]->organization;
+                if ($user && $user->lmssettingViaEmail && count($user->lmssettingViaEmail) > 0) {
+                    $user['user_organization'] = $user->lmssettingViaEmail[0]->organization;
                 } else {
-                    $default_lms_setting = $this->defaultSsoSettingsRepository->findByField('lms_access_key', $result['oauth_consumer_key']);
-                    //if default LMS setting not exist!
-                    if (!$default_lms_setting) {
-                        return response([
-                            'errors' => ['Unable to find default LMS setting with your client id.'],
-                        ], 404);
-                    }
                     $default_lms_setting = $default_lms_setting->toArray();
                     $default_lms_setting['lms_login_id'] = strtolower($user['user_email']);
                     $newly_created_setting = $user->lmssetting()->create($default_lms_setting);
