@@ -13,14 +13,6 @@ return new class extends Migration
      */
     public function up()
     {
-        DB::statement("drop view IF EXISTS outcome_data");
-        DB::statement("drop materialized view IF EXISTS outcome_data1");
-        DB::statement("drop view IF EXISTS outcome_data_back10112021");
-
-        Schema::table('lrs_statements_data', function (Blueprint $table) {
-            $table->string('class_id', 255)->change();
-        });
-
         DB::statement("CREATE OR REPLACE VIEW public.outcome_data
 AS SELECT sq1.user_id,
     sq1.class_id,
@@ -110,6 +102,6 @@ UNION ALL
      */
     public function down()
     {
-        //
+
     }
 };

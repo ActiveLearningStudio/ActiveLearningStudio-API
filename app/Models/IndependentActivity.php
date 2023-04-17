@@ -172,9 +172,15 @@ class IndependentActivity extends Model
      */
     public function activityItem()
     {
-        return $this->hasOne(ActivityItem::class, 'organization_id', 'organization_id')
-        ->ofMany([], function ($query) {
-            $query->where('h5pLib', $this->h5pLibrary);
-        });
+        if ($this->h5pLibrary) {
+            return $this->hasOne(ActivityItem::class, 'organization_id', 'organization_id')
+            ->ofMany([], function ($query) {
+                $h5pLibrary = explode(' ',$this->h5pLibrary);
+                $h5pLibraryName = $h5pLibrary[0];
+                $query->where('h5pLib', 'like', $h5pLibraryName . '%');
+            });
+        }
+
+        return null;
     }
 }
