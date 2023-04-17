@@ -115,7 +115,7 @@ class MicroSoftTeamController extends Controller
     /**
 	 * get access_token using code
 	 *
-     * @bodyParam request contains code
+     * @bodyParam request Contains classId, assignmentId, submissionId
      * 
      * @response {
      *   "message": "Token fetched successfully."
