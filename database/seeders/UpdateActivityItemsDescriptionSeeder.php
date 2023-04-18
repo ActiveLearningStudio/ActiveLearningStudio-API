@@ -28,7 +28,6 @@ class UpdateActivityItemsDescriptionSeeder extends Seeder
 
                     $index++;
                 } 
-                
             }
             fclose($file);
         } else {
