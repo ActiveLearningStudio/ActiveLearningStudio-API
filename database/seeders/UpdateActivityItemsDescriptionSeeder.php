@@ -27,13 +27,19 @@ class UpdateActivityItemsDescriptionSeeder extends Seeder
                     $activityItemsDescriptions[$index] = trim($line[1]);
 
                     $index++;
-                } 
+                }               
+                 
+                $activityItems[$index] = strtolower(trim($line[0]));
+                $activityItemsDescriptions[$index] = trim($line[1]);
+
+                $index++;
+
             }
             fclose($file);
         } else {
             exit();
         }
-       
+
         $allActivityItems = DB::table('activity_items')->select('id', 'title')->get();
 
         foreach ($allActivityItems as $activityItem) {
