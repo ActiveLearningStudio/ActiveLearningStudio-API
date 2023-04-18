@@ -22,18 +22,11 @@ class UpdateActivityItemsDescriptionSeeder extends Seeder
             $index = 0;
             while (($line = fgetcsv($file)) !== FALSE) {
                 if ($line[0]!== '' && $line[1]!== '') {
-
                     $activityItems[$index] = strtolower(trim($line[0]));
                     $activityItemsDescriptions[$index] = trim($line[1]);
 
                     $index++;
                 }               
-                 
-                $activityItems[$index] = strtolower(trim($line[0]));
-                $activityItemsDescriptions[$index] = trim($line[1]);
-
-                $index++;
-
             }
             fclose($file);
         } else {
