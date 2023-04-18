@@ -22,18 +22,19 @@ class UpdateActivityItemsDescriptionSeeder extends Seeder
             $index = 0;
             while (($line = fgetcsv($file)) !== FALSE) {
                 if ($line[0]!== '' && $line[1]!== '') {
-                  
-                    $activityItems[$index] = strtolower($line[0]);
-                    $activityItemsDescriptions[$index] = addslashes($line[1]);
 
+                    $activityItems[$index] = strtolower(trim($line[0]));
+                    $activityItemsDescriptions[$index] = trim($line[1]);
+
+                    $index++;
                 } 
-                $index++;
+                
             }
             fclose($file);
         } else {
             exit();
         }
-        
+       
         $allActivityItems = DB::table('activity_items')->select('id', 'title')->get();
 
         foreach ($allActivityItems as $activityItem) {
