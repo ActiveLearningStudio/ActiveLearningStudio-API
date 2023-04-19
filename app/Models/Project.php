@@ -176,4 +176,18 @@ class Project extends Model
         }
         return false;
     }
+
+    /**
+     * Get the activity item associated with the project's activity's h5pLibrary.
+     * 
+     * @param string $5pLibraryName
+     * @return ActivityItem
+     */
+    public function activityItem($h5pLibraryName)
+    {
+        return $this->hasOne(ActivityItem::class, 'organization_id', 'organization_id')
+        ->ofMany([], function ($query) use ($h5pLibraryName) {
+            $query->where('h5pLib', 'like', $h5pLibraryName . '%');
+        });
+    }
 }
