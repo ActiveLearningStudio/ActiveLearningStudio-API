@@ -174,7 +174,7 @@ class LaravelH5pStorage implements H5PFileStorage
             throw new Exception('Unable to create directory for H5P export file.');
         }
 
-        if (!copy($source, "{$this->path}/exports/abc{$filename}")) {
+        if (!copy($source, "{$this->path}/exports/{$filename}")) {
             throw new Exception('Unable to save H5P export file.');
         }
     }
