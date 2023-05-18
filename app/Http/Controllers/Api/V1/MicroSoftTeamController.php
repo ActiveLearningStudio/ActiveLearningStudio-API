@@ -150,6 +150,42 @@ class MicroSoftTeamController extends Controller
     }
 
     /**
+     * get access_token using obo flow
+     *
+     * 
+     * @response {
+     *   "message": "Token fetched successfully."
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Invalid grant."
+     *   ]
+     * }
+     *
+     * @param GetTokenViaCode $request
+     * @return Response
+     */
+    public function getAccessTokenOnBehalfOf(Request $request)
+    {
+        $accessToken = $this->microsoftTeamRepository->getTokenOnBehalfOf($request);
+
+        if ($accessToken && array_key_exists('access_token', $accessToken)) {
+            return response([
+                'status_code' => 200,
+                'message' => 'Token fetched successfully.',
+                'access_token' => $accessToken['access_token'],
+                'refresh_token' => $accessToken['refresh_token']
+            ], 200);
+        }
+        return response([
+            'status_code' => 424,
+            'errors' => $accessToken['error'],
+            'message' => $accessToken['error_description']
+        ], 500);
+    }
+
+    /**
      * get the status of an msteams submission
      *
      * @bodyParam request contains token, classId, assignmentId, submissionId

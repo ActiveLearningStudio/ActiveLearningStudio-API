@@ -52,6 +52,7 @@ class ActivityDetailResource extends JsonResource
             'updated_at' => $this->updated_at,
             'source_type' => $this->source_type,
             'source_url' => $this->source_url,
+            'activity_item' => new ActivityItemResource($this->activityItem),
         ];
 
         if ($this->resource->brightcoveData) {

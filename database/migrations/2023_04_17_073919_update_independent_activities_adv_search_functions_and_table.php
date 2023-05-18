@@ -27,7 +27,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
         DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar,varchar,boolean)");
         DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar,varchar,boolean)");
-        
+
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dt");
 
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dtnew");

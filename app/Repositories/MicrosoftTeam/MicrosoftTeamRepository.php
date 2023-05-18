@@ -111,6 +111,32 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
     }
 
     /**
+     * @param $request object
+     * @return array
+     */ 
+
+    public function getTokenOnBehalfOf($request) {
+        $postInput = [
+            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            'client_id' => $this->clientId,
+            'client_secret' => $this->secretId,
+            'assertion' => $request->token,
+            'scope' => config('ms-team-configs.scope_for_token'),
+            'requested_token_use' => 'on_behalf_of',
+        ];
+        
+        $headers = [
+            'X-header' => 'value'
+        ];
+
+        $response = Http::asForm()->withOptions(["verify"=>false])->post($this->apiURL, $postInput);
+
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
+        return $responseBody;
+    }
+
+    /**
      * @param $code string
      * @return string
      */
