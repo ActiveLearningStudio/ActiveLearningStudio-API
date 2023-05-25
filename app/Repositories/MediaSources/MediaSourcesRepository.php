@@ -31,5 +31,19 @@ class MediaSourcesRepository extends BaseRepository implements MediaSourcesInter
         $mediaSourcesId = !empty($mediaSourcesRow) ? $mediaSourcesRow->id : 0;
         return $mediaSourcesId;
     }
+
+    /**
+     * To get media sources by type
+     *
+     * @param $mediaSourceName string
+     * @return object
+     */
+    public function getMediaSourcesByType($mediaSourceType)
+    {
+        $mediaSources = $this->model->where('media_type', $mediaSourceType)
+                              ->where('name','!=', 'Safari Montage')  
+                              ->get();
+        return $mediaSources;
+    }
     
 }

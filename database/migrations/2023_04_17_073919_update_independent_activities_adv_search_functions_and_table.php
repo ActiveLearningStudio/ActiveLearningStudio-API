@@ -25,6 +25,9 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
         DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar,varchar)");
         DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar,varchar)");
 
+        DB::statement("drop function IF EXISTS advindependentactivitysearch(int,varchar,varchar,varchar,varchar,varchar,boolean)");
+        DB::statement("drop function IF EXISTS advindependentactivitysearch(varchar,varchar,varchar,varchar,varchar,boolean)");
+
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dt");
 
         DB::statement("drop table IF EXISTS advsearchIndependentActivity_dtnew");
@@ -100,12 +103,12 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
 
         $independentActivityAdvSearchSql = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying,_matchActivityType boolean)
+        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_uid integer, _text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying, _matchactivitytype boolean)
         RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(lower(_text),'%'));
+        _searchText character varying := concat('%',concat(lower(replace(_text,'''','')),'%'));
         vCnt INTEGER := 0;
         hCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
@@ -173,7 +176,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where a.activity_type='INDEPENDENT' and hl.title is not null and  a.user_id = '%s' and lower(a.title) like '%s'  %s  
+                where a.activity_type='INDEPENDENT' and hl.title is not null and  a.user_id = '%s' and lower(replace(a.title,'''','')) like '%s'  %s  
                 union all
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
@@ -184,7 +187,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where a.activity_type='INDEPENDENT' and hl.title is not null and  a.user_id = '%s' and lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
+                where a.activity_type='INDEPENDENT' and hl.title is not null and  a.user_id = '%s' and lower(replace(a.title,'''','')) not like '%s' and lower(replace(a.description,'''','')) like '%s' %s  
                 $s$,joinTable,h5p,_uid,_searchText,cnd,joinTable,h5p,_uid,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;
@@ -195,12 +198,12 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
 
 
         $independentActivityAdvsearchSqlOverloading = <<<'EOL'
-        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying,_matchActivityType boolean)
+        CREATE OR REPLACE FUNCTION public.advindependentactivitysearch(_text character varying, _subject character varying, _education character varying, _tag character varying, _h5p character varying, _matchactivitytype boolean)
         RETURNS SETOF advsearchindependentactivity_dtnew
         LANGUAGE plpgsql
         AS $function$
         declare 
-        _searchText character varying := concat('%',concat(lower(_text),'%'));
+        _searchText character varying := concat('%',concat(lower(replace(_text,'''','')),'%'));
         vCnt INTEGER := 0;
         hCnt INTEGER := 0;
         vCntEducation INTEGER := 0;
@@ -268,7 +271,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where a.activity_type='INDEPENDENT' and hl.title is not null and  lower(a.title) like '%s'  %s  
+                where a.activity_type='INDEPENDENT' and hl.title is not null and  lower(replace(a.title,'''','')) like '%s'  %s  
                 union all
                 select distinct 2 as priority,'Independent Activity' as entity,a.organization_id as org_id,a.id as entity_id,a.user_id as user_id, null::bigint as project_id,
                 null::bigint as playlist_id,u.first_name,u.last_name,u.email,a.title as name,a.description as description,a.thumb_url,a.created_at,a.deleted_at,
@@ -279,7 +282,7 @@ class UpdateIndependentActivitiesAdvSearchFunctionsAndTable extends Migration
                 left join h5p_libraries hl on hc.library_id=hl.id %s
                 left join users u on a.user_id=u.id
                 left join organizations o on a.organization_id=o.id
-                where a.activity_type='INDEPENDENT' and hl.title is not null and  lower(a.title) not like '%s' and lower(a.description) like '%s' %s  
+                where a.activity_type='INDEPENDENT' and hl.title is not null and  lower(replace(a.title,'''','')) not like '%s' and lower(replace(a.description,'''','')) like '%s' %s  
                 $s$,joinTable,h5p,_searchText,cnd,joinTable,h5p,_searchText,_searchText,cnd);
                 RETURN QUERY execute query;	
                 END;

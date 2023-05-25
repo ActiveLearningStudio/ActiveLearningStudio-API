@@ -150,4 +150,24 @@ class Activity extends Model
     {
         return $this->belongsToMany('App\Models\AuthorTag', 'activity_author_tag')->withTimestamps();
     }
+
+    /**
+     * Get the activity item associated with the activity.
+     */
+    public function activityItem()
+    {
+        if (
+            isset($this->playlist)
+            && isset($this->playlist->project)
+            && isset($this->playlist->project->organization_id)
+            && $h5pLibrary = $this->h5pLibrary
+        ) {
+            $h5pLibraryArray = explode(' ',$h5pLibrary);
+            $h5pLibraryName = $h5pLibraryArray[0];
+
+            return $this->playlist->project->activityItem($h5pLibraryName);
+        }
+
+        return null;
+    }
 }

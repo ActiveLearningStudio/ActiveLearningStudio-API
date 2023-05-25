@@ -61,17 +61,17 @@ class ProjectRepository extends BaseRepository
 
         $this->query = $this->model->when($mode !== 'all', function ($query) use ($mode) {
             return $query->where(function ($query) use ($mode) {
-                return $query->where('starter_project', (bool)$mode);
+                return $query->where('starter_project', (bool) $mode);
             });
         });
 
         // exclude users those projects which were clone from global starter project
-        if (isset($data['exclude_starter']) && $data['exclude_starter']){
+        if (isset($data['exclude_starter']) && $data['exclude_starter']) {
             $this->query = $this->query->where('is_user_starter', false);
         }
 
         // if specific index projects requested
-        if (isset($data['indexing']) && $data['indexing']){
+        if (isset($data['indexing']) && $data['indexing']) {
             $this->query = $this->query->where('indexing', $data['indexing']);
         }
         return $this->getDtPaginated(['users']);
@@ -84,7 +84,7 @@ class ProjectRepository extends BaseRepository
      * @return string
      * @throws GeneralException
      */
-    public function clone(User $user, $project_id, $organization_id = null): string
+    public function clone (User $user, $project_id, $organization_id = null): string
     {
         $project = $this->model->find($project_id);
 
@@ -138,7 +138,7 @@ class ProjectRepository extends BaseRepository
      */
     public function updateIndex($project, $index): string
     {
-        if (! isset($this->model::$indexing[$index])){
+        if (!isset($this->model::$indexing[$index])) {
             throw new GeneralException('Invalid Library value provided.');
         }
         $project->update(['indexing' => $index]);
@@ -156,7 +156,7 @@ class ProjectRepository extends BaseRepository
         if (empty($projects)) {
             throw new GeneralException('Choose at-least one project.');
         }
-        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
+        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool) $flag]);
         return 'Starter Projects status updated successfully!';
     }
 

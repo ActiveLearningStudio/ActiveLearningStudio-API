@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\App;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\Resources\V1\ActivityResource;
+use App\Models\Subject;
+use App\Models\EducationLevel;
+use App\Models\AuthorTag;
 
 class ProjectRepository extends BaseRepository implements ProjectRepositoryInterface
 {
@@ -60,17 +63,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         if (
             isset($attributes['organization_visibility_type_id']) &&
-            $projectObj->organization_visibility_type_id !== (int)$attributes['organization_visibility_type_id']
+            $projectObj->organization_visibility_type_id !== (int) $attributes['organization_visibility_type_id']
         ) {
             if ($projectObj->organization->auto_approve) {
                 $attributes['indexing'] = config('constants.indexing-approved');
             } else {
                 $attributes['indexing'] = config('constants.indexing-requested');
             }
-            
+
             $attributes['status'] = config('constants.status-finished');
 
-            if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
+            if ((int) $attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
                 $attributes['status'] = config('constants.status-draft');
             }
         }
@@ -93,14 +96,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $is_updated = $project->save();
 
         if ($is_updated) {
-            foreach ($project->playlists as $playlist)
-            {
+            foreach ($project->playlists as $playlist) {
                 $playlist->shared = $shared;
                 $is_playlist_updated = $playlist->save();
 
                 if ($is_playlist_updated) {
-                    foreach ($playlist->activities as $activity)
-                    {
+                    foreach ($playlist->activities as $activity) {
                         $activity->shared = $shared;
                         $activity->save();
                     }
@@ -118,7 +119,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function getOrder($authenticated_user)
     {
-        return $authenticated_user->projects()->orderBy('order','desc')
+        return $authenticated_user->projects()->orderBy('order', 'desc')
             ->value('order') ?? 0;
     }
 
@@ -133,7 +134,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @return Response
      * @throws GeneralException
      */
-    public function clone($authUser, Project $project, $token, $organization_id = null, $team = null)
+    public function clone ($authUser, Project $project, $token, $organization_id = null, $team = null)
     {
         try {
             $new_image_url = clone_thumbnail($project->thumb_url, "projects");
@@ -149,8 +150,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 'thumb_url' => $new_image_url,
                 'shared' => $project->shared,
                 'order' => ($isDuplicate) ? $project->order + 1 : $this->getOrder($authUser) + 1,
-                'starter_project' => false, // this is for global starter project
-                'is_user_starter' => (bool) $project->starter_project, // this is for user level starter project (means cloned by global starter project)
+                'starter_project' => false,
+                // this is for global starter project
+                'is_user_starter' => (bool) $project->starter_project,
+                // this is for user level starter project (means cloned by global starter project)
                 'cloned_from' => $project->id,
             ];
 
@@ -231,12 +234,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function fetchByLtiClientAndEmail($lti_client_id, $user_email, $searchTerm, $lms_organization_id)
     {
         return $this->model->whereIn('organization_id', $lms_organization_id)->where('name', 'iLIKE', '%' . $searchTerm . '%')
-        ->where('team_id', null)->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
-            $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
-                $query_lmssetting->where('lti_client_id', $lti_client_id);
-                $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
-            });
-        })->get();
+            ->where('team_id', null)->whereHas('users', function ($query_user) use ($lti_client_id, $user_email) {
+                $query_user->whereHas('lmssetting', function ($query_lmssetting) use ($lti_client_id, $user_email) {
+                    $query_lmssetting->where('lti_client_id', $lti_client_id);
+                    $query_lmssetting->where('lms_login_id', 'ilike', $user_email);
+                });
+            })->get();
     }
 
     /**
@@ -248,12 +251,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     public function getProjectForPreview(Project $project)
     {
         $project = Project::where(['id' => $project->id])
-            ->with(['playlists' => function ($query) {
-                $query->orderBy('order');
-            },
-            'playlists.activities' => function ($query) {
-                $query->orderBy('order');
-            }])
+            ->with([
+                'playlists' => function ($query) {
+                    $query->orderBy('order');
+                },
+                'playlists.activities' => function ($query) {
+                    $query->orderBy('order');
+                }
+            ])
             ->first();
 
         $proj = [];
@@ -355,9 +360,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             if (!empty($projects)) {
                 $order = 1;
                 foreach ($projects as $project) {
-                   $project->order = $order;
-                   $project->save();
-                   $order++;
+                    $project->order = $order;
+                    $project->save();
+                    $order++;
                 }
             }
         }
@@ -392,8 +397,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $authenticatedUserOrgProjectIdsString = $this->getUserProjectIdsInOrganization($authenticatedUser, $project->organization);
 
-        $existingOrder = $project->order;// order of project whose position we want to change
-        $newOrder = $order;// new order for project
+        $existingOrder = $project->order; // order of project whose position we want to change
+        $newOrder = $order; // new order for project
 
         // get id of project whose position we want to change
         $projectId = $project->id;
@@ -462,10 +467,10 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // if simple request for getting project listing with search
         if ($q) {
-            $query = $query->where(function($qry) use ($q) {
-                $qry->where('name', 'iLIKE', '%' .$q. '%')
+            $query = $query->where(function ($qry) use ($q) {
+                $qry->where('name', 'iLIKE', '%' . $q . '%')
                     ->orWhereHas('users', function ($qry) use ($q) {
-                        $qry->where('email', 'iLIKE', '%' .$q. '%');
+                        $qry->where('email', 'iLIKE', '%' . $q . '%');
                     });
             });
         }
@@ -483,7 +488,16 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // if specific index projects requested
         if (isset($data['indexing']) && $data['indexing'] !== '0') {
-            $query = $query->where('indexing', $data['indexing']);
+            if ($data['indexing'] === 'null') {
+                $query = $query->whereNull('indexing');
+            } else {
+                $query = $query->where('indexing', $data['indexing']);
+            }
+        }
+
+        // if specific visibility projects requested
+        if (isset($data['visibility'])) {
+            $query = $query->where('organization_visibility_type_id', $data['visibility']);
         }
 
         // if starter projects requested
@@ -493,11 +507,11 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // filter by author
         if (isset($data['author_id'])) {
-            $query = $query->where(function($qry) use ($data) {
-                        $qry->WhereHas('users', function ($qry) use ($data) {
-                            $qry->where('id', $data['author_id']);
-                        });
-                     });
+            $query = $query->where(function ($qry) use ($data) {
+                $qry->WhereHas('users', function ($qry) use ($data) {
+                    $qry->where('id', $data['author_id']);
+                });
+            });
         }
 
         // filter by shared status
@@ -554,17 +568,17 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         // if simple request for getting project listing with search
         if ($q) {
-            $query = $query->where(function($qry) use ($q) {
-                $qry->where('name', 'iLIKE', '%' .$q. '%')
+            $query = $query->where(function ($qry) use ($q) {
+                $qry->where('name', 'iLIKE', '%' . $q . '%')
                     ->orWhereHas('team', function ($qry) use ($q) {
-                        $qry->where('name', 'iLIKE', '%' .$q. '%');
-                });
+                        $qry->where('name', 'iLIKE', '%' . $q . '%');
+                    });
             });
         }
 
         $query = $query->whereHas('users', function ($qry) use ($auth_user) {
-                    $qry->where('user_id', $auth_user->id);
-                 });
+            $qry->where('user_id', $auth_user->id);
+        });
 
         $query = $query->whereNotNull('team_id');
 
@@ -580,7 +594,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     public function updateIndex($project, $index): string
     {
-        if (! isset($this->model::$indexing[$index])){
+        if (!isset($this->model::$indexing[$index])) {
             throw new GeneralException('Invalid Library value provided.');
         }
         $project->update(['indexing' => $index]);
@@ -598,7 +612,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         if (empty($projects)) {
             throw new GeneralException('Choose at-least one project.');
         }
-        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool)$flag]);
+        $this->model->whereIn('id', $projects)->update(['starter_project' => (bool) $flag]);
         return 'Starter Projects status updated successfully!';
     }
 
@@ -614,7 +628,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $zip = new ZipArchive;
 
-        $project_dir_name = 'projects-'.uniqid();
+        $project_dir_name = 'projects-' . uniqid();
 
         // Add Grade level of first activity on project manifest
         $organizationName = Organization::where('id', $project->organization_id)->value('name');
@@ -623,15 +637,15 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $project['org_name'] = $organizationName;
         $project['grade_name'] = $this->getActivityGrade($project->id, 'educationLevels');
         $project['subject_name'] = $this->getActivityGrade($project->id, 'subjects');
-        Storage::disk('public')->put('/exports/'.$project_dir_name.'/project.json', $project);
+        Storage::disk('public')->put('/exports/' . $project_dir_name . '/project.json', $project);
 
         $project_thumbanil = "";
         if (!empty($project->thumb_url) && filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
-            $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
+            $project_thumbanil = storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
             $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
-            if(file_exists($project_thumbanil)) {
+            if (file_exists($project_thumbanil)) {
                 Storage::disk('public')
-                            ->put('/exports/'.$project_dir_name.'/'.basename($project_thumbanil), file_get_contents($project_thumbanil));
+                    ->put('/exports/' . $project_dir_name . '/' . basename($project_thumbanil), file_get_contents($project_thumbanil));
             }
         }
 
@@ -640,75 +654,75 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         foreach ($playlists as $playlist) {
 
             $title = str_replace('/', '-', $playlist->title);
-            Storage::disk('public')->put('/exports/'.$project_dir_name.'/playlists/'.$title.'/'.$title.'.json', $playlist);
+            Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title . '/' . $title . '.json', $playlist);
             $activites = $playlist->activities;
             ;
-            foreach($activites as $activity) {
+            foreach ($activites as $activity) {
 
                 $activityTitle = str_replace('/', '-', $activity->title);
 
                 $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                $activityTitle . '/' . $activityTitle . '.json';
+                    $activityTitle . '/' . $activityTitle . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
 
                 // Export Subject
                 $activitySubjectJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                    $activityTitle . '/activity_subject.json';
+                    $activityTitle . '/activity_subject.json';
 
                 Storage::disk('public')->put($activitySubjectJsonFile, $activity->subjects);
 
                 // Export Education level
 
                 $activityEducationLevelJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                    $activityTitle . '/activity_education_level.json';
+                    $activityTitle . '/activity_education_level.json';
 
                 Storage::disk('public')->put($activityEducationLevelJsonFile, $activity->educationLevels);
 
                 // Export Author
 
                 $activityAuthorTagJsonFile = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                    $activityTitle . '/activity_author_tag.json';
+                    $activityTitle . '/activity_author_tag.json';
 
                 Storage::disk('public')->put($activityAuthorTagJsonFile, $activity->authorTags);
 
-                $decoded_content = json_decode($activity->h5p_content,true);
+                $decoded_content = json_decode($activity->h5p_content, true);
 
                 $decoded_content['library_title'] = DB::table('h5p_libraries')
-                                                                    ->where('id', $decoded_content['library_id'])->value('name');
+                    ->where('id', $decoded_content['library_id'])->value('name');
                 $decoded_content['library_major_version'] = DB::table('h5p_libraries')
-                                                                        ->where('id', $decoded_content['library_id'])
-                                                                        ->value('major_version');
+                    ->where('id', $decoded_content['library_id'])
+                    ->value('major_version');
                 $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
-                                                                        ->where('id', $decoded_content['library_id'])
-                                                                        ->value('minor_version');
+                    ->where('id', $decoded_content['library_id'])
+                    ->value('minor_version');
 
-                $content_json_file = '/exports/'.$project_dir_name.'/playlists/' . $title . '/activities/' .
-                                                                $activityTitle.'/' . $activity->h5p_content_id . '.json';
+                $content_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
+                    $activityTitle . '/' . $activity->h5p_content_id . '.json';
                 Storage::disk('public')->put($content_json_file, json_encode($decoded_content));
 
                 if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
-                    $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
+                    $activity_thumbanil = storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
-                    if(!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
+                    if (!is_dir($activity_thumbanil) && file_exists($activity_thumbanil)) {
                         $activity_thumbanil_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                            $activityTitle . '/' . basename($activity_thumbanil);
+                            $activityTitle . '/' . basename($activity_thumbanil);
                         Storage::disk('public')->put($activity_thumbanil_file, file_get_contents($activity_thumbanil));
                     }
                 }
                 $exported_content_dir_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                                                    $activityTitle . '/' . $activity->h5p_content_id;
+                    $activityTitle . '/' . $activity->h5p_content_id;
                 $exported_content_dir = storage_path($exported_content_dir_path);
-                \File::copyDirectory( storage_path('app/public/h5p/content/'.$activity->h5p_content_id), $exported_content_dir );
+                \File::copyDirectory(storage_path('app/public/h5p/content/' . $activity->h5p_content_id), $exported_content_dir);
             }
         }
 
         // Get real path for our folder
-        $rootPath = storage_path('app/public/exports/'.$project_dir_name);
+        $rootPath = storage_path('app/public/exports/' . $project_dir_name);
 
         // Initialize archive object
         $zip = new ZipArchive();
-        $fileName = $project_dir_name.'.zip';
-        $zip->open(storage_path('app/public/exports/'.$fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $fileName = $project_dir_name . '.zip';
+        $zip->open(storage_path('app/public/exports/' . $fileName), ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
@@ -717,11 +731,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        foreach ($files as $name => $file)
-        {
+        foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
-            if (!$file->isDir())
-            {
+            if (!$file->isDir()) {
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
@@ -734,12 +746,12 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         // Zip archive will be created only after closing object
         $zip->close();
         // Remove project folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name));
+        $this->rrmdir(storage_path('app/public/exports/' . $project_dir_name));
 
         // Remove project folder after creation of zip
-        $this->rrmdir(storage_path('app/public/exports/'.$project_dir_name));
+        $this->rrmdir(storage_path('app/public/exports/' . $project_dir_name));
 
-        return storage_path('app/public/exports/'.$fileName);
+        return storage_path('app/public/exports/' . $fileName);
     }
 
 
@@ -751,8 +763,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param int $suborganization_id
      * @throws GeneralException
      */
-    public function importProject($authUser, $path, $suborganization_id, $method_source="API")
+    public function importProject($authUser, $path, $suborganization_id, $method_source = "API")
     {
+
         try {
 
             $zip = new ZipArchive;
@@ -763,35 +776,37 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             }
 
             if ($zip->open($source_file) === TRUE) {
-                $extracted_folder_name = "app/public/imports/project-".uniqid();
-                $zip->extractTo(storage_path($extracted_folder_name.'/'));
+                $extracted_folder_name = "app/public/imports/project-" . uniqid();
+                $zip->extractTo(storage_path($extracted_folder_name . '/'));
                 $zip->close();
-            }else {
+            } else {
+
                 $return_res = [
-                    "success"=> false,
+                    "success" => false,
                     "message" => "Unable to import Project."
                 ];
                 return json_encode($return_res);
             }
             return DB::transaction(function () use ($extracted_folder_name, $suborganization_id, $authUser, $source_file, $method_source) {
-                if (file_exists(storage_path($extracted_folder_name.'/project.json'))) {
-                    $project_json = file_get_contents(storage_path($extracted_folder_name.'/project.json'));
 
-                    $project = json_decode($project_json,true);
+                if (file_exists(storage_path($extracted_folder_name . '/project.json'))) {
+                    $project_json = file_get_contents(storage_path($extracted_folder_name . '/project.json'));
+
+                    $project = json_decode($project_json, true);
                     unset($project['id'], $project['organization_id'],
-                                            $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at'], $project['team_id']);
+                        $project['organization_visibility_type_id'], $project['created_at'], $project['updated_at'], $project['team_id']);
 
                     $project['organization_id'] = $suborganization_id;
                     $project['organization_visibility_type_id'] = 1;
-                    if (!empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) {  // copy thumb url
+                    if (!empty($project['thumb_url']) && filter_var($project['thumb_url'], FILTER_VALIDATE_URL) === false) { // copy thumb url
 
-                        if (file_exists(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])))) {
+                        if (file_exists(storage_path($extracted_folder_name . '/' . basename($project['thumb_url'])))) {
 
                             $ext = pathinfo(basename($project['thumb_url']), PATHINFO_EXTENSION);
                             $new_image_name = uniqid() . '.' . $ext;
-                            $destination_file = storage_path('app/public/projects/'.$new_image_name);
+                            $destination_file = storage_path('app/public/projects/' . $new_image_name);
 
-                            \File::copy(storage_path($extracted_folder_name.'/'.basename($project['thumb_url'])), $destination_file);
+                            \File::copy(storage_path($extracted_folder_name . '/' . basename($project['thumb_url'])), $destination_file);
                             $project['thumb_url'] = "/storage/projects/" . $new_image_name;
                         }
                     }
@@ -800,12 +815,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     if (file_exists(storage_path($extracted_folder_name . '/playlists'))) {
                         $playlist_directories = scandir(storage_path($extracted_folder_name . '/playlists'));
 
-                        for ($i=0; $i<count($playlist_directories); $i++) { // loop through all playlists
-                            if ($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..') continue;
+                        for ($i = 0; $i < count($playlist_directories); $i++) { // loop through all playlists
+                            if ($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..')
+                                continue;
                             $this->playlistRepository->playlistImport($cloned_project, $authUser, $extracted_folder_name, $playlist_directories[$i]);
                         }
                     }
 
+                    $isMetaDataImported = $this->checkProjectMetaData($extracted_folder_name, $suborganization_id);
                     $this->rrmdir(storage_path($extracted_folder_name)); // Deleted the storage extracted directory
 
                     if ($method_source !== "command") {
@@ -813,27 +830,31 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                     } else {
 
                         $return_res = [
-                            "success"=> true,
+                            "success" => true,
                             "message" => "Project has been imported successfully",
                             "project_id" => $cloned_project->id
                         ];
                         return json_encode($return_res);
                     }
 
-                    return $project['name'];
+                    return [
+                        'name' => $project['name'],
+                        'isMetaDataImported' => $isMetaDataImported
+                    ];
                 }
             });
 
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error($e->getMessage());
+            Log::error($e);
+            \Sentry\captureException($e);
             if ($method_source === "command") {
                 $return_res = [
-                    "success"=> false,
+                    "success" => false,
                     "message" => "Unable to import the project, please try again later!"
                 ];
-                return(json_encode($return_res));
+                return (json_encode($return_res));
             }
 
             throw new GeneralException('Unable to import the project, please try again later!');
@@ -845,20 +866,24 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $dir
      */
-    private function rrmdir($dir) {
+    private function rrmdir($dir)
+    {
         if (is_dir($dir)) {
-          $objects = scandir($dir);
-          foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-              if (filetype($dir . "/" . $object) == "dir") $this->rrmdir($dir . "/" . $object); else unlink($dir . "/" . $object);
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir . "/" . $object) == "dir")
+                        $this->rrmdir($dir . "/" . $object);
+                    else
+                        unlink($dir . "/" . $object);
+                }
             }
-          }
-          reset($objects);
-          rmdir($dir);
+            reset($objects);
+            rmdir($dir);
         }
-     }
+    }
 
-     /**
+    /**
      * To export project and associated playlists
      *
      * @param $authUser
@@ -874,7 +899,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
 
         $project_thumbanil = "";
         if (!empty($project->thumb_url) && filter_var($project->thumb_url, FILTER_VALIDATE_URL) == false) {
-            $project_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
+            $project_thumbanil = storage_path("app/public/" . (str_replace('/storage/', '', $project->thumb_url)));
             $ext = pathinfo(basename($project_thumbanil), PATHINFO_EXTENSION);
             if (file_exists($project_thumbanil)) {
                 Storage::disk('public')->put('/exports/' . $project_dir_name . '/' . basename($project_thumbanil), file_get_contents($project_thumbanil));
@@ -891,42 +916,42 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         foreach ($playlists as $playlist) {
 
             $title = str_replace('/', '-', $playlist->title);
-            Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title. '/' . $title . '.json', $playlist);
+            Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title . '/' . $title . '.json', $playlist);
             $activites = $playlist->activities;
             ;
-            foreach($activites as $activity) {
+            foreach ($activites as $activity) {
                 $destination_playlist_json = '/exports/' . $project_dir_name . '/playlists/' . $title .
-                                                '/activities/' . $activity->title . '/' . $activity->title . '.json';
+                    '/activities/' . $activity->title . '/' . $activity->title . '.json';
                 Storage::disk('public')->put($destination_playlist_json, $activity);
                 $decoded_content = json_decode($activity->h5p_content, true);
 
                 $decoded_content['library_title'] = DB::table('h5p_libraries')
-                                                            ->where('id', $decoded_content['library_id'])
-                                                            ->value('name');
+                    ->where('id', $decoded_content['library_id'])
+                    ->value('name');
                 $decoded_content['library_major_version'] = DB::table('h5p_libraries')
-                                                                ->where('id', $decoded_content['library_id'])
-                                                                ->value('major_version');
+                    ->where('id', $decoded_content['library_id'])
+                    ->value('major_version');
                 $decoded_content['library_minor_version'] = DB::table('h5p_libraries')
-                                                                ->where('id', $decoded_content['library_id'])
-                                                                ->value('minor_version');
+                    ->where('id', $decoded_content['library_id'])
+                    ->value('minor_version');
                 $destination_activity_json = '/exports/' . $project_dir_name . '/playlists/' . $title .
-                                                '/activities/' . $activity->title . '/' . $activity->h5p_content_id . '.json';
+                    '/activities/' . $activity->title . '/' . $activity->h5p_content_id . '.json';
 
                 Storage::disk('public')->put($destination_activity_json, json_encode($decoded_content));
 
                 if (!empty($activity->thumb_url) && filter_var($activity->thumb_url, FILTER_VALIDATE_URL) == false) {
-                    $activity_thumbanil =  storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
+                    $activity_thumbanil = storage_path("app/public/" . (str_replace('/storage/', '', $activity->thumb_url)));
                     $ext = pathinfo(basename($activity_thumbanil), PATHINFO_EXTENSION);
                     if (file_exists($activity_thumbanil)) {
                         $destination_activity_thumbnail = '/exports/' . $project_dir_name . '/playlists/' . $title .
-                                                            '/activities/' . $activity->title . '/' . basename($activity_thumbanil);
+                            '/activities/' . $activity->title . '/' . basename($activity_thumbanil);
                         Storage::disk('public')->put($destination_activity_thumbnail, file_get_contents($activity_thumbanil));
                     }
                 }
 
                 $content_directory_source = storage_path('app/public/h5p/content/' . $activity->h5p_content_id);
-                $content_directory_destination_path = 'app/public/exports/' . $project_dir_name .'/playlists/' . $title .
-                                                        '/activities/' . $activity->title . '/' . $activity->h5p_content_id;
+                $content_directory_destination_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title .
+                    '/activities/' . $activity->title . '/' . $activity->h5p_content_id;
                 $content_directory_destination = storage_path($content_directory_destination_path);
                 \File::copyDirectory($content_directory_source, $content_directory_destination);
                 $h5p = App::make('LaravelH5p');
@@ -938,7 +963,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
                 if (file_exists(storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p'))) {
                     $h5p_source = storage_path('app/public/h5p/exports/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p');
                     $h5p_destination_path = 'app/public/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
-                                                $activity->title . '/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p';
+                        $activity->title . '/' . $content['slug'] . '-' . $activity->h5p_content_id . '.h5p';
                     $h5p_destination = storage_path($h5p_destination_path);
                     @copy($h5p_source, $h5p_destination);
                 }
@@ -962,11 +987,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        foreach ($files as $name => $file)
-        {
+        foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
-            if (!$file->isDir())
-            {
+            if (!$file->isDir()) {
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
@@ -1032,12 +1055,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $organization
      * @return array
      */
-    public function getUserProjectIdsInOrganization($authenticatedUser, $organization) {
+    public function getUserProjectIdsInOrganization($authenticatedUser, $organization)
+    {
         $authenticatedUserOrgProjectIds = $authenticatedUser
-                                        ->projects()
-                                        ->where('organization_id', $organization->id)
-                                        ->pluck('id')
-                                        ->all();
+            ->projects()
+            ->where('organization_id', $organization->id)
+            ->pluck('id')
+            ->all();
 
         $authenticatedUserOrgProjectIdsString = implode(",", $authenticatedUserOrgProjectIds);
 
@@ -1053,9 +1077,9 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      */
     private function getActivityGrade($projectId, $activityParam)
     {
-        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order','asc')->limit(1)->first();
+        $playlistId = Playlist::where('project_id', $projectId)->orderBy('order', 'asc')->limit(1)->first();
 
-        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order','asc')->limit(1)->first();
+        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order', 'asc')->limit(1)->first();
 
         $resource = new ActivityResource($activity);
 
@@ -1074,15 +1098,16 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $data
      * @return response
      */
-    public function getProjects($suborganization, $data) {
+    public function getProjects($suborganization, $data)
+    {
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->projects();
 
         if (isset($data['query']) && $data['query'] != '') {
-            $query = $query->where(function($qry) use ($data) {
+            $query = $query->where(function ($qry) use ($data) {
                 $qry->where('name', 'iLIKE', '%' . $data['query'] . '%')
-                ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
+                    ->orwhere('description', 'iLIKE', '%' . $data['query'] . '%');
             });
         }
 
@@ -1109,7 +1134,8 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      * @param $data
      * @return response
      */
-    public function getFavoriteProjects($suborganization, $data) {
+    public function getFavoriteProjects($suborganization, $data)
+    {
 
         $authenticated_user = auth()->user();
         $query = $authenticated_user->favoriteProjects();
@@ -1133,5 +1159,89 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         }
 
         return $query->paginate($data['size'])->withQueryString();
+    }
+
+    /**
+     * Check Missing Meta data
+     *
+     * @param $extracted_folder_name
+     * @param $projectOrganizationId
+     * @return response
+     */
+    private function checkProjectMetaData($extracted_folder_name, $projectOrganizationId)
+    {
+
+        if (file_exists(storage_path($extracted_folder_name . '/playlists'))) {
+            $playlist_directories = scandir(storage_path($extracted_folder_name . '/playlists'));
+
+            for ($i = 0; $i < count($playlist_directories); $i++) { // loop through all playlists
+                if ($playlist_directories[$i] == '.' || $playlist_directories[$i] == '..')
+                    continue;
+
+                $playlist_dir = $playlist_directories[$i];
+                if (file_exists(storage_path($extracted_folder_name . '/playlists/' . $playlist_directories[$i] . '/activities/'))) {
+                    $activitity_directories = scandir(storage_path($extracted_folder_name . '/playlists/' . $playlist_directories[$i] . '/activities/'));
+
+                    for ($j = 0; $j < count($activitity_directories); $j++) { // loop through all activities
+                        if ($activitity_directories[$j] == '.' || $activitity_directories[$j] == '..')
+                            continue;
+
+                        $activity_dir = $activitity_directories[$j];
+                        $activitySubjectPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir .
+                            '/activities/' . $activity_dir . '/activity_subject.json');
+                        if (file_exists($activitySubjectPath)) {
+                            $subjectContent = file_get_contents($activitySubjectPath);
+                            $subjects = json_decode($subjectContent, true);
+
+                            foreach ($subjects as $subject) {
+
+                                $recSubject = Subject::where(['name' => $subject['name'], 'organization_id' => $projectOrganizationId])->first();
+
+                                if (empty($recSubject)) {
+                                    return 404;
+                                }
+
+                            }
+                        }
+
+                        // check Activity Education-Level
+
+                        $activtyEducationPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir . '/activities/' .
+                            $activity_dir . '/activity_education_level.json');
+                        if (file_exists($activtyEducationPath)) {
+                            $educationLevelContent = file_get_contents($activtyEducationPath);
+                            $educationLevels = json_decode($educationLevelContent, true);
+
+                            foreach ($educationLevels as $educationLevel) {
+
+                                $recEducationLevel = EducationLevel::where(['name' => $educationLevel['name'], 'organization_id' => $projectOrganizationId])->first();
+                                if (empty($recEducationLevel)) {
+                                    return 404;
+                                }
+
+                            }
+                        }
+
+                        // check Activity Author-Tag
+
+                        $authorTagPath = storage_path($extracted_folder_name . '/playlists/' . $playlist_dir .
+                            '/activities/' . $activity_dir . '/activity_author_tag.json');
+                        if (file_exists($authorTagPath)) {
+                            $authorTagContent = file_get_contents($authorTagPath);
+                            $authorTags = json_decode($authorTagContent, true);
+
+                            foreach ($authorTags as $authorTag) {
+                                $recAuthorTag = AuthorTag::where(['name' => $authorTag['name'], 'organization_id' => $projectOrganizationId])->first();
+
+                                if (empty($recAuthorTag)) {
+                                    return 404;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

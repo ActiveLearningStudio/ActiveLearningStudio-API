@@ -1,0 +1,110 @@
+{
+    "data": [
+        {
+            "id": 2,
+            "user_id": 23,
+            "organization_id": 1,
+            "tool_name": "Kaltura Integration",
+            "tool_url": "https://4515783.kaf.kaltura.com",
+            "tool_domain": "4515783.kaf.kaltura.com",
+            "lti_version": "LTI-1p0",
+            "tool_consumer_key": "4515783",
+            "tool_secret_key": "test",
+            "tool_description": "Testing kaltura integration",
+            "tool_custom_parameter": null,
+            "tool_content_selection_url": "https://4515783.kaf.kaltura.com",
+            "tool_client_id": null,
+            "tool_proxy_id": null,
+            "tool_enabled_capability": null,
+            "tool_icon": null,
+            "tool_secure_icon": null,
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null,
+            "media_source_id": 3,
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false,
+                "tos_type": null,
+                "tos_url": null,
+                "tos_content": null,
+                "privacy_policy_type": null,
+                "privacy_policy_url": null,
+                "privacy_policy_content": null,
+                "primary_color": null,
+                "secondary_color": null,
+                "tertiary_color": null,
+                "primary_font_family": null,
+                "secondary_font_family": null,
+                "favicon": null,
+                "msteam_client_id": null,
+                "msteam_secret_id": null,
+                "msteam_tenant_id": null,
+                "msteam_secret_id_expiry": null,
+                "msteam_project_visibility": true,
+                "msteam_playlist_visibility": false,
+                "msteam_activity_visibility": false,
+                "auto_approve": false,
+                "activity_title_text": "Title",
+                "activity_title_placeholder": "Give your layout a name...",
+                "h5p_reuse_option": true,
+                "h5p_embed_option": true
+            },
+            "media_sources": {
+                "id": 3,
+                "name": "Kaltura",
+                "media_type": "Video",
+                "created_at": "2022-05-09T08:18:12.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            }
+        }
+    ],
+    "links": {
+        "first": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings?filter=3&page=1",
+        "last": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings?filter=3&page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings?filter=3&page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://curriki-studio-api.local/api/v1/suborganizations/1/lti-tool-settings",
+        "per_page": 10,
+        "to": 1,
+        "total": 1
+    }
+}

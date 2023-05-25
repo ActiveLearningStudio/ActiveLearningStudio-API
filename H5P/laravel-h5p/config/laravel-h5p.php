@@ -27,7 +27,7 @@ return [
 	'h5p_show_display_option' => TRUE,
 	'h5p_frame' => TRUE,
 	'h5p_export' => TRUE,
-	'h5p_embed' => TRUE,
+	'h5p_embed' => FALSE,
 	'h5p_copyright' => TRUE,
 	'h5p_icon' => TRUE,
 	'h5p_track_user' => TRUE,
