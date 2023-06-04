@@ -7,6 +7,7 @@ use App\Events\PlaylistUpdatedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\ActivityCreateRequest;
 use App\Http\Requests\V1\ActivityEditRequest;
+use App\Http\Requests\V1\H5pContentByTemplateRequest;
 use App\Http\Resources\V1\ActivityResource;
 use App\Http\Resources\V1\ActivityDetailResource;
 use App\Http\Resources\V1\H5pActivityResource;
@@ -20,14 +21,17 @@ use App\Models\Project;
 use App\Models\Team;
 use App\Repositories\Activity\ActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
+use App\Repositories\H5pContentTemplate\H5pContentTemplateRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
@@ -45,6 +49,7 @@ class ActivityController extends Controller
     private $playlistRepository;
     private $activityRepository;
     private $h5pContentRepository;
+    private $h5pContentTemplateRepository;
 
     /**
      * ActivityController constructor.
@@ -53,18 +58,21 @@ class ActivityController extends Controller
      * @param ActivityRepositoryInterface $activityRepository
      * @param H5pContentRepositoryInterface $h5pContentRepository
      * @param ActivityItemRepositoryInterface $activityItemRepository
+     * @param H5pContentTemplateRepositoryInterface $h5pContentTemplateRepository
      */
     public function __construct(
         PlaylistRepositoryInterface $playlistRepository,
         ActivityRepositoryInterface $activityRepository,
         H5pContentRepositoryInterface $h5pContentRepository,
-        ActivityItemRepositoryInterface $activityItemRepository
+        ActivityItemRepositoryInterface $activityItemRepository,
+        H5pContentTemplateRepositoryInterface $h5pContentTemplateRepository
     )
     {
         $this->playlistRepository = $playlistRepository;
         $this->activityRepository = $activityRepository;
         $this->h5pContentRepository = $h5pContentRepository;
         $this->activityItemRepository = $activityItemRepository;
+        $this->h5pContentTemplateRepository = $h5pContentTemplateRepository;
 
         // $this->authorizeResource(Activity::class, 'activity');
     }
@@ -319,12 +327,12 @@ class ActivityController extends Controller
 
     /**
      * Update H5P
-     * 
+     *
      * Update H5P content
      *
      * @param $request
      * @param int $id
-     * 
+     *
      * @return mixed
      * @throws H5PException
      */
@@ -600,7 +608,7 @@ class ActivityController extends Controller
 
     /**
      * H5P Activity
-     * 
+     *
      * Get H5P Activity details
      *
      * @urlParam activity required The Id of a activity Example: 1
@@ -808,6 +816,34 @@ class ActivityController extends Controller
             'activity' => new ActivityResource($activity),
             'playlist' => new PlaylistResource($activity->playlist),
         ], 200);
+    }
+
+
+
+    public function createH5pContentByTemplate(H5pContentByTemplateRequest $request) {
+        $validated = $request->validated();
+        $contentTemplate = $this->h5pContentTemplateRepository->getH5pContentTemplate($validated['library']);
+        $template = $contentTemplate->template;
+        $contentJson = Blade::render($template, ['data' => $validated]);
+
+        // Instantiate the desired controller
+        try {
+            $controller = app()->make(H5pController::class);
+
+            $request = new Request();
+            $request->merge([
+                'action' => 'create',
+                'library' => $validated['library'],
+                'parameters' => $contentJson,
+            ]);
+            $response = $controller->store($request);
+            return response()->json(json_decode($response->getContent()));
+        } catch (BindingResolutionException $e) {
+            return response([
+                'errors' => ['Unable to create activity.']
+            ], 400);
+        }
+
     }
 }
 
