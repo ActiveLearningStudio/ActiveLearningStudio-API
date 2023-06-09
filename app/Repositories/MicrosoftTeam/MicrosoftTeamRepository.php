@@ -103,7 +103,9 @@ class MicrosoftTeamRepository extends BaseRepository implements MicrosoftTeamRep
             'X-header' => 'value'
         ];
 
-        $response = Http::asForm()->withOptions(["verify"=>false])->post($this->apiURL, $postInput);
+        $url = $this->loginUrl . '/' . $request->tenantId . '/oauth2/v2.0/token';
+
+        $response = Http::asForm()->withOptions(["verify"=>false])->post($url, $postInput);
 
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
