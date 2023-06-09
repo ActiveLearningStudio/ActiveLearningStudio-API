@@ -25,6 +25,7 @@ class GetTokenViaCode extends FormRequest
     {
         return [
             'code' => 'required',
+            'tenantId' => 'required',
         ];
     }
 }
