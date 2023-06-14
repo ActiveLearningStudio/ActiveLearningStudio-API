@@ -26,7 +26,7 @@ return [
 	// Content screen setting
 	'h5p_show_display_option' => TRUE,
 	'h5p_frame' => TRUE,
-	'h5p_export' => FALSE,
+	'h5p_export' => TRUE,
 	'h5p_embed' => TRUE,
 	'h5p_copyright' => TRUE,
 	'h5p_icon' => TRUE,
