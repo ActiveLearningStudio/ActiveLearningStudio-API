@@ -183,7 +183,7 @@ class H5pApiController extends Controller
 
         // Prepare form
         $library = $content['library'] ? H5PCore::libraryToString($content['library']) : 0;
-        $parameters = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+        $parameters = '{"params":' . $h5p::filterParametersWithoutExport($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
         $display_options = $core->getDisplayOptionsForEdit($content['disable']);
 
         // view Get the file and settings to print from
@@ -199,7 +199,7 @@ class H5pApiController extends Controller
             $content['library']['majorVersion'] . '.' . $content['library']['minorVersion']
         ));
 
-        $user = Auth::user();        
+        $user = Auth::user();
 
         return response()->json([
             'settings' => $settings,
