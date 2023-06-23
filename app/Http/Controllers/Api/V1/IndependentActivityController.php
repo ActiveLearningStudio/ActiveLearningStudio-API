@@ -309,7 +309,7 @@ class IndependentActivityController extends Controller
         return \DB::transaction(function () use ($validated, $independent_activity) {
 
             $attributes = Arr::except($validated, ['data', 'subject_id', 'education_level_id', 'author_tag_id']);
-            
+
             $is_updated = $this->independentActivityRepository->update($attributes, $independent_activity->id);
 
             if ($is_updated) {
@@ -344,14 +344,14 @@ class IndependentActivityController extends Controller
 
     /**
      * Update H5P
-     * 
+     *
      * Update H5P Content
-     * 
+     *
      * @urlParam id required The Id of hp5 content Example: 1
      *
      * @param $request
      * @param int $id
-     * 
+     *
      * @return mixed
      * @throws H5PException
      */
@@ -448,7 +448,7 @@ class IndependentActivityController extends Controller
             $editor = $h5p::$h5peditor;
             $content = $h5p->load_content($independent_activity->h5p_content_id);
             $library = $content['library'] ? \H5PCore::libraryToString($content['library']) : 0;
-            $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+            $data['h5p_parameters'] = '{"params":' . $h5p::filterParametersWithoutExport($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
         }
 
         return response([
@@ -886,10 +886,10 @@ class IndependentActivityController extends Controller
      *
      * @param Request $request
      * @param IndependentActivity $independent_activity
-     * 
+     *
      * @return download file download for the independent activity XAPI zip download
      */
-    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity) 
+    public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity)
     {
         return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
     }

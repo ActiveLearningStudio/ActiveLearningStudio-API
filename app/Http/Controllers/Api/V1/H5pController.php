@@ -53,7 +53,7 @@ class H5pController extends Controller
      * Get a list of the H5Ps.
      *
      * @param Request $request
-     * 
+     *
      * @return JsonResponse
      */
     public function index(Request $request)
@@ -82,7 +82,7 @@ class H5pController extends Controller
 
     /**
      * Create H5P Settings
-     * 
+     *
      * Create H5P Settings in the database.
      *
      * @param Request $request
@@ -127,7 +127,7 @@ class H5pController extends Controller
 
     /**
      * Store H5P
-     * 
+     *
      * Store H5P Content
      *
      * @param Request $request
@@ -195,7 +195,7 @@ class H5pController extends Controller
 
                 // Set disabled features
                 $this->get_disabled_content_features($core, $content);
-                
+
                 // Save new content
                 $content['id'] = $core->saveContent($content);
 
@@ -214,7 +214,7 @@ class H5pController extends Controller
                         $bcAPIClient = new Client($bcAPISetting);
                         $bcInstance = new UpdateVideoTags($bcAPIClient);
                         $bcInstance->fetch($bcAPISetting, $createH5PBCVC->brightcove_video_id, 'curriki', false);
-                    }                    
+                    }
                 }
 
                 // Move images and find all content dependencies
@@ -281,7 +281,7 @@ class H5pController extends Controller
 
         // Prepare form
         $library = $content['library'] ? H5PCore::libraryToString($content['library']) : 0;
-        $parameters = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+        $parameters = '{"params":' . $h5p::filterParametersWithoutExport($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
         $display_options = $core->getDisplayOptionsForEdit($content['disable']);
 
         // view Get the file and settings to print from
@@ -315,7 +315,7 @@ class H5pController extends Controller
 
     /**
      * Get H5P Activity
-     * 
+     *
      * Get H5P based on Activity
      *
      * @urlParam activity required The Id of a activity Example: 1
@@ -360,7 +360,7 @@ class H5pController extends Controller
         }
 
         $h5p_data = ['settings' => $settings, 'user' => $user_data, 'embed_code' => $embed_code];
-        
+
         $brightcoveContentData = H5pBrightCoveVideoContents::where('h5p_content_id', $activity->h5p_content_id)->first();
         $brightcoveData = null;
         if ($brightcoveContentData && $brightcoveContentData->brightcove_api_setting_id) {
@@ -368,7 +368,7 @@ class H5pController extends Controller
             $brightcoveData = ['videoId' => $brightcoveContentData->brightcove_video_id, 'accountId' => $bcAPISettingRepository->account_id];
             $activity->brightcoveData = $brightcoveData;
         }
-        
+
         return response([
             'h5p_activity' => new H5pActivityResource($activity, $h5p_data),
         ], 200);
@@ -376,7 +376,7 @@ class H5pController extends Controller
 
     /**
      * Get H5P Independent Activity
-     * 
+     *
      * Get H5P based on Independent Activity
      *
      * @urlParam independent_activity required The Id of an independent activity Example: 1
@@ -667,7 +667,7 @@ class H5pController extends Controller
         // Move so core can validate the file extension.
         // dd($_FILES['h5p_file']);
         rename($_FILES['h5p_file']['tmp_name'], $interface->getUploadedH5pPath());
-       
+
         $skipContent = ($content === NULL);
         if ($validator->isValidPackage($skipContent, $only_upgrade)) {
             $tmpDir = $interface->getUploadedH5pFolderPath();

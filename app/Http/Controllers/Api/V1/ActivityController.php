@@ -429,7 +429,7 @@ class ActivityController extends Controller
             $editor = $h5p::$h5peditor;
             $content = $h5p->load_content($activity->h5p_content_id);
             $library = $content['library'] ? \H5PCore::libraryToString($content['library']) : 0;
-            $data['h5p_parameters'] = '{"params":' . $core->filterParameters($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
+            $data['h5p_parameters'] = '{"params":' . $h5p::filterParametersWithoutExport($content) . ',"metadata":' . json_encode((object)$content['metadata']) . '}';
         }
 
         return response([
