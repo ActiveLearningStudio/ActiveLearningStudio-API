@@ -621,14 +621,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $authUser
      * @param Project $project
-     * @param int $suborganization_id
+     * @param string $projectDirName
      * @throws GeneralException
      */
-    public function exportProject($authUser, Project $project)
+    public function exportProject($authUser, Project $project, $projectDirName = 'projects-')
     {
         $zip = new ZipArchive;
 
-        $project_dir_name = 'projects-' . uniqid();
+        $project_dir_name = $projectDirName . uniqid();
 
         // Add Grade level of first activity on project manifest
         $organizationName = Organization::where('id', $project->organization_id)->value('name');
