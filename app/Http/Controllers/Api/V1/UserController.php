@@ -983,8 +983,7 @@ class UserController extends Controller
 
         $userImportRequestData = $userImportRequest->validated();
 
-        $exportUsersRequest = $this->userRepository->processImportUsersRequest(auth()->user(), $userImportRequestData, $suborganization);
-        // ProcessImportUserRequest::dispatch(auth()->user(), $userImportRequestData, $suborganization)->delay(now()->addSecond());
+        ProcessImportUserRequest::dispatch(auth()->user(), $userImportRequestData, $suborganization)->delay(now()->addSecond());
 
         return response([
             'message' =>  "Your request to import users and their projects and independent activities has been received and is being processed. <br>

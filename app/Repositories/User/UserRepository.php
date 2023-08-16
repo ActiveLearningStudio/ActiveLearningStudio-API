@@ -687,12 +687,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
                                 if (config('constants.map-device-lti-client-id')) {
                                     // map-device-lti-client-id
-                                    // $lms_settings = LmsSetting::where('lti_client_id',config('constants.map-device-lti-client-id'))->first();
                                     $lms_settings = $this->lmsSettingRepository->findByField('lti_client_id', config('constants.map-device-lti-client-id'));
 
                                     if (!empty($lms_settings) && isset($encodedResponse['project_id']) && !empty($encodedResponse['project_id'])) {
                                         // Code for Moodle Import
-                                        // $playlists = Playlist::where('project_id',$encodedResponse['project_id'])->get();
                                         $playlists = $this->playlistRepository->getPlaylistsByProjectId($encodedResponse['project_id']);
 
                                         foreach ($playlists as $playlist) {
