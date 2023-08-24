@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('parent_id')->references('id')->on('export_request_items');
             $table->unsignedBigInteger('item_id');
             $table->enum('item_type', ['USER', 'PROJECT', 'INDEPENDENT-ACTIVITY'])->default("USER");
+            $table->enum('item_status', ['PENDING', 'IN-PROGRESS', 'FAILED', 'COMPLETED'])->nullable();
             $table->string('exported_file_path')->nullable();
             $table->timestamps();
             $table->softDeletes();

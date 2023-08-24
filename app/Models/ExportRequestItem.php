@@ -24,6 +24,7 @@ class ExportRequestItem extends Model
         'parent_id',
         'item_id',
         'item_type',
+        'item_status',
         'exported_file_path'
     ];
 

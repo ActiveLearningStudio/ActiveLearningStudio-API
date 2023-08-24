@@ -502,33 +502,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                                 ->get();
 
                     foreach ($userOrgProjectsObjs as $userProjectObj) {
-                        $userPlaylistObjs = $userProjectObj->playlists;
-                        if ($userPlaylistObjs->count() < 1) {
-                            continue;
+                        try {
+                            $projectExportFile = basename($this->projectRepository->exportProject($authUser, $userProjectObj, 'export-requests/projects-'));
+                            $itemStatus = 'COMPLETED';
+                        } catch (\Exception $e) {
+                            $itemStatus = 'FAILED';
+                            $projectExportFile = 'FAILED EXPORT: ' .$e->getMessage();
                         }
-
-                        foreach ($userPlaylistObjs as $userPlaylistObj) {
-                            $userActivitiesObjs = $userPlaylistObj->activities;
-
-                            if ($userActivitiesObjs->count() < 1) {
-                                continue 2;
-                            }
-
-                            foreach ($userActivitiesObjs as $userActivityObj) {
-                                $userH5pContentObj = $userActivityObj->h5p_content;
-
-                                if (!$userH5pContentObj) {
-                                    continue 3;
-                                }
-                            }
-                        }
-
-                        $projectExportFile = $this->projectRepository->exportProject($authUser, $userProjectObj, 'export-requests/projects-');
 
                         $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
                             'item_id' => $userProjectObj->id,
                             'item_type' => 'PROJECT',
-                            'exported_file_path' => basename($projectExportFile)
+                            'item_status' => $itemStatus,
+                            'exported_file_path' => $projectExportFile
                         ]);
                     }
 
@@ -538,12 +524,19 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                                 ->get();
 
                     foreach ($userIndependentActivitiesObjs as $independentActivityObj) {
-                        $independentActivityExportFile = $this->independentActivityRepository->exportIndependentActivity($authUser, $independentActivityObj, 'export-requests/independent_activity-');
+                        try {
+                            $independentActivityExportFile = basename($this->independentActivityRepository->exportIndependentActivity($authUser, $independentActivityObj, 'export-requests/independent_activity-'));
+                            $itemStatus = 'COMPLETED';
+                        } catch (\Exception $e) {
+                            $itemStatus = 'FAILED';
+                            $independentActivityExportFile = 'FAILED EXPORT: ' .$e->getMessage();
+                        }
 
                         $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
                             'item_id' => $independentActivityObj->id,
                             'item_type' => 'INDEPENDENT-ACTIVITY',
-                            'exported_file_path' => basename($independentActivityExportFile)
+                            'item_status' => $itemStatus,
+                            'exported_file_path' => $independentActivityExportFile
                         ]);
                     }
                 }
@@ -680,30 +673,32 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                         $exportRequestSubItems = $exportRequestUser->export_request_sub_items;
 
                         foreach ($exportRequestSubItems as $exportRequestSubItem) {
-                            $exportedFilePath = storage_path("app/public/exports/export-requests/" . $exportRequestSubItem->exported_file_path);
-                            if ($exportRequestSubItem->item_type === 'PROJECT') {
-                                $response = $this->projectRepository->importProject($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
-                                $encodedResponse = json_decode($response,true);
+                            if ($exportRequestSubItem->item_status === 'COMPLETED') {
+                                $exportedFilePath = storage_path("app/public/exports/export-requests/" . $exportRequestSubItem->exported_file_path);
+                                if ($exportRequestSubItem->item_type === 'PROJECT') {
+                                    $response = $this->projectRepository->importProject($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                    $encodedResponse = json_decode($response,true);
 
-                                if (config('constants.map-device-lti-client-id')) {
-                                    // map-device-lti-client-id
-                                    $lms_settings = $this->lmsSettingRepository->findByField('lti_client_id', config('constants.map-device-lti-client-id'));
+                                    if (config('constants.map-device-lti-client-id')) {
+                                        // map-device-lti-client-id
+                                        $lms_settings = $this->lmsSettingRepository->findByField('lti_client_id', config('constants.map-device-lti-client-id'));
 
-                                    if (!empty($lms_settings) && isset($encodedResponse['project_id']) && !empty($encodedResponse['project_id'])) {
-                                        // Code for Moodle Import
-                                        $playlists = $this->playlistRepository->getPlaylistsByProjectId($encodedResponse['project_id']);
+                                        if (!empty($lms_settings) && isset($encodedResponse['project_id']) && !empty($encodedResponse['project_id'])) {
+                                            // Code for Moodle Import
+                                            $playlists = $this->playlistRepository->getPlaylistsByProjectId($encodedResponse['project_id']);
 
-                                        foreach ($playlists as $playlist) {
-                                            // Publish playlist into moodle
-                                            $lmsSetting = $this->lmsSettingRepository->find($lms_settings->id);
-                                            $counter = 0;
-                                            $playlistMoodleObj = new PlaylistMoodle($lmsSetting);
-                                            $responseReq = $playlistMoodleObj->send($playlist, ['counter' => intval($counter)]);
+                                            foreach ($playlists as $playlist) {
+                                                // Publish playlist into moodle
+                                                $lmsSetting = $this->lmsSettingRepository->find($lms_settings->id);
+                                                $counter = 0;
+                                                $playlistMoodleObj = new PlaylistMoodle($lmsSetting);
+                                                $responseReq = $playlistMoodleObj->send($playlist, ['counter' => intval($counter)]);
+                                            }
                                         }
                                     }
+                                } elseif ($exportRequestSubItem->item_type === 'INDEPENDENT-ACTIVITY') {
+                                    $response = $this->independentActivityRepository->importIndependentActivity($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
                                 }
-                            } elseif ($exportRequestSubItem->item_type === 'INDEPENDENT-ACTIVITY') {
-                                $response = $this->independentActivityRepository->importIndependentActivity($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
                             }
                         }
                     }

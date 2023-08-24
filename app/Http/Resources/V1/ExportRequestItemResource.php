@@ -26,6 +26,7 @@ class ExportRequestItemResource extends JsonResource
             'parent_id' => $this->whenNotNull($this->parent_id),
             'item_id' => $this->item_id,
             'item_type' => $this->item_type,
+            'item_status' => $this->whenNotNull($this->item_status),
             'exported_file_path' => $this->whenNotNull($this->exported_file_path),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

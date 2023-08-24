@@ -54,7 +54,7 @@ class ImportUsersRequestProcessedNotification extends Notification
     {
         return (new MailMessage)
             ->greeting('Hello ' . $this->userName . '!')
-            ->line('Your import users request [' . $this->exportUsersRequest['export_request_id'] . '] has been completed.')
+            ->line('Your import users request [' . $this->importUsersRequest['export_request_id'] . '] has been completed.')
 
             ->line('Thank you for using our application!');
     }
@@ -67,8 +67,8 @@ class ImportUsersRequestProcessedNotification extends Notification
      */
     public function toDatabase($notifiable)
     {
-        $exportUsersRequestId = $this->exportUsersRequest['export_request_id'];
-        $message = "Import Users Request [$exportUsersRequestId] has been imported successfully.";
+        $importUsersRequestId = $this->importUsersRequest['export_request_id'];
+        $message = "Import Users Request [$importUsersRequestId] has been imported successfully.";
 
         return [
             'message' => $message,
