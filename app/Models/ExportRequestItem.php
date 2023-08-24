@@ -24,6 +24,7 @@ class ExportRequestItem extends Model
         'parent_id',
         'item_id',
         'item_type',
+        'status',
         'exported_file_path'
     ];
 
@@ -41,6 +42,22 @@ class ExportRequestItem extends Model
     public function exportRequest()
     {
         return $this->belongsTo('App\Models\ExportRequest');
+    }
+
+    /**
+     * Get the project that owns the export request item.
+     */
+    public function project()
+    {
+        return $this->belongsTo('App\Models\Project', 'item_id');
+    }
+
+    /**
+     * Get the independent activity that owns the export request item.
+     */
+    public function independentActivity()
+    {
+        return $this->belongsTo('App\Models\IndependentActivity', 'item_id');
     }
 
     /**

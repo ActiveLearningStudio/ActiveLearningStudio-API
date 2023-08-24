@@ -32,6 +32,7 @@ use App\Models\ExportRequest;
 use App\Jobs\ProcessExportUserRequest;
 use App\Jobs\ProcessImportUserRequest;
 use App\Notifications\NewUserNotification;
+use App\Notifications\ExportUsersRequestProcessedNotification;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -902,6 +903,44 @@ class UserController extends Controller
         return response([
             'errors' => ['Not a valid token or user dont exist.'],
         ], 500);
+    }
+
+    /**
+     * Create User Export Request
+     *
+     * Create the request to export users and their projects and independent activities.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam users CSV file containing user emails to export data for.
+     *
+     * @response {
+     *   "message": "Your request to export users and their projects and independent activities has been received and is being processed. <br> You will be alerted in the notification section in the title bar when complete."
+     * }
+     *
+     * @param UserExportRequest $userExportRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function createExportRequest(UserExportRequest $userExportRequest, Organization $suborganization)
+    {
+        $this->authorize('addUser', $suborganization);
+
+        $userExportRequest->validated();
+        $path = $userExportRequest->file('users')->store('public/imports');
+
+        try {
+            $exportUsersRequest = $userRepository->createExportUsersRequest(auth()->user(), Storage::url($path), $suborganization);
+
+            $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
+            $this->user->notify(new ExportUsersRequestProcessedNotification($userName, $exportUsersRequest));
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+        }
+
+        return response([
+            'message' =>  "Your request to export users and their projects and independent activities has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
     }
 
     /**

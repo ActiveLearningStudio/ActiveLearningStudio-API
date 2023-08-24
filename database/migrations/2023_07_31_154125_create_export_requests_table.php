@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->enum('type', ['ORGANIZATION', 'USER', 'PROJECT', 'INDEPENDENT-ACTIVITY'])->default("USER");
+            $table->enum('status', ['PENDING', 'IN-PROGRESS', 'FAILED', 'COMPLETED'])->default("PENDING");
             $table->timestamps();
             $table->softDeletes();
         });

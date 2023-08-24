@@ -9,6 +9,7 @@ use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\ExportRequest\ExportRequestRepositoryInterface;
 use App\CurrikiGo\Moodle\Playlist as PlaylistMoodle;
 use App\User;
 use Carbon\Carbon;
@@ -36,6 +37,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     private $uiOrganizationPermissionMappingRepository;
     private $lmsSettingRepository;
     private $playlistRepository;
+    private $exportRequestRepository;
 
     /**
      * UserRepository constructor.
@@ -46,6 +48,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
      * @param LmsSettingRepositoryInterface $lmsSettingRepository
      * @param PlaylistRepositoryInterface $playlistRepository
+     * @param ExportRequestRepositoryInterface $exportRequestRepository
      */
     public function __construct(
         User $model,
@@ -53,7 +56,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         IndependentActivityRepositoryInterface $independentActivityRepository,
         UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository,
         LmsSettingRepositoryInterface $lmsSettingRepository,
-        PlaylistRepositoryInterface $playlistRepository
+        PlaylistRepositoryInterface $playlistRepository,
+        ExportRequestRepositoryInterface $exportRequestRepository
     )
     {
         $this->projectRepository = $projectRepository;
@@ -61,6 +65,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->uiOrganizationPermissionMappingRepository = $uiOrganizationPermissionMappingRepository;
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->playlistRepository = $playlistRepository;
+        $this->exportRequestRepository = $exportRequestRepository;
         parent::__construct($model);
     }
 
@@ -445,6 +450,332 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * Create the request to export users and their projects and independent activities
+     *
+     * @param $authUser
+     * @param string $path
+     * @param $suborganization
+     * @param string $methodSource
+     * @throws GeneralException
+     */
+    public function createExportUsersRequest($authUser, $path, $suborganization, $methodSource = "API")
+    {
+        try {
+            $sourceFile = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
+
+            if ($methodSource === "command") {
+                $sourceFile = $path;
+            }
+
+            $userEmails = [];
+            if (file_exists($sourceFile)) {
+                $file = fopen($sourceFile, 'r');
+                while (($line = fgetcsv($file)) !== FALSE) {
+                    if ($line[0] !== '') {
+                        $userEmails[] = $line[0];
+                    }
+                }
+                fclose($file);
+            } else {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to create export users request."
+                ];
+
+                return json_encode($return_res);
+            }
+
+            $userObjs = $suborganization->users()->whereIn('email', $userEmails)->get();
+
+            return DB::transaction(function () use ($authUser, $userObjs, $suborganization, $sourceFile, $methodSource) {
+                $exportRequestObj = $authUser->exportRequests()->create([
+                    'organization_id' => $suborganization->id,
+                    'type' => 'USER',
+                    'status' => 'PENDING'
+                ]);
+
+                foreach ($userObjs as $userObj) {
+                    $exportRequestsItemObj = $exportRequestObj->exportRequestsItems()->create([
+                        'item_id' => $userObj->id,
+                        'item_type' => 'USER',
+                        'status' => 'PENDING'
+                    ]);
+
+                    $userOrgProjectsObjs = $userObj->projects()
+                                                ->where('organization_id', $suborganization->id)
+                                                ->get();
+
+                    foreach ($userOrgProjectsObjs as $userProjectObj) {
+                        $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
+                            'item_id' => $userProjectObj->id,
+                            'item_type' => 'PROJECT',
+                            'status' => 'PENDING'
+                        ]);
+                    }
+
+                    $userIndependentActivitiesObjs = $userObj->independentActivities()
+                                                ->has('h5p_content')
+                                                ->where('organization_id', $suborganization->id)
+                                                ->get();
+
+                    foreach ($userIndependentActivitiesObjs as $independentActivityObj) {
+                        $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
+                            'item_id' => $independentActivityObj->id,
+                            'item_type' => 'INDEPENDENT-ACTIVITY'
+                        ]);
+                    }
+                }
+
+                if (file_exists($sourceFile)) {
+                    if ($methodSource !== "command") {
+                        unlink($sourceFile); // Deleted the storage csv file
+                    } else {
+                        $return_res = [
+                            "success" => true,
+                            "message" => "Created export users request successfully",
+                            "export_request_id" => $exportRequestObj->id
+                        ];
+                        return json_encode($return_res);
+                    }
+
+                    return [
+                        'export_request_id' => $exportRequestObj->id
+                    ];
+                }
+            });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            \Sentry\captureException($e);
+            if ($methodSource === "command") {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to create export users request, please try again later!"
+                ];
+                return (json_encode($return_res));
+            }
+
+            throw new GeneralException('Unable to create export users request, please try again later!');
+        }
+    }
+
+    /**
+     * Process the requests to export users and their projects and independent activities
+     *
+     * @param $authUser
+     * @param string $path
+     * @param $suborganization
+     * @param string $methodSource
+     * @throws GeneralException
+     */
+    public function processExportRequest($authUser, $path, $suborganization, $methodSource = "API")
+    {
+        try {
+            $inProgressExportRequest = $this->exportRequestRepository->getByStatus('IN-PROGRESS');
+
+            if ($inProgressExportRequest && $inProgressExportRequest->type === 'USER') {
+                $inProgressExportRequestItem = $inProgressExportRequest->exportRequestsItems()
+                    ->where('item_type', 'USER')
+                    ->where('status', 'IN-PROGRESS')
+                    ->orderBy('id', 'ASC')
+                    ->first();
+
+                if ($inProgressExportRequestItem) {
+                    $pendingSubExportRequestItem = $inProgressExportRequestItem->subExportRequestsItems()
+                        ->where('item_type', 'PROJECT')
+                        ->where('status', 'PENDING')
+                        ->orderBy('id', 'ASC')
+                        ->first();
+
+                    if ($pendingSubExportRequestItem) {
+                        $pendingSubExportRequestItem->status = 'IN-PROGRESS';
+                        $pendingSubExportRequestItem->save();
+                        $projectExportFile = $this->projectRepository->exportProject('', $pendingSubExportRequestItem->project, 'export-requests/projects-');
+                        $pendingSubExportRequestItem->exported_file_path = basename($projectExportFile);
+                        $pendingSubExportRequestItem->status = 'COMPLETED';
+                        $pendingSubExportRequestItem->save();
+                    } else {
+                        $pendingSubExportRequestItemIndependentActivity = $inProgressExportRequestItem->subExportRequestsItems()
+                            ->where('item_type', 'INDEPENDENT-ACTIVITY')
+                            ->where('status', 'PENDING')
+                            ->orderBy('id', 'ASC')
+                            ->first();
+
+                        if ($pendingSubExportRequestItemIndependentActivity) {
+                            $pendingSubExportRequestItemIndependentActivity->status = 'IN-PROGRESS';
+                            $pendingSubExportRequestItemIndependentActivity->save();
+                            $independentActivityExportFile = $this->independentActivityRepository->exportIndependentActivity('', $pendingSubExportRequestItemIndependentActivity->independentActivity, 'export-requests/independent_activity-');
+                            $pendingSubExportRequestItemIndependentActivity->exported_file_path = basename($independentActivityExportFile);
+                            $pendingSubExportRequestItemIndependentActivity->status = 'COMPLETED';
+                            $pendingSubExportRequestItemIndependentActivity->save();
+                        }
+                    }
+                } else {
+                    $pendingExportRequestItem = $inProgressExportRequest->exportRequestsItems()
+                        ->where('item_type', 'USER')
+                        ->where('status', 'PENDING')
+                        ->orderBy('id', 'ASC')
+                        ->first();
+
+                    if ($pendingExportRequestItem) {
+                        $pendingSubExportRequestItem = $pendingExportRequestItem->subExportRequestsItems()
+                            ->where('item_type', 'PROJECT')
+                            ->where('status', 'PENDING')
+                            ->orderBy('id', 'ASC')
+                            ->first();
+    
+                        if ($pendingSubExportRequestItem) {
+                            $pendingSubExportRequestItem->status = 'IN-PROGRESS';
+                            $pendingSubExportRequestItem->save();
+                            $projectExportFile = $this->projectRepository->exportProject('', $pendingSubExportRequestItem->project, 'export-requests/projects-');
+                            $pendingSubExportRequestItem->exported_file_path = basename($projectExportFile);
+                            $pendingSubExportRequestItem->status = 'COMPLETED';
+                            $pendingSubExportRequestItem->save();
+                        } else {
+                            $pendingSubExportRequestItemIndependentActivity = $pendingExportRequestItem->subExportRequestsItems()
+                                ->where('item_type', 'INDEPENDENT-ACTIVITY')
+                                ->where('status', 'PENDING')
+                                ->orderBy('id', 'ASC')
+                                ->first();
+    
+                            if ($pendingSubExportRequestItemIndependentActivity) {
+                                $pendingSubExportRequestItemIndependentActivity->status = 'IN-PROGRESS';
+                                $pendingSubExportRequestItemIndependentActivity->save();
+                                $independentActivityExportFile = $this->independentActivityRepository->exportIndependentActivity('', $pendingSubExportRequestItemIndependentActivity->independentActivity, 'export-requests/independent_activity-');
+                                $pendingSubExportRequestItemIndependentActivity->exported_file_path = basename($independentActivityExportFile);
+                                $pendingSubExportRequestItemIndependentActivity->status = 'COMPLETED';
+                                $pendingSubExportRequestItemIndependentActivity->save();
+                            }
+                        }
+                    }
+                }
+            } else {
+                $pendingExportRequest = $this->exportRequestRepository->getByStatus('PENDING');
+            }
+
+            $sourceFile = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
+
+            if ($methodSource === "command") {
+                $sourceFile = $path;
+            }
+
+            $userEmails = [];
+            if (file_exists($sourceFile)) {
+                $file = fopen($sourceFile, 'r');
+                while (($line = fgetcsv($file)) !== FALSE) {
+                    if ($line[0] !== '') {
+                        $userEmails[] = $line[0];
+                    }
+                }
+                fclose($file);
+            } else {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to process export users request."
+                ];
+
+                return json_encode($return_res);
+            }
+
+            $userObjs = $suborganization->users()->whereIn('email', $userEmails)->get();
+
+            return DB::transaction(function () use ($authUser, $userObjs, $suborganization, $sourceFile, $methodSource) {
+                $exportRequestObj = $authUser->exportRequests()->create([
+                    'organization_id' => $suborganization->id,
+                    'type' => 'USER'
+                ]);
+
+                foreach ($userObjs as $userObj) {
+                    $exportRequestsItemObj = $exportRequestObj->exportRequestsItems()->create([
+                        'item_id' => $userObj->id,
+                        'item_type' => 'USER'
+                    ]);
+
+                    $userOrgProjectsObjs = $userObj->projects()
+                                                ->where('organization_id', $suborganization->id)
+                                                ->get();
+
+                    foreach ($userOrgProjectsObjs as $userProjectObj) {
+                        $userPlaylistObjs = $userProjectObj->playlists;
+                        if ($userPlaylistObjs->count() < 1) {
+                            continue;
+                        }
+
+                        foreach ($userPlaylistObjs as $userPlaylistObj) {
+                            $userActivitiesObjs = $userPlaylistObj->activities;
+
+                            if ($userActivitiesObjs->count() < 1) {
+                                continue 2;
+                            }
+
+                            foreach ($userActivitiesObjs as $userActivityObj) {
+                                $userH5pContentObj = $userActivityObj->h5p_content;
+
+                                if (!$userH5pContentObj) {
+                                    continue 3;
+                                }
+                            }
+                        }
+
+                        $projectExportFile = $this->projectRepository->exportProject($authUser, $userProjectObj, 'export-requests/projects-');
+
+                        $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
+                            'item_id' => $userProjectObj->id,
+                            'item_type' => 'PROJECT',
+                            'exported_file_path' => basename($projectExportFile)
+                        ]);
+                    }
+
+                    $userIndependentActivitiesObjs = $userObj->independentActivities()
+                                                ->has('h5p_content')
+                                                ->where('organization_id', $suborganization->id)
+                                                ->get();
+
+                    foreach ($userIndependentActivitiesObjs as $independentActivityObj) {
+                        $independentActivityExportFile = $this->independentActivityRepository->exportIndependentActivity($authUser, $independentActivityObj, 'export-requests/independent_activity-');
+
+                        $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
+                            'item_id' => $independentActivityObj->id,
+                            'item_type' => 'INDEPENDENT-ACTIVITY',
+                            'exported_file_path' => basename($independentActivityExportFile)
+                        ]);
+                    }
+                }
+
+                if (file_exists($sourceFile)) {
+                    if ($methodSource !== "command") {
+                        unlink($sourceFile); // Deleted the storage csv file
+                    } else {
+                        $return_res = [
+                            "success" => true,
+                            "message" => "Processed export users request successfully",
+                            "export_request_id" => $exportRequestObj->id
+                        ];
+                        return json_encode($return_res);
+                    }
+
+                    return [
+                        'export_request_id' => $exportRequestObj->id
+                    ];
+                }
+            });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            \Sentry\captureException($e);
+            if ($methodSource === "command") {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to process export users request, please try again later!"
+                ];
+                return (json_encode($return_res));
+            }
+
+            throw new GeneralException('Unable to process export users request, please try again later!');
+        }
     }
 
     /**

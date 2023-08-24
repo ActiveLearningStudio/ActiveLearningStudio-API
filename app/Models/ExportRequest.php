@@ -21,7 +21,8 @@ class ExportRequest extends Model
     protected $fillable = [
         'organization_id',
         'user_id',
-        'type'
+        'type',
+        'status'
     ];
 
     /**
