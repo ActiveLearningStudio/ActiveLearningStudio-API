@@ -593,11 +593,29 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     if ($pendingSubExportRequestItem) {
                         $pendingSubExportRequestItem->status = 'IN-PROGRESS';
                         $pendingSubExportRequestItem->save();
-                        $projectExportFile = $this->projectRepository->exportProject('', $pendingSubExportRequestItem->project, 'export-requests/projects-');
-                        $pendingSubExportRequestItem->exported_file_path = basename($projectExportFile);
-                        $pendingSubExportRequestItem->status = 'COMPLETED';
+                        $pendingSubExportRequestItemStatus = 'COMPLETED';
+                        try {
+                            $projectExportFile = basename($this->projectRepository->exportProject('', $pendingSubExportRequestItem->project, 'export-requests/projects-'));
+                        } catch (\Exception $e) {
+                            $pendingSubExportRequestItemStatus = 'FAILED';
+                            $projectExportFile = 'FAILED EXPORT: ' .$e->getMessage();
+                        }
+                        $pendingSubExportRequestItem->exported_file_path = $projectExportFile;
+                        $pendingSubExportRequestItem->status = $pendingSubExportRequestItemStatus;
                         $pendingSubExportRequestItem->save();
                     } else {
+                        $failedSubExportRequestItem = $inProgressExportRequestItem->subExportRequestsItems()
+                            ->where('item_type', 'PROJECT')
+                            ->where('status', 'FAILED')
+                            ->orderBy('id', 'ASC')
+                            ->first();
+                        
+                        if ($failedSubExportRequestItem) {
+                            $inProgressExportRequestItem
+                        }
+
+
+
                         $pendingSubExportRequestItemIndependentActivity = $inProgressExportRequestItem->subExportRequestsItems()
                             ->where('item_type', 'INDEPENDENT-ACTIVITY')
                             ->where('status', 'PENDING')
@@ -607,9 +625,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                         if ($pendingSubExportRequestItemIndependentActivity) {
                             $pendingSubExportRequestItemIndependentActivity->status = 'IN-PROGRESS';
                             $pendingSubExportRequestItemIndependentActivity->save();
-                            $independentActivityExportFile = $this->independentActivityRepository->exportIndependentActivity('', $pendingSubExportRequestItemIndependentActivity->independentActivity, 'export-requests/independent_activity-');
-                            $pendingSubExportRequestItemIndependentActivity->exported_file_path = basename($independentActivityExportFile);
-                            $pendingSubExportRequestItemIndependentActivity->status = 'COMPLETED';
+                            $pendingSubExportRequestItemIndependentActivityStatus = 'COMPLETED';
+                            try {
+                                $independentActivityExportFile = basename($this->independentActivityRepository->exportIndependentActivity('', $pendingSubExportRequestItemIndependentActivity->independentActivity, 'export-requests/independent_activity-'));
+                            } catch (\Exception $e) {
+                                $pendingSubExportRequestItemIndependentActivityStatus = 'FAILED';
+                                $independentActivityExportFile = 'FAILED EXPORT: ' .$e->getMessage();
+                            }
+                            $pendingSubExportRequestItemIndependentActivity->exported_file_path = $independentActivityExportFile;
+                            $pendingSubExportRequestItemIndependentActivity->status = $pendingSubExportRequestItemIndependentActivityStatus;
                             $pendingSubExportRequestItemIndependentActivity->save();
                         }
                     }
