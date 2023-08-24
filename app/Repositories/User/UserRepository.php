@@ -505,9 +505,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                         try {
                             $projectExportFile = basename($this->projectRepository->exportProject($authUser, $userProjectObj, 'export-requests/projects-'));
                             $itemStatus = 'COMPLETED';
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $t) {
                             $itemStatus = 'FAILED';
-                            $projectExportFile = 'FAILED EXPORT: ' .$e->getMessage();
+                            $projectExportFile = 'FAILED EXPORT: ' .$t->getMessage();
                         }
 
                         $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
@@ -527,9 +527,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                         try {
                             $independentActivityExportFile = basename($this->independentActivityRepository->exportIndependentActivity($authUser, $independentActivityObj, 'export-requests/independent_activity-'));
                             $itemStatus = 'COMPLETED';
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $t) {
                             $itemStatus = 'FAILED';
-                            $independentActivityExportFile = 'FAILED EXPORT: ' .$e->getMessage();
+                            $independentActivityExportFile = 'FAILED EXPORT: ' .$t->getMessage();
                         }
 
                         $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
