@@ -21,11 +21,6 @@ class ProcessImportUserRequest implements ShouldQueue
     protected $user;
 
     /**
-     * @var 
-     */
-    protected $request;
-
-    /**
      * @var
      */
     protected $organization;
@@ -35,10 +30,9 @@ class ProcessImportUserRequest implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $user, $request, $organization = null)
+    public function __construct(User $user, $organization = null)
     {
         $this->user = $user;
-        $this->request = $request;
         $this->organization = $organization;
     }
 
@@ -50,7 +44,7 @@ class ProcessImportUserRequest implements ShouldQueue
     public function handle(UserRepositoryInterface $userRepository)
     {
         try {
-            $importUsersRequest = $userRepository->processImportUsersRequest($this->user, $this->request, $this->organization);
+            $importUsersRequest = $userRepository->processImportUsersRequest($this->organization);
 
             $userName = rtrim($this->user->first_name . ' ' . $this->user->last_name, ' ');
             $this->user->notify(new ImportUsersRequestProcessedNotification($userName, $importUsersRequest));

@@ -30,7 +30,7 @@ class ExportUsersRequestProcessedNotification extends Notification
     public function __construct($userName, $exportUsersRequest)
     {
         $this->userName = $userName;
-        $this->exportUsersRequest = $exportUsersRequest;
+        $this->exportUsersRequest = json_decode($exportUsersRequest);
     }
 
     /**
@@ -54,7 +54,7 @@ class ExportUsersRequestProcessedNotification extends Notification
     {
         return (new MailMessage)
             ->greeting('Hello ' . $this->userName . '!')
-            ->line('Your export users request [' . $this->exportUsersRequest['export_request_id'] . '] has been completed.')
+            ->line('Your export users request [' . $this->exportUsersRequest->export_request_id . '] has been completed.')
 
             ->line('Thank you for using our application!');
     }
@@ -67,7 +67,7 @@ class ExportUsersRequestProcessedNotification extends Notification
      */
     public function toDatabase($notifiable)
     {
-        $exportUsersRequestId = $this->exportUsersRequest['export_request_id'];
+        $exportUsersRequestId = $this->exportUsersRequest->export_request_id;
         $message = "Export Users Request [$exportUsersRequestId] has been imported successfully.";
 
         return [

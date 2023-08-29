@@ -964,26 +964,20 @@ class UserController extends Controller
      * Process the request to import users and their projects and independent activities.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
-     * @bodyParam server string URL of the source server. Example: https://my.currikistudio.org
-     * @bodyParam token string Authorization bearer token for source server.
-     * @bodyParam org_id integer Organization id on source server to import data from. Example: 1
-     * @bodyParam export_request_id integer Export request id on source server to import data for. Example: 52
      *
      * @response {
      *   "message": "Your request to import users and their projects and independent activities has been received and is being processed. <br> You will be alerted in the notification section in the title bar when complete."
      * }
      *
-     * @param UserImportRequest $userImportRequest
+     * @param Request $request
      * @param Organization $suborganization
      * @return Response
      */
-    public function processImportRequest(UserImportRequest $userImportRequest, Organization $suborganization)
+    public function processImportRequest(Request $request, Organization $suborganization)
     {
         $this->authorize('addUser', $suborganization);
 
-        $userImportRequestData = $userImportRequest->validated();
-
-        ProcessImportUserRequest::dispatch(auth()->user(), $userImportRequestData, $suborganization)->delay(now()->addSecond());
+        ProcessImportUserRequest::dispatch(auth()->user(), $suborganization)->delay(now()->addSecond());
 
         return response([
             'message' =>  "Your request to import users and their projects and independent activities has been received and is being processed. <br>
