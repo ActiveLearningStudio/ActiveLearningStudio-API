@@ -75,4 +75,24 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * @return bool
      */
     public function eliminateDualSignup();
+
+    /**
+     * Process the request to export users and their projects and independent activities
+     *
+     * @param $authUser
+     * @param string $path
+     * @param $suborganization
+     * @param string $methodSource
+     * @throws GeneralException
+     */
+    public function processExportUsersRequest($authUser, $path, $suborganization, $methodSource = "API");
+
+    /**
+     * Process the request to import users and their projects and independent activities
+     *
+     * @param $suborganization
+     * @param string $methodSource
+     * @throws GeneralException
+     */
+    public function processImportUsersRequest($suborganization, $methodSource = "API");
 }

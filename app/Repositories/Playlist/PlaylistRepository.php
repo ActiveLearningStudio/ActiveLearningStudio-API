@@ -257,4 +257,15 @@ class PlaylistRepository extends BaseRepository implements PlaylistRepositoryInt
         return $playlists = $playlists->get();
     }
 
+    /**
+     * Get Playlists By Project Id
+     *
+     * @param $projectId
+     * @return array
+     */
+    public function getPlaylistsByProjectId($projectId)
+    {
+        return $this->model::where('project_id', $projectId)
+                            ->get();
+    }
 }

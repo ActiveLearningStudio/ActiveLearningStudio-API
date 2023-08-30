@@ -10,20 +10,27 @@ use App\Http\Requests\V1\SuborganizationUpdateUserDetail;
 use App\Http\Requests\V1\UserCheckRequest;
 use App\Http\Requests\V1\CheckUserEmailRequest;
 use App\Http\Requests\V1\UserSearchRequest;
+use App\Http\Requests\V1\UserExportRequest;
+use App\Http\Requests\V1\UserImportRequest;
 use App\Http\Resources\V1\Admin\ProjectResource;
 use App\Http\Resources\V1\UserForTeamResource;
 use App\Http\Resources\V1\UserResource;
 use App\Http\Resources\V1\OrganizationResource;
+use App\Http\Resources\V1\ExportRequestResource;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Rules\StrongPassword;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\V1\ExportedProjectsResource;
 use App\Http\Resources\V1\ExportedIndependentActivitiesResource;
 use App\Http\Resources\V1\UserStatsResource;
 use App\Models\Organization;
+use App\Models\ExportRequest;
+use App\Jobs\ProcessExportUserRequest;
+use App\Jobs\ProcessImportUserRequest;
 use App\Notifications\NewUserNotification;
 use App\Repositories\Organization\OrganizationRepositoryInterface;
 use Illuminate\Support\Arr;
@@ -897,4 +904,61 @@ class UserController extends Controller
         ], 500);
     }
 
+    /**
+     * Process User Export Request
+     *
+     * Process the request to export users and their projects and independent activities.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam users CSV file containing user emails to export data for.
+     *
+     * @response {
+     *   "message": "Your request to export users and their projects and independent activities has been received and is being processed. <br> You will be alerted in the notification section in the title bar when complete."
+     * }
+     *
+     * @param UserExportRequest $userExportRequest
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function processExportRequest(UserExportRequest $userExportRequest, Organization $suborganization)
+    {
+        $this->authorize('addUser', $suborganization);
+
+        $userExportRequest->validated();
+        $path = $userExportRequest->file('users')->store('public/imports');
+
+        ProcessExportUserRequest::dispatch(auth()->user(), Storage::url($path), $suborganization)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to export users and their projects and independent activities has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
+
+    /**
+     * Process User Import Request
+     *
+     * Process the request to import users and their projects and independent activities.
+     *
+     * @urlParam suborganization required The Id of a suborganization Example: 1
+     *
+     * @response {
+     *   "message": "Your request to import users and their projects and independent activities has been received and is being processed. <br> You will be alerted in the notification section in the title bar when complete."
+     * }
+     *
+     * @param Request $request
+     * @param Organization $suborganization
+     * @return Response
+     */
+    public function processImportRequest(Request $request, Organization $suborganization)
+    {
+        $this->authorize('addUser', $suborganization);
+
+        ProcessImportUserRequest::dispatch(auth()->user(), $suborganization)->delay(now()->addSecond());
+
+        return response([
+            'message' =>  "Your request to import users and their projects and independent activities has been received and is being processed. <br>
+                            You will be alerted in the notification section in the title bar when complete.",
+        ], 200);
+    }
 }

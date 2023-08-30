@@ -621,14 +621,14 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
      *
      * @param $authUser
      * @param Project $project
-     * @param int $suborganization_id
+     * @param string $projectDirName
      * @throws GeneralException
      */
-    public function exportProject($authUser, Project $project)
+    public function exportProject($authUser, Project $project, $projectDirName = 'projects-')
     {
         $zip = new ZipArchive;
 
-        $project_dir_name = 'projects-' . uniqid();
+        $project_dir_name = $projectDirName . uniqid();
 
         // Add Grade level of first activity on project manifest
         $organizationName = Organization::where('id', $project->organization_id)->value('name');
@@ -652,14 +652,13 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $playlists = $project->playlists;
 
         foreach ($playlists as $playlist) {
-
-            $title = str_replace('/', '-', $playlist->title);
+            $title = preg_replace("/[^[:alnum:][:space:]]/u", '', $playlist->title);
             Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title . '/' . $title . '.json', $playlist);
             $activites = $playlist->activities;
             ;
             foreach ($activites as $activity) {
 
-                $activityTitle = str_replace('/', '-', $activity->title);
+                $activityTitle = preg_replace("/[^[:alnum:][:space:]]/u", '', $activity->title);
 
                 $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                     $activityTitle . '/' . $activityTitle . '.json';
@@ -1079,16 +1078,20 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         $playlistId = Playlist::where('project_id', $projectId)->orderBy('order', 'asc')->limit(1)->first();
 
-        $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order', 'asc')->limit(1)->first();
+        if ($playlistId) {
+            $activity = Activity::where('playlist_id', $playlistId->id)->orderBy('order', 'asc')->limit(1)->first();
 
-        $resource = new ActivityResource($activity);
+            if($activity) {
+                $resource = new ActivityResource($activity);
 
-        // Get first Category
-        if ($resource->$activityParam->isNotEmpty()) {
-            return $resource->$activityParam[0]->name;
+                // Get first Category
+                if ($resource && $resource->$activityParam && $resource->$activityParam->isNotEmpty()) {
+                    return $resource->$activityParam[0]->name;
+                }
+            }
         }
-        return null;
 
+        return null;
     }
 
     /**

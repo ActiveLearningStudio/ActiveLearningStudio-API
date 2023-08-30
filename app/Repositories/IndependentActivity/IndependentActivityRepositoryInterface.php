@@ -74,10 +74,10 @@ interface IndependentActivityRepositoryInterface extends EloquentRepositoryInter
      *
      * @param $authUser
      * @param IndependentActivity $independent_activity
-     * @param int $suborganization_id
+     * @param string $activityDirName
      * @throws GeneralException
      */
-    public function exportIndependentActivity($authUser, IndependentActivity $independent_activity);
+    public function exportIndependentActivity($authUser, IndependentActivity $independent_activity, $activityDirName = 'independent_activity-');
 
     /**
      * To import independent activity 

@@ -632,14 +632,14 @@ class IndependentActivityRepository extends BaseRepository implements Independen
      *
      * @param $authUser
      * @param IndependentActivity $independent_activity
-     * @param int $suborganization_id
+     * @param string $activityDirName
      * @throws GeneralException
      */
-    public function exportIndependentActivity($authUser, IndependentActivity $independent_activity)
+    public function exportIndependentActivity($authUser, IndependentActivity $independent_activity, $activityDirName = 'independent_activity-')
     {
         $zip = new ZipArchive;
 
-        $activityDirName = 'independent_activity-'.uniqid();
+        $activityDirName = $activityDirName . uniqid();
 
         $activityTitle = str_replace('/', '-', $independent_activity->title);
 

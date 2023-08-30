@@ -135,9 +135,10 @@ interface ProjectRepositoryInterface extends EloquentRepositoryInterface
      *
      * @param $authUser
      * @param Project $project
+     * @param string $projectDirName
      * @throws GeneralException
      */
-    public function exportProject($authUser, Project $project);
+    public function exportProject($authUser, Project $project, $projectDirName = 'projects-');
 
     /**
      * To import project and associated playlists

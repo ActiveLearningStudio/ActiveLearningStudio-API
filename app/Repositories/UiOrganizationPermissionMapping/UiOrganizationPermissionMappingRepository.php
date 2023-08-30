@@ -33,4 +33,20 @@ class UiOrganizationPermissionMappingRepository extends BaseRepository implement
 
         return $organizationPermissionTypeIds;
     }
+
+    /**
+     * Get UI module permission ids for organization permission type ids
+     *
+     * @param array $organizationPermissionTypeIds
+     * @return array $uiModulePermissionIds
+     */
+    public function getUiModulePermissionIds($organizationPermissionTypeIds)
+    {
+        $uiModulePermissionIds = $this->model
+        ->whereIn('organization_permission_type_id', $organizationPermissionTypeIds)
+        ->pluck('ui_module_permission_id')
+        ->toArray();
+
+        return $uiModulePermissionIds;
+    }
 }

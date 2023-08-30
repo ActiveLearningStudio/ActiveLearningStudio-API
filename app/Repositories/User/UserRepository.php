@@ -4,6 +4,12 @@ namespace App\Repositories\User;
 
 use App\Http\Resources\V1\NotificationListResource;
 use App\Repositories\BaseRepository;
+use App\Repositories\Project\ProjectRepositoryInterface;
+use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
+use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
+use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
+use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\CurrikiGo\Moodle\Playlist as PlaylistMoodle;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -18,16 +24,44 @@ use Lcobucci\JWT\UnencryptedToken;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use App\Exceptions\GeneralException;
+use GuzzleHttp\Client;
+use App\Http\Resources\V1\UserExportResource;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
+    private $projectRepository;
+    private $independentActivityRepository;
+    private $uiOrganizationPermissionMappingRepository;
+    private $lmsSettingRepository;
+    private $playlistRepository;
+
     /**
      * UserRepository constructor.
      *
      * @param User $model
+     * @param ProjectRepositoryInterface $projectRepository
+     * @param IndependentActivityRepositoryInterface $independentActivityRepository
+     * @param UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
+     * @param LmsSettingRepositoryInterface $lmsSettingRepository
+     * @param PlaylistRepositoryInterface $playlistRepository
      */
-    public function __construct(User $model)
+    public function __construct(
+        User $model,
+        ProjectRepositoryInterface $projectRepository,
+        IndependentActivityRepositoryInterface $independentActivityRepository,
+        UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository,
+        LmsSettingRepositoryInterface $lmsSettingRepository,
+        PlaylistRepositoryInterface $playlistRepository
+    )
     {
+        $this->projectRepository = $projectRepository;
+        $this->independentActivityRepository = $independentActivityRepository;
+        $this->uiOrganizationPermissionMappingRepository = $uiOrganizationPermissionMappingRepository;
+        $this->lmsSettingRepository = $lmsSettingRepository;
+        $this->playlistRepository = $playlistRepository;
         parent::__construct($model);
     }
 
@@ -412,5 +446,320 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             return true;
         }
         return false;
+    }
+
+    /**
+     * Process the request to export users and their projects and independent activities
+     *
+     * @param $authUser
+     * @param string $path
+     * @param $suborganization
+     * @param string $methodSource
+     * @throws GeneralException
+     */
+    public function processExportUsersRequest($authUser, $path, $suborganization, $methodSource = "API")
+    {
+        try {
+            $sourceFile = storage_path("app/public/" . (str_replace('/storage/', '', $path)));
+
+            if ($methodSource === "command") {
+                $sourceFile = $path;
+            }
+
+            $userEmails = [];
+            if (file_exists($sourceFile)) {
+                $file = fopen($sourceFile, 'r');
+                while (($line = fgetcsv($file)) !== FALSE) {
+                    if ($line[0] !== '') {
+                        $userEmails[] = $line[0];
+                    }
+                }
+                fclose($file);
+            } else {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to process export users request."
+                ];
+
+                return json_encode($return_res);
+            }
+
+            $userObjs = $suborganization->users()->whereIn('email', $userEmails)->get();
+
+            return DB::transaction(function () use ($authUser, $userObjs, $suborganization, $sourceFile, $methodSource) {
+                $exportRequestObj = $authUser->exportRequests()->create([
+                    'organization_id' => $suborganization->id,
+                    'type' => 'USER'
+                ]);
+
+                $exportRequestJson = [
+                    'id' => $exportRequestObj->id,
+                    'organization_id' => $exportRequestObj->organization_id,
+                    'user_id' => $exportRequestObj->user_id,
+                    'type' => $exportRequestObj->type,
+                    'created_at' => $exportRequestObj->created_at,
+                    'updated_at' => $exportRequestObj->updated_at
+                ];
+
+                $exportRequestsItemsJson = [];
+
+                foreach ($userObjs as $userObj) {
+                    $exportRequestsItemObj = $exportRequestObj->exportRequestsItems()->create([
+                        'item_id' => $userObj->id,
+                        'item_type' => 'USER'
+                    ]);
+
+                    $exportRequestsItemJson = [
+                        'id' => $exportRequestsItemObj->id,
+                        'export_request_id' => $exportRequestsItemObj->export_request_id,
+                        'item_id' => $exportRequestsItemObj->item_id,
+                        'item_type' => $exportRequestsItemObj->item_type,
+                        'created_at' => $exportRequestsItemObj->created_at,
+                        'updated_at' => $exportRequestsItemObj->updated_at,
+                        'user' => new UserExportResource($userObj)
+                    ];
+
+                    $exportRequestsSubItemsJson = [];
+
+                    $userOrgProjectsObjs = $userObj->projects()
+                                                ->where('organization_id', $suborganization->id)
+                                                ->get();
+
+                    foreach ($userOrgProjectsObjs as $userProjectObj) {
+                        try {
+                            $projectExportFile = basename($this->projectRepository->exportProject($authUser, $userProjectObj, 'export-requests/projects-'));
+                            $itemStatus = 'COMPLETED';
+                        } catch (\Throwable $t) {
+                            Log::error($t);
+                            $itemStatus = 'FAILED';
+                            $projectExportFile = 'FAILED EXPORT: ' .$t->getMessage();
+                        }
+
+                        $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
+                            'item_id' => $userProjectObj->id,
+                            'item_type' => 'PROJECT',
+                            'item_status' => $itemStatus,
+                            'exported_file_path' => $projectExportFile
+                        ]);
+
+                        $exportRequestsSubItemsJson[] = [
+                            'id' => $subExportRequestsItemObj->id,
+                            'parent_id' => $subExportRequestsItemObj->parent_id,
+                            'item_id' => $subExportRequestsItemObj->item_id,
+                            'item_type' => $subExportRequestsItemObj->item_type,
+                            'item_status' => $subExportRequestsItemObj->item_status,
+                            'exported_file_path' => $subExportRequestsItemObj->exported_file_path,
+                            'created_at' => $subExportRequestsItemObj->created_at,
+                            'updated_at' => $subExportRequestsItemObj->updated_at
+                        ];
+                    }
+
+                    $userIndependentActivitiesObjs = $userObj->independentActivities()
+                                                ->has('h5p_content')
+                                                ->where('organization_id', $suborganization->id)
+                                                ->get();
+
+                    foreach ($userIndependentActivitiesObjs as $independentActivityObj) {
+                        try {
+                            $independentActivityExportFile = basename($this->independentActivityRepository->exportIndependentActivity($authUser, $independentActivityObj, 'export-requests/independent_activity-'));
+                            $itemStatus = 'COMPLETED';
+                        } catch (\Throwable $t) {
+                            Log::error($t);
+                            $itemStatus = 'FAILED';
+                            $independentActivityExportFile = 'FAILED EXPORT: ' .$t->getMessage();
+                        }
+
+                        $subExportRequestsItemObj = $exportRequestsItemObj->subExportRequestsItems()->create([
+                            'item_id' => $independentActivityObj->id,
+                            'item_type' => 'INDEPENDENT-ACTIVITY',
+                            'item_status' => $itemStatus,
+                            'exported_file_path' => $independentActivityExportFile
+                        ]);
+
+                        $exportRequestsSubItemsJson[] = [
+                            'id' => $subExportRequestsItemObj->id,
+                            'parent_id' => $subExportRequestsItemObj->parent_id,
+                            'item_id' => $subExportRequestsItemObj->item_id,
+                            'item_type' => $subExportRequestsItemObj->item_type,
+                            'item_status' => $subExportRequestsItemObj->item_status,
+                            'exported_file_path' => $subExportRequestsItemObj->exported_file_path,
+                            'created_at' => $subExportRequestsItemObj->created_at,
+                            'updated_at' => $subExportRequestsItemObj->updated_at
+                        ];
+                    }
+
+                    $exportRequestsItemJson['export_request_sub_items'] = $exportRequestsSubItemsJson;
+                    $exportRequestsItemsJson[] = $exportRequestsItemJson;
+                }
+
+                $exportRequestJson['export_request_items'] = $exportRequestsItemsJson;
+
+                $exportRequestJsonFile = '/exports/export-requests/export_request.json';
+
+                Storage::disk('public')->put($exportRequestJsonFile, json_encode($exportRequestJson));
+
+                if (file_exists($sourceFile)) {
+                    if ($methodSource !== "command") {
+                        unlink($sourceFile); // Deleted the storage csv file
+                    } else {
+                        $return_res = [
+                            "success" => true,
+                            "message" => "Processed export users request successfully",
+                            "export_request_id" => $exportRequestObj->id
+                        ];
+                        return json_encode($return_res);
+                    }
+
+                    return [
+                        'export_request_id' => $exportRequestObj->id
+                    ];
+                }
+            });
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            \Sentry\captureException($e);
+            if ($methodSource === "command") {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to process export users request, please try again later!"
+                ];
+                return (json_encode($return_res));
+            }
+
+            throw new GeneralException('Unable to process export users request, please try again later!');
+        }
+    }
+
+    /**
+     * Process the request to import users and their projects and independent activities
+     *
+     * @param $suborganization
+     * @param string $methodSource
+     * @throws GeneralException
+     */
+    public function processImportUsersRequest($suborganization, $methodSource = "API")
+    {
+        try {
+            $exportRequestJsonFile = 'app/public/exports/export-requests/export_request.json';
+            if (file_exists(storage_path($exportRequestJsonFile))) {
+                $exportRequestJson = file_get_contents(storage_path($exportRequestJsonFile));
+
+                $exportRequestObj = json_decode($exportRequestJson);
+
+                return DB::transaction(function () use ($exportRequestObj, $suborganization, $methodSource) {
+
+                    if ($exportRequestObj->type == 'USER') {
+                        $exportRequestUsers = $exportRequestObj->export_request_items;
+                        $excludeFromUserFields = [
+                            'id',
+                            'organization_role'
+                        ];
+
+                        foreach ($exportRequestUsers as $exportRequestUser) {
+                            $importedRequestUser = $this->model
+                                                        ->where('email', $exportRequestUser->user->email)
+                                                        ->first();
+
+                            if (!$importedRequestUser) {
+                                $importUser = Arr::except((array) $exportRequestUser->user, $excludeFromUserFields);
+                                $importUser['remember_token'] = Str::random(64);
+                                $importUser['email_verified_at'] = now();
+
+                                $importedRequestUser = $this->model->create($importUser);
+                            }
+
+                            if (!$suborganization->users()->where('user_id', $importedRequestUser->id)->exists()) {
+                                $importOrganizationRoleType = $suborganization
+                                                        ->roles()
+                                                        ->where('name', $exportRequestUser->user->organization_role->name)
+                                                        ->first();
+
+                                if (!$importOrganizationRoleType) {
+                                    $importOrganizationRoleType = $suborganization->roles()->create([
+                                        'name' => $exportRequestUser->user->organization_role->name,
+                                        'display_name' => $exportRequestUser->user->organization_role->display_name,
+                                    ]);
+
+                                    // $exportPermissionCount = $exportRequestUser->user->organization_role->permissions->count();
+                                    $exportPermissionNames = $exportRequestUser->user->organization_role->permissions->pluck('name')->toArray();
+                                    $importPermissionsIds = $suborganization
+                                                            ->roles()
+                                                            ->permissions()
+                                                            ->whereIn('name', $exportPermissionNames)
+                                                            ->pluck('id')
+                                                            ->toArray();
+
+                                    // $importPermissionCount = $importPermissionsIds->count();
+                                    // if ($exportPermissionCount !== $importPermissionCount) {
+                                    // }
+
+                                    $uiModulePermissionIds = $this->uiOrganizationPermissionMappingRepository
+                                    ->getUiModulePermissionIds($importPermissionsIds);
+
+                                    $importOrganizationRoleType->uiModulePermissions()->sync($uiModulePermissionIds);
+                                    $importOrganizationRoleType->permissions()->sync($importPermissionsIds);
+                                }
+
+                                $suborganization->users()->attach($importedRequestUser->id, ['organization_role_type_id' => $importOrganizationRoleType->id]);
+                            }
+
+                            $exportRequestSubItems = $exportRequestUser->export_request_sub_items;
+
+                            foreach ($exportRequestSubItems as $exportRequestSubItem) {
+                                if ($exportRequestSubItem->item_status === 'COMPLETED') {
+                                    $exportedFilePath = storage_path("app/public/exports/export-requests/" . $exportRequestSubItem->exported_file_path);
+                                    if ($exportRequestSubItem->item_type === 'PROJECT') {
+                                        $response = $this->projectRepository->importProject($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                        $encodedResponse = json_decode($response,true);
+
+                                        if (config('constants.map-device-lti-client-id')) {
+                                            // map-device-lti-client-id
+                                            $lms_settings = $this->lmsSettingRepository->findByField('lti_client_id', config('constants.map-device-lti-client-id'));
+
+                                            if (!empty($lms_settings) && isset($encodedResponse['project_id']) && !empty($encodedResponse['project_id'])) {
+                                                // Code for Moodle Import
+                                                $playlists = $this->playlistRepository->getPlaylistsByProjectId($encodedResponse['project_id']);
+
+                                                foreach ($playlists as $playlist) {
+                                                    // Publish playlist into moodle
+                                                    $lmsSetting = $this->lmsSettingRepository->find($lms_settings->id);
+                                                    $counter = 0;
+                                                    $playlistMoodleObj = new PlaylistMoodle($lmsSetting);
+                                                    $responseReq = $playlistMoodleObj->send($playlist, ['counter' => intval($counter)]);
+                                                }
+                                            }
+                                        }
+                                    } elseif ($exportRequestSubItem->item_type === 'INDEPENDENT-ACTIVITY') {
+                                        $response = $this->independentActivityRepository->importIndependentActivity($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $return_res = [
+                        "success" => true,
+                        "message" => "Processed import users request successfully",
+                        "export_request_id" => $exportRequestObj->id
+                    ];
+
+                    return json_encode($return_res);
+                });
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            \Sentry\captureException($e);
+            if ($methodSource === "command") {
+                $return_res = [
+                    "success" => false,
+                    "message" => "Unable to process import users request, please try again later!"
+                ];
+                return (json_encode($return_res));
+            }
+
+            throw new GeneralException('Unable to process import users request, please try again later!');
+        }
     }
 }
