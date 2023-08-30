@@ -936,29 +936,6 @@ class UserController extends Controller
     }
 
     /**
-     * Get Export Request Details
-     *
-     * Get detailed data for the specific export request
-     *
-     * @urlParam exportRequest required The Id of an export request Example: 1
-     *
-     * @responseFile responses/notifications/notifications.json
-     *
-     * @param Request $request
-     * @param ExportRequest $exportRequest
-     * @param Organization $suborganization
-     * @return Response
-     */
-    public function getExportRequest(Request $request, Organization $suborganization, ExportRequest $exportRequest)
-    {
-        $this->authorize('addUser', $exportRequest->organization);
-
-        return response([
-            'export_request' => new ExportRequestResource($exportRequest->load('exportRequestsItems.subExportRequestsItems')),
-        ], 200);
-    }
-
-    /**
      * Process User Import Request
      *
      * Process the request to import users and their projects and independent activities.

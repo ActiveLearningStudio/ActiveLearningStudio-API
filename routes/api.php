@@ -73,7 +73,6 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             'index', 'show', 'update', 'destroy'
         ]);
         Route::post('suborganization/{suborganization}/users/export-request', 'UserController@processExportRequest');
-        Route::get('suborganization/{suborganization}/users/export-request/{exportRequest}', 'UserController@getExportRequest');
         Route::post('suborganization/{suborganization}/users/import-request', 'UserController@processImportRequest');
 
         // Teams
