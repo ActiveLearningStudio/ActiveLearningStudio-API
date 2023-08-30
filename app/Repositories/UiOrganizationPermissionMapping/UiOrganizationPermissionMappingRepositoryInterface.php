@@ -13,4 +13,12 @@ interface UiOrganizationPermissionMappingRepositoryInterface extends EloquentRep
      * @return array $organizationPermissionTypeIds
      */
     public function getOrganizationPermissionTypeIds($uiModulePermissionIds);
+
+    /**
+     * Get UI module permission ids for organization permission type ids
+     *
+     * @param array $organizationPermissionTypeIds
+     * @return array $uiModulePermissionIds
+     */
+    public function getUiModulePermissionIds($organizationPermissionTypeIds);
 }
