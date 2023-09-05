@@ -9,6 +9,7 @@ use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\UiOrganizationPermissionMapping\UiOrganizationPermissionMappingRepositoryInterface;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
 use App\Repositories\Playlist\PlaylistRepositoryInterface;
+use App\Repositories\OrganizationPermissionType\OrganizationPermissionTypeRepositoryInterface;
 use App\CurrikiGo\Moodle\Playlist as PlaylistMoodle;
 use App\User;
 use Carbon\Carbon;
@@ -37,6 +38,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     private $uiOrganizationPermissionMappingRepository;
     private $lmsSettingRepository;
     private $playlistRepository;
+    private $organizationPermissionTypeRepository;
 
     /**
      * UserRepository constructor.
@@ -47,6 +49,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository
      * @param LmsSettingRepositoryInterface $lmsSettingRepository
      * @param PlaylistRepositoryInterface $playlistRepository
+     * @param OrganizationPermissionTypeRepositoryInterface $organizationPermissionTypeRepository
      */
     public function __construct(
         User $model,
@@ -54,7 +57,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         IndependentActivityRepositoryInterface $independentActivityRepository,
         UiOrganizationPermissionMappingRepositoryInterface $uiOrganizationPermissionMappingRepository,
         LmsSettingRepositoryInterface $lmsSettingRepository,
-        PlaylistRepositoryInterface $playlistRepository
+        PlaylistRepositoryInterface $playlistRepository,
+        OrganizationPermissionTypeRepositoryInterface $organizationPermissionTypeRepository
     )
     {
         $this->projectRepository = $projectRepository;
@@ -62,6 +66,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         $this->uiOrganizationPermissionMappingRepository = $uiOrganizationPermissionMappingRepository;
         $this->lmsSettingRepository = $lmsSettingRepository;
         $this->playlistRepository = $playlistRepository;
+        $this->organizationPermissionTypeRepository = $organizationPermissionTypeRepository;
         parent::__construct($model);
     }
 
@@ -662,11 +667,17 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                                         ->first();
 
                             if (!$importedRequestUser) {
-                                $importUser = Arr::except((array) $exportRequestUser->user, $excludeFromUserFields);
-                                $importUser['remember_token'] = Str::random(64);
-                                $importUser['email_verified_at'] = now();
+                                $importedRequestUser = $this->model
+                                                        ->where('email', strtolower($exportRequestUser->user->email))
+                                                        ->first();
 
-                                $importedRequestUser = $this->model->create($importUser);
+                                if (!$importedRequestUser) {
+                                    $importUser = Arr::except((array) $exportRequestUser->user, $excludeFromUserFields);
+                                    $importUser['remember_token'] = Str::random(64);
+                                    $importUser['email_verified_at'] = now();
+
+                                    $importedRequestUser = $this->model->create($importUser);
+                                }
                             }
 
                             if (!$suborganization->users()->where('user_id', $importedRequestUser->id)->exists()) {
@@ -682,11 +693,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                     ]);
 
                                     // $exportPermissionCount = $exportRequestUser->user->organization_role->permissions->count();
-                                    $exportPermissionNames = $exportRequestUser->user->organization_role->permissions->pluck('name')->toArray();
-                                    $importPermissionsIds = $suborganization
-                                                            ->roles()
-                                                            ->permissions()
-                                                            ->whereIn('name', $exportPermissionNames)
+                                    $exportRequestUserOrgRolePermissions = $exportRequestUser->user->organization_role->permissions;
+                                    $exportPermissionNames = Arr::pluck($exportRequestUserOrgRolePermissions, 'name');
+                                    $importPermissionsIds = $this->organizationPermissionTypeRepository
+                                                            ->getOrganizationPermissionTypesByNames($exportPermissionNames)
                                                             ->pluck('id')
                                                             ->toArray();
 
@@ -710,7 +720,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                 if ($exportRequestSubItem->item_status === 'COMPLETED') {
                                     $exportedFilePath = storage_path("app/public/exports/export-requests/" . $exportRequestSubItem->exported_file_path);
                                     if ($exportRequestSubItem->item_type === 'PROJECT') {
-                                        $response = $this->projectRepository->importProject($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                        try {
+                                            $response = $this->projectRepository->importProject($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                        } catch (\Throwable $t) {
+                                            Log::error($t);
+                                            continue;
+                                        }
+
                                         $encodedResponse = json_decode($response,true);
 
                                         if (config('constants.map-device-lti-client-id')) {
@@ -731,7 +747,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                             }
                                         }
                                     } elseif ($exportRequestSubItem->item_type === 'INDEPENDENT-ACTIVITY') {
-                                        $response = $this->independentActivityRepository->importIndependentActivity($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                        try {
+                                            $response = $this->independentActivityRepository->importIndependentActivity($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
+                                        } catch (\Throwable $t) {
+                                            Log::error($t);
+                                            continue;
+                                        }
                                     }
                                 }
                             }
