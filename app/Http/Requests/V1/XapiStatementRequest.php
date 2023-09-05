@@ -3,6 +3,7 @@
 namespace App\Http\Requests\V1;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class XapiStatementRequest extends FormRequest
 {
@@ -25,6 +26,10 @@ class XapiStatementRequest extends FormRequest
     {
         return [
             'statement' => 'required',
+            'type' => [
+                'nullable',
+                Rule::in(['c2e']),
+            ],
         ];
     }
 }

@@ -20,6 +20,9 @@ class XapiController extends Controller
      *
      * Creates a new statement in the database.
      *
+     * @bodyParam statement required Statement to save
+     * @bodyParam type Type of statement to save Example: c2e
+     *
      * @param XapiStatementRequest $statementRequest
      *
      * @response 201 {
@@ -38,9 +41,10 @@ class XapiController extends Controller
     public function saveStatement(XapiStatementRequest $statementRequest)
     {
         $data = $statementRequest->validated();
+        $type = isset($data['type']) ? $data['type'] : null;
 
         try {
-            $service = new LearnerRecordStoreService();
+            $service = new LearnerRecordStoreService($type);
             $response = $service->saveStatement($data['statement']);
             if ($response->success) {
                 return response([
