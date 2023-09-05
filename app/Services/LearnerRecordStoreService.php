@@ -32,13 +32,19 @@ class LearnerRecordStoreService implements LearnerRecordStoreServiceInterface
      *
      * @return void
      */
-    function __construct()
+    function __construct($type = null)
     {
+        if (!$type) {
+            $type = '';
+        } else {
+            $type = $type . '_';
+        }
+
         $this->service = new RemoteLRS(
-            config('xapi.lrs_remote_url'),
-            config('xapi.xapi_version'),
-            config('xapi.lrs_username'),
-            config('xapi.lrs_password')
+            config("xapi.{$type}lrs_remote_url"),
+            config("xapi.xapi_version"),
+            config("xapi.{$type}lrs_username"),
+            config("xapi.{$type}lrs_password")
         );
     }
 
