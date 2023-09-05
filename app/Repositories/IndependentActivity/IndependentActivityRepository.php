@@ -785,7 +785,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
 
                     $old_content_id = $activity['h5p_content_id'];
 
-                    unset($activity["id"], $activity["playlist_id"], $activity["created_at"], $activity["updated_at"], $activity["h5p_content_id"]);
+                    unset($activity["id"], $activity["playlist_id"], $activity["created_at"], $activity["updated_at"], $activity["h5p_content_id"], $activity['user_id'], $activity['organization_id']);
 
                     $content_json = file_get_contents(
                                             storage_path($extracted_folder . '/' . $old_content_id . '.json'));
@@ -837,6 +837,8 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                     );
 
                     $activity['h5p_content_id'] = $new_content_id;
+                    $activity['user_id'] = $authUser->id;
+                    $activity['organization_id'] = $suborganization_id;
 
                     if (!empty($activity['thumb_url']) && filter_var($activity['thumb_url'], FILTER_VALIDATE_URL) === false) {
                         $activitiy_thumbnail_path = storage_path(
@@ -893,7 +895,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                             $newEducationLevel['created_at'] = date('Y-m-d H:i:s');
                             $newEducationLevel['updated_at'] = date('Y-m-d H:i:s');
 
-                            DB::table('independent_activity_education_level')->insert($newEducationLevel);
+                            DB::table('activity_education_level')->insert($newEducationLevel);
                         }
                     }
 
@@ -911,7 +913,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
                             $newauthorTag['created_at'] = date('Y-m-d H:i:s');
                             $newauthorTag['updated_at'] = date('Y-m-d H:i:s');
 
-                            DB::table('independent_activity_author_tag')->insert($newauthorTag);
+                            DB::table('activity_author_tag')->insert($newauthorTag);
                         }
                     }
                     $this->rrmdir(storage_path($extracted_folder)); // Deleted the storage extracted directory

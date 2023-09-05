@@ -652,14 +652,19 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $playlists = $project->playlists;
 
         foreach ($playlists as $playlist) {
-            $title = preg_replace("/[^[:alnum:][:space:]]/u", '', $playlist->title);
+            $title = preg_replace("/[^[:alnum:]]/u", '_', $playlist->title);
+            if (empty($title)) {
+                $title = 'playlist-' . $playlist->id;
+            }
             Storage::disk('public')->put('/exports/' . $project_dir_name . '/playlists/' . $title . '/' . $title . '.json', $playlist);
             $activites = $playlist->activities;
             ;
             foreach ($activites as $activity) {
 
-                $activityTitle = preg_replace("/[^[:alnum:][:space:]]/u", '', $activity->title);
-
+                $activityTitle = preg_replace("/[^[:alnum:]]/u", '_', $activity->title);
+                if (empty($activityTitle)) {
+                    $activityTitle = 'activity-' . $activity->id;
+                }
                 $activity_json_file = '/exports/' . $project_dir_name . '/playlists/' . $title . '/activities/' .
                     $activityTitle . '/' . $activityTitle . '.json';
                 Storage::disk('public')->put($activity_json_file, $activity);
