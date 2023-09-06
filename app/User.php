@@ -347,4 +347,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany('App\Models\IndependentActivity');
     }
 
+    /**
+     * Get the export requests for the user.
+     */
+    public function exportRequests()
+    {
+        return $this->hasMany('App\Models\ExportRequest');
+    }
 }

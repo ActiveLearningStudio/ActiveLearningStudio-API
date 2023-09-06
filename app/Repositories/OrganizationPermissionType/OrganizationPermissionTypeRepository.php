@@ -34,4 +34,17 @@ class OrganizationPermissionTypeRepository extends BaseRepository implements Org
             ->orderBy('name', 'asc')
             ->get();
     }
+
+    /**
+     * Get organization permission types by names
+     *
+     * @param $permissionNames
+     * @return Model
+     */
+    public function getOrganizationPermissionTypesByNames($permissionNames)
+    {
+        return$this->model
+            ->whereIn('name', $permissionNames)
+            ->get();
+    }
 }
