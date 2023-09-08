@@ -72,4 +72,12 @@ interface PlaylistRepositoryInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function allSharedPlaylists(Project $project);
+
+    /**
+     * Get Playlists By Project Id
+     *
+     * @param $projectId
+     * @return array
+     */
+    public function getPlaylistsByProjectId($projectId);
 }

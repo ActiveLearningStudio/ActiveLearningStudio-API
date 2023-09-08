@@ -14,4 +14,12 @@ interface OrganizationPermissionTypeRepositoryInterface extends EloquentReposito
      * @return OrganizationPermissionType $organizationPermissionTypes
      */
     public function fetchOrganizationPermissionTypes($data);
+
+    /**
+     * Get organization permission types by names
+     *
+     * @param $permissionNames
+     * @return Model
+     */
+    public function getOrganizationPermissionTypesByNames($permissionNames);
 }
