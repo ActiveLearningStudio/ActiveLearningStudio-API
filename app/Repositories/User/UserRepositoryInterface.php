@@ -91,8 +91,9 @@ interface UserRepositoryInterface extends EloquentRepositoryInterface
      * Process the request to import users and their projects and independent activities
      *
      * @param $suborganization
+     * @param string $path
      * @param string $methodSource
      * @throws GeneralException
      */
-    public function processImportUsersRequest($suborganization, $methodSource = "API");
+    public function processImportUsersRequest($suborganization, $path, $methodSource = "API");
 }
