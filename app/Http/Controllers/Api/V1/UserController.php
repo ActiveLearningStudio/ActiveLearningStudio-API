@@ -941,6 +941,7 @@ class UserController extends Controller
      * Process the request to import users and their projects and independent activities.
      *
      * @urlParam suborganization required The Id of a suborganization Example: 1
+     * @bodyParam path required Path to folder to import from
      *
      * @response {
      *   "message": "Your request to import users and their projects and independent activities has been received and is being processed. <br> You will be alerted in the notification section in the title bar when complete."
@@ -954,7 +955,15 @@ class UserController extends Controller
     {
         $this->authorize('addUser', $suborganization);
 
-        ProcessImportUserRequest::dispatch(auth()->user(), $suborganization)->delay(now()->addSecond());
+        $data = $request->validate([
+            'path' => [
+                'required'
+            ],
+        ]);
+
+        $path = $data['path'];
+
+        ProcessImportUserRequest::dispatch(auth()->user(), $suborganization, $path)->delay(now()->addSecond());
 
         return response([
             'message' =>  "Your request to import users and their projects and independent activities has been received and is being processed. <br>

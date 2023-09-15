@@ -640,19 +640,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * Process the request to import users and their projects and independent activities
      *
      * @param $suborganization
+     * @param string $path
      * @param string $methodSource
      * @throws GeneralException
      */
-    public function processImportUsersRequest($suborganization, $methodSource = "API")
+    public function processImportUsersRequest($suborganization, $path, $methodSource = "API")
     {
         try {
-            $exportRequestJsonFile = 'app/public/exports/export-requests/export_request.json';
-            if (file_exists(storage_path($exportRequestJsonFile))) {
-                $exportRequestJson = file_get_contents(storage_path($exportRequestJsonFile));
+            $exportRequestJsonFile = storage_path($path . '/export_request.json');
+            if (file_exists($exportRequestJsonFile)) {
+                $exportRequestJson = file_get_contents($exportRequestJsonFile);
 
                 $exportRequestObj = json_decode($exportRequestJson);
 
-                return DB::transaction(function () use ($exportRequestObj, $suborganization, $methodSource) {
+                return DB::transaction(function () use ($exportRequestObj, $suborganization, $methodSource, $path, $exportRequestJsonFile) {
 
                     if ($exportRequestObj->type == 'USER') {
                         $exportRequestUsers = $exportRequestObj->export_request_items;
@@ -718,7 +719,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
                             foreach ($exportRequestSubItems as $exportRequestSubItem) {
                                 if ($exportRequestSubItem->item_status === 'COMPLETED') {
-                                    $exportedFilePath = storage_path("app/public/exports/export-requests/" . $exportRequestSubItem->exported_file_path);
+                                    $exportedFilePath = storage_path($path . "/" . $exportRequestSubItem->exported_file_path);
                                     if ($exportRequestSubItem->item_type === 'PROJECT') {
                                         try {
                                             $response = $this->projectRepository->importProject($importedRequestUser, $exportedFilePath, $suborganization->id, 'command');
@@ -754,10 +755,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                                             continue;
                                         }
                                     }
+
+                                    if (file_exists($exportedFilePath)) {
+                                        unlink($exportedFilePath); // Deleted the storage zip file
+                                    }
                                 }
                             }
                         }
                     }
+
+                    unlink($exportRequestJsonFile);
 
                     $return_res = [
                         "success" => true,
