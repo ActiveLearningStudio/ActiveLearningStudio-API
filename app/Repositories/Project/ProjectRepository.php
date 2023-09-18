@@ -652,7 +652,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
         $playlists = $project->playlists;
 
         foreach ($playlists as $playlist) {
-            $title = preg_replace("/[^[:alnum:]]/u", '_', $playlist->title);
+            $title = preg_replace("/[^[:alnum:]]/u", '', $playlist->title);
             if (empty($title)) {
                 $title = 'playlist-' . $playlist->id;
             }
@@ -661,7 +661,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
             ;
             foreach ($activites as $activity) {
 
-                $activityTitle = preg_replace("/[^[:alnum:]]/u", '_', $activity->title);
+                $activityTitle = preg_replace("/[^[:alnum:]]/u", '', $activity->title);
                 if (empty($activityTitle)) {
                     $activityTitle = 'activity-' . $activity->id;
                 }

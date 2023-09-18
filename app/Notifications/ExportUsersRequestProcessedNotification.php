@@ -30,7 +30,7 @@ class ExportUsersRequestProcessedNotification extends Notification
     public function __construct($userName, $exportUsersRequest)
     {
         $this->userName = $userName;
-        $this->exportUsersRequest = json_decode($exportUsersRequest);
+        $this->exportUsersRequest = $exportUsersRequest;
     }
 
     /**
