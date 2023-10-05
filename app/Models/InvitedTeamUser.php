@@ -19,6 +19,24 @@ class InvitedTeamUser extends Model
     ];
 
     /**
+     * Cascade on create/update the user invite
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function(InvitedTeamUser $invitedTeamUser) {
+            $invitedTeamUser->invited_email = strtolower($invitedTeamUser->invited_email);
+        });
+
+        self::updating(function (InvitedTeamUser $invitedTeamUser) {
+            if($invitedTeamUser->invited_email){
+                $invitedTeamUser->invited_email = strtolower($invitedTeamUser->invited_email);
+            }
+        });
+    }
+
+    /**
      * Scope for email search
      *
      * @param $query
@@ -27,7 +45,7 @@ class InvitedTeamUser extends Model
      */
     public function scopeSearchByEmail($query, $value)
     {
-        return $query->orWhereRaw("invited_email = '" . $value . "'");
+        return $query->orWhereRaw("invited_email = '" . strtolower($value) . "'");
     }
 
 }
