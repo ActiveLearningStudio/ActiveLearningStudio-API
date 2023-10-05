@@ -295,7 +295,7 @@ class AuthController extends Controller
         $result = $client->verifyIdToken($request->tokenId);
 
         if ($result) {
-            $user = $this->userRepository->findByField('email', $result['email']);
+            $user = $this->userRepository->findByField('email', strtolower($result['email']));
 
             return \DB::transaction(function () use ($user, $result, $request) {
 

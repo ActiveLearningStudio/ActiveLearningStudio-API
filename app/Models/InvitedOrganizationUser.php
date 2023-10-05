@@ -20,6 +20,24 @@ class InvitedOrganizationUser extends Model
     ];
 
     /**
+     * Cascade on create/update the user invite
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function(InvitedOrganizationUser $invitedOrganizationUser) {
+            $invitedOrganizationUser->invited_email = strtolower($invitedOrganizationUser->invited_email);
+        });
+
+        self::updating(function (InvitedOrganizationUser $invitedOrganizationUser) {
+            if($invitedOrganizationUser->invited_email){
+                $invitedOrganizationUser->invited_email = strtolower($invitedOrganizationUser->invited_email);
+            }
+        });
+    }
+
+    /**
      * Scope for email search
      *
      * @param $query
@@ -28,7 +46,7 @@ class InvitedOrganizationUser extends Model
      */
     public function scopeSearchByEmail($query, $value)
     {
-        return $query->orWhereRaw("invited_email = '" . $value . "'");
+        return $query->orWhereRaw("invited_email = '" . strtolower($value) . "'");
     }
 
 }
