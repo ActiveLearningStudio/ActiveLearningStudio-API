@@ -891,6 +891,7 @@ class IndependentActivityController extends Controller
      */
     public function getXAPIFileForIndepActivity(Request $request, IndependentActivity $independent_activity)
     {
+        $this->authorize('view', $independent_activity);
         return Storage::download($this->lms->getXAPIFileForIndepActivity($independent_activity));
     }
 
@@ -1014,6 +1015,8 @@ class IndependentActivityController extends Controller
      */
     public function copyIndependentActivityIntoPlaylist(Request $request, Organization $suborganization, IndependentActivity $independent_activity, Playlist $playlist)
     {
+        $this->authorize('clone', $independent_activity);
+
         CopyIndependentActivityIntoPlaylist::dispatch($suborganization, $independent_activity, $playlist, $request->bearerToken())->delay(now()->addSecond());
 
         return response([

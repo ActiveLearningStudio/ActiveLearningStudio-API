@@ -46,7 +46,13 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Team" => "Edit",
             "Independent Activity" => "Edit",
             "My Interactive Video" => "None",
-            "Record a Video" => "Edit"
+            "Record a Video" => "Edit",
+            "Update Library Preference" => "Edit",
+            "Copy to My Activities" => "Edit",
+            "Copy to My projects" => "Edit",
+            "Search Existing Activity" => "View",
+            "Export xAPI" => "View",
+            "Export H5P" => "View"
         ];
 
         $courseCreatorUiPermissions = [
@@ -75,7 +81,13 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Team" => "Edit",
             "Independent Activity" => "Edit",
             "My Interactive Video" => "None",
-            "Record a Video" => "Edit"
+            "Record a Video" => "Edit",
+            "Update Library Preference" => "Edit",
+            "Copy to My Activities" => "Edit",
+            "Copy to My projects" => "Edit",
+            "Search Existing Activity" => "View",
+            "Export xAPI" => "View",
+            "Export H5P" => "View"
         ];
 
         $memberUiPermissions = [
@@ -104,7 +116,13 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Team" => "View",
             "Independent Activity" => "View",
             "My Interactive Video" => "None",
-            "Record a Video" => "None"
+            "Record a Video" => "None",
+            "Update Library Preference" => "None",
+            "Copy to My Activities" => "None",
+            "Copy to My projects" => "None",
+            "Search Existing Activity" => "None",
+            "Export xAPI" => "None",
+            "Export H5P" => "None"
         ];
 
         $selfRegisteredUiPermissions = [
@@ -133,7 +151,13 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Team" => "Edit",
             "Independent Activity" => "Edit",
             "My Interactive Video" => "None",
-            "Record a Video" => "None"
+            "Record a Video" => "None",
+            "Update Library Preference" => "Edit",
+            "Copy to My Activities" => "Edit",
+            "Copy to My projects" => "Edit",
+            "Search Existing Activity" => "View",
+            "Export xAPI" => "View",
+            "Export H5P" => "View"
         ];
 
         $roleTypes = OrganizationRoleType::whereIn('name', ['admin', 'course_creator', 'member', 'self_registered'])->get();
