@@ -350,40 +350,42 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                     "None" => []
                 ],
                 "Update Library Preference" => [
-                    "Edit" => [
-                        'independent-activity:edit',
-                        'project:edit'
+                    "View" => [
+                        'independent-activity:view-library-preference-options',
+                        'project:view-library-preference-options'
                     ],
                     "None" => []
                 ],
                 "Copy to My Activities" => [
-                    "Edit" => [
-                        'independent-activity:duplicate'
+                    "View" => [
+                        'independent-activity:view-copy-to-my-activities-option'
                     ],
                     "None" => []
                 ],
                 "Copy to My projects" => [
-                    "Edit" => [
-                        'independent-activity:duplicate',
-                        'project:clone'
+                    "View" => [
+                        'independent-activity:view-copy-to-my-projects-option',
+                        'project:view-copy-to-my-projects-option'
                     ],
                     "None" => []
                 ],
                 "Search Existing Activity" => [
                     "View" => [
-                        'organization:view'
+                        'independent-activity:view-existing-activity-search-option',
+                        'activity:view-existing-activity-search-option'
                     ],
                     "None" => []
                 ],
                 "Export xAPI" => [
                     "View" => [
-                        'independent-activity:view'
+                        'independent-activity:view-export-xapi-option',
+                        'activity:view-export-xapi-option'
                     ],
                     "None" => []
                 ],
                 "Export H5P" => [
                     "View" => [
-                        'independent-activity:export'
+                        'independent-activity:view-export-h5p-option'
                     ],
                     "None" => []
                 ]

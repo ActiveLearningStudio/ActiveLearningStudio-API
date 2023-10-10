@@ -172,6 +172,18 @@ class OrganizationPermissionTypeSeeder extends Seeder
             'feature' => 'Project'
         ]);
 
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'project:view-library-preference-options',
+            'display_name' => 'Update Library Preference',
+            'feature' => 'Project'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'project:view-copy-to-my-projects-option',
+            'display_name' => 'Copy to My projects',
+            'feature' => 'Project'
+        ]);
+
         // Project Import Export
         DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'project:export',
@@ -262,6 +274,18 @@ class OrganizationPermissionTypeSeeder extends Seeder
         DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'activity:duplicate',
             'display_name' => 'Duplicate Activity',
+            'feature' => 'Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'activity:view-export-xapi-option',
+            'display_name' => 'Export xAPI',
+            'feature' => 'Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'activity:view-existing-activity-search-option',
+            'display_name' => 'Search Existing Activity',
             'feature' => 'Activity'
         ]);
 
