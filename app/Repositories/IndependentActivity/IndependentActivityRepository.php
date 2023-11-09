@@ -15,6 +15,7 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Subject\SubjectRepositoryInterface;
 use App\Repositories\EducationLevel\EducationLevelRepositoryInterface;
 use App\Http\Resources\V1\SearchIndependentActivityResource;
+use Djoudi\LaravelH5p\Eloquents\H5pContentsLibrary;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -73,7 +74,7 @@ class IndependentActivityRepository extends BaseRepository implements Independen
             } else {
                 $attributes['indexing'] = config('constants.indexing-requested');
             }
-            
+
             $attributes['status'] = config('constants.status-finished');
 
             if ((int)$attributes['organization_visibility_type_id'] === config('constants.private-organization-visibility-type-id')) {
@@ -298,10 +299,20 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     public function clone(Organization $organization, IndependentActivity $independentActivity, $token)
     {
         $h5pContent = $independentActivity->h5p_content;
+        $existingH5pContentsLibraries = $h5pContent->libraries;
         if ($h5pContent) {
             $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
             $h5pContent->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
             $h5pContent->save(); // this will return true, then we can get id of h5pContent
+
+            // Replicate associated H5pContentsLibrary records
+            if ($existingH5pContentsLibraries) {
+                foreach ($existingH5pContentsLibraries as $existingH5PContentLibrary) {
+                    $newH5PContentLibrary = $existingH5PContentLibrary->replicate();
+                    $newH5PContentLibrary->content_id = $h5pContent->id;
+                    $newH5PContentLibrary->save();
+                }
+            }
         }
         $newH5pContent = $h5pContent->id ?? null;
 
@@ -977,10 +988,20 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     public function copyToPlaylist($independentActivity, $playlist, $token)
     {
         $h5pContent = $independentActivity->h5p_content;
+        $existingH5pContentsLibraries = $h5pContent->libraries;
         if ($h5pContent) {
             $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
             $h5pContent->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
             $h5pContent->save(); // this will return true, then we can get id of h5pContent
+
+            // Replicate associated H5pContentsLibrary records
+            if ($existingH5pContentsLibraries) {
+                foreach ($existingH5pContentsLibraries as $existingH5PContentLibrary) {
+                    $newH5PContentLibrary = $existingH5PContentLibrary->replicate();
+                    $newH5PContentLibrary->content_id = $h5pContent->id;
+                    $newH5PContentLibrary->save();
+                }
+            }
         }
         $newH5pContent = $h5pContent->id ?? null;
 
@@ -1029,11 +1050,20 @@ class IndependentActivityRepository extends BaseRepository implements Independen
         DB::transaction(function () use ($independentActivities) {
             foreach ($independentActivities as $independentActivity) {
                 $h5pContent = $this->h5pContentRepository->find($independentActivity->h5p_content_id);
-
+                $existingH5pContentsLibraries = $h5pContent->libraries;
                 if ($h5pContent) {
                     $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
                     $h5pContent->user_id = $independentActivity->user_id; // just add the user id
                     $h5pContent->save(); // this will return true, then we can get id of h5pContent
+
+                    // Replicate associated H5pContentsLibrary records
+                    if ($existingH5pContentsLibraries) {
+                        foreach ($existingH5pContentsLibraries as $existingH5PContentLibrary) {
+                            $newH5PContentLibrary = $existingH5PContentLibrary->replicate();
+                            $newH5PContentLibrary->content_id = $h5pContent->id;
+                            $newH5PContentLibrary->save();
+                        }
+                    }
                 }
                 $newH5pContent = $h5pContent->id ?? null;
 
@@ -1172,10 +1202,20 @@ class IndependentActivityRepository extends BaseRepository implements Independen
     public function convertIntoIndependentActivity($organization, $activity, $token)
     {
         $h5pContent = $activity->h5p_content;
+        $existingH5pContentsLibraries = $h5pContent->libraries;
         if ($h5pContent) {
             $h5pContent = $h5pContent->replicate(); // replicate the all data of original activity h5pContent relation
             $h5pContent->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
             $h5pContent->save(); // this will return true, then we can get id of h5pContent
+
+            // Replicate associated H5pContentsLibrary records
+            if ($existingH5pContentsLibraries) {
+                foreach ($existingH5pContentsLibraries as $existingH5PContentLibrary) {
+                    $newH5PContentLibrary = $existingH5PContentLibrary->replicate();
+                    $newH5PContentLibrary->content_id = $h5pContent->id;
+                    $newH5PContentLibrary->save();
+                }
+            }
         }
         $newH5pContent = $h5pContent->id ?? null;
 
