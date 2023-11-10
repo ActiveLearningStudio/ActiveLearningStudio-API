@@ -560,7 +560,7 @@ class LaravelH5p
      * @return Object NULL on failure.
      */
     public static function filterParametersWithoutExport(&$content) {
-        if (!empty($content['filtered'])) {
+        if (!empty($content['filtered']) && self::isLibraryDependenciesSaveNotRequired($content)) {
             return $content['filtered'];
         }
 
@@ -617,6 +617,23 @@ class LaravelH5p
             ));
         }
         return $params;
+    }
+
+    /**
+     * Check Library dependencies already saved or not.
+     * if new content then not required
+     * if existing content then check content dependencies length
+     * @param $content
+     * @return bool - false if library save not need else true which is taken care inside filterParametersWithoutExport
+     */
+    public static function isLibraryDependenciesSaveNotRequired($content) {
+        $contentId = $content['id'];
+        if (!$contentId) {
+            return true;
+        }
+
+        $contentDependencies = self::$interface->loadContentDependencies($contentId);
+        return count($contentDependencies) > 0;
     }
 
     /**
