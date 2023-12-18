@@ -348,6 +348,46 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'record-video:edit'
                     ],
                     "None" => []
+                ],
+                "Update Library Preference" => [
+                    "View" => [
+                        'independent-activity:view-library-preference-options',
+                        'project:view-library-preference-options'
+                    ],
+                    "None" => []
+                ],
+                "Copy to My Activities" => [
+                    "View" => [
+                        'independent-activity:view-copy-to-my-activities-option'
+                    ],
+                    "None" => []
+                ],
+                "Copy to My projects" => [
+                    "View" => [
+                        'independent-activity:view-copy-to-my-projects-option',
+                        'project:view-copy-to-my-projects-option'
+                    ],
+                    "None" => []
+                ],
+                "Search Existing Activity" => [
+                    "View" => [
+                        'independent-activity:view-existing-activity-search-option',
+                        'activity:view-existing-activity-search-option'
+                    ],
+                    "None" => []
+                ],
+                "Export xAPI" => [
+                    "View" => [
+                        'independent-activity:view-export-xapi-option',
+                        'activity:view-export-xapi-option'
+                    ],
+                    "None" => []
+                ],
+                "Export H5P" => [
+                    "View" => [
+                        'independent-activity:view-export-h5p-option'
+                    ],
+                    "None" => []
                 ]
             ]
         ];

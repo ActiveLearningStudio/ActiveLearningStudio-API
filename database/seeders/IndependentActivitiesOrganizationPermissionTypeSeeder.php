@@ -79,5 +79,41 @@ class IndependentActivitiesOrganizationPermissionTypeSeeder extends Seeder
             'display_name' => 'Author Edit Of Independent Activity',
             'feature' => 'Independent Activity'
         ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:view-library-preference-options',
+            'display_name' => 'Update Library Preference',
+            'feature' => 'Independent Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:view-copy-to-my-activities-option',
+            'display_name' => 'Copy to My Activities',
+            'feature' => 'Independent Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:view-copy-to-my-projects-option',
+            'display_name' => 'Copy to My projects',
+            'feature' => 'Independent Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:view-export-xapi-option',
+            'display_name' => 'Export xAPI',
+            'feature' => 'Independent Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:view-export-h5p-option',
+            'display_name' => 'Export H5P',
+            'feature' => 'Independent Activity'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'independent-activity:view-existing-activity-search-option',
+            'display_name' => 'Search Existing Activity',
+            'feature' => 'Independent Activity'
+        ]);
     }
 }

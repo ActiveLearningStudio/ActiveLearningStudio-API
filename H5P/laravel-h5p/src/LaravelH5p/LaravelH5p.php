@@ -397,7 +397,7 @@ class LaravelH5p
      */
     public static function get_content_settings($content)
     {
-        $safe_parameters = self::$core->filterParameters($content);
+        $safe_parameters = self::filterParametersWithoutExport($content);
 
         // Getting author's user id
         $author_id = (int)(is_array($content) ? $content['user_id'] : $content->user_id);
@@ -532,6 +532,8 @@ class LaravelH5p
         if (!is_string($content)) {
             $tags = DB::select(
                 "SELECT t.name
+
+
                 FROM h5p_contents_tags ct
                 JOIN h5p_tags t ON ct.tag_id = t.id
                 WHERE ct.content_id = ?",
@@ -550,4 +552,140 @@ class LaravelH5p
     {
         return config('laravel-h5p.language');
     }
+
+    /**
+     * Filter content run parameters, rebuild content dependency cache without export for preview and edit activities
+     *
+     * @param Object|array $content
+     * @return Object NULL on failure.
+     */
+    public static function filterParametersWithoutExport(&$content) {
+        if (!empty($content['filtered']) && self::isLibraryDependenciesSaveNotRequired($content)) {
+            return $content['filtered'];
+        }
+
+        if (!(isset($content['library']) && isset($content['params']))) {
+            return NULL;
+        }
+
+        // Validate and filter against main library semantics.
+        $h5pContentValidator = new H5PContentValidator(self::$interface, self::$core);
+        $params = (object) array(
+            'library' => H5PCore::libraryToString($content['library']),
+            'params' => json_decode($content['params'])
+        );
+        if (!$params->params) {
+            return NULL;
+        }
+        $h5pContentValidator->validateLibrary($params, (object) array('options' => array($params->library)));
+
+        // Handle addons:
+        $addons = self::$interface->loadAddons();
+        foreach ($addons as $addon) {
+            $add_to = json_decode($addon['addTo']);
+
+            if (isset($add_to->content->types)) {
+                foreach($add_to->content->types as $type) {
+
+                    if (isset($type->text->regex) &&
+                        self::textAddonMatches($params->params, $type->text->regex)) {
+                        $h5pContentValidator->addon($addon);
+                        break;
+                    }
+                }
+            }
+        }
+
+        $params = json_encode($params->params);
+
+        // Update content dependencies.
+        $content['dependencies'] = $h5pContentValidator->getDependencies();
+
+        // Sometimes the parameters are filtered before content has been created
+        if ($content['id']) {
+            self::$interface->deleteLibraryUsage($content['id']);
+            self::$interface->saveLibraryUsage($content['id'], $content['dependencies']);
+
+            if (!$content['slug']) {
+                $content['slug'] = self::generateContentSlug($content);
+            }
+
+            // Cache.
+            self::$interface->updateContentFields($content['id'], array(
+                'filtered' => $params,
+                'slug' => $content['slug']
+            ));
+        }
+        return $params;
+    }
+
+    /**
+     * Check Library dependencies already saved or not.
+     * if new content then not required
+     * if existing content then check content dependencies length
+     * @param $content
+     * @return bool - false if library save not need else true which is taken care inside filterParametersWithoutExport
+     */
+    public static function isLibraryDependenciesSaveNotRequired($content) {
+        $contentId = $content['id'];
+        if (!$contentId) {
+            return true;
+        }
+
+        $contentDependencies = self::$interface->loadContentDependencies($contentId);
+        return count($contentDependencies) > 0;
+    }
+
+    /**
+     * Generate content slug
+     *
+     * @param array $content object
+     * @return string unique content slug
+     */
+    private static function generateContentSlug($content) {
+        $slug = H5PCore::slugify($content['title']);
+
+        $available = NULL;
+        while (!$available) {
+            if ($available === FALSE) {
+                // If not available, add number suffix.
+                $matches = array();
+                if (preg_match('/(.+-)([0-9]+)$/', $slug, $matches)) {
+                    $slug = $matches[1] . (intval($matches[2]) + 1);
+                }
+                else {
+                    $slug .=  '-2';
+                }
+            }
+            $available = self::$interface->isContentSlugAvailable($slug);
+        }
+        return $slug;
+    }
+
+    /**
+     * Determine if params contain any match.
+     *
+     * @param {object} params - Parameters.
+     * @param {string} [pattern] - Regular expression to identify pattern.
+     * @param {boolean} [found] - Used for recursion.
+     * @return {boolean} True, if params matches pattern.
+     */
+    private static function textAddonMatches($params, $pattern, $found = false) {
+        $type = gettype($params);
+        if ($type === 'string') {
+            if (preg_match($pattern, $params) === 1) {
+                return true;
+            }
+        }
+        elseif ($type === 'array' || $type === 'object') {
+            foreach ($params as $value) {
+                $found = self::textAddonMatches($value, $pattern, $found);
+                if ($found === true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

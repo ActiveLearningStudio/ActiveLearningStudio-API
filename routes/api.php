@@ -165,6 +165,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
         Route::get('activities/{activity}/h5p', 'ActivityController@h5p');
         Route::get('activities/{activity}/h5p-resource-settings', 'ActivityController@getH5pResourceSettings');
         Route::get('activities/{activity}/h5p-resource-settings-open', 'ActivityController@getH5pResourceSettingsOpen');
+        Route::post('activities/templates/h5p-content', 'ActivityController@createH5pContentByTemplate');
         Route::apiResource('playlists.activities', 'ActivityController');
 
         Route::apiResource('suborganizations/{suborganization}/activity-layouts', 'ActivityLayoutController');
