@@ -27,6 +27,7 @@ use App\Models\Subject;
 use App\Models\EducationLevel;
 use App\Models\AuthorTag;
 use App\Models\H5pBrightCoveVideoContents;
+use Djoudi\LaravelH5p\Eloquents\H5pContentsLibrary;
 
 class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
@@ -387,13 +388,23 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
      */
     public function clone (Playlist $playlist, Activity $activity, $token)
     {
-        $h5p_content = $activity->h5p_content;
-        if ($h5p_content) {
-            $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
-            $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
-            $h5p_content->save(); // this will return true, then we can get id of h5pContent
+        $existing_h5p_content = $activity->h5p_content;
+        $existing_h5p_contents_libraries = $existing_h5p_content->libraries;
+        if ($existing_h5p_content) {
+            $new_h5p_content = $existing_h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
+            $new_h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
+            $new_h5p_content->save(); // this will return true, then we can get id of h5pContent
+
+            // Replicate associated H5pContentsLibrary records
+            if ($existing_h5p_contents_libraries) {
+                foreach ($existing_h5p_contents_libraries as $existing_h5p_content_library) {
+                    $new_h5p_content_library = $existing_h5p_content_library->replicate();
+                    $new_h5p_content_library->content_id = $new_h5p_content->id;
+                    $new_h5p_content_library->save();
+                }
+            }
         }
-        $newH5pContent = $h5p_content->id ?? null;
+        $newH5pContent = $new_h5p_content->id ?? null;
 
         // copy the content data if exist
         $this->copy_content_data($activity->h5p_content_id, $newH5pContent);
@@ -444,10 +455,20 @@ class ActivityRepository extends BaseRepository implements ActivityRepositoryInt
     public function cloneStandAloneActivity(Activity $activity, $token)
     {
         $h5p_content = $activity->h5p_content;
+        $existingH5pContentsLibrary = H5pContentsLibrary::where('content_id', $h5p_content->id)->get();
         if ($h5p_content) {
             $h5p_content = $h5p_content->replicate(); // replicate the all data of original activity h5pContent relation
             $h5p_content->user_id = get_user_id_by_token($token); // just update the user id which is performing the cloning
             $h5p_content->save(); // this will return true, then we can get id of h5pContent
+
+            // Replicate associated H5pContentsLibrary records
+            if ($existingH5pContentsLibrary) {
+                foreach ($existingH5pContentsLibrary as $h5pContentsLibrary) {
+                    $newH5pContentsLibrary = $h5pContentsLibrary->replicate();
+                    $newH5pContentsLibrary->content_id = $h5p_content->id;
+                    $newH5pContentsLibrary->save();
+                }
+            }
         }
         $newH5pContent = $h5p_content->id ?? null;
 

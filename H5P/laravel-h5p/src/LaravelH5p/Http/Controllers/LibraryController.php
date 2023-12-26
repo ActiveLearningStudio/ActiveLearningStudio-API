@@ -195,7 +195,7 @@ class LibraryController extends Controller
 
         foreach ($contents as $content) {
             $content = $core->loadContent($content->id);
-            $core->filterParameters($content);
+            $h5p::filterParametersWithoutExport($content);
             $done++;
             if ((microtime(TRUE) - $start) > 5) {
                 break;

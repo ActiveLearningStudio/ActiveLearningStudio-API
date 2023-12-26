@@ -44,7 +44,7 @@ class InvitedOrganizationUserRepository extends BaseRepository implements Invite
      */
     public function delete($email)
     {
-        $this->model->where('invited_email', $email)->delete();
+        $this->model->where('invited_email', strtolower($email))->delete();
     }
 
     /**

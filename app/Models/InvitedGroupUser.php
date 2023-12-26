@@ -26,6 +26,24 @@ class InvitedGroupUser extends Model
     protected $table = 'invited_group_users';
 
     /**
+     * Cascade on create/update the user invite
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function(InvitedGroupUser $invitedGroupUser) {
+            $invitedGroupUser->invited_email = strtolower($invitedGroupUser->invited_email);
+        });
+
+        self::updating(function (InvitedGroupUser $invitedGroupUser) {
+            if($invitedGroupUser->invited_email){
+                $invitedGroupUser->invited_email = strtolower($invitedGroupUser->invited_email);
+            }
+        });
+    }
+
+    /**
      * Scope for email search
      *
      * @param $query
@@ -34,7 +52,7 @@ class InvitedGroupUser extends Model
      */
     public function scopeSearchByEmail($query, $value)
     {
-        return $query->orWhereRaw("invited_email = '" . $value . "'");
+        return $query->orWhereRaw("invited_email = '" . strtolower($value) . "'");
     }
 
 }

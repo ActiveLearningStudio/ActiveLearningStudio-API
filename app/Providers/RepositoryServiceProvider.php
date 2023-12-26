@@ -81,6 +81,8 @@ use App\Repositories\MicrosoftTeam\MicrosoftTeamRepositoryInterface;
 use App\Repositories\MicrosoftTeam\MicrosoftTeamRepository;
 use App\Repositories\MediaSources\MediaSourcesInterface;
 use App\Repositories\MediaSources\MediaSourcesRepository;
+use App\Repositories\H5pContentTemplate\H5pContentTemplateRepository;
+use App\Repositories\H5pContentTemplate\H5pContentTemplateRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -130,6 +132,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(OrganizationRoleTypeRepositoryInterface::class, OrganizationRoleTypeRepository::class);
         $this->app->bind(MicrosoftTeamRepositoryInterface::class, MicrosoftTeamRepository::class);
         $this->app->bind(MediaSourcesInterface::class, MediaSourcesRepository::class);
+        $this->app->bind(H5pContentTemplateRepositoryInterface::class, H5pContentTemplateRepository::class);
     }
 
     /**
