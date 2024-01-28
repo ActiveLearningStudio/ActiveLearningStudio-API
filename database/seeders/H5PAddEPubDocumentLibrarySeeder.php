@@ -18,7 +18,27 @@ class H5PAddEPubDocumentLibrarySeeder extends Seeder
         $h5pePubLib = DB::table('h5p_libraries')->where($h5pePubLibParams)->first();
 
       if (empty($h5pePubLib)) {
-          $h5pFibLibId = DB::table('h5p_libraries')->insertGetId([
+
+          $h5pEpubSelectChapterId = DB::table('h5p_libraries')->insertGetId([
+              'name' => 'H5PEditor.SelectEpubChapter',
+              'title' => 'Select Epub Chapter',
+              'major_version' => 1,
+              'minor_version' => 0,
+              'patch_version' => 0,
+              'embed_types' => '',
+              'runnable' => 0,
+              'restricted' => 0,
+              'fullscreen' => 0,
+              'preloaded_js' => 'select-epub-chapter.js',
+              'preloaded_css' => 'select-epub-chapter.css',
+              'drop_library_css' => '',
+              'semantics' => '',
+              'tutorial_url' => ' ',
+              'has_icon' => 0
+          ]);
+
+
+          $h5pEpubDocumentLibId = DB::table('h5p_libraries')->insertGetId([
                           'name' => 'H5P.EPubDocument',
                           'title' => 'ePub Document',
                           'major_version' => 1,
@@ -35,7 +55,27 @@ class H5PAddEPubDocumentLibrarySeeder extends Seeder
                           'tutorial_url' => ' ',
                           'has_icon' => 1
           ]);
+
+          $this->insertDependentLibraries($h5pEpubDocumentLibId, $h5pEpubSelectChapterId);
+
       }
+
+    }
+
+    /**
+     * Insert Dependent Libraries
+     * @param $h5pEpubDocumentLibId
+     * @param $h5pEpubSelectChapterId
+     */
+    private function insertDependentLibraries($h5pEpubDocumentLibId, $h5pEpubSelectChapterId)
+    {
+
+
+        DB::table('h5p_libraries_libraries')->insert([
+            'library_id' => $h5pEpubDocumentLibId,
+            'required_library_id' => $h5pEpubSelectChapterId,
+            'dependency_type' => 'editor'
+        ]);
 
     }
 
@@ -47,9 +87,18 @@ class H5PAddEPubDocumentLibrarySeeder extends Seeder
     "type": "file",
     "label": "ePub Document(.epub file)",
     "importance": "high",
-    "disableCopyright": true
+    "disableCopyright": true,
+    "mimes": [
+      "application/epub+zip"
+    ]
+  },
+  {
+    "name": "chapter",
+    "type": "select",
+    "widget": "selectEpubChapter",
+    "label": "Chapter",
+    "importance": "high"
   }
-]
-';
+]';
     }
 }
