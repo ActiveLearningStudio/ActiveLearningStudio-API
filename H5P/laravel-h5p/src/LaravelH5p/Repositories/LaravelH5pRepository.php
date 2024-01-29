@@ -421,7 +421,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
      */
     public function updateContent($content, $contentMainId = NULL)
     {
-        $user = Auth::user();        
+        $user = Auth::user();
         $current_date = date('Y-m-d H:i:s');
         $metadata = (array)$content['metadata'];
         $table = 'h5p_contents';
@@ -488,10 +488,10 @@ class LaravelH5pRepository implements H5PFrameworkInterface
         if ($isLibrary) {
             $whitelist .= ' ' . $defaultLibraryWhitelist;
         }
-        
+
         $whitelistArr = explode(' ', $whitelist);
         $whitelistCapitalized = array_map(function($ext) { return strtoupper($ext); }, $whitelistArr);
-        $whitelistFinalArr = array_merge($whitelistArr, $whitelistCapitalized, ['html','htm','HTML','HTM', 'yml', 'YML']);
+        $whitelistFinalArr = array_merge($whitelistArr, $whitelistCapitalized, ['html','htm','HTML','HTM', 'yml', 'YML', 'epub']);
         $whitelist = implode(' ', $whitelistFinalArr);
         return $whitelist;
     }
