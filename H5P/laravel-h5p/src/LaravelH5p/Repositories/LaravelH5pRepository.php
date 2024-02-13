@@ -20,6 +20,7 @@ use Djoudi\LaravelH5p\Eloquents\H5pLibrariesLibrary;
 use Djoudi\LaravelH5p\Eloquents\H5pLibrary;
 use Djoudi\LaravelH5p\Eloquents\H5pResult;
 use Djoudi\LaravelH5p\Events\H5pEvent;
+use Djoudi\LaravelH5p\H5pCore\CustomH5PMetadata;
 use Djoudi\LaravelH5p\Helpers\H5pHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -427,7 +428,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
         $table = 'h5p_contents';
 
         $format = array();
-        $data = array_merge(\H5PMetadata::toDBArray($metadata, true, true, $format), array(
+        $data = array_merge(CustomH5PMetadata::toDBArray($metadata, true, true, $format), array(
             'updated_at' => $current_date,
             'parameters' => $content['params'],
             'embed_type' => 'div', // TODO: Determine from library?
@@ -715,7 +716,13 @@ class LaravelH5pRepository implements H5PFrameworkInterface
                 , hc.license_extras AS "licenseExtras"
                 , hc.author_comments AS "authorComments"
                 , hc.changes AS "changes"
-                , hc.default_language AS "defaultLanguage"
+                , hc.default_language AS "defaultLanguage",
+                , hc.royalty_type AS "royaltyType",
+                , hc.royalty_terms_views AS "royaltyTermsViews",
+                , hc.amount AS "amount",
+                , hc.currency AS "currency",
+                , hc.copyright_notice AS "copyrightNotice",
+                , hc.credit_text AS "creditText"
             FROM h5p_contents hc
             JOIN h5p_libraries hl ON hl.id = hc.library_id
             WHERE hc.id = ?
@@ -729,7 +736,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
 
         if ($content !== NULL) {
             $content['metadata'] = array();
-            $metadata_structure = array('title', 'authors', 'source', 'yearFrom', 'yearTo', 'license', 'licenseVersion', 'licenseExtras', 'authorComments', 'changes', 'defaultLanguage');
+            $metadata_structure = array('title', 'authors', 'source', 'yearFrom', 'yearTo', 'license', 'licenseVersion', 'licenseExtras', 'authorComments', 'changes', 'defaultLanguage', 'royaltyType', 'royaltyTermsViews', 'amount', 'currency', 'copyrightNotice', 'creditText');
             foreach ($metadata_structure as $property) {
                 if (!empty($content[$property])) {
                     if ($property === 'authors' || $property === 'changes') {
