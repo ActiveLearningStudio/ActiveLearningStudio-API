@@ -716,12 +716,12 @@ class LaravelH5pRepository implements H5PFrameworkInterface
                 , hc.license_extras AS "licenseExtras"
                 , hc.author_comments AS "authorComments"
                 , hc.changes AS "changes"
-                , hc.default_language AS "defaultLanguage",
-                , hc.royalty_type AS "royaltyType",
-                , hc.royalty_terms_views AS "royaltyTermsViews",
-                , hc.amount AS "amount",
-                , hc.currency AS "currency",
-                , hc.copyright_notice AS "copyrightNotice",
+                , hc.default_language AS "defaultLanguage"
+                , hc.royalty_type AS "royaltyType"
+                , hc.royalty_terms_views AS "royaltyTermsViews"
+                , hc.amount AS "amount"
+                , hc.currency AS "currency"
+                , hc.copyright_notice AS "copyrightNotice"
                 , hc.credit_text AS "creditText"
             FROM h5p_contents hc
             JOIN h5p_libraries hl ON hl.id = hc.library_id
