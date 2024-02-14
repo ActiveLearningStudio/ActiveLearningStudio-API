@@ -29,6 +29,12 @@ class H5pContent extends Model
         'license',
         'keywords',
         'description',
+        'royalty_type',
+        'royalty_terms_views',
+        'currency',
+        'amount',
+        'copyright_notice',
+        'credit_text'
     ];
 
     public function user()
