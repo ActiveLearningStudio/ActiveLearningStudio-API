@@ -20,7 +20,6 @@ use Djoudi\LaravelH5p\Eloquents\H5pLibrariesLibrary;
 use Djoudi\LaravelH5p\Eloquents\H5pLibrary;
 use Djoudi\LaravelH5p\Eloquents\H5pResult;
 use Djoudi\LaravelH5p\Events\H5pEvent;
-use Djoudi\LaravelH5p\H5pCore\CustomH5PMetadata;
 use Djoudi\LaravelH5p\Helpers\H5pHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
