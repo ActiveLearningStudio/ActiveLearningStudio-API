@@ -26,7 +26,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 6
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -37,7 +37,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 6
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -46,40 +46,87 @@ endpoints:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: vktbzfdzochaaxlotyzypsrf
+        example: nrdoirlejutpzbapbizjd
         type: string
         custom: []
       size:
         name: size
         description: ''
         required: false
-        example: 10
+        example: 8
         type: integer
         custom: []
       order_by_column:
         name: order_by_column
         description: 'Must be one of <code>title</code> or <code>order</code>.'
         required: false
-        example: title
+        example: order
         type: string
         custom: []
       order_by_type:
         name: order_by_type
         description: 'Must be one of <code>asc</code> or <code>desc</code>.'
         required: false
-        example: asc
+        example: desc
         type: string
         custom: []
     cleanBodyParameters:
-      query: vktbzfdzochaaxlotyzypsrf
-      size: 10
-      order_by_column: title
-      order_by_type: asc
+      query: nrdoirlejutpzbapbizjd
+      size: 8
+      order_by_column: order
+      order_by_type: desc
     fileParameters: []
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Layout Two\",\r\n            \"description\": \"test\",\r\n            \"order\": null,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"test\",\r\n            \"image\": \"/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"demo_activity_id\": \"1\",\r\n            \"demo_video_id\": \"1\",\r\n            \"organization_id\": \"1\",\r\n            \"created_at\": \"2022-02-09T10:22:42.000000Z\",\r\n            \"updated_at\": \"2022-02-09T10:22:42.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Layout One\",\r\n            \"description\": \"test\",\r\n            \"order\": null,\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"test\",\r\n            \"image\": \"/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"demo_activity_id\": \"1\",\r\n            \"demo_video_id\": \"1\",\r\n            \"organization_id\": \"1\",\r\n            \"created_at\": \"2022-02-09T09:46:28.000000Z\",\r\n            \"updated_at\": \"2022-02-09T10:24:52.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/activity-layouts?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/activity-layouts?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/activity-layouts\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 2,
+                      "title": "Layout Two",
+                      "description": "test",
+                      "order": null,
+                      "type": "h5p",
+                      "h5pLib": "test",
+                      "image": "/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                      "demo_activity_id": "1",
+                      "demo_video_id": "1",
+                      "organization_id": "1",
+                      "created_at": "2022-02-09T10:22:42.000000Z",
+                      "updated_at": "2022-02-09T10:22:42.000000Z"
+                  },
+                  {
+                      "id": 1,
+                      "title": "Layout One",
+                      "description": "test",
+                      "order": null,
+                      "type": "h5p",
+                      "h5pLib": "test",
+                      "image": "/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                      "demo_activity_id": "1",
+                      "demo_video_id": "1",
+                      "organization_id": "1",
+                      "created_at": "2022-02-09T09:46:28.000000Z",
+                      "updated_at": "2022-02-09T10:24:52.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/activity-layouts?page=1",
+                  "last": "http://localhost:8000/api/v1/activity-layouts?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/activity-layouts",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -112,7 +159,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 6
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -123,7 +170,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 6
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -139,7 +186,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: eum
+        example: maxime
         type: string
         custom: []
       order:
@@ -153,54 +200,54 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: aut
+        example: quia
         type: string
         custom: []
       h5pLib:
         name: h5pLib
         description: ''
         required: true
-        example: odio
+        example: tenetur
         type: string
         custom: []
       image:
         name: image
         description: 'Valid Image.'
         required: true
-        example: voluptas
+        example: maiores
         type: image
         custom: []
       demo_activity_id:
         name: demo_activity_id
         description: ''
         required: true
-        example: dolor
+        example: ut
         type: string
         custom: []
       demo_video_id:
         name: demo_video_id
         description: ''
         required: true
-        example: consectetur
+        example: commodi
         type: string
         custom: []
       organization_id:
         name: organization_id
         description: ''
         required: true
-        example: 10
+        example: 19
         type: integer
         custom: []
     cleanBodyParameters:
       title: Audio
-      description: eum
+      description: maxime
       order: 1
-      type: aut
-      h5pLib: odio
-      image: voluptas
-      demo_activity_id: dolor
-      demo_video_id: consectetur
-      organization_id: 10
+      type: quia
+      h5pLib: tenetur
+      image: maiores
+      demo_activity_id: ut
+      demo_video_id: commodi
+      organization_id: 19
     fileParameters: []
     responses:
       -
@@ -227,7 +274,23 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"activityLayout\": {\r\n        \"id\": 1,\r\n        \"title\": \"Layout One\",\r\n        \"description\": \"test\",\r\n        \"order\": null,\r\n        \"type\": \"h5p\",\r\n        \"h5pLib\": \"test\",\r\n        \"image\": \"/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n        \"demo_activity_id\": \"1\",\r\n        \"demo_video_id\": \"1\",\r\n        \"organization_id\": \"1\",\r\n        \"created_at\": \"2022-02-09T09:46:28.000000Z\",\r\n        \"updated_at\": \"2022-02-09T10:24:52.000000Z\"\r\n    }\r\n}"
+        content: |-
+          {
+              "activityLayout": {
+                  "id": 1,
+                  "title": "Layout One",
+                  "description": "test",
+                  "order": null,
+                  "type": "h5p",
+                  "h5pLib": "test",
+                  "image": "/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                  "demo_activity_id": "1",
+                  "demo_video_id": "1",
+                  "organization_id": "1",
+                  "created_at": "2022-02-09T09:46:28.000000Z",
+                  "updated_at": "2022-02-09T10:24:52.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -260,14 +323,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 2
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the activity layout.'
         required: true
-        example: 4
+        example: 1081
         type: integer
         custom: []
       suborganization:
@@ -285,8 +348,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 2
-      id: 4
+      suborganization_id: 63
+      id: 1081
       suborganization: '1'
       activityLayout: '1'
     queryParameters: []
@@ -297,7 +360,23 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"activityLayout\": {\r\n        \"id\": 1,\r\n        \"title\": \"Layout One\",\r\n        \"description\": \"test\",\r\n        \"order\": null,\r\n        \"type\": \"h5p\",\r\n        \"h5pLib\": \"test\",\r\n        \"image\": \"/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n        \"demo_activity_id\": \"1\",\r\n        \"demo_video_id\": \"1\",\r\n        \"organization_id\": \"1\",\r\n        \"created_at\": \"2022-02-09T09:46:28.000000Z\",\r\n        \"updated_at\": \"2022-02-09T10:24:52.000000Z\"\r\n    }\r\n}"
+        content: |-
+          {
+              "activityLayout": {
+                  "id": 1,
+                  "title": "Layout One",
+                  "description": "test",
+                  "order": null,
+                  "type": "h5p",
+                  "h5pLib": "test",
+                  "image": "/storage/activity-layouts/BmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                  "demo_activity_id": "1",
+                  "demo_video_id": "1",
+                  "organization_id": "1",
+                  "created_at": "2022-02-09T09:46:28.000000Z",
+                  "updated_at": "2022-02-09T10:24:52.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -330,14 +409,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 15
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the activity layout.'
         required: true
-        example: 20
+        example: 1081
         type: integer
         custom: []
       suborganization:
@@ -355,8 +434,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 15
-      id: 20
+      suborganization_id: 63
+      id: 1081
       suborganization: '1'
       activityLayout: '1'
     queryParameters: []
@@ -425,11 +504,11 @@ endpoints:
         name: thumb
         description: 'Thumbnail image'
         required: true
-        example: esse
+        example: aut
         type: image
         custom: []
     cleanBodyParameters:
-      thumb: esse
+      thumb: aut
     fileParameters:
       image: null
     responses:

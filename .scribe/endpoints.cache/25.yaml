@@ -28,19 +28,19 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 11
+        example: 62447
         type: integer
         custom: []
       project:
         name: project
         description: 'The Id of the project Example 1'
         required: true
-        example: tempora
+        example: illum
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 11
-      project: tempora
+      project_id: 62447
+      project: illum
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -48,11 +48,11 @@ endpoints:
         name: setting_id
         description: 'The Id of the LMS setting Example 1'
         required: false
-        example: 11
+        example: 18
         type: integer
         custom: []
     cleanBodyParameters:
-      setting_id: 11
+      setting_id: 18
     fileParameters: []
     responses:
       -
@@ -79,7 +79,18 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"project\": {\r\n        \"course\": \"How to build a playlist in CurrikiStudio\",\r\n        \"playlists\": [\r\n            \"Playlist 1\",\r\n            \"Playlist 2\",\r\n            \"Playlist 3\",\r\n            \"Playlist 4\"\r\n        ]\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "project": {
+                  "course": "How to build a playlist in CurrikiStudio",
+                  "playlists": [
+                      "Playlist 1",
+                      "Playlist 2",
+                      "Playlist 3",
+                      "Playlist 4"
+                  ]
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -112,19 +123,19 @@ endpoints:
         name: lms
         description: ''
         required: true
-        example: inventore
+        example: eum
         type: string
         custom: []
       project_id:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 15
+        example: 62447
         type: integer
         custom: []
     cleanUrlParameters:
-      lms: inventore
-      project_id: 15
+      lms: eum
+      project_id: 62447
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -132,11 +143,11 @@ endpoints:
         name: setting_id
         description: ''
         required: true
-        example: quasi
+        example: et
         type: string
         custom: []
     cleanBodyParameters:
-      setting_id: quasi
+      setting_id: et
     fileParameters: []
     responses: []
     responseFields: []

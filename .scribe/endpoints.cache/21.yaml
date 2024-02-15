@@ -28,7 +28,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 18
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -39,7 +39,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 18
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -48,14 +48,14 @@ endpoints:
         name: size
         description: 'Must not be greater than 255.'
         required: false
-        example: 12
+        example: 21
         type: integer
         custom: []
       query:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: yqifclm
+        example: nyqsutvfxjk
         type: string
         custom: []
       order_by_column:
@@ -73,15 +73,50 @@ endpoints:
         type: string
         custom: []
     cleanBodyParameters:
-      size: 12
-      query: yqifclm
+      size: 21
+      query: nyqsutvfxjk
       order_by_column: name
       order_by_type: desc
     fileParameters: []
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Audio\",\r\n            \"order\": 1,\r\n            \"organization_id\" : \"1\",\r\n            \"created_at\": \"2022-01-10T13:09:36.000000Z\",\r\n            \"updated_at\": \"2022-01-10T13:09:36.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Video\",\r\n            \"order\": 1,\r\n            \"organization_id\" : \"2\",\r\n            \"created_at\": \"2022-01-10T13:09:44.000000Z\",\r\n            \"updated_at\": \"2022-01-10T13:09:44.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/author-tags?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/author-tags?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/author-tags\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "name": "Audio",
+                      "order": 1,
+                      "organization_id" : "1",
+                      "created_at": "2022-01-10T13:09:36.000000Z",
+                      "updated_at": "2022-01-10T13:09:36.000000Z"
+                  },
+                  {
+                      "id": 2,
+                      "name": "Video",
+                      "order": 1,
+                      "organization_id" : "2",
+                      "created_at": "2022-01-10T13:09:44.000000Z",
+                      "updated_at": "2022-01-10T13:09:44.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/author-tags?page=1",
+                  "last": "http://localhost:8000/api/v1/author-tags?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/author-tags",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -114,7 +149,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 12
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -125,7 +160,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 12
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -148,13 +183,13 @@ endpoints:
         name: organization_id
         description: ''
         required: true
-        example: 1
+        example: 6
         type: integer
         custom: []
     cleanBodyParameters:
       name: Audio
       order: 1
-      organization_id: 1
+      organization_id: 6
     fileParameters: []
     responses:
       -
@@ -170,7 +205,17 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"author-tag\": {\r\n        \"id\": 1,\r\n        \"name\": \"Audio\",\r\n        \"order\": 1,\r\n        \"organization_id\" : \"1\",\r\n        \"created_at\": \"2022-01-10T13:09:36.000000Z\",\r\n        \"updated_at\": \"2022-01-10T13:09:36.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "author-tag": {
+                  "id": 1,
+                  "name": "Audio",
+                  "order": 1,
+                  "organization_id" : "1",
+                  "created_at": "2022-01-10T13:09:36.000000Z",
+                  "updated_at": "2022-01-10T13:09:36.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -203,14 +248,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 7
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the author tag.'
         required: true
-        example: 13
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -228,8 +273,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 7
-      id: 13
+      suborganization_id: 63
+      id: 1
       suborganization: '1'
       authorTag: '1'
     queryParameters: []
@@ -240,7 +285,17 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"author-tag\": {\r\n        \"id\": 1,\r\n        \"name\": \"Audio\",\r\n        \"order\": 1,\r\n        \"organization_id\" : \"1\",\r\n        \"created_at\": \"2022-01-10T13:09:36.000000Z\",\r\n        \"updated_at\": \"2022-01-10T13:09:36.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "author-tag": {
+                  "id": 1,
+                  "name": "Audio",
+                  "order": 1,
+                  "organization_id" : "1",
+                  "created_at": "2022-01-10T13:09:36.000000Z",
+                  "updated_at": "2022-01-10T13:09:36.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -273,14 +328,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 12
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the author tag.'
         required: true
-        example: 20
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -298,8 +353,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 12
-      id: 20
+      suborganization_id: 63
+      id: 1
       suborganization: '1'
       authorTag: '1'
     queryParameters: []

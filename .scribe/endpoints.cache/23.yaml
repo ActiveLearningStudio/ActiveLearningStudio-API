@@ -33,7 +33,41 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": {\r\n        \"settings\": [\r\n            {\r\n                \"id\": 1,\r\n                \"lms_url\": \"https://moodle39.curriki.org\",\r\n                \"lms_access_token\": \"bf06028490c01e1f4538f6206055bc00\",\r\n                \"site_name\": \"Moodle Demo\",\r\n                \"lms_name\": \"moodle\",\r\n                \"lms_access_key\": \"\",\r\n                \"lms_access_secret\": \"\",\r\n                \"description\": \"Moodle Demo\",\r\n                \"user_id\": 1,\r\n                \"lti_client_id\": null,\r\n                \"created_at\": \"2020-08-27T18:35:17.000000Z\",\r\n                \"updated_at\": \"2020-08-27T18:35:17.000000Z\"\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"lms_url\": \"https://moodle39.curriki.org\",\r\n                \"lms_access_token\": \"bf06028490c01e1f4538f6206055bc01\",\r\n                \"site_name\": \"Moodle Demo\",\r\n                \"lms_name\": \"moodle\",\r\n                \"lms_access_key\": \"\",\r\n                \"lms_access_secret\": \"\",\r\n                \"description\": \"Moodle Demo\",\r\n                \"user_id\": 1,\r\n                \"lti_client_id\": null,\r\n                \"created_at\": \"2020-08-28T18:35:17.000000Z\",\r\n                \"updated_at\": \"2020-08-28T18:35:17.000000Z\"\r\n            }\r\n        ]\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "data": {
+                  "settings": [
+                      {
+                          "id": 1,
+                          "lms_url": "https://moodle39.curriki.org",
+                          "lms_access_token": "bf06028490c01e1f4538f6206055bc00",
+                          "site_name": "Moodle Demo",
+                          "lms_name": "moodle",
+                          "lms_access_key": "",
+                          "lms_access_secret": "",
+                          "description": "Moodle Demo",
+                          "user_id": 1,
+                          "lti_client_id": null,
+                          "created_at": "2020-08-27T18:35:17.000000Z",
+                          "updated_at": "2020-08-27T18:35:17.000000Z"
+                      },
+                      {
+                          "id": 2,
+                          "lms_url": "https://moodle39.curriki.org",
+                          "lms_access_token": "bf06028490c01e1f4538f6206055bc01",
+                          "site_name": "Moodle Demo",
+                          "lms_name": "moodle",
+                          "lms_access_key": "",
+                          "lms_access_secret": "",
+                          "description": "Moodle Demo",
+                          "user_id": 1,
+                          "lti_client_id": null,
+                          "created_at": "2020-08-28T18:35:17.000000Z",
+                          "updated_at": "2020-08-28T18:35:17.000000Z"
+                      }
+                  ]
+              }
+          }
         headers: []
         description: ''
         custom: []

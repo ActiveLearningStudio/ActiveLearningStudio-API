@@ -28,7 +28,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 3
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -39,7 +39,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 3
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -48,14 +48,14 @@ endpoints:
         name: size
         description: 'Must not be greater than 255.'
         required: false
-        example: 16
+        example: 18
         type: integer
         custom: []
       query:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: lrriuxtlznmkmjwzfiewr
+        example: seuptyulacyvvptbqrhnd
         type: string
         custom: []
       order_by_column:
@@ -69,19 +69,54 @@ endpoints:
         name: order_by_type
         description: 'Must be one of <code>asc</code>, <code>desc</code>, <code>ASC</code>, or <code>DESC</code>.'
         required: false
-        example: ASC
+        example: desc
         type: string
         custom: []
     cleanBodyParameters:
-      size: 16
-      query: lrriuxtlznmkmjwzfiewr
+      size: 18
+      query: seuptyulacyvvptbqrhnd
       order_by_column: order
-      order_by_type: ASC
+      order_by_type: desc
     fileParameters: []
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Grade A\",\r\n            \"order\": 1,\r\n            \"organization_id\" : \"1\",\r\n            \"created_at\": \"2022-01-07T13:51:38.000000Z\",\r\n            \"updated_at\": \"2022-01-07T13:51:38.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Grade B\",\r\n            \"order\": 1,\r\n            \"organization_id\" : \"2\",\r\n            \"created_at\": \"2022-01-07T13:51:56.000000Z\",\r\n            \"updated_at\": \"2022-01-07T13:51:56.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/education-levels?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/education-levels?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/education-levels\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "name": "Grade A",
+                      "order": 1,
+                      "organization_id" : "1",
+                      "created_at": "2022-01-07T13:51:38.000000Z",
+                      "updated_at": "2022-01-07T13:51:38.000000Z"
+                  },
+                  {
+                      "id": 2,
+                      "name": "Grade B",
+                      "order": 1,
+                      "organization_id" : "2",
+                      "created_at": "2022-01-07T13:51:56.000000Z",
+                      "updated_at": "2022-01-07T13:51:56.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/education-levels?page=1",
+                  "last": "http://localhost:8000/api/v1/education-levels?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/education-levels",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -114,7 +149,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 8
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -125,7 +160,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 8
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -148,13 +183,13 @@ endpoints:
         name: organization_id
         description: ''
         required: true
-        example: 14
+        example: 7
         type: integer
         custom: []
     cleanBodyParameters:
       name: 'Special Education'
       order: 1
-      organization_id: 14
+      organization_id: 7
     fileParameters: []
     responses:
       -
@@ -170,7 +205,17 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"education-level\": {\r\n        \"id\": 1,\r\n        \"name\": \"Grade A\",\r\n        \"order\": \"1\",\r\n        \"organization_id\" : \"1\",\r\n        \"created_at\": \"2022-01-07T13:51:56.000000Z\",\r\n        \"updated_at\": \"2022-01-07T13:51:56.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "education-level": {
+                  "id": 1,
+                  "name": "Grade A",
+                  "order": "1",
+                  "organization_id" : "1",
+                  "created_at": "2022-01-07T13:51:56.000000Z",
+                  "updated_at": "2022-01-07T13:51:56.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -203,14 +248,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 12
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the education level.'
         required: true
-        example: 12
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -228,8 +273,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 12
-      id: 12
+      suborganization_id: 63
+      id: 1
       suborganization: '1'
       EducationLevel: '1'
     queryParameters: []
@@ -240,7 +285,17 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"education-level\": {\r\n        \"id\": 1,\r\n        \"name\": \"Grade A\",\r\n        \"order\": \"1\",\r\n        \"organization_id\" : \"1\",\r\n        \"created_at\": \"2022-01-07T13:51:56.000000Z\",\r\n        \"updated_at\": \"2022-01-07T13:51:56.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "education-level": {
+                  "id": 1,
+                  "name": "Grade A",
+                  "order": "1",
+                  "organization_id" : "1",
+                  "created_at": "2022-01-07T13:51:56.000000Z",
+                  "updated_at": "2022-01-07T13:51:56.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -273,14 +328,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 19
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the education level.'
         required: true
-        example: 19
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -298,8 +353,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 19
-      id: 19
+      suborganization_id: 63
+      id: 1
       suborganization: '1'
       educationLevel: '1'
     queryParameters: []

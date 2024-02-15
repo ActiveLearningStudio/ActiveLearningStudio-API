@@ -28,7 +28,7 @@ endpoints:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 14
+        example: 171
         type: integer
         custom: []
       playlist:
@@ -39,7 +39,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      playlist_id: 14
+      playlist_id: 171
       playlist: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -52,7 +52,7 @@ endpoints:
         content: |-
           {
             "errors": [
-              "No shareable Project found."
+              "Playlist is not shareable."
             ]
           }
         headers: []
@@ -60,7 +60,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -93,14 +126,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 20
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 1
+        example: 171
         type: integer
         custom: []
       project:
@@ -111,8 +144,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 20
-      playlist_id: 1
+      project_id: 62447
+      playlist_id: 171
       project: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -125,7 +158,7 @@ endpoints:
         content: |-
           {
             "errors": [
-              "No shareable Playlist found."
+              "Playlist is not shareable."
             ]
           }
         headers: []
@@ -133,7 +166,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -166,7 +232,7 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 8
+        example: 62447
         type: integer
         custom: []
       project:
@@ -177,7 +243,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 8
+      project_id: 62447
       project: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -198,9 +264,447 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/playlists/update-order
+    metadata:
+      groupName: '4. Playlist'
+      groupDescription: |-
+
+        APIs for playlist management
+      subgroup: null
+      subgroupDescription: null
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 404
+        content: |-
+          {
+              "message": "",
+              "exception": "Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException",
+              "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Routing/AbstractRouteCollection.php",
+              "line": 44,
+              "trace": [
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Routing/CompiledRouteCollection.php",
+                      "line": 144,
+                      "function": "handleMatchedRoute",
+                      "class": "Illuminate\\Routing\\AbstractRouteCollection",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 753,
+                      "function": "match",
+                      "class": "Illuminate\\Routing\\CompiledRouteCollection",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 740,
+                      "function": "findRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Routing/Router.php",
+                      "line": 729,
+                      "function": "dispatchToRoute",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 190,
+                      "function": "dispatch",
+                      "class": "Illuminate\\Routing\\Router",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 141,
+                      "function": "Illuminate\\Foundation\\Http\\{closure}",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php",
+                      "line": 31,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php",
+                      "line": 21,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php",
+                      "line": 40,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\TrimStrings",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php",
+                      "line": 27,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php",
+                      "line": 86,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/app/Http/Middleware/Cors.php",
+                      "line": 40,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "App\\Http\\Middleware\\Cors",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php",
+                      "line": 39,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 180,
+                      "function": "handle",
+                      "class": "Illuminate\\Http\\Middleware\\TrustProxies",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php",
+                      "line": 116,
+                      "function": "Illuminate\\Pipeline\\{closure}",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 165,
+                      "function": "then",
+                      "class": "Illuminate\\Pipeline\\Pipeline",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php",
+                      "line": 134,
+                      "function": "sendRequestThroughRouter",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 306,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Http\\Kernel",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 294,
+                      "function": "callLaravelOrLumenRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 92,
+                      "function": "makeApiCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 45,
+                      "function": "makeResponseCall",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Strategies/Responses/ResponseCalls.php",
+                      "line": 35,
+                      "function": "makeResponseCallIfConditionsPass",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 209,
+                      "function": "__invoke",
+                      "class": "Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 166,
+                      "function": "iterateThroughStrategies",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Extracting/Extractor.php",
+                      "line": 95,
+                      "function": "fetchResponses",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php",
+                      "line": 122,
+                      "function": "processRoute",
+                      "class": "Knuckles\\Scribe\\Extracting\\Extractor",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php",
+                      "line": 69,
+                      "function": "extractEndpointsInfoFromLaravelApp",
+                      "class": "Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/GroupedEndpoints/GroupedEndpointsFromApp.php",
+                      "line": 47,
+                      "function": "extractEndpointsInfoAndWriteToDisk",
+                      "class": "Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/knuckleswtf/scribe/src/Commands/GenerateDocumentation.php",
+                      "line": 53,
+                      "function": "get",
+                      "class": "Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 36,
+                      "function": "handle",
+                      "class": "Knuckles\\Scribe\\Commands\\GenerateDocumentation",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Container/Util.php",
+                      "line": 41,
+                      "function": "Illuminate\\Container\\{closure}",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 93,
+                      "function": "unwrapIfClosure",
+                      "class": "Illuminate\\Container\\Util",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php",
+                      "line": 37,
+                      "function": "callBoundMethod",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Container/Container.php",
+                      "line": 651,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\BoundMethod",
+                      "type": "::"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Console/Command.php",
+                      "line": 182,
+                      "function": "call",
+                      "class": "Illuminate\\Container\\Container",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/symfony/console/Command/Command.php",
+                      "line": 312,
+                      "function": "execute",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Console/Command.php",
+                      "line": 152,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Command\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/symfony/console/Application.php",
+                      "line": 1020,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Command",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/symfony/console/Application.php",
+                      "line": 312,
+                      "function": "doRunCommand",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/symfony/console/Application.php",
+                      "line": 168,
+                      "function": "doRun",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Console/Application.php",
+                      "line": 102,
+                      "function": "run",
+                      "class": "Symfony\\Component\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php",
+                      "line": 155,
+                      "function": "run",
+                      "class": "Illuminate\\Console\\Application",
+                      "type": "->"
+                  },
+                  {
+                      "file": "/var/www/studio/api/artisan",
+                      "line": 37,
+                      "function": "handle",
+                      "class": "Illuminate\\Foundation\\Console\\Kernel",
+                      "type": "->"
+                  }
+              ]
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
         custom: []
     responseFields: []
     auth: []
@@ -231,7 +735,7 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 4
+        example: 62447
         type: integer
         custom: []
       project:
@@ -242,7 +746,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 4
+      project_id: 62447
       project: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -252,17 +756,161 @@ endpoints:
         description: 'Playlists of a project'
         required: true
         example:
-          - repellat
+          - est
         type: 'string[]'
         custom: []
     cleanBodyParameters:
       playlists:
-        - repellat
+        - est
     fileParameters: []
     responses:
       -
         status: 200
-        content: "{\r\n    \"playlists\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Math Playlist\",\r\n            \"order\": 0,\r\n            \"is_public\": true,\r\n            \"gcr_playlist_visibility\": true,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Audio Record\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Audio Record content\",\r\n                    \"shared\": true,\r\n                    \"order\": 0,\r\n                    \"thumb_url\": \"/storage/activities/3vVpHHh75MJHOV6a6iZdy13luBaiNn1SrniYpBbQ.png\",\r\n                    \"subject_id\": \"Career & Technical Education\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19430,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"record\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"record\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                        \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                    \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Language Arts\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Language Arts content\",\r\n                    \"shared\": true,\r\n                    \"order\": 1,\r\n                    \"thumb_url\": \"/storage/activities/w2LXV4VMPgccjJyZbs16wSzglX1s58K5NFfFp7ed.png\",\r\n                    \"subject_id\": \"Language Arts\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19431,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"fghfhg\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"fghfhg\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                        \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                    \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n            \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Music Playlist\",\r\n            \"order\": 1,\r\n            \"is_public\": false,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [],\r\n            \"created_at\": \"2020-09-16T18:21:29.000000Z\",\r\n            \"updated_at\": \"2020-09-16T18:21:29.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "playlists": [
+                  {
+                      "id": 1,
+                      "title": "Math Playlist",
+                      "order": 0,
+                      "is_public": true,
+                      "gcr_playlist_visibility": true,
+                      "project_id": 1,
+                      "project": {
+                          "id": 1,
+                          "name": "Test Project",
+                          "description": "This is a test project.",
+                          "thumb_url": "https://images.pexels.com/photos/2832382",
+                          "shared": true,
+                          "starter_project": null,
+                          "users": [
+                              {
+                                  "id": 1,
+                                  "first_name": "John",
+                                  "last_name": "Doe",
+                                  "email": "john.doe@currikistudio.org",
+                                  "role": "owner"
+                              }
+                          ],
+                          "is_public": true,
+                          "created_at": "2020-09-06T19:21:08.000000Z",
+                          "updated_at": "2020-09-06T19:21:08.000000Z"
+                      },
+                      "activities": [
+                          {
+                              "id": 1,
+                              "playlist_id": 1,
+                              "title": "Audio Record",
+                              "type": "h5p",
+                              "content": "Audio Record content",
+                              "shared": true,
+                              "order": 0,
+                              "thumb_url": "/storage/activities/3vVpHHh75MJHOV6a6iZdy13luBaiNn1SrniYpBbQ.png",
+                              "subject_id": "Career & Technical Education",
+                              "education_level_id": null,
+                              "h5p_content": {
+                                  "id": 19430,
+                                  "user_id": 1,
+                                  "title": "record",
+                                  "library_id": 98,
+                                  "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                                  "filtered": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing &quot;Retry&quot; you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can&#039;t create the audio file.\"}}",
+                                  "slug": "record",
+                                  "embed_type": "div",
+                                  "disable": 9,
+                                  "content_type": null,
+                                  "authors": null,
+                                  "source": null,
+                                  "year_from": null,
+                                  "year_to": null,
+                                  "license": "U",
+                                  "license_version": null,
+                                  "license_extras": null,
+                                  "author_comments": null,
+                                  "changes": null,
+                                  "default_language": null,
+                                  "created_at": "2020-09-27T07:14:57.000000Z",
+                                  "updated_at": "2020-09-27T07:14:57.000000Z"
+                              },
+                              "is_public": false,
+                              "created_at": "2020-09-27T07:14:57.000000Z",
+                              "updated_at": "2020-09-27T07:14:57.000000Z"
+                          },
+                          {
+                              "id": 2,
+                              "playlist_id": 1,
+                              "title": "Language Arts",
+                              "type": "h5p",
+                              "content": "Language Arts content",
+                              "shared": true,
+                              "order": 1,
+                              "thumb_url": "/storage/activities/w2LXV4VMPgccjJyZbs16wSzglX1s58K5NFfFp7ed.png",
+                              "subject_id": "Language Arts",
+                              "education_level_id": null,
+                              "h5p_content": {
+                                  "id": 19431,
+                                  "user_id": 1,
+                                  "title": "fghfhg",
+                                  "library_id": 98,
+                                  "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                                  "filtered": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing &quot;Retry&quot; you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can&#039;t create the audio file.\"}}",
+                                  "slug": "fghfhg",
+                                  "embed_type": "div",
+                                  "disable": 9,
+                                  "content_type": null,
+                                  "authors": null,
+                                  "source": null,
+                                  "year_from": null,
+                                  "year_to": null,
+                                  "license": "U",
+                                  "license_version": null,
+                                  "license_extras": null,
+                                  "author_comments": null,
+                                  "changes": null,
+                                  "default_language": null,
+                                  "created_at": "2020-09-07T07:15:31.000000Z",
+                                  "updated_at": "2020-09-07T07:15:31.000000Z"
+                              },
+                              "is_public": false,
+                              "created_at": "2020-09-07T07:15:31.000000Z",
+                              "updated_at": "2020-09-07T07:15:31.000000Z"
+                          }
+                      ],
+                      "created_at": "2020-09-07T17:01:24.000000Z",
+                      "updated_at": "2020-09-07T17:01:24.000000Z"
+                  },
+                  {
+                      "id": 2,
+                      "title": "Music Playlist",
+                      "order": 1,
+                      "is_public": false,
+                      "project_id": 1,
+                      "project": {
+                          "id": 1,
+                          "name": "Test Project",
+                          "description": "This is a test project.",
+                          "thumb_url": "https://images.pexels.com/photos/2832382",
+                          "shared": true,
+                          "starter_project": null,
+                          "users": [
+                              {
+                                  "id": 1,
+                                  "first_name": "John",
+                                  "last_name": "Doe",
+                                  "email": "john.doe@currikistudio.org",
+                                  "role": "owner"
+                              }
+                          ],
+                          "is_public": true,
+                          "created_at": "2020-09-06T19:21:08.000000Z",
+                          "updated_at": "2020-09-06T19:21:08.000000Z"
+                      },
+                      "activities": [],
+                      "created_at": "2020-09-16T18:21:29.000000Z",
+                      "updated_at": "2020-09-16T18:21:29.000000Z"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -295,14 +943,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 18
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 9
+        example: 171
         type: integer
         custom: []
       project:
@@ -320,8 +968,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 18
-      playlist_id: 9
+      project_id: 62447
+      playlist_id: 171
       project: '1'
       playlist: '1'
     queryParameters: []
@@ -379,7 +1027,7 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 13
+        example: 62447
         type: integer
         custom: []
       project:
@@ -390,7 +1038,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 13
+      project_id: 62447
       project: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -400,7 +1048,151 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"playlists\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Math Playlist\",\r\n            \"order\": 0,\r\n            \"is_public\": true,\r\n            \"gcr_playlist_visibility\": true,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Audio Record\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Audio Record content\",\r\n                    \"shared\": true,\r\n                    \"order\": 0,\r\n                    \"thumb_url\": \"/storage/activities/3vVpHHh75MJHOV6a6iZdy13luBaiNn1SrniYpBbQ.png\",\r\n                    \"subject_id\": \"Career & Technical Education\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19430,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"record\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"record\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                        \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-27T07:14:57.000000Z\",\r\n                    \"updated_at\": \"2020-09-27T07:14:57.000000Z\"\r\n                },\r\n                {\r\n                    \"id\": 2,\r\n                    \"playlist_id\": 1,\r\n                    \"title\": \"Language Arts\",\r\n                    \"type\": \"h5p\",\r\n                    \"content\": \"Language Arts content\",\r\n                    \"shared\": true,\r\n                    \"order\": 1,\r\n                    \"thumb_url\": \"/storage/activities/w2LXV4VMPgccjJyZbs16wSzglX1s58K5NFfFp7ed.png\",\r\n                    \"subject_id\": \"Language Arts\",\r\n                    \"education_level_id\": null,\r\n                    \"h5p_content\": {\r\n                        \"id\": 19431,\r\n                        \"user_id\": 1,\r\n                        \"title\": \"fghfhg\",\r\n                        \"library_id\": 98,\r\n                        \"parameters\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing \\\\\\\"Retry\\\\\\\" you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can't create the audio file.\\\"}}\",\r\n                        \"filtered\": \"{\\\"l10n\\\":{\\\"recordAnswer\\\":\\\"Record\\\",\\\"pause\\\":\\\"Pause\\\",\\\"continue\\\":\\\"Continue\\\",\\\"download\\\":\\\"Download\\\",\\\"done\\\":\\\"Done\\\",\\\"retry\\\":\\\"Retry\\\",\\\"microphoneNotSupported\\\":\\\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\\\",\\\"microphoneInaccessible\\\":\\\"Microphone is not accessible. Make sure that the browser microphone is enabled.\\\",\\\"insecureNotAllowed\\\":\\\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\\\",\\\"statusReadyToRecord\\\":\\\"Press a button below to record your answer.\\\",\\\"statusRecording\\\":\\\"Recording...\\\",\\\"statusPaused\\\":\\\"Recording paused. Press a button to continue recording.\\\",\\\"statusFinishedRecording\\\":\\\"You have successfully recorded your answer! Listen to the recording below.\\\",\\\"downloadRecording\\\":\\\"Download this recording or retry.\\\",\\\"retryDialogHeaderText\\\":\\\"Retry recording?\\\",\\\"retryDialogBodyText\\\":\\\"By pressing &quot;Retry&quot; you will lose your current recording.\\\",\\\"retryDialogConfirmText\\\":\\\"Retry\\\",\\\"retryDialogCancelText\\\":\\\"Cancel\\\",\\\"statusCantCreateTheAudioFile\\\":\\\"Can&#039;t create the audio file.\\\"}}\",\r\n                        \"slug\": \"fghfhg\",\r\n                        \"embed_type\": \"div\",\r\n                        \"disable\": 9,\r\n                        \"content_type\": null,\r\n                        \"authors\": null,\r\n                        \"source\": null,\r\n                        \"year_from\": null,\r\n                        \"year_to\": null,\r\n                        \"license\": \"U\",\r\n                        \"license_version\": null,\r\n                        \"license_extras\": null,\r\n                        \"author_comments\": null,\r\n                        \"changes\": null,\r\n                        \"default_language\": null,\r\n                        \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                        \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                    },\r\n                    \"is_public\": false,\r\n                    \"created_at\": \"2020-09-07T07:15:31.000000Z\",\r\n                    \"updated_at\": \"2020-09-07T07:15:31.000000Z\"\r\n                }\r\n            ],\r\n            \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n            \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Music Playlist\",\r\n            \"order\": 1,\r\n            \"is_public\": false,\r\n            \"project_id\": 1,\r\n            \"project\": {\r\n                \"id\": 1,\r\n                \"name\": \"Test Project\",\r\n                \"description\": \"This is a test project.\",\r\n                \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n                \"shared\": true,\r\n                \"starter_project\": null,\r\n                \"users\": [\r\n                    {\r\n                        \"id\": 1,\r\n                        \"first_name\": \"John\",\r\n                        \"last_name\": \"Doe\",\r\n                        \"email\": \"john.doe@currikistudio.org\",\r\n                        \"role\": \"owner\"\r\n                    }\r\n                ],\r\n                \"is_public\": true,\r\n                \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n                \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n            },\r\n            \"activities\": [],\r\n            \"created_at\": \"2020-09-16T18:21:29.000000Z\",\r\n            \"updated_at\": \"2020-09-16T18:21:29.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "playlists": [
+                  {
+                      "id": 1,
+                      "title": "Math Playlist",
+                      "order": 0,
+                      "is_public": true,
+                      "gcr_playlist_visibility": true,
+                      "project_id": 1,
+                      "project": {
+                          "id": 1,
+                          "name": "Test Project",
+                          "description": "This is a test project.",
+                          "thumb_url": "https://images.pexels.com/photos/2832382",
+                          "shared": true,
+                          "starter_project": null,
+                          "users": [
+                              {
+                                  "id": 1,
+                                  "first_name": "John",
+                                  "last_name": "Doe",
+                                  "email": "john.doe@currikistudio.org",
+                                  "role": "owner"
+                              }
+                          ],
+                          "is_public": true,
+                          "created_at": "2020-09-06T19:21:08.000000Z",
+                          "updated_at": "2020-09-06T19:21:08.000000Z"
+                      },
+                      "activities": [
+                          {
+                              "id": 1,
+                              "playlist_id": 1,
+                              "title": "Audio Record",
+                              "type": "h5p",
+                              "content": "Audio Record content",
+                              "shared": true,
+                              "order": 0,
+                              "thumb_url": "/storage/activities/3vVpHHh75MJHOV6a6iZdy13luBaiNn1SrniYpBbQ.png",
+                              "subject_id": "Career & Technical Education",
+                              "education_level_id": null,
+                              "h5p_content": {
+                                  "id": 19430,
+                                  "user_id": 1,
+                                  "title": "record",
+                                  "library_id": 98,
+                                  "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                                  "filtered": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing &quot;Retry&quot; you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can&#039;t create the audio file.\"}}",
+                                  "slug": "record",
+                                  "embed_type": "div",
+                                  "disable": 9,
+                                  "content_type": null,
+                                  "authors": null,
+                                  "source": null,
+                                  "year_from": null,
+                                  "year_to": null,
+                                  "license": "U",
+                                  "license_version": null,
+                                  "license_extras": null,
+                                  "author_comments": null,
+                                  "changes": null,
+                                  "default_language": null,
+                                  "created_at": "2020-09-27T07:14:57.000000Z",
+                                  "updated_at": "2020-09-27T07:14:57.000000Z"
+                              },
+                              "is_public": false,
+                              "created_at": "2020-09-27T07:14:57.000000Z",
+                              "updated_at": "2020-09-27T07:14:57.000000Z"
+                          },
+                          {
+                              "id": 2,
+                              "playlist_id": 1,
+                              "title": "Language Arts",
+                              "type": "h5p",
+                              "content": "Language Arts content",
+                              "shared": true,
+                              "order": 1,
+                              "thumb_url": "/storage/activities/w2LXV4VMPgccjJyZbs16wSzglX1s58K5NFfFp7ed.png",
+                              "subject_id": "Language Arts",
+                              "education_level_id": null,
+                              "h5p_content": {
+                                  "id": 19431,
+                                  "user_id": 1,
+                                  "title": "fghfhg",
+                                  "library_id": 98,
+                                  "parameters": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing \\\"Retry\\\" you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can't create the audio file.\"}}",
+                                  "filtered": "{\"l10n\":{\"recordAnswer\":\"Record\",\"pause\":\"Pause\",\"continue\":\"Continue\",\"download\":\"Download\",\"done\":\"Done\",\"retry\":\"Retry\",\"microphoneNotSupported\":\"Microphone not supported. Make sure you are using a browser that allows microphone recording.\",\"microphoneInaccessible\":\"Microphone is not accessible. Make sure that the browser microphone is enabled.\",\"insecureNotAllowed\":\"Access to microphone is not allowed in your browser since this page is not served using HTTPS. Please contact the author, and ask him to make this available using HTTPS\",\"statusReadyToRecord\":\"Press a button below to record your answer.\",\"statusRecording\":\"Recording...\",\"statusPaused\":\"Recording paused. Press a button to continue recording.\",\"statusFinishedRecording\":\"You have successfully recorded your answer! Listen to the recording below.\",\"downloadRecording\":\"Download this recording or retry.\",\"retryDialogHeaderText\":\"Retry recording?\",\"retryDialogBodyText\":\"By pressing &quot;Retry&quot; you will lose your current recording.\",\"retryDialogConfirmText\":\"Retry\",\"retryDialogCancelText\":\"Cancel\",\"statusCantCreateTheAudioFile\":\"Can&#039;t create the audio file.\"}}",
+                                  "slug": "fghfhg",
+                                  "embed_type": "div",
+                                  "disable": 9,
+                                  "content_type": null,
+                                  "authors": null,
+                                  "source": null,
+                                  "year_from": null,
+                                  "year_to": null,
+                                  "license": "U",
+                                  "license_version": null,
+                                  "license_extras": null,
+                                  "author_comments": null,
+                                  "changes": null,
+                                  "default_language": null,
+                                  "created_at": "2020-09-07T07:15:31.000000Z",
+                                  "updated_at": "2020-09-07T07:15:31.000000Z"
+                              },
+                              "is_public": false,
+                              "created_at": "2020-09-07T07:15:31.000000Z",
+                              "updated_at": "2020-09-07T07:15:31.000000Z"
+                          }
+                      ],
+                      "created_at": "2020-09-07T17:01:24.000000Z",
+                      "updated_at": "2020-09-07T17:01:24.000000Z"
+                  },
+                  {
+                      "id": 2,
+                      "title": "Music Playlist",
+                      "order": 1,
+                      "is_public": false,
+                      "project_id": 1,
+                      "project": {
+                          "id": 1,
+                          "name": "Test Project",
+                          "description": "This is a test project.",
+                          "thumb_url": "https://images.pexels.com/photos/2832382",
+                          "shared": true,
+                          "starter_project": null,
+                          "users": [
+                              {
+                                  "id": 1,
+                                  "first_name": "John",
+                                  "last_name": "Doe",
+                                  "email": "john.doe@currikistudio.org",
+                                  "role": "owner"
+                              }
+                          ],
+                          "is_public": true,
+                          "created_at": "2020-09-06T19:21:08.000000Z",
+                          "updated_at": "2020-09-06T19:21:08.000000Z"
+                      },
+                      "activities": [],
+                      "created_at": "2020-09-16T18:21:29.000000Z",
+                      "updated_at": "2020-09-16T18:21:29.000000Z"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -433,19 +1225,19 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 20
+        example: 62447
         type: integer
         custom: []
       project:
         name: project
         description: 'The Id of a project Example 1'
         required: true
-        example: eos
+        example: maxime
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 20
-      project: eos
+      project_id: 62447
+      project: maxime
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -481,7 +1273,40 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -514,14 +1339,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 7
+        example: 62447
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the playlist.'
         required: true
-        example: 15
+        example: 171
         type: integer
         custom: []
       project:
@@ -539,8 +1364,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 7
-      id: 15
+      project_id: 62447
+      id: 171
       project: '1'
       playlist: '1'
     queryParameters: []
@@ -562,7 +1387,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -596,14 +1454,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 20
+        example: 62447
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the playlist.'
         required: true
-        example: 12
+        example: 171
         type: integer
         custom: []
       project:
@@ -621,8 +1479,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 20
-      id: 12
+      project_id: 62447
+      id: 171
       project: '1'
       playlist: '1'
     queryParameters: []
@@ -671,7 +1529,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -704,14 +1595,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 19
+        example: 62447
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the playlist.'
         required: true
-        example: 15
+        example: 171
         type: integer
         custom: []
       project:
@@ -729,8 +1620,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 19
-      id: 15
+      project_id: 62447
+      id: 171
       project: '1'
       playlist: '1'
     queryParameters: []
@@ -799,14 +1690,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 17
+        example: 63
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 17
+        example: 171
         type: integer
         custom: []
       suborganization:
@@ -824,8 +1715,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 17
-      playlist_id: 17
+      suborganization_id: 63
+      playlist_id: 171
       suborganization: '1'
       playlist: '1'
     queryParameters: []
@@ -847,7 +1738,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -880,14 +1804,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 14
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 12
+        example: 171
         type: integer
         custom: []
       playlist:
@@ -905,8 +1829,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 14
-      playlist_id: 12
+      project_id: 62447
+      playlist_id: 171
       playlist: '1'
       project: '1'
     queryParameters: []
@@ -928,7 +1852,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -961,14 +1918,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 7
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 8
+        example: 171
         type: integer
         custom: []
       playlist:
@@ -986,8 +1943,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 7
-      playlist_id: 8
+      project_id: 62447
+      playlist_id: 171
       playlist: '1'
       project: '1'
     queryParameters: []
@@ -1009,7 +1966,40 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1042,19 +2032,19 @@ endpoints:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 15
+        example: 171
         type: integer
         custom: []
       project:
         name: project
         description: 'The Id of a project Example 1'
         required: true
-        example: animi
+        example: fugit
         type: string
         custom: []
     cleanUrlParameters:
-      playlist_id: 15
-      project: animi
+      playlist_id: 171
+      project: fugit
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1063,7 +2053,40 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Math Playlist\",\r\n        \"order\": 0,\r\n        \"is_public\": true,\r\n        \"project_id\": 1,\r\n        \"gcr_playlist_visibility\": true,\r\n        \"project\": {\r\n            \"id\": 1,\r\n            \"name\": \"Test Project\",\r\n            \"description\": \"This is a test project.\",\r\n            \"thumb_url\": \"https://images.pexels.com/photos/2832382\",\r\n            \"shared\": true,\r\n            \"starter_project\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"John\",\r\n                    \"last_name\": \"Doe\",\r\n                    \"email\": \"john.doe@currikistudio.org\",\r\n                    \"role\": \"owner\"\r\n                }\r\n            ],\r\n            \"is_public\": true,\r\n            \"created_at\": \"2020-09-06T19:21:08.000000Z\",\r\n            \"updated_at\": \"2020-09-06T19:21:08.000000Z\"\r\n        },\r\n        \"activities\": [],\r\n        \"created_at\": \"2020-09-07T17:01:24.000000Z\",\r\n        \"updated_at\": \"2020-09-07T17:01:24.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Math Playlist",
+                  "order": 0,
+                  "is_public": true,
+                  "project_id": 1,
+                  "gcr_playlist_visibility": true,
+                  "project": {
+                      "id": 1,
+                      "name": "Test Project",
+                      "description": "This is a test project.",
+                      "thumb_url": "https://images.pexels.com/photos/2832382",
+                      "shared": true,
+                      "starter_project": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "John",
+                              "last_name": "Doe",
+                              "email": "john.doe@currikistudio.org",
+                              "role": "owner"
+                          }
+                      ],
+                      "is_public": true,
+                      "created_at": "2020-09-06T19:21:08.000000Z",
+                      "updated_at": "2020-09-06T19:21:08.000000Z"
+                  },
+                  "activities": [],
+                  "created_at": "2020-09-07T17:01:24.000000Z",
+                  "updated_at": "2020-09-07T17:01:24.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []

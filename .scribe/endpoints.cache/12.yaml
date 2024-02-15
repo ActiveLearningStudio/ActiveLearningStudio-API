@@ -28,11 +28,11 @@ endpoints:
         name: suborganization
         description: 'The suborganization.'
         required: true
-        example: asperiores
+        example: quibusdam
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization: asperiores
+      suborganization: quibusdam
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -41,7 +41,55 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"demo_activity_id\": \"760\",\r\n            \"demo_video_id\": \"https://youtu.be/O73ikb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "activityItems": [
+                  {
+                      "id": 1,
+                      "title": "Audio Recorder",
+                      "description": "Record your voice and play back or download a .wav file of your recording.",
+                      "order": 1,
+                      "activityType": {
+                          "id": 1,
+                          "title": "Audio",
+                          "order": 0,
+                          "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                          "created_at": "2020-08-25T16:29:35.000000Z",
+                          "updated_at": "2020-08-25T16:29:35.000000Z"
+                      },
+                      "type": "h5p",
+                      "h5pLib": "H5P.AudioRecorder 1.0",
+                      "image": "/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+                      "demo_activity_id": "768",
+                      "demo_video_id": "https://youtu.be/O73hIb7yxLg",
+                      "organization_id": 1,
+                      "created_at": "2020-08-25T16:29:35.000000Z",
+                      "updated_at": "2020-08-25T16:29:35.000000Z"
+                  },
+                  {
+                      "id": 2,
+                      "title": "Dictation",
+                      "description": "A tool to create dictation exercises",
+                      "order": 2,
+                      "activityType": {
+                          "id": 1,
+                          "title": "Audio",
+                          "order": 0,
+                          "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                          "created_at": "2020-08-25T16:29:35.000000Z",
+                          "updated_at": "2020-08-25T16:29:35.000000Z"
+                      },
+                      "type": "h5p",
+                      "h5pLib": "H5P.Dictation 1.0",
+                      "image": "/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                      "demo_activity_id": "760",
+                      "demo_video_id": "https://youtu.be/O73ikb7yxLg",
+                      "organization_id": 1,
+                      "created_at": "2020-08-25T16:29:35.000000Z",
+                      "updated_at": "2020-08-25T16:29:35.000000Z"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -74,7 +122,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 6
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -85,7 +133,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 6
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -101,7 +149,7 @@ endpoints:
         name: description
         description: ''
         required: true
-        example: molestiae
+        example: ullam
         type: string
         custom: []
       order:
@@ -115,62 +163,62 @@ endpoints:
         name: activity_type_id
         description: ''
         required: true
-        example: 19
+        example: 14
         type: integer
         custom: []
       type:
         name: type
         description: ''
         required: true
-        example: optio
+        example: est
         type: string
         custom: []
       h5pLib:
         name: h5pLib
         description: ''
         required: true
-        example: temporibus
+        example: omnis
         type: string
         custom: []
       image:
         name: image
         description: 'Valid Image.'
         required: true
-        example: numquam
+        example: quis
         type: image
         custom: []
       demo_activity_id:
         name: demo_activity_id
         description: ''
         required: true
-        example: autem
+        example: magni
         type: string
         custom: []
       demo_video_id:
         name: demo_video_id
         description: ''
         required: true
-        example: delectus
+        example: voluptates
         type: string
         custom: []
       organization_id:
         name: organization_id
         description: ''
         required: true
-        example: 5
+        example: 10
         type: integer
         custom: []
     cleanBodyParameters:
       title: Audio
-      description: molestiae
+      description: ullam
       order: 1
-      activity_type_id: 19
-      type: optio
-      h5pLib: temporibus
-      image: numquam
-      demo_activity_id: autem
-      demo_video_id: delectus
-      organization_id: 5
+      activity_type_id: 14
+      type: est
+      h5pLib: omnis
+      image: quis
+      demo_activity_id: magni
+      demo_video_id: voluptates
+      organization_id: 10
     fileParameters: []
     responses:
       -
@@ -197,7 +245,31 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"activityItem\": {\r\n        \"id\": 1,\r\n        \"title\": \"Audio Recorder\",\r\n        \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n        \"order\": 1,\r\n        \"activityType\": {\r\n            \"id\": 1,\r\n            \"title\": \"Audio\",\r\n            \"order\": 0,\r\n            \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        \"type\": \"h5p\",\r\n        \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n        \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n        \"demo_activity_id\": \"768\",\r\n        \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n        \"organization_id\": 1,\r\n        \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n        \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "activityItem": {
+                  "id": 1,
+                  "title": "Audio Recorder",
+                  "description": "Record your voice and play back or download a .wav file of your recording.",
+                  "order": 1,
+                  "activityType": {
+                      "id": 1,
+                      "title": "Audio",
+                      "order": 0,
+                      "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                      "created_at": "2020-08-25T16:29:35.000000Z",
+                      "updated_at": "2020-08-25T16:29:35.000000Z"
+                  },
+                  "type": "h5p",
+                  "h5pLib": "H5P.AudioRecorder 1.0",
+                  "image": "/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+                  "demo_activity_id": "768",
+                  "demo_video_id": "https://youtu.be/O73hIb7yxLg",
+                  "organization_id": 1,
+                  "created_at": "2020-08-25T16:29:35.000000Z",
+                  "updated_at": "2020-08-25T16:29:35.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -230,14 +302,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 17
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the activity item.'
         required: true
-        example: 14
+        example: 6929
         type: integer
         custom: []
       suborganization:
@@ -255,8 +327,8 @@ endpoints:
         type: integer
         custom: []
     cleanUrlParameters:
-      suborganization_id: 17
-      id: 14
+      suborganization_id: 63
+      id: 6929
       suborganization: '1'
       activityItem: 1
     queryParameters: []
@@ -267,7 +339,31 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"activityItem\": {\r\n        \"id\": 1,\r\n        \"title\": \"Audio Recorder\",\r\n        \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n        \"order\": 1,\r\n        \"activityType\": {\r\n            \"id\": 1,\r\n            \"title\": \"Audio\",\r\n            \"order\": 0,\r\n            \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        \"type\": \"h5p\",\r\n        \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n        \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n        \"demo_activity_id\": \"768\",\r\n        \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n        \"organization_id\": 1,\r\n        \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n        \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "activityItem": {
+                  "id": 1,
+                  "title": "Audio Recorder",
+                  "description": "Record your voice and play back or download a .wav file of your recording.",
+                  "order": 1,
+                  "activityType": {
+                      "id": 1,
+                      "title": "Audio",
+                      "order": 0,
+                      "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                      "created_at": "2020-08-25T16:29:35.000000Z",
+                      "updated_at": "2020-08-25T16:29:35.000000Z"
+                  },
+                  "type": "h5p",
+                  "h5pLib": "H5P.AudioRecorder 1.0",
+                  "image": "/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+                  "demo_activity_id": "768",
+                  "demo_video_id": "https://youtu.be/O73hIb7yxLg",
+                  "organization_id": 1,
+                  "created_at": "2020-08-25T16:29:35.000000Z",
+                  "updated_at": "2020-08-25T16:29:35.000000Z"
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -300,14 +396,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 18
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the activity item.'
         required: true
-        example: 15
+        example: 6929
         type: integer
         custom: []
       suborganization:
@@ -325,8 +421,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 18
-      id: 15
+      suborganization_id: 63
+      id: 6929
       suborganization: '1'
       activityItem: '1'
     queryParameters: []
@@ -384,7 +480,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 20
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -395,7 +491,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 20
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -405,7 +501,55 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"activityItems\": [\r\n        {\r\n            \"id\": 1,\r\n            \"title\": \"Audio Recorder\",\r\n            \"description\": \"Record your voice and play back or download a .wav file of your recording.\",\r\n            \"order\": 1,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.AudioRecorder 1.0\",\r\n            \"image\": \"/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png\",\r\n            \"demo_activity_id\": \"768\",\r\n            \"demo_video_id\": \"https://youtu.be/O73hIb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"title\": \"Dictation\",\r\n            \"description\": \"A tool to create dictation exercises\",\r\n            \"order\": 2,\r\n            \"activityType\": {\r\n                \"id\": 1,\r\n                \"title\": \"Audio\",\r\n                \"order\": 0,\r\n                \"image\": \"/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png\",\r\n                \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n                \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n            },\r\n            \"type\": \"h5p\",\r\n            \"h5pLib\": \"H5P.Dictation 1.0\",\r\n            \"image\": \"/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png\",\r\n            \"demo_activity_id\": \"760\",\r\n            \"demo_video_id\": \"https://youtu.be/O73ikb7yxLg\",\r\n            \"organization_id\": 1,\r\n            \"created_at\": \"2020-08-25T16:29:35.000000Z\",\r\n            \"updated_at\": \"2020-08-25T16:29:35.000000Z\"\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "activityItems": [
+                  {
+                      "id": 1,
+                      "title": "Audio Recorder",
+                      "description": "Record your voice and play back or download a .wav file of your recording.",
+                      "order": 1,
+                      "activityType": {
+                          "id": 1,
+                          "title": "Audio",
+                          "order": 0,
+                          "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                          "created_at": "2020-08-25T16:29:35.000000Z",
+                          "updated_at": "2020-08-25T16:29:35.000000Z"
+                      },
+                      "type": "h5p",
+                      "h5pLib": "H5P.AudioRecorder 1.0",
+                      "image": "/storage/activity-items/zGUwGiarxX5Xt0UDFMMHtJ3ICGy1F9W68cO0Ukm6.png",
+                      "demo_activity_id": "768",
+                      "demo_video_id": "https://youtu.be/O73hIb7yxLg",
+                      "organization_id": 1,
+                      "created_at": "2020-08-25T16:29:35.000000Z",
+                      "updated_at": "2020-08-25T16:29:35.000000Z"
+                  },
+                  {
+                      "id": 2,
+                      "title": "Dictation",
+                      "description": "A tool to create dictation exercises",
+                      "order": 2,
+                      "activityType": {
+                          "id": 1,
+                          "title": "Audio",
+                          "order": 0,
+                          "image": "/storage/activity-types/4kZL5uuExvNPngVsaIdC7JscWmstOTsYO8sBbekx.png",
+                          "created_at": "2020-08-25T16:29:35.000000Z",
+                          "updated_at": "2020-08-25T16:29:35.000000Z"
+                      },
+                      "type": "h5p",
+                      "h5pLib": "H5P.Dictation 1.0",
+                      "image": "/storage/activity-items/WpXZiHcrkBmbSXE3OMOmHTovHKP3wzk9suHHfe1X.png",
+                      "demo_activity_id": "760",
+                      "demo_video_id": "https://youtu.be/O73ikb7yxLg",
+                      "organization_id": 1,
+                      "created_at": "2020-08-25T16:29:35.000000Z",
+                      "updated_at": "2020-08-25T16:29:35.000000Z"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -449,11 +593,11 @@ endpoints:
         name: thumb
         description: 'Thumbnail image'
         required: true
-        example: rerum
+        example: reiciendis
         type: image
         custom: []
     cleanBodyParameters:
-      thumb: rerum
+      thumb: reiciendis
     fileParameters:
       image: null
     responses:

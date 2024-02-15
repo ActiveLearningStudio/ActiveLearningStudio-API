@@ -1,0 +1,919 @@
+name: '31. Publisher Settings'
+description: |-
+
+  APIs for publisher.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/c2e/publishers/suborganizations/{suborganization_id}/settings'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get All Publisher Settings for listing.'
+      description: 'Returns the paginated response with pagination links (DataTables are fully supported - All Params).'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 63
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 63
+      suborganization: '1'
+    queryParameters:
+      start:
+        name: start
+        description: 'Offset for getting the paginated response, Default 0.'
+        required: false
+        example: '0'
+        type: string
+        custom: []
+      length:
+        name: length
+        description: 'Limit for getting the paginated records, Default 25.'
+        required: false
+        example: '25'
+        type: string
+        custom: []
+    cleanQueryParameters:
+      start: '0'
+      length: '25'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "name": "c2e-publisher-service edited",
+                      "description": null,
+                      "url": "http://localhost:8888",
+                      "key": "oQ/iXdY0gaBFo99Fh0mA7xknHlhyNb/W8cQuAhqGjKk=",
+                      "organization": {
+                          "id": 1,
+                          "name": "org name 1",
+                          "description": "org description 1",
+                          "domain": "currikistudio",
+                          "parent_id": null,
+                          "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+                          "created_at": null,
+                          "updated_at": "2021-08-09T16:46:01.000000Z",
+                          "deleted_at": null,
+                          "self_registration": false,
+                          "account_id": null,
+                          "api_key": null,
+                          "unit_path": null,
+                          "noovo_client_id": null,
+                          "gcr_project_visibility": true,
+                          "gcr_playlist_visibility": false,
+                          "gcr_activity_visibility": false,
+                          "tos_type": null,
+                          "tos_url": null,
+                          "tos_content": null,
+                          "privacy_policy_type": null,
+                          "privacy_policy_url": null,
+                          "privacy_policy_content": null,
+                          "primary_color": null,
+                          "secondary_color": null,
+                          "tertiary_color": null,
+                          "primary_font_family": null,
+                          "secondary_font_family": null,
+                          "favicon": null,
+                          "msteam_client_id": null,
+                          "msteam_secret_id": null,
+                          "msteam_tenant_id": null,
+                          "msteam_secret_id_expiry": null,
+                          "msteam_project_visibility": true,
+                          "msteam_playlist_visibility": false,
+                          "msteam_activity_visibility": false,
+                          "auto_approve": false,
+                          "activity_title_text": "Title",
+                          "activity_title_placeholder": "Give your layout a name...",
+                          "h5p_reuse_option": true,
+                          "h5p_embed_option": true
+                      },
+                      "user": {
+                          "id": 3,
+                          "first_name": "Abby",
+                          "last_name": "_",
+                          "email": "abby@curriki.org",
+                          "organization_name": "",
+                          "organization_type": null,
+                          "job_title": "",
+                          "address": null,
+                          "phone_number": null,
+                          "website": null,
+                          "subscribed": true,
+                          "projects_count": 0,
+                          "teams_count": 0,
+                          "groups_count": 0
+                      },
+                      "project_visibility": false,
+                      "playlist_visibility": false,
+                      "activity_visibility": false
+                  }
+              ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/c2e/publishers/suborganizations/{suborganization_id}/settings'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Create Publisher Setting'
+      description: 'Creates the new publisher setting in database.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 63
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 63
+      suborganization: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Publisher name'
+        required: true
+        example: PublisherName
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Publisher description'
+        required: false
+        example: Publisherdescription
+        type: string
+        custom: []
+      url:
+        name: url
+        description: 'Publisher url'
+        required: true
+        example: 'https://cee-publisher-service.curriki.org/'
+        type: string
+        custom: []
+      key:
+        name: key
+        description: 'Publisher key'
+        required: true
+        example: oQ/iXdY0gaBFo99Fh0mA7xknHlhyNb/W8cQuAhqGjKk=
+        type: string
+        custom: []
+      project_visibility:
+        name: project_visibility
+        description: 'Publisher project visibility'
+        required: false
+        example: true
+        type: boolean
+        custom: []
+      playlist_visibility:
+        name: playlist_visibility
+        description: 'Publisher playlist visibility'
+        required: false
+        example: 'false'
+        type: string
+        custom: []
+      activity_visibility:
+        name: activity_visibility
+        description: 'Publisher activity visibility'
+        required: false
+        example: 'true'
+        type: string
+        custom: []
+    cleanBodyParameters:
+      name: PublisherName
+      description: Publisherdescription
+      url: 'https://cee-publisher-service.curriki.org/'
+      key: oQ/iXdY0gaBFo99Fh0mA7xknHlhyNb/W8cQuAhqGjKk=
+      project_visibility: true
+      playlist_visibility: 'false'
+      activity_visibility: 'true'
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Unable to create setting, please try again later!"
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: |-
+          {
+              "message": "Setting created successfully!",
+              "data": {
+                  "id": 3,
+                  "name": "c2e-publisher-service",
+                  "description": null,
+                  "url": "http://localhost:8888",
+                  "key": "234a2d48-8467-4542-935e-dbcda66730c0",
+                  "organization": {
+                      "id": 1,
+                      "name": "org name 1",
+                      "description": "org description 1",
+                      "domain": "currikistudio",
+                      "parent_id": null,
+                      "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+                      "created_at": null,
+                      "updated_at": "2021-08-09T16:46:01.000000Z",
+                      "deleted_at": null,
+                      "self_registration": false,
+                      "account_id": null,
+                      "api_key": null,
+                      "unit_path": null,
+                      "noovo_client_id": null,
+                      "gcr_project_visibility": true,
+                      "gcr_playlist_visibility": false,
+                      "gcr_activity_visibility": false,
+                      "tos_type": null,
+                      "tos_url": null,
+                      "tos_content": null,
+                      "privacy_policy_type": null,
+                      "privacy_policy_url": null,
+                      "privacy_policy_content": null,
+                      "primary_color": null,
+                      "secondary_color": null,
+                      "tertiary_color": null,
+                      "primary_font_family": null,
+                      "secondary_font_family": null,
+                      "favicon": null,
+                      "msteam_client_id": null,
+                      "msteam_secret_id": null,
+                      "msteam_tenant_id": null,
+                      "msteam_secret_id_expiry": null,
+                      "msteam_project_visibility": true,
+                      "msteam_playlist_visibility": false,
+                      "msteam_activity_visibility": false,
+                      "auto_approve": false,
+                      "activity_title_text": "Title",
+                      "activity_title_placeholder": "Give your layout a name...",
+                      "h5p_reuse_option": true,
+                      "h5p_embed_option": true
+                  },
+                  "user": {
+                      "id": 3,
+                      "first_name": "Abby",
+                      "last_name": "_",
+                      "email": "abby@curriki.org",
+                      "organization_name": "",
+                      "organization_type": null,
+                      "job_title": "",
+                      "address": null,
+                      "phone_number": null,
+                      "website": null,
+                      "subscribed": true,
+                      "projects_count": 0,
+                      "teams_count": 0,
+                      "groups_count": 0
+                  },
+                  "project_visibility": null,
+                  "playlist_visibility": null,
+                  "activity_visibility": null
+              }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/c2e/publishers/suborganizations/{suborganization_id}/settings/{id}'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Publisher Setting'
+      description: 'Get the specified publisher setting data.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 63
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the setting.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      setting:
+        name: setting
+        description: 'The Id of a publisher setting'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 63
+      id: 1
+      suborganization: '1'
+      setting: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+              "id": 1,
+              "name": "c2e-publisher-service edited",
+              "description": null,
+              "url": "http://localhost:8888",
+              "key": "oQ/iXdY0gaBFo99Fh0mA7xknHlhyNb/W8cQuAhqGjKk=",
+              "organization": {
+                  "id": 1,
+                  "name": "org name 1",
+                  "description": "org description 1",
+                  "domain": "currikistudio",
+                  "parent_id": null,
+                  "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+                  "created_at": null,
+                  "updated_at": "2021-08-09T16:46:01.000000Z",
+                  "deleted_at": null,
+                  "self_registration": false,
+                  "account_id": null,
+                  "api_key": null,
+                  "unit_path": null,
+                  "noovo_client_id": null,
+                  "gcr_project_visibility": true,
+                  "gcr_playlist_visibility": false,
+                  "gcr_activity_visibility": false,
+                  "tos_type": null,
+                  "tos_url": null,
+                  "tos_content": null,
+                  "privacy_policy_type": null,
+                  "privacy_policy_url": null,
+                  "privacy_policy_content": null,
+                  "primary_color": null,
+                  "secondary_color": null,
+                  "tertiary_color": null,
+                  "primary_font_family": null,
+                  "secondary_font_family": null,
+                  "favicon": null,
+                  "msteam_client_id": null,
+                  "msteam_secret_id": null,
+                  "msteam_tenant_id": null,
+                  "msteam_secret_id_expiry": null,
+                  "msteam_project_visibility": true,
+                  "msteam_playlist_visibility": false,
+                  "msteam_activity_visibility": false,
+                  "auto_approve": false,
+                  "activity_title_text": "Title",
+                  "activity_title_placeholder": "Give your layout a name...",
+                  "h5p_reuse_option": true,
+                  "h5p_embed_option": true
+              },
+              "user": {
+                  "id": 3,
+                  "first_name": "Abby",
+                  "last_name": "_",
+                  "email": "abby@curriki.org",
+                  "organization_name": "",
+                  "organization_type": null,
+                  "job_title": "",
+                  "address": null,
+                  "phone_number": null,
+                  "website": null,
+                  "subscribed": true,
+                  "projects_count": 0,
+                  "teams_count": 0,
+                  "groups_count": 0
+              },
+              "project_visibility": false,
+              "playlist_visibility": false,
+              "activity_visibility": false
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/c2e/publishers/suborganizations/{suborganization_id}/settings/{id}'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Update Publisher Setting'
+      description: 'Updates the publisher setting in database.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 63
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the setting.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      setting:
+        name: setting
+        description: 'The Id of a publisher setting'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 63
+      id: 1
+      suborganization: '1'
+      setting: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      name:
+        name: name
+        description: 'Publisher name'
+        required: true
+        example: PublisherName
+        type: string
+        custom: []
+      description:
+        name: description
+        description: 'Publisher description'
+        required: false
+        example: Publisherdescription
+        type: string
+        custom: []
+      url:
+        name: url
+        description: 'Publisher url'
+        required: true
+        example: 'https://cee-publisher-service.curriki.org/'
+        type: string
+        custom: []
+      key:
+        name: key
+        description: 'Publisher key'
+        required: true
+        example: oQ/iXdY0gaBFo99Fh0mA7xknHlhyNb/W8cQuAhqGjKk=
+        type: string
+        custom: []
+      project_visibility:
+        name: project_visibility
+        description: 'Publisher project visibility'
+        required: false
+        example: true
+        type: boolean
+        custom: []
+      playlist_visibility:
+        name: playlist_visibility
+        description: 'Publisher playlist visibility'
+        required: false
+        example: 'false'
+        type: string
+        custom: []
+      activity_visibility:
+        name: activity_visibility
+        description: 'Publisher activity visibility'
+        required: false
+        example: 'true'
+        type: string
+        custom: []
+    cleanBodyParameters:
+      name: PublisherName
+      description: Publisherdescription
+      url: 'https://cee-publisher-service.curriki.org/'
+      key: oQ/iXdY0gaBFo99Fh0mA7xknHlhyNb/W8cQuAhqGjKk=
+      project_visibility: true
+      playlist_visibility: 'false'
+      activity_visibility: 'true'
+    fileParameters: []
+    responses:
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Unable to update publisher setting, please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: |-
+          {
+              "message": "Setting updated successfully!",
+              "data": {
+                  "id": 3,
+                  "name": "c2e-publisher-service",
+                  "description": null,
+                  "url": "http://localhost:8888",
+                  "key": "234a2d48-8467-4542-935e-dbcda66730c0",
+                  "organization": {
+                      "id": 1,
+                      "name": "org name 1",
+                      "description": "org description 1",
+                      "domain": "currikistudio",
+                      "parent_id": null,
+                      "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg",
+                      "created_at": null,
+                      "updated_at": "2021-08-09T16:46:01.000000Z",
+                      "deleted_at": null,
+                      "self_registration": false,
+                      "account_id": null,
+                      "api_key": null,
+                      "unit_path": null,
+                      "noovo_client_id": null,
+                      "gcr_project_visibility": true,
+                      "gcr_playlist_visibility": false,
+                      "gcr_activity_visibility": false,
+                      "tos_type": null,
+                      "tos_url": null,
+                      "tos_content": null,
+                      "privacy_policy_type": null,
+                      "privacy_policy_url": null,
+                      "privacy_policy_content": null,
+                      "primary_color": null,
+                      "secondary_color": null,
+                      "tertiary_color": null,
+                      "primary_font_family": null,
+                      "secondary_font_family": null,
+                      "favicon": null,
+                      "msteam_client_id": null,
+                      "msteam_secret_id": null,
+                      "msteam_tenant_id": null,
+                      "msteam_secret_id_expiry": null,
+                      "msteam_project_visibility": true,
+                      "msteam_playlist_visibility": false,
+                      "msteam_activity_visibility": false,
+                      "auto_approve": false,
+                      "activity_title_text": "Title",
+                      "activity_title_placeholder": "Give your layout a name...",
+                      "h5p_reuse_option": true,
+                      "h5p_embed_option": true
+                  },
+                  "user": {
+                      "id": 3,
+                      "first_name": "Abby",
+                      "last_name": "_",
+                      "email": "abby@curriki.org",
+                      "organization_name": "",
+                      "organization_type": null,
+                      "job_title": "",
+                      "address": null,
+                      "phone_number": null,
+                      "website": null,
+                      "subscribed": true,
+                      "projects_count": 0,
+                      "teams_count": 0,
+                      "groups_count": 0
+                  },
+                  "project_visibility": false,
+                  "playlist_visibility": false,
+                  "activity_visibility": false
+              }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/c2e/publishers/suborganizations/{suborganization_id}/settings/{id}'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Delete Publisher Setting'
+      description: 'Deletes the publisher setting from database.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      suborganization_id:
+        name: suborganization_id
+        description: 'The ID of the suborganization.'
+        required: true
+        example: 63
+        type: integer
+        custom: []
+      id:
+        name: id
+        description: 'The ID of the setting.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      suborganization:
+        name: suborganization
+        description: 'The Id of a suborganization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      setting:
+        name: setting
+        description: 'The Id of a publisher setting'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      suborganization_id: 63
+      id: 1
+      suborganization: '1'
+      setting: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Publisher setting deleted successfully!",
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 500
+        content: |-
+          {
+            "errors": [
+              "Unable to delete publisher setting, please try again later."
+            ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/c2e/publishers/{publisher_id}/stores'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Get Publisher Stores'
+      description: 'Display a listing of the stores for the publisher'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publisher_id:
+        name: publisher_id
+        description: 'The ID of the publisher.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      publisher:
+        name: publisher
+        description: 'The Id of a publisher'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      publisher_id: 1
+      publisher: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+              "code": 200,
+              "message": "success",
+              "result": [
+                  {
+                      "id": "f5eb2780-f8cc-4c73-8123-9f0153482f9d",
+                      "name": "Fahad Store"
+                  }
+              ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: 'api/v1/c2e/publishers/{publisher_id}/independent-activities/{independent_activity_id}/publish'
+    metadata:
+      groupName: '31. Publisher Settings'
+      groupDescription: |-
+
+        APIs for publisher.
+      subgroup: null
+      subgroupDescription: null
+      title: 'Publish Independent Activity To Store'
+      description: 'Publish the specified activity to selected store of a user.'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      publisher_id:
+        name: publisher_id
+        description: 'The ID of the publisher.'
+        required: true
+        example: 1
+        type: integer
+        custom: []
+      independent_activity_id:
+        name: independent_activity_id
+        description: 'The ID of the independent activity.'
+        required: true
+        example: 82230
+        type: integer
+        custom: []
+      publisher:
+        name: publisher
+        description: 'The Id of a publisher'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      independent_activity:
+        name: independent_activity
+        description: 'The Id of a independent_activity'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+    cleanUrlParameters:
+      publisher_id: 1
+      independent_activity_id: 82230
+      publisher: '1'
+      independent_activity: '1'
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      store_id:
+        name: store_id
+        description: 'The Id of store'
+        required: true
+        example: 2
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      store_id: 2
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |-
+          {
+            "message": "Your request to publish independent Activity [title] has been received and is being processed."
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

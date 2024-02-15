@@ -85,42 +85,42 @@ endpoints:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: fejgktmyoexuldmymt
+        example: rarwemmh
         type: string
         custom: []
       organization_id:
         name: organization_id
         description: ''
         required: true
-        example: 2
+        example: 17
         type: integer
         custom: []
       negativeQuery:
         name: negativeQuery
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: svhxgaiyahabvfhocvz
+        example: xojoerosohazfjefrjhkt
         type: string
         custom: []
       indexing:
         name: indexing
         description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
         required: false
-        example: '1'
+        example: null
         type: object
         custom: []
       startDate:
         name: startDate
         description: 'Must be a valid date.'
         required: false
-        example: '2022-12-05T09:02:28'
+        example: '2024-02-15T15:56:22'
         type: string
         custom: []
       endDate:
         name: endDate
         description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
         required: false
-        example: '2082-02-15'
+        example: '2110-06-17'
         type: string
         custom: []
       userIds:
@@ -128,22 +128,21 @@ endpoints:
         description: ''
         required: false
         example:
-          - 18
+          - 14
         type: 'integer[]'
         custom: []
       author:
         name: author
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: cl
+        example: e
         type: string
         custom: []
       h5pLibraries:
         name: h5pLibraries
         description: ''
         required: false
-        example:
-          - dolorem
+        example: null
         type: object
         custom: []
       subjectIds:
@@ -151,7 +150,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - 13
+          - 5
         type: 'integer[]'
         custom: []
       educationLevelIds:
@@ -159,7 +158,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - 20
+          - 19
         type: 'integer[]'
         custom: []
       authorTagsIds:
@@ -167,14 +166,14 @@ endpoints:
         description: ''
         required: false
         example:
-          - 11
+          - 10
         type: 'integer[]'
         custom: []
       model:
         name: model
         description: 'Must be one of <code>activities</code>, <code>playlists</code>, or <code>projects</code>.'
         required: false
-        example: activities
+        example: projects
         type: string
         custom: []
       sort:
@@ -195,40 +194,37 @@ endpoints:
         name: from
         description: ''
         required: false
-        example: 12
+        example: 10
         type: integer
         custom: []
       size:
         name: size
         description: ''
         required: false
-        example: 20
+        example: 11
         type: integer
         custom: []
     cleanBodyParameters:
       searchType: my_projects
-      query: fejgktmyoexuldmymt
-      organization_id: 2
-      negativeQuery: svhxgaiyahabvfhocvz
-      indexing: '1'
-      startDate: '2022-12-05T09:02:28'
-      endDate: '2082-02-15'
+      query: rarwemmh
+      organization_id: 17
+      negativeQuery: xojoerosohazfjefrjhkt
+      startDate: '2024-02-15T15:56:22'
+      endDate: '2110-06-17'
       userIds:
-        - 18
-      author: cl
-      h5pLibraries:
-        - dolorem
+        - 14
+      author: e
       subjectIds:
-        - 13
+        - 5
       educationLevelIds:
-        - 20
+        - 19
       authorTagsIds:
-        - 11
-      model: activities
+        - 10
+      model: projects
       sort: created_at
       order: desc
-      from: 12
-      size: 20
+      from: 10
+      size: 11
     fileParameters: []
     responses:
       -
@@ -246,7 +242,51 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"projects\": {\r\n        \"979\": {\r\n            \"id\": 979,\r\n            \"thumb_url\": \"/storage/uploads/5f10830df0dcf.png\",\r\n            \"title\": \"Exploring Our National Parks\",\r\n            \"description\": \"Explore America’s national parks. Discover our most treasured places. From science to the arts, service learning to teacher training, America’s national parks teach invaluable lessons about our planet, our history, and ourselves. These incredible places, and all that they offer beyond the boundaries of the national parks, are the catalysts for inspiring a new generation of park enthusiasts. The National Park Foundation is dedicated to utilizing these powerful learning environments that can provide in-depth, real-world learning experiences, to nurture a deep connection between the next generation and America's national parks.\",\r\n            \"model\": \"Project\",\r\n            \"user\": null,\r\n            \"playlists\": {\r\n                \"2174\": {\r\n                    \"id\": 2174,\r\n                    \"thumb_url\": \"/storage/uploads/5f10830df0dcf.png\",\r\n                    \"title\": \"Exploring Yosemite\",\r\n                    \"model\": \"Playlist\",\r\n                    \"user\": null,\r\n                    \"activities\": {\r\n                        \"9990\": {\r\n                            \"id\": 9990,\r\n                            \"thumb_url\": \"/storage/uploads/5f10831d961f8.jpeg\",\r\n                            \"title\": \"\",\r\n                            \"model\": \"Activity\",\r\n                            \"user\": null\r\n                        },\r\n                        \"9991\": {\r\n                            \"id\": 9991,\r\n                            \"thumb_url\": \"/storage/uploads/5f108329c36e2.jpeg\",\r\n                            \"title\": \"\",\r\n                            \"model\": \"Activity\",\r\n                            \"user\": null\r\n                        },\r\n                        \"9992\": {\r\n                            \"id\": 9992,\r\n                            \"thumb_url\": \"/storage/uploads/5f10833529209.jpeg\",\r\n                            \"title\": \"\",\r\n                            \"model\": \"Activity\",\r\n                            \"user\": null\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }        \r\n    }\r\n}"
+        content: |-
+          {
+              "projects": {
+                  "979": {
+                      "id": 979,
+                      "thumb_url": "/storage/uploads/5f10830df0dcf.png",
+                      "title": "Exploring Our National Parks",
+                      "description": "Explore America’s national parks. Discover our most treasured places. From science to the arts, service learning to teacher training, America’s national parks teach invaluable lessons about our planet, our history, and ourselves. These incredible places, and all that they offer beyond the boundaries of the national parks, are the catalysts for inspiring a new generation of park enthusiasts. The National Park Foundation is dedicated to utilizing these powerful learning environments that can provide in-depth, real-world learning experiences, to nurture a deep connection between the next generation and America's national parks.",
+                      "model": "Project",
+                      "user": null,
+                      "playlists": {
+                          "2174": {
+                              "id": 2174,
+                              "thumb_url": "/storage/uploads/5f10830df0dcf.png",
+                              "title": "Exploring Yosemite",
+                              "model": "Playlist",
+                              "user": null,
+                              "activities": {
+                                  "9990": {
+                                      "id": 9990,
+                                      "thumb_url": "/storage/uploads/5f10831d961f8.jpeg",
+                                      "title": "",
+                                      "model": "Activity",
+                                      "user": null
+                                  },
+                                  "9991": {
+                                      "id": 9991,
+                                      "thumb_url": "/storage/uploads/5f108329c36e2.jpeg",
+                                      "title": "",
+                                      "model": "Activity",
+                                      "user": null
+                                  },
+                                  "9992": {
+                                      "id": 9992,
+                                      "thumb_url": "/storage/uploads/5f10833529209.jpeg",
+                                      "title": "",
+                                      "model": "Activity",
+                                      "user": null
+                                  }
+                              }
+                          }
+                      }
+                  }        
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -349,7 +389,7 @@ endpoints:
         description: 'of h5p libraries to match.'
         required: false
         example:
-          - iste
+          - fugit
         type: 'string[]'
         custom: []
       model:
@@ -402,7 +442,7 @@ endpoints:
       authorTagsIds:
         - 1
       h5pLibraries:
-        - iste
+        - fugit
       model: activities
       sort: created_at
       order: desc
@@ -413,49 +453,414 @@ endpoints:
         name: searchType
         description: 'Must be one of <code>my_projects</code>, <code>showcase_projects</code>, <code>org_projects</code>, or <code>lti_search</code>.'
         required: true
-        example: org_projects
+        example: lti_search
         type: string
         custom: []
       query:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: cvqrbfveohykgwshwlywao
+        example: gulkf
         type: string
         custom: []
       organization_id:
         name: organization_id
         description: ''
         required: true
-        example: 15
+        example: 4
         type: integer
         custom: []
       negativeQuery:
         name: negativeQuery
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: bllym
+        example: sejqpuiriejjezid
         type: string
         custom: []
       indexing:
         name: indexing
         description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
         required: false
-        example: 'null'
+        example: null
         type: object
         custom: []
       startDate:
         name: startDate
         description: 'Must be a valid date.'
         required: false
-        example: '2022-12-05T09:02:28'
+        example: '2024-02-15T15:56:22'
         type: string
         custom: []
       endDate:
         name: endDate
         description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
         required: false
-        example: '2094-05-09'
+        example: '2033-05-21'
+        type: string
+        custom: []
+      userIds:
+        name: userIds
+        description: ''
+        required: false
+        example:
+          - 17
+        type: 'integer[]'
+        custom: []
+      author:
+        name: author
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: ptfaepjlykfjuojzfw
+        type: string
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: ''
+        required: false
+        example: null
+        type: object
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: ''
+        required: false
+        example:
+          - 10
+        type: 'integer[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: ''
+        required: false
+        example:
+          - 10
+        type: 'integer[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: ''
+        required: false
+        example:
+          - 19
+        type: 'integer[]'
+        custom: []
+      model:
+        name: model
+        description: 'Must be one of <code>activities</code>, <code>playlists</code>, or <code>projects</code>.'
+        required: false
+        example: playlists
+        type: string
+        custom: []
+      sort:
+        name: sort
+        description: 'Must be one of <code>created_at</code>.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Must be one of <code>asc</code> or <code>desc</code>.'
+        required: false
+        example: asc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: ''
+        required: false
+        example: 1
+        type: integer
+        custom: []
+      size:
+        name: size
+        description: ''
+        required: false
+        example: 8
+        type: integer
+        custom: []
+    cleanBodyParameters:
+      searchType: lti_search
+      query: gulkf
+      organization_id: 4
+      negativeQuery: sejqpuiriejjezid
+      startDate: '2024-02-15T15:56:22'
+      endDate: '2033-05-21'
+      userIds:
+        - 17
+      author: ptfaepjlykfjuojzfw
+      subjectIds:
+        - 10
+      educationLevelIds:
+        - 10
+      authorTagsIds:
+        - 19
+      model: playlists
+      sort: created_at
+      order: asc
+      from: 1
+      size: 8
+    fileParameters: []
+    responses:
+      -
+        status: 400
+        content: |-
+          {
+            "errors": {
+              "userIds": [
+                "The user Ids must be an array."
+              ]
+            }
+          }
+        headers: []
+        description: ''
+        custom: []
+      -
+        status: 200
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 9999,
+                      "thumb_url": "/storage/uploads/5f1083871600f.png",
+                      "title": "",
+                      "model": "Activity",
+                      "user": null,
+                      "created_at": "2020-07-29T20:51:30.000000Z"
+                  },
+                  {
+                      "id": 999,
+                      "thumb_url": "/storage/uploads/5ef42a8dc4386.png",
+                      "title": "About The National Parks",
+                      "model": "Playlist",
+                      "user": null,
+                      "created_at": "2020-07-29T20:51:30.000000Z"
+                  },
+                  {
+                      "id": 999,
+                      "thumb_url": "/storage/uploads_tmp/UDixgGgVAnNYNMikT8Qic7q0WR0SSA54lOqL9u6t.png",
+                      "title": "Algebra 1 ACPS Curriki Resources",
+                      "description": "Algebra 1 ACPS Curriki Resources",
+                      "favored": false,
+                      "model": "Project",
+                      "user": null,
+                      "created_at": "2020-07-29T20:51:30.000000Z"
+                  }
+              ],
+              "meta": {
+                  "activities": 1,
+                  "playlists": 1,
+                  "projects": 1,
+                  "total": 3
+              }
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/search/dashboard
+    metadata:
+      groupName: '13. Search'
+      groupDescription: |-
+
+        APIs for search management
+      subgroup: null
+      subgroupDescription: null
+      title: 'Dashboard search'
+      description: 'Dashboard search for projects, playlists and activities irrespective of indexing status'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      organization_id:
+        name: organization_id
+        description: 'The Id of a organization'
+        required: true
+        example: '1'
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Query to search.'
+        required: false
+        example: test
+        type: string
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Terms that should not exist.'
+        required: false
+        example: badword
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'Indexing requested, approved or not approved.'
+        required: false
+        example: '[3]'
+        type: string
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Start date for search by date range.'
+        required: false
+        example: '2020-04-30 00:00:00'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'End date for search by date range.'
+        required: false
+        example: '2020-04-30 23:59:59'
+        type: string
+        custom: []
+      subjectIds:
+        name: subjectIds
+        description: 'of subject ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      educationLevelIds:
+        name: educationLevelIds
+        description: 'of education level ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      authorTagsIds:
+        name: authorTagsIds
+        description: 'of author tags ids to match.'
+        required: false
+        example:
+          - 1
+        type: 'string[]'
+        custom: []
+      h5pLibraries:
+        name: h5pLibraries
+        description: 'of h5p libraries to match.'
+        required: false
+        example:
+          - ut
+        type: 'string[]'
+        custom: []
+      model:
+        name: model
+        description: 'Index to filter by.'
+        required: false
+        example: activities
+        type: string
+        custom: []
+      sort:
+        name: sort
+        description: 'Field to sort by.'
+        required: false
+        example: created_at
+        type: string
+        custom: []
+      order:
+        name: order
+        description: 'Order to sort by.'
+        required: false
+        example: desc
+        type: string
+        custom: []
+      from:
+        name: from
+        description: 'Index where the pagination start from.'
+        required: false
+        example: '0'
+        type: string
+        custom: []
+      size:
+        name: size
+        description: 'Number of records to return.'
+        required: false
+        example: 10
+        type: integer
+        custom: []
+    cleanQueryParameters:
+      organization_id: '1'
+      query: test
+      negativeQuery: badword
+      indexing: '[3]'
+      startDate: '2020-04-30 00:00:00'
+      endDate: '2020-04-30 23:59:59'
+      subjectIds:
+        - 1
+      educationLevelIds:
+        - 1
+      authorTagsIds:
+        - 1
+      h5pLibraries:
+        - ut
+      model: activities
+      sort: created_at
+      order: desc
+      from: '0'
+      size: 10
+    bodyParameters:
+      searchType:
+        name: searchType
+        description: 'Must be one of <code>my_projects</code>, <code>showcase_projects</code>, <code>org_projects</code>, or <code>lti_search</code>.'
+        required: true
+        example: showcase_projects
+        type: string
+        custom: []
+      query:
+        name: query
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: vrdpvwbmr
+        type: string
+        custom: []
+      organization_id:
+        name: organization_id
+        description: ''
+        required: true
+        example: 19
+        type: integer
+        custom: []
+      negativeQuery:
+        name: negativeQuery
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: mqrz
+        type: string
+        custom: []
+      indexing:
+        name: indexing
+        description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
+        required: false
+        example: null
+        type: object
+        custom: []
+      startDate:
+        name: startDate
+        description: 'Must be a valid date.'
+        required: false
+        example: '2024-02-15T15:56:22'
+        type: string
+        custom: []
+      endDate:
+        name: endDate
+        description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
+        required: false
+        example: '2123-05-30'
         type: string
         custom: []
       userIds:
@@ -470,15 +875,14 @@ endpoints:
         name: author
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: cnkvax
+        example: sgwgyytlvez
         type: string
         custom: []
       h5pLibraries:
         name: h5pLibraries
         description: ''
         required: false
-        example:
-          - et
+        example: null
         type: object
         custom: []
       subjectIds:
@@ -486,7 +890,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - 16
+          - 3
         type: 'integer[]'
         custom: []
       educationLevelIds:
@@ -502,14 +906,14 @@ endpoints:
         description: ''
         required: false
         example:
-          - 19
+          - 7
         type: 'integer[]'
         custom: []
       model:
         name: model
         description: 'Must be one of <code>activities</code>, <code>playlists</code>, or <code>projects</code>.'
         required: false
-        example: projects
+        example: activities
         type: string
         custom: []
       sort:
@@ -537,51 +941,90 @@ endpoints:
         name: size
         description: ''
         required: false
-        example: 7
+        example: 20
         type: integer
         custom: []
     cleanBodyParameters:
-      searchType: org_projects
-      query: cvqrbfveohykgwshwlywao
-      organization_id: 15
-      negativeQuery: bllym
-      indexing: 'null'
-      startDate: '2022-12-05T09:02:28'
-      endDate: '2094-05-09'
+      searchType: showcase_projects
+      query: vrdpvwbmr
+      organization_id: 19
+      negativeQuery: mqrz
+      startDate: '2024-02-15T15:56:22'
+      endDate: '2123-05-30'
       userIds:
         - 1
-      author: cnkvax
-      h5pLibraries:
-        - et
+      author: sgwgyytlvez
       subjectIds:
-        - 16
+        - 3
       educationLevelIds:
         - 13
       authorTagsIds:
-        - 19
-      model: projects
+        - 7
+      model: activities
       sort: created_at
       order: asc
       from: 5
-      size: 7
+      size: 20
     fileParameters: []
     responses:
+      -
+        status: 200
+        content: '{"data":[{"id":45073,"project_id":62498,"playlist_id":9697,"thumb_url":"\/storage\/uploads\/5f4d0c6aaf189.png","title":"Business Model Canvas","content":"","model":"Activity","created_at":"2023-08-11T07:39:46.000000Z","user":{"id":2,"first_name":"masterdemo@curriki.org","last_name":"","email":"masterdemo@curriki.org"},"organization":{"id":1,"name":"org name 1","description":"org description 1","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg"}},{"id":45073,"project_id":62498,"playlist_id":9697,"thumb_url":"\/storage\/uploads\/5f4d0c6aaf189.png","title":"Business Model Canvas","content":"","model":"Activity","created_at":"2023-08-11T07:39:46.000000Z","user":{"id":2,"first_name":"masterdemo@curriki.org","last_name":"","email":"masterdemo@curriki.org"},"organization":{"id":1,"name":"org name 1","description":"org description 1","image":"\/storage\/organizations\/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg"}}]}'
+        headers: []
+        description: ''
+        custom: []
       -
         status: 400
         content: |-
           {
-            "errors": {
-              "userIds": [
-                "The user Ids must be an array."
-              ]
-            }
+              "errors": {
+                  "userIds": [
+                      "The user ids must be an array."
+                  ]
+              }
           }
         headers: []
         description: ''
         custom: []
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 9999,\r\n            \"thumb_url\": \"/storage/uploads/5f1083871600f.png\",\r\n            \"title\": \"\",\r\n            \"model\": \"Activity\",\r\n            \"user\": null,\r\n            \"created_at\": \"2020-07-29T20:51:30.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 999,\r\n            \"thumb_url\": \"/storage/uploads/5ef42a8dc4386.png\",\r\n            \"title\": \"About The National Parks\",\r\n            \"model\": \"Playlist\",\r\n            \"user\": null,\r\n            \"created_at\": \"2020-07-29T20:51:30.000000Z\"\r\n        },\r\n        {\r\n            \"id\": 999,\r\n            \"thumb_url\": \"/storage/uploads_tmp/UDixgGgVAnNYNMikT8Qic7q0WR0SSA54lOqL9u6t.png\",\r\n            \"title\": \"Algebra 1 ACPS Curriki Resources\",\r\n            \"description\": \"Algebra 1 ACPS Curriki Resources\",\r\n            \"favored\": false,\r\n            \"model\": \"Project\",\r\n            \"user\": null,\r\n            \"created_at\": \"2020-07-29T20:51:30.000000Z\"\r\n        }\r\n    ],\r\n    \"meta\": {\r\n        \"activities\": 1,\r\n        \"playlists\": 1,\r\n        \"projects\": 1,\r\n        \"total\": 3\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 9,
+                      "thumb_url": null,
+                      "title": "",
+                      "model": "Activity",
+                      "user": null,
+                      "created_at": "2020-07-29T20:51:30.000000Z"
+                  },
+                  {
+                      "id": 9,
+                      "thumb_url": "/storage/uploads/i6kOcAFcvBGd3yabpnbUKaqUARdUQsJ8LJLzzDUW.png",
+                      "title": "Chapter 2: What is money?",
+                      "model": "Playlist",
+                      "user": null,
+                      "created_at": "2020-07-29T20:51:30.000000Z"
+                  },
+                  {
+                      "id": 9,
+                      "thumb_url": "/storage/uploads/5f4013d35ec0e.png",
+                      "title": "Globalization, Robots and You",
+                      "description": "You have important decisions to make about your educations and career – wouldn’t it be nice if you could better understand the forces of globalization and automation first? What information do you need to gauge salary prospects, the risk of automation, and foreign competition as you compare your options?",
+                      "favored": false,
+                      "model": "Project",
+                      "user": null,
+                      "created_at": "2020-07-29T20:51:30.000000Z"
+                  }
+              ],
+              "meta": {
+                  "activities": 1,
+                  "playlists": 1,
+                  "projects": 1,
+                  "total": 3
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -705,7 +1148,7 @@ endpoints:
         description: 'of h5p libraries to match.'
         required: false
         example:
-          - ut
+          - rerum
         type: 'string[]'
         custom: []
       sort:
@@ -754,7 +1197,7 @@ endpoints:
       authorTagsIds:
         - 1
       h5pLibraries:
-        - ut
+        - rerum
       sort: created_at
       order: desc
       from: '0'
@@ -764,49 +1207,49 @@ endpoints:
         name: searchType
         description: 'Must be one of <code>my_activities</code>, <code>showcase_activities</code>, <code>org_activities</code>, or <code>lti_search</code>.'
         required: true
-        example: showcase_activities
+        example: my_activities
         type: string
         custom: []
       query:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: e
+        example: gd
         type: string
         custom: []
       organization_id:
         name: organization_id
         description: ''
         required: true
-        example: 4
+        example: 15
         type: integer
         custom: []
       negativeQuery:
         name: negativeQuery
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: thxtualhdntreegq
+        example: tn
         type: string
         custom: []
       indexing:
         name: indexing
         description: 'Must be one of <code>null</code>, <code>1</code>, <code>2</code>, or <code>3</code>.'
         required: false
-        example: '1'
+        example: null
         type: object
         custom: []
       startDate:
         name: startDate
         description: 'Must be a valid date.'
         required: false
-        example: '2022-12-05T09:02:30'
+        example: '2024-02-15T15:56:22'
         type: string
         custom: []
       endDate:
         name: endDate
         description: 'Must be a valid date. Must be a date after or equal to <code>startDate</code>.'
         required: false
-        example: '2107-02-17'
+        example: '2104-12-07'
         type: string
         custom: []
       userIds:
@@ -814,22 +1257,21 @@ endpoints:
         description: ''
         required: false
         example:
-          - 20
+          - 7
         type: 'integer[]'
         custom: []
       author:
         name: author
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: mmfeijegxf
+        example: hadwh
         type: string
         custom: []
       h5pLibraries:
         name: h5pLibraries
         description: ''
         required: false
-        example:
-          - necessitatibus
+        example: null
         type: object
         custom: []
       subjectIds:
@@ -837,7 +1279,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - 18
+          - 9
         type: 'integer[]'
         custom: []
       educationLevelIds:
@@ -845,7 +1287,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - 7
+          - 12
         type: 'integer[]'
         custom: []
       authorTagsIds:
@@ -853,7 +1295,7 @@ endpoints:
         description: ''
         required: false
         example:
-          - 12
+          - 15
         type: 'integer[]'
         custom: []
       sort:
@@ -867,46 +1309,43 @@ endpoints:
         name: order
         description: 'Must be one of <code>asc</code> or <code>desc</code>.'
         required: false
-        example: desc
+        example: asc
         type: string
         custom: []
       from:
         name: from
         description: ''
         required: false
-        example: 4
+        example: 16
         type: integer
         custom: []
       size:
         name: size
         description: ''
         required: false
-        example: 15
+        example: 4
         type: integer
         custom: []
     cleanBodyParameters:
-      searchType: showcase_activities
-      query: e
-      organization_id: 4
-      negativeQuery: thxtualhdntreegq
-      indexing: '1'
-      startDate: '2022-12-05T09:02:30'
-      endDate: '2107-02-17'
+      searchType: my_activities
+      query: gd
+      organization_id: 15
+      negativeQuery: tn
+      startDate: '2024-02-15T15:56:22'
+      endDate: '2104-12-07'
       userIds:
-        - 20
-      author: mmfeijegxf
-      h5pLibraries:
-        - necessitatibus
-      subjectIds:
-        - 18
-      educationLevelIds:
         - 7
-      authorTagsIds:
+      author: hadwh
+      subjectIds:
+        - 9
+      educationLevelIds:
         - 12
+      authorTagsIds:
+        - 15
       sort: created_at
-      order: desc
-      from: 4
-      size: 15
+      order: asc
+      from: 16
+      size: 4
     fileParameters: []
     responses:
       -
@@ -924,7 +1363,32 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"thumb_url\": null,\r\n            \"title\": \"title\",\r\n            \"created_at\": \"2022-04-27 23:51:58\",\r\n            \"user\": {\r\n                \"email\": \"abby@curriki.org\",\r\n                \"first_name\": \"Abby\",\r\n                \"id\": 3,\r\n                \"last_name\": \"_\"\r\n            },\r\n            \"organization\": {\r\n                \"id\": 1,\r\n                \"name\": \"org name 1\",\r\n                \"description\": \"org description 1\",\r\n                \"image\": \"/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg\"\r\n            }\r\n        }\r\n    ],\r\n    \"meta\": {\r\n        \"total\": 1\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "thumb_url": null,
+                      "title": "title",
+                      "created_at": "2022-04-27 23:51:58",
+                      "user": {
+                          "email": "abby@curriki.org",
+                          "first_name": "Abby",
+                          "id": 3,
+                          "last_name": "_"
+                      },
+                      "organization": {
+                          "id": 1,
+                          "name": "org name 1",
+                          "description": "org description 1",
+                          "image": "/storage/organizations/jlvKGDV1XjzIzfNrm1Py8gqgVkHpENwLoQj6OMjV.jpeg"
+                      }
+                  }
+              ],
+              "meta": {
+                  "total": 1
+              }
+          }
         headers: []
         description: ''
         custom: []
