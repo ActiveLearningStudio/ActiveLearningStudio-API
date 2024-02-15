@@ -56,7 +56,6 @@ class PublisherService implements PublisherServiceInterface
 			"workflowItems" => $this->generateWorkflowItems($independentActivity)
 		];
 		
-		// return json_encode($payloadJson);
 		return $payloadJson;
 	}
 
