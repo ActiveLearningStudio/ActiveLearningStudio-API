@@ -48,6 +48,9 @@ class RouteServiceProvider extends ServiceProvider
 
         // CurrikiGo integrations - Brightcove Player etc.
         $this->mapApiGoIntegrationRoutes();
+
+        // C2E routes - Publisher etc.
+        $this->mapApiC2eRoutes();
     }
 
     /**
@@ -92,5 +95,20 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/integrations.php'));
+    }
+
+    /**
+     * Define the "api C2E" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapApiC2eRoutes()
+    {
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/c2e.php'));
     }
 }

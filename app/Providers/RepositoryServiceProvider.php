@@ -21,6 +21,8 @@ use App\Repositories\AuthorTag\AuthorTagRepositoryInterface;
 use App\Repositories\BaseRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepository;
 use App\Repositories\CurrikiGo\LmsSetting\LmsSettingRepositoryInterface;
+use App\Repositories\C2E\Publisher\PublisherRepository;
+use App\Repositories\C2E\Publisher\PublisherRepositoryInterface;
 use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsInterface;
 use App\Repositories\DefaultSsoIntegrationSettings\DefaultSsoIntegrationSettingsRepository;
 use App\Repositories\EloquentRepositoryInterface;
@@ -101,6 +103,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ActivityTypeRepositoryInterface::class, ActivityTypeRepository::class);
         $this->app->bind(ActivityItemRepositoryInterface::class, ActivityItemRepository::class);
         $this->app->bind(LmsSettingRepositoryInterface::class, LmsSettingRepository::class);
+        $this->app->bind(PublisherRepositoryInterface::class, PublisherRepository::class);
         $this->app->bind(H5pLibraryRepositoryInterface::class, H5pLibraryRepository::class);
         $this->app->bind(H5pContentRepositoryInterface::class, H5pContentRepository::class);
         $this->app->bind(MetricsRepositoryInterface::class, MetricsRepository::class);
