@@ -428,7 +428,7 @@ class LaravelH5pRepository implements H5PFrameworkInterface
         $table = 'h5p_contents';
 
         $format = array();
-        $data = array_merge(CustomH5PMetadata::toDBArray($metadata, true, true, $format), array(
+        $data = array_merge(\H5PMetadata::toDBArray($metadata, true, true, $format), array(
             'updated_at' => $current_date,
             'parameters' => $content['params'],
             'embed_type' => 'div', // TODO: Determine from library?
