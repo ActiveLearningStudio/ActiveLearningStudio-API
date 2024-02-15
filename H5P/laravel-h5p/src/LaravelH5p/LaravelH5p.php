@@ -12,7 +12,6 @@
 
 namespace Djoudi\LaravelH5p;
 
-use Djoudi\LaravelH5p\H5pCore\CustomH5PContentValidator;
 use H5PCore;
 use H5peditor;
 use H5PExport;
@@ -62,7 +61,7 @@ class LaravelH5p
         self::$core->aggregateAssets = config('laravel-h5p.H5P_DISABLE_AGGREGATION');
         self::$validator = new H5PValidator(self::$interface, self::$core);
         self::$storage = new H5PStorage(self::$interface, self::$core);
-        self::$contentvalidator = new CustomH5PContentValidator(self::$interface, self::$core);
+        self::$contentvalidator = new H5PContentValidator(self::$interface, self::$core);
         self::$export = new H5PExport(self::$interface, self::$core);
         self::$editorStorage = new EditorStorage();
         self::$h5peditor = new H5peditor(self::$core, self::$editorStorage, new EditorAjaxRepository());
