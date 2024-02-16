@@ -32,13 +32,21 @@ endpoints:
     bodyParameters:
       statement:
         name: statement
-        description: ''
-        required: true
-        example: eos
-        type: string
+        description: 'Statement to save'
+        required: false
+        example: ipsum
+        type: required
+        custom: []
+      type:
+        name: type
+        description: 'of statement to save'
+        required: false
+        example: c2e
+        type: Type
         custom: []
     cleanBodyParameters:
-      statement: eos
+      statement: ipsum
+      type: c2e
     fileParameters: []
     responses:
       -

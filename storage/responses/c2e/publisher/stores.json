@@ -1,0 +1,10 @@
+{
+    "code": 200,
+    "message": "success",
+    "result": [
+        {
+            "id": "f5eb2780-f8cc-4c73-8123-9f0153482f9d",
+            "name": "Fahad Store"
+        }
+    ]
+}

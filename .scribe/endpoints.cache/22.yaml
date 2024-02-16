@@ -41,7 +41,53 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 25,\r\n            \"name\": \"activity:edit\",\r\n            \"display_name\": \"Edit Activity\",\r\n            \"feature\": \"Activity\"\r\n        },\r\n        {\r\n            \"id\": 43,\r\n            \"name\": \"group:edit\",\r\n            \"display_name\": \"Edit Group\",\r\n            \"feature\": \"Group\"\r\n        },\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"organization:edit\",\r\n            \"display_name\": \"Edit Organization\",\r\n            \"feature\": \"Organization\"\r\n        },\r\n        {\r\n            \"id\": 19,\r\n            \"name\": \"playlist:edit\",\r\n            \"display_name\": \"Edit Playlist\",\r\n            \"feature\": \"Playlist\"\r\n        },\r\n        {\r\n            \"id\": 10,\r\n            \"name\": \"project:edit\",\r\n            \"display_name\": \"Edit Project\",\r\n            \"feature\": \"Project\"\r\n        },\r\n        {\r\n            \"id\": 31,\r\n            \"name\": \"team:edit\",\r\n            \"display_name\": \"Edit Team\",\r\n            \"feature\": \"Team\"\r\n        },\r\n        {\r\n            \"id\": 57,\r\n            \"name\": \"user:edit\",\r\n            \"display_name\": \"Edit User\",\r\n            \"feature\": \"User\"\r\n        }\r\n    ]\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 25,
+                      "name": "activity:edit",
+                      "display_name": "Edit Activity",
+                      "feature": "Activity"
+                  },
+                  {
+                      "id": 43,
+                      "name": "group:edit",
+                      "display_name": "Edit Group",
+                      "feature": "Group"
+                  },
+                  {
+                      "id": 1,
+                      "name": "organization:edit",
+                      "display_name": "Edit Organization",
+                      "feature": "Organization"
+                  },
+                  {
+                      "id": 19,
+                      "name": "playlist:edit",
+                      "display_name": "Edit Playlist",
+                      "feature": "Playlist"
+                  },
+                  {
+                      "id": 10,
+                      "name": "project:edit",
+                      "display_name": "Edit Project",
+                      "feature": "Project"
+                  },
+                  {
+                      "id": 31,
+                      "name": "team:edit",
+                      "display_name": "Edit Team",
+                      "feature": "Team"
+                  },
+                  {
+                      "id": 57,
+                      "name": "user:edit",
+                      "display_name": "Edit User",
+                      "feature": "User"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []

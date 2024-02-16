@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Services\CurrikiGo\LMSIntegrationService;
 use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
+use App\Services\C2E\Publisher\PublisherService;
+use App\Services\C2E\Publisher\PublisherServiceInterface;
 use Illuminate\Support\Facades\Response;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(LMSIntegrationServiceInterface::class, LMSIntegrationService::class);
+        $this->app->bind(PublisherServiceInterface::class, PublisherService::class);
     }
 
     /**

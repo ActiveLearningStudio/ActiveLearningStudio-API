@@ -92,7 +92,7 @@ endpoints:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 13
+        example: 1
         type: integer
         custom: []
       team:
@@ -103,7 +103,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      team_id: 13
+      team_id: 1
       team: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -119,12 +119,12 @@ endpoints:
         name: role_id
         description: ''
         required: true
-        example: accusantium
+        example: eos
         type: string
         custom: []
     cleanBodyParameters:
       email: abby@curriki.org
-      role_id: accusantium
+      role_id: eos
     fileParameters: []
     responses:
       -
@@ -187,14 +187,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 6
+        example: 63
         type: integer
         custom: []
       team_id:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 13
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -212,8 +212,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 6
-      team_id: 13
+      suborganization_id: 63
+      team_id: 1
       suborganization: '1'
       team: '1'
     queryParameters: []
@@ -224,41 +224,41 @@ endpoints:
         description: 'The array of the users'
         required: true
         example:
-          - occaecati
+          - eum
         type: 'string[]'
         custom: []
       note:
         name: note
         description: ''
         required: false
-        example: voluptatum
+        example: soluta
         type: string
         custom: []
       'users[].id':
         name: 'users[].id'
         description: ''
         required: true
-        example: assumenda
+        example: doloribus
         type: string
         custom: []
       'users[].role_id':
         name: 'users[].role_id'
         description: ''
         required: true
-        example: ab
+        example: qui
         type: string
         custom: []
       'users[].email':
         name: 'users[].email'
         description: 'Must be a valid email address.'
         required: true
-        example: lshields@example.org
+        example: mireya.mclaughlin@example.org
         type: string
         custom: []
     cleanBodyParameters:
       users:
-        - occaecati
-      note: voluptatum
+        - eum
+      note: soluta
     fileParameters: []
     responses:
       -
@@ -321,7 +321,7 @@ endpoints:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 7
+        example: 1
         type: integer
         custom: []
       team:
@@ -332,7 +332,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      team_id: 7
+      team_id: 1
       team: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -348,12 +348,12 @@ endpoints:
         name: email
         description: 'Must be a valid email address.'
         required: false
-        example: kertzmann.william@example.com
+        example: reinger.cecil@example.net
         type: string
         custom: []
     cleanBodyParameters:
       id: 1
-      email: kertzmann.william@example.com
+      email: reinger.cecil@example.net
     fileParameters: []
     responses:
       -
@@ -416,7 +416,7 @@ endpoints:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 13
+        example: 1
         type: integer
         custom: []
       team:
@@ -427,7 +427,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      team_id: 13
+      team_id: 1
       team: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -505,7 +505,7 @@ endpoints:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 8
+        example: 1
         type: integer
         custom: []
       team:
@@ -516,7 +516,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      team_id: 8
+      team_id: 1
       team: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -592,14 +592,14 @@ endpoints:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 4
+        example: 1
         type: integer
         custom: []
       project_id:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 1
+        example: 62447
         type: integer
         custom: []
       team:
@@ -617,8 +617,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      team_id: 4
-      project_id: 1
+      team_id: 1
+      project_id: 62447
       team: '1'
       project: '1'
     queryParameters: []
@@ -697,14 +697,14 @@ endpoints:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 19
+        example: 1
         type: integer
         custom: []
       project_id:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 12
+        example: 62447
         type: integer
         custom: []
       team:
@@ -722,8 +722,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      team_id: 19
-      project_id: 12
+      team_id: 1
+      project_id: 62447
       team: '1'
       project: '1'
     queryParameters: []
@@ -740,12 +740,12 @@ endpoints:
         name: email
         description: 'Must be a valid email address.'
         required: false
-        example: roel.brakus@example.com
+        example: renner.trenton@example.com
         type: string
         custom: []
     cleanBodyParameters:
       id: 1
-      email: roel.brakus@example.com
+      email: renner.trenton@example.com
     fileParameters: []
     responses:
       -
@@ -808,7 +808,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 1
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -819,7 +819,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 1
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -829,7 +829,83 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -862,7 +938,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 11
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -873,7 +949,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 11
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -882,14 +958,14 @@ endpoints:
         name: query
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: donfqkldnwshl
+        example: oxl
         type: string
         custom: []
       order_by_column:
         name: order_by_column
         description: 'Must be one of <code>name</code> or <code>created_at</code>.'
         required: false
-        example: created_at
+        example: name
         type: string
         custom: []
       order_by_type:
@@ -903,19 +979,95 @@ endpoints:
         name: size
         description: 'Must not be greater than 100.'
         required: false
-        example: 24
+        example: 4
         type: integer
         custom: []
     cleanBodyParameters:
-      query: donfqkldnwshl
-      order_by_column: created_at
+      query: oxl
+      order_by_column: name
       order_by_type: desc
-      size: 24
+      size: 4
     fileParameters: []
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -948,14 +1100,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 12
+        example: 63
         type: integer
         custom: []
       team_id:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 9
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -973,8 +1125,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 12
-      team_id: 9
+      suborganization_id: 63
+      team_id: 1
       suborganization: '1'
       team: '1'
     queryParameters: []
@@ -985,7 +1137,31 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"teamPermissions\": {\r\n        \"activeRole\": \"admin\",\r\n        \"roleId\": 1,\r\n        \"Team\": [\r\n            \"team:add-team-user\",\r\n            \"team:remove-team-user\",\r\n            \"team:add-project\",\r\n            \"team:remove-project\",\r\n            \"team:add-member-project\",\r\n            \"team:remove-member-project\",\r\n            \"team:add-playlist\",\r\n            \"team:edit-playlist\",\r\n            \"team:delete-playlist\",\r\n            \"team:add-activity\",\r\n            \"team:edit-activity\",\r\n            \"team:delete-activity\",\r\n            \"team:share-project\",\r\n            \"team:share-activity\",\r\n            \"team:share-playlist\",\r\n            \"team:assign-team-role\"\r\n        ]\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "teamPermissions": {
+                  "activeRole": "admin",
+                  "roleId": 1,
+                  "Team": [
+                      "team:add-team-user",
+                      "team:remove-team-user",
+                      "team:add-project",
+                      "team:remove-project",
+                      "team:add-member-project",
+                      "team:remove-member-project",
+                      "team:add-playlist",
+                      "team:edit-playlist",
+                      "team:delete-playlist",
+                      "team:add-activity",
+                      "team:edit-activity",
+                      "team:delete-activity",
+                      "team:share-project",
+                      "team:share-activity",
+                      "team:share-playlist",
+                      "team:assign-team-role"
+                  ]
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1018,14 +1194,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 13
+        example: 63
         type: integer
         custom: []
       team_id:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 19
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -1043,8 +1219,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 13
-      team_id: 19
+      suborganization_id: 63
+      team_id: 1
       suborganization: '1'
       team: '1'
     queryParameters: []
@@ -1082,7 +1258,83 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1115,7 +1367,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 12
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1126,7 +1378,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 12
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1136,7 +1388,83 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1169,7 +1497,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 3
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1180,7 +1508,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 3
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1189,7 +1517,7 @@ endpoints:
         name: organization_id
         description: ''
         required: true
-        example: 4
+        example: 8
         type: integer
         custom: []
       name:
@@ -1218,14 +1546,14 @@ endpoints:
         name: projects
         description: 'Must not have more than 1 items.'
         required: false
-        example: v
+        example: null
         type: object
         custom: []
       note:
         name: note
         description: 'Must not be greater than 200 characters.'
         required: false
-        example: fych
+        example: mjsfgptj
         type: string
         custom: []
       noovo_group_title:
@@ -1239,34 +1567,33 @@ endpoints:
         name: 'users[].id'
         description: ''
         required: true
-        example: dignissimos
+        example: aut
         type: string
         custom: []
       'users[].role_id':
         name: 'users[].role_id'
         description: ''
         required: true
-        example: eum
+        example: veniam
         type: string
         custom: []
       'users[].email':
         name: 'users[].email'
         description: 'Must be a valid email address.'
         required: true
-        example: carmella41@example.com
+        example: lexi41@example.net
         type: string
         custom: []
     cleanBodyParameters:
-      organization_id: 4
+      organization_id: 8
       name: 'Test Team'
       description: 'This is a test team.'
       users:
         -
-          id: dignissimos
-          role_id: eum
-          email: carmella41@example.com
-      projects: v
-      note: fych
+          id: aut
+          role_id: veniam
+          email: lexi41@example.net
+      note: mjsfgptj
       noovo_group_title: Test_Group
     fileParameters: []
     responses:
@@ -1283,7 +1610,83 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1316,14 +1719,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 7
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the team.'
         required: true
-        example: 7
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -1341,8 +1744,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 7
-      id: 7
+      suborganization_id: 63
+      id: 1
       suborganization: '1'
       team: '1'
     queryParameters: []
@@ -1353,7 +1756,83 @@ endpoints:
     responses:
       -
         status: 201
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1387,7 +1866,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 9
+        example: 63
         type: integer
         custom: []
       id:
@@ -1412,7 +1891,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 9
+      suborganization_id: 63
       id: 1
       suborganization: '1'
       team: '1'
@@ -1459,7 +1938,83 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 52,\r\n            \"organization_id\": 1,\r\n            \"name\": \"Team 12\",\r\n            \"description\": \"desc\",\r\n            \"indexing\": null,\r\n            \"users\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"first_name\": \"Test\",\r\n                    \"last_name\": \"Test\",\r\n                    \"email\": \"test@test.com\",\r\n                    \"projects\": [\r\n                        {\r\n                            \"id\": 6,\r\n                            \"name\": \"The Science of Golf\",\r\n                            \"description\": \"Uncover the science, technology, engineering, and mathematics behind the game of golf.\",\r\n                            \"thumb_url\": \"\",\r\n                            \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"updated_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                            \"deleted_at\": null,\r\n                            \"shared\": true,\r\n                            \"is_public\": false,\r\n                            \"starter_project\": false,\r\n                            \"organization_id\": null,\r\n                            \"organization_visibility_type_id\": null,\r\n                            \"cloned_from\": 1,\r\n                            \"clone_ctr\": 0,\r\n                            \"order\": 1,\r\n                            \"is_user_starter\": false,\r\n                            \"status\": 1,\r\n                            \"indexing\": null,\r\n                            \"original_user\": null,\r\n                            \"team_id\": null,\r\n                            \"pivot\": {\r\n                                \"user_id\": 1,\r\n                                \"project_id\": 6,\r\n                                \"role\": \"owner\",\r\n                                \"created_at\": \"2021-08-17T09:52:34.000000Z\",\r\n                                \"updated_at\": \"2021-08-17T09:52:34.000000Z\"\r\n                            }\r\n                        }\r\n                    ],\r\n                    \"role\": {\r\n                        \"id\": 1,\r\n                        \"name\": \"admin\",\r\n                        \"display_name\": \"Team Administrator\",\r\n                        \"created_at\": \"2021-07-19T11:39:05.000000Z\",\r\n                        \"updated_at\": null\r\n                    }\r\n                }\r\n            ],\r\n            \"invited_emails\": [],\r\n            \"projects\": [],\r\n            \"created_at\": \"2021-07-20T11:02:20.000000Z\",\r\n            \"updated_at\": \"2021-07-20T11:02:20.000000Z\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"last\": \"http://localhost:8000/api/v1/suborganization/1/teams?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 1,\r\n        \"path\": \"http://localhost:8000/api/v1/suborganization/1/teams\",\r\n        \"per_page\": 10,\r\n        \"to\": 2,\r\n        \"total\": 2\r\n    }\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 52,
+                      "organization_id": 1,
+                      "name": "Team 12",
+                      "description": "desc",
+                      "indexing": null,
+                      "users": [
+                          {
+                              "id": 1,
+                              "first_name": "Test",
+                              "last_name": "Test",
+                              "email": "test@test.com",
+                              "projects": [
+                                  {
+                                      "id": 6,
+                                      "name": "The Science of Golf",
+                                      "description": "Uncover the science, technology, engineering, and mathematics behind the game of golf.",
+                                      "thumb_url": "",
+                                      "created_at": "2021-08-17T09:52:34.000000Z",
+                                      "updated_at": "2021-08-17T09:52:34.000000Z",
+                                      "deleted_at": null,
+                                      "shared": true,
+                                      "is_public": false,
+                                      "starter_project": false,
+                                      "organization_id": null,
+                                      "organization_visibility_type_id": null,
+                                      "cloned_from": 1,
+                                      "clone_ctr": 0,
+                                      "order": 1,
+                                      "is_user_starter": false,
+                                      "status": 1,
+                                      "indexing": null,
+                                      "original_user": null,
+                                      "team_id": null,
+                                      "pivot": {
+                                          "user_id": 1,
+                                          "project_id": 6,
+                                          "role": "owner",
+                                          "created_at": "2021-08-17T09:52:34.000000Z",
+                                          "updated_at": "2021-08-17T09:52:34.000000Z"
+                                      }
+                                  }
+                              ],
+                              "role": {
+                                  "id": 1,
+                                  "name": "admin",
+                                  "display_name": "Team Administrator",
+                                  "created_at": "2021-07-19T11:39:05.000000Z",
+                                  "updated_at": null
+                              }
+                          }
+                      ],
+                      "invited_emails": [],
+                      "projects": [],
+                      "created_at": "2021-07-20T11:02:20.000000Z",
+                      "updated_at": "2021-07-20T11:02:20.000000Z"
+                  }
+              ],
+              "links": {
+                  "first": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "last": "http://localhost:8000/api/v1/suborganization/1/teams?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 1,
+                  "path": "http://localhost:8000/api/v1/suborganization/1/teams",
+                  "per_page": 10,
+                  "to": 2,
+                  "total": 2
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1492,14 +2047,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 2
+        example: 63
         type: integer
         custom: []
       id:
         name: id
         description: 'The ID of the team.'
         required: true
-        example: 11
+        example: 1
         type: integer
         custom: []
       suborganization:
@@ -1517,8 +2072,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 2
-      id: 11
+      suborganization_id: 63
+      id: 1
       suborganization: '1'
       team: '1'
     queryParameters: []
@@ -1576,21 +2131,21 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 2
+        example: 63
         type: integer
         custom: []
       team_id:
         name: team_id
         description: 'The ID of the team.'
         required: true
-        example: 17
+        example: 1
         type: integer
         custom: []
       project_id:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 8
+        example: 62447
         type: integer
         custom: []
       suborganization:
@@ -1615,9 +2170,9 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 2
-      team_id: 17
-      project_id: 8
+      suborganization_id: 63
+      team_id: 1
+      project_id: 62447
       suborganization: '1'
       team: '1'
       project: '1'

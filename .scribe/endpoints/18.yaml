@@ -55,7 +55,44 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 128,\r\n            \"payload\": \"CloneProject\",\r\n            \"queue\": \"default\",\r\n            \"time\": \"1 day ago\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception\": \"N/A\"\r\n        },\r\n        {\r\n            \"id\": 129,\r\n            \"payload\": \"CloneProject\",\r\n            \"queue\": \"default\",\r\n            \"time\": \"1 day ago\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception\": \"Unable to clone project\"\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1\",\r\n        \"last\": \"https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1\",\r\n        \"prev\": null,\r\n        \"next\": null\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": null,\r\n        \"last_page\": 1,\r\n        \"path\": \"https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs\",\r\n        \"per_page\": \"2\",\r\n        \"to\": null,\r\n        \"total\": 0\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "data": [
+                  {
+                      "id": 128,
+                      "payload": "CloneProject",
+                      "queue": "default",
+                      "time": "1 day ago",
+                      "failed": false,
+                      "attempt": 1,
+                      "exception": "N/A"
+                  },
+                  {
+                      "id": 129,
+                      "payload": "CloneProject",
+                      "queue": "default",
+                      "time": "1 day ago",
+                      "failed": false,
+                      "attempt": 1,
+                      "exception": "Unable to clone project"
+                  }
+              ],
+              "links": {
+                  "first": "https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1",
+                  "last": "https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs?page=1",
+                  "prev": null,
+                  "next": null
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": null,
+                  "last_page": 1,
+                  "path": "https://currikistudio.org/api/api/v1/admin/queue-monitor/jobs",
+                  "per_page": "2",
+                  "to": null,
+                  "total": 0
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -297,7 +334,50 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 128,\r\n            \"job_id\": \"376471\",\r\n            \"name\": \"CloneProject\",\r\n            \"queue\": \"default\",\r\n            \"started_at\": \"23 hours ago\",\r\n            \"is_finished\": true,\r\n            \"time_elapsed\": \"8.22 s\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception_message\": null\r\n        },\r\n        {\r\n            \"id\": 127,\r\n            \"job_id\": \"376470\",\r\n            \"name\": \"CloneActivity\",\r\n            \"queue\": \"default\",\r\n            \"started_at\": \"23 hours ago\",\r\n            \"is_finished\": true,\r\n            \"time_elapsed\": \"8.17 s\",\r\n            \"failed\": false,\r\n            \"attempt\": 1,\r\n            \"exception_message\": null\r\n        }\r\n    ],\r\n    \"links\": {\r\n        \"first\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor?page=1\",\r\n        \"last\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor?page=9\",\r\n        \"prev\": null,\r\n        \"next\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor?page=2\"\r\n    },\r\n    \"meta\": {\r\n        \"current_page\": 1,\r\n        \"from\": 1,\r\n        \"last_page\": 9,\r\n        \"path\": \"https://www.currikistudio.org/api/v1/admin/queue-monitor\",\r\n        \"per_page\": \"2\",\r\n        \"to\": 2,\r\n        \"total\": 17\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "data": [
+                  {
+                      "id": 128,
+                      "job_id": "376471",
+                      "name": "CloneProject",
+                      "queue": "default",
+                      "started_at": "23 hours ago",
+                      "is_finished": true,
+                      "time_elapsed": "8.22 s",
+                      "failed": false,
+                      "attempt": 1,
+                      "exception_message": null
+                  },
+                  {
+                      "id": 127,
+                      "job_id": "376470",
+                      "name": "CloneActivity",
+                      "queue": "default",
+                      "started_at": "23 hours ago",
+                      "is_finished": true,
+                      "time_elapsed": "8.17 s",
+                      "failed": false,
+                      "attempt": 1,
+                      "exception_message": null
+                  }
+              ],
+              "links": {
+                  "first": "https://www.currikistudio.org/api/v1/admin/queue-monitor?page=1",
+                  "last": "https://www.currikistudio.org/api/v1/admin/queue-monitor?page=9",
+                  "prev": null,
+                  "next": "https://www.currikistudio.org/api/v1/admin/queue-monitor?page=2"
+              },
+              "meta": {
+                  "current_page": 1,
+                  "from": 1,
+                  "last_page": 9,
+                  "path": "https://www.currikistudio.org/api/v1/admin/queue-monitor",
+                  "per_page": "2",
+                  "to": 2,
+                  "total": 17
+              }
+          }
         headers: []
         description: ''
         custom: []

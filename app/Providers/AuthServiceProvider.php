@@ -94,6 +94,10 @@ class AuthServiceProvider extends ServiceProvider
         // Gate::before(function ($user, $ability) {
         //     return $user->isAdmin() ? true : null;
         // });
+
+        Gate::guessPolicyNamesUsing(function ($modelClass) {
+            return 'App\\Policies\\C2E\\' . class_basename($modelClass) . '\\' . class_basename($modelClass) . 'Policy';
+        });
     }
 
     /**

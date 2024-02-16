@@ -204,6 +204,18 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:edit-microsoft-team'
                     ],
                     "None" => []
+                ],
+                "C2E Publishers" => [
+                    "View" => [
+                        'organization:view-c2e-publisher'
+                    ],
+                    "Edit" => [
+                        'organization:view-c2e-publisher',
+                        'organization:create-c2e-publisher',
+                        'organization:delete-c2e-publisher',
+                        'organization:edit-c2e-publisher'
+                    ],
+                    "None" => []
                 ]
             ],
             "Users" => [
@@ -386,6 +398,14 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                 "Export H5P" => [
                     "View" => [
                         'independent-activity:view-export-h5p-option'
+                    ],
+                    "None" => []
+                ],
+                "C2E Publisher" => [
+                    "View" => [
+                        'c2e-publisher:view-author',
+                        'c2e-publisher:view-stores',
+                        'c2e-publisher:publish-independent-activity'
                     ],
                     "None" => []
                 ]

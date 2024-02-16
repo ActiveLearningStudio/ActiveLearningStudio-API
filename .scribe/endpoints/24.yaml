@@ -26,14 +26,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 2
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 6
+        example: 171
         type: integer
         custom: []
       project:
@@ -51,8 +51,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 2
-      playlist_id: 6
+      project_id: 62447
+      playlist_id: 171
       project: '1'
       playlist: '1'
     queryParameters: []
@@ -76,7 +76,7 @@ endpoints:
         name: publisher_org
         description: ''
         required: false
-        example: 15
+        example: 11
         type: integer
         custom: []
       creation_type:
@@ -90,15 +90,15 @@ endpoints:
         name: canvas_course_id
         description: ''
         required: true
-        example: 5
+        example: 1
         type: integer
         custom: []
     cleanBodyParameters:
       setting_id: 1
       counter: 1
-      publisher_org: 15
+      publisher_org: 11
       creation_type: modules
-      canvas_course_id: 5
+      canvas_course_id: 1
     fileParameters: []
     responses:
       -
@@ -136,7 +136,26 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"playlist\": {\r\n        \"id\": 1,\r\n        \"title\": \"Development Setup\",\r\n        \"position\": 4,\r\n        \"type\": \"ExternalTool\",\r\n        \"module_id\": 26,\r\n        \"content_id\": 0,\r\n        \"html_url\": \"https://canvas2.curriki.org/courses/32/modules/items/112\",\r\n        \"url\": \"https://canvas2.curriki.org/api/v1/courses/32/external_tools/sessionless_launch?launch_type=module_item&module_item_id=112\",\r\n        \"external_url\": \"https://tsugi.curriki.org/mod/curriki/?playlist=1\",\r\n        \"new_tab\": false,\r\n        \"completion_requirement\": {\r\n            \"type\": \"must_view\"\r\n        },\r\n        \"published\": false,\r\n        \"indent\": 0\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "playlist": {
+                  "id": 1,
+                  "title": "Development Setup",
+                  "position": 4,
+                  "type": "ExternalTool",
+                  "module_id": 26,
+                  "content_id": 0,
+                  "html_url": "https://canvas2.curriki.org/courses/32/modules/items/112",
+                  "url": "https://canvas2.curriki.org/api/v1/courses/32/external_tools/sessionless_launch?launch_type=module_item&module_item_id=112",
+                  "external_url": "https://tsugi.curriki.org/mod/curriki/?playlist=1",
+                  "new_tab": false,
+                  "completion_requirement": {
+                      "type": "must_view"
+                  },
+                  "published": false,
+                  "indent": 0
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -169,14 +188,14 @@ endpoints:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 3
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 15
+        example: 171
         type: integer
         custom: []
       project:
@@ -194,8 +213,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      project_id: 3
-      playlist_id: 15
+      project_id: 62447
+      playlist_id: 171
       project: '1'
       playlist: '1'
     queryParameters: []
@@ -219,13 +238,13 @@ endpoints:
         name: publisher_org
         description: ''
         required: false
-        example: 8
+        example: 17
         type: integer
         custom: []
     cleanBodyParameters:
       setting_id: 1
       counter: 1
-      publisher_org: 8
+      publisher_org: 17
     fileParameters: []
     responses:
       -
@@ -290,27 +309,27 @@ endpoints:
         name: lms
         description: ''
         required: true
-        example: consequuntur
+        example: perferendis
         type: string
         custom: []
       project_id:
         name: project_id
         description: 'The ID of the project.'
         required: true
-        example: 19
+        example: 62447
         type: integer
         custom: []
       playlist_id:
         name: playlist_id
         description: 'The ID of the playlist.'
         required: true
-        example: 20
+        example: 171
         type: integer
         custom: []
     cleanUrlParameters:
-      lms: consequuntur
-      project_id: 19
-      playlist_id: 20
+      lms: perferendis
+      project_id: 62447
+      playlist_id: 171
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -318,21 +337,21 @@ endpoints:
         name: setting_id
         description: ''
         required: true
-        example: sequi
+        example: accusamus
         type: string
         custom: []
       counter:
         name: counter
         description: ''
         required: false
-        example: 7
+        example: 18
         type: integer
         custom: []
       publisher_org:
         name: publisher_org
         description: ''
         required: false
-        example: 17
+        example: 9
         type: integer
         custom: []
       creation_type:
@@ -346,15 +365,15 @@ endpoints:
         name: canvas_course_id
         description: ''
         required: true
-        example: 20
+        example: 18
         type: integer
         custom: []
     cleanBodyParameters:
-      setting_id: sequi
-      counter: 7
-      publisher_org: 17
+      setting_id: accusamus
+      counter: 18
+      publisher_org: 9
       creation_type: modules
-      canvas_course_id: 20
+      canvas_course_id: 18
     fileParameters: []
     responses: []
     responseFields: []

@@ -232,6 +232,30 @@ class OrganizationAdminPanelPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:edit-c2e-publisher',
+            'display_name' => 'Edit C2E Publisher',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:delete-c2e-publisher',
+            'display_name' => 'Delete C2E Publisher',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:view-c2e-publisher',
+            'display_name' => 'View C2E Publisher',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:create-c2e-publisher',
+            'display_name' => 'Create C2E Publisher',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'organization:edit-media',
             'display_name' => 'Edit Organization Media',
             'feature' => 'Organization'

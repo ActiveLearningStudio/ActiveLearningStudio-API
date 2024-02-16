@@ -26,7 +26,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 15
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -37,7 +37,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 15
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -105,7 +105,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 4
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -116,7 +116,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 4
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -126,7 +126,22 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"permissions\": {\r\n        \"activeRole\": \"non_editing_teacher\",\r\n        \"roleId\": 4,\r\n        \"Project\": [\r\n            \"project:view\"\r\n        ],\r\n        \"Playlist\": [\r\n            \"playlist:view\"\r\n        ],\r\n        \"Activity\": [\r\n            \"activity:view\"\r\n        ]\r\n    }\r\n}"
+        content: |-
+          {
+              "permissions": {
+                  "activeRole": "non_editing_teacher",
+                  "roleId": 4,
+                  "Project": [
+                      "project:view"
+                  ],
+                  "Playlist": [
+                      "playlist:view"
+                  ],
+                  "Activity": [
+                      "activity:view"
+                  ]
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -159,7 +174,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 20
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -170,7 +185,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 20
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -180,7 +195,22 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"permissions\": {\r\n        \"activeRole\": \"non_editing_teacher\",\r\n        \"roleId\": 4,\r\n        \"Project\": [\r\n            \"project:view\"\r\n        ],\r\n        \"Playlist\": [\r\n            \"playlist:view\"\r\n        ],\r\n        \"Activity\": [\r\n            \"activity:view\"\r\n        ]\r\n    }\r\n}"
+        content: |-
+          {
+              "permissions": {
+                  "activeRole": "non_editing_teacher",
+                  "roleId": 4,
+                  "Project": [
+                      "project:view"
+                  ],
+                  "Playlist": [
+                      "playlist:view"
+                  ],
+                  "Activity": [
+                      "activity:view"
+                  ]
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -213,7 +243,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 8
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -224,7 +254,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 8
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -309,7 +339,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 1
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -320,7 +350,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 1
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -405,7 +435,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 13
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -416,7 +446,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 13
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -498,7 +528,31 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"private\",\r\n            \"display_name\": \"Private\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"protected\",\r\n            \"display_name\": \"Protected\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"name\": \"global\",\r\n            \"display_name\": \"Global\"\r\n        },\r\n        {\r\n            \"id\": 4,\r\n            \"name\": \"public\",\r\n            \"display_name\": \"Public\"\r\n        }\r\n    ]\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "name": "private",
+                      "display_name": "Private"
+                  },
+                  {
+                      "id": 2,
+                      "name": "protected",
+                      "display_name": "Protected"
+                  },
+                  {
+                      "id": 3,
+                      "name": "global",
+                      "display_name": "Global"
+                  },
+                  {
+                      "id": 4,
+                      "name": "public",
+                      "display_name": "Public"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -531,7 +585,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 1
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -542,7 +596,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 1
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -552,7 +606,26 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"admin\",\r\n            \"display_name\": \"Administrator\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"name\": \"member\",\r\n            \"display_name\": \"Member\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"course_creator\",\r\n            \"display_name\": \"Course Creator\"\r\n        }\r\n    ]\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "name": "admin",
+                      "display_name": "Administrator"
+                  },
+                  {
+                      "id": 3,
+                      "name": "member",
+                      "display_name": "Member"
+                  },
+                  {
+                      "id": 2,
+                      "name": "course_creator",
+                      "display_name": "Course Creator"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -585,19 +658,19 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 1
+        example: 63
         type: integer
         custom: []
       roleId:
         name: roleId
         description: ''
         required: true
-        example: quisquam
+        example: laborum
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 1
-      roleId: quisquam
+      suborganization_id: 63
+      roleId: laborum
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -606,7 +679,26 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"admin\",\r\n            \"display_name\": \"Administrator\"\r\n        },\r\n        {\r\n            \"id\": 3,\r\n            \"name\": \"member\",\r\n            \"display_name\": \"Member\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"course_creator\",\r\n            \"display_name\": \"Course Creator\"\r\n        }\r\n    ]\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "id": 1,
+                      "name": "admin",
+                      "display_name": "Administrator"
+                  },
+                  {
+                      "id": 3,
+                      "name": "member",
+                      "display_name": "Member"
+                  },
+                  {
+                      "id": 2,
+                      "name": "course_creator",
+                      "display_name": "Course Creator"
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -639,14 +731,14 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 17
+        example: 63
         type: integer
         custom: []
       role_id:
         name: role_id
         description: 'The ID of the role.'
         required: true
-        example: 10
+        example: 77
         type: integer
         custom: []
       suborganization:
@@ -664,8 +756,8 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 17
-      role_id: 10
+      suborganization_id: 63
+      role_id: 77
       suborganization: '1'
       role: '1'
     queryParameters: []
@@ -676,7 +768,401 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"data\": [\r\n        {\r\n            \"title\": \"Organiziations\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"Organiziation\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 1,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 2,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 3,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Projects\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"All Projects\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 4,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 5,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": true\r\n                        },\r\n                        {\r\n                            \"id\": 6,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Import/Export Projects\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 7,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 8,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 9,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Ref. Tables\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"Activity Types\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 10,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 11,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 12,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Activity Items\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 13,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 14,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 15,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Integrations\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"LMS Settings\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 16,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 17,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 18,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"LTI Tools\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 19,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 20,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 21,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"BrightCove\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 22,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 23,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 24,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Users\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"Manage Users\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 25,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 26,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 27,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Manage Roles\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 28,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 29,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 30,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Independent Activities\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"All Independent Activities\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 31,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 32,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 33,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Export/Import Activities\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 34,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 35,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 36,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"title\": \"Authoring\",\r\n            \"ui_sub_modules\": [\r\n                {\r\n                    \"title\": \"Project\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 37,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 38,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 39,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Playlist\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 40,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 41,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 42,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Activity\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 43,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 44,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 45,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Team\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 46,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 47,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 48,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"Independent Activity\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 49,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 50,\r\n                            \"title\": \"Edit\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 51,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                },\r\n                {\r\n                    \"title\": \"My Interactive Video\",\r\n                    \"ui_module_permissions\": [\r\n                        {\r\n                            \"id\": 52,\r\n                            \"title\": \"View\",\r\n                            \"selected\": false\r\n                        },\r\n                        {\r\n                            \"id\": 53,\r\n                            \"title\": \"None\",\r\n                            \"selected\": false\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}"
+        content: |-
+          {
+              "data": [
+                  {
+                      "title": "Organiziations",
+                      "ui_sub_modules": [
+                          {
+                              "title": "Organiziation",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 1,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 2,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 3,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "title": "Projects",
+                      "ui_sub_modules": [
+                          {
+                              "title": "All Projects",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 4,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 5,
+                                      "title": "Edit",
+                                      "selected": true
+                                  },
+                                  {
+                                      "id": 6,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Import/Export Projects",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 7,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 8,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 9,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "title": "Ref. Tables",
+                      "ui_sub_modules": [
+                          {
+                              "title": "Activity Types",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 10,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 11,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 12,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Activity Items",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 13,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 14,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 15,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "title": "Integrations",
+                      "ui_sub_modules": [
+                          {
+                              "title": "LMS Settings",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 16,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 17,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 18,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "LTI Tools",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 19,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 20,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 21,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "BrightCove",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 22,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 23,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 24,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "title": "Users",
+                      "ui_sub_modules": [
+                          {
+                              "title": "Manage Users",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 25,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 26,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 27,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Manage Roles",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 28,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 29,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 30,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "title": "Independent Activities",
+                      "ui_sub_modules": [
+                          {
+                              "title": "All Independent Activities",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 31,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 32,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 33,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Export/Import Activities",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 34,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 35,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 36,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "title": "Authoring",
+                      "ui_sub_modules": [
+                          {
+                              "title": "Project",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 37,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 38,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 39,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Playlist",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 40,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 41,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 42,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Activity",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 43,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 44,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 45,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Team",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 46,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 47,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 48,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "Independent Activity",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 49,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 50,
+                                      "title": "Edit",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 51,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          },
+                          {
+                              "title": "My Interactive Video",
+                              "ui_module_permissions": [
+                                  {
+                                      "id": 52,
+                                      "title": "View",
+                                      "selected": false
+                                  },
+                                  {
+                                      "id": 53,
+                                      "title": "None",
+                                      "selected": false
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -709,7 +1195,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 13
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -720,7 +1206,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 13
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -785,7 +1271,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 8
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -796,7 +1282,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 8
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -861,7 +1347,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 15
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -872,7 +1358,7 @@ endpoints:
         type: integer
         custom: []
     cleanUrlParameters:
-      suborganization_id: 15
+      suborganization_id: 63
       suborganization: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -888,12 +1374,12 @@ endpoints:
         name: page
         description: 'Must be one of <code>create</code> or <code>update</code>.'
         required: true
-        example: create
+        example: update
         type: string
         custom: []
     cleanBodyParameters:
       query: leo
-      page: create
+      page: update
     fileParameters: []
     responses:
       -
@@ -912,7 +1398,37 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"member-options\": [\r\n        {\r\n            \"id\": 3,\r\n            \"first_name\": \"Abby\",\r\n            \"last_name\": \"_\",\r\n            \"email\": \"abby@curriki.org\",\r\n            \"organization_name\": \"\",\r\n            \"organization_type\": null,\r\n            \"job_title\": \"\",\r\n            \"address\": null,\r\n            \"phone_number\": null,\r\n            \"website\": null,\r\n            \"subscribed\": true\r\n        },\r\n        {\r\n            \"id\": 1494,\r\n            \"first_name\": \"Gabriella\",\r\n            \"last_name\": \"Tennant-Nicholas\",\r\n            \"email\": \"gabbytennant05@gmail.com\",\r\n            \"organization_name\": \"Arizona State University\",\r\n            \"organization_type\": null,\r\n            \"job_title\": \"Student\",\r\n            \"address\": null,\r\n            \"phone_number\": null,\r\n            \"website\": null,\r\n            \"subscribed\": true\r\n        }\r\n    ]\r\n}"
+        content: |-
+          {
+              "member-options": [
+                  {
+                      "id": 3,
+                      "first_name": "Abby",
+                      "last_name": "_",
+                      "email": "abby@curriki.org",
+                      "organization_name": "",
+                      "organization_type": null,
+                      "job_title": "",
+                      "address": null,
+                      "phone_number": null,
+                      "website": null,
+                      "subscribed": true
+                  },
+                  {
+                      "id": 1494,
+                      "first_name": "Gabriella",
+                      "last_name": "Tennant-Nicholas",
+                      "email": "gabbytennant05@gmail.com",
+                      "organization_name": "Arizona State University",
+                      "organization_type": null,
+                      "job_title": "Student",
+                      "address": null,
+                      "phone_number": null,
+                      "website": null,
+                      "subscribed": true
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -945,7 +1461,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 4
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -956,7 +1472,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 4
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1029,7 +1545,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 17
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1040,7 +1556,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 17
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1121,7 +1637,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 3
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1132,7 +1648,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 3
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1271,7 +1787,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 3
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1282,7 +1798,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 3
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1415,7 +1931,7 @@ endpoints:
         description: 'Array of the "user_id" and "role_id" for suborganization users'
         required: true
         example:
-          - accusamus
+          - aliquam
         type: 'string[]'
         custom: []
       parent_id:
@@ -1436,21 +1952,21 @@ endpoints:
         name: account_id
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: heavgyrzyn
+        example: kioroxxsdoyltyjbmu
         type: string
         custom: []
       api_key:
         name: api_key
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: futpmlqgnogbin
+        example: fi
         type: string
         custom: []
       unit_path:
         name: unit_path
         description: 'Must not be greater than 255 characters.'
         required: false
-        example: emdlzzb
+        example: vphi
         type: string
         custom: []
       noovo_client_id:
@@ -1471,35 +1987,35 @@ endpoints:
         name: tos_url
         description: 'This field is required when <code>tos_type</code> is <code>==</code> or <code>URL</code>.  Must be a valid URL. Must not be greater than 255 characters.'
         required: false
-        example: 'http://www.eichmann.com/aut-quasi-sunt-cumque-expedita'
+        example: 'http://www.harris.com/ducimus-possimus-illo-officia'
         type: string
         custom: []
       tos_content:
         name: tos_content
         description: 'This field is required when <code>tos_type</code> is <code>==</code> or <code>Content</code>. Must not be greater than 65000 characters.'
         required: false
-        example: iuqx
+        example: abb
         type: string
         custom: []
       privacy_policy_type:
         name: privacy_policy_type
         description: 'Must be one of <code>Parent</code>, <code>URL</code>, or <code>Content</code>.'
         required: true
-        example: URL
+        example: Parent
         type: string
         custom: []
       privacy_policy_url:
         name: privacy_policy_url
         description: 'This field is required when <code>privacy_policy_type</code> is <code>==</code> or <code>URL</code>.  Must be a valid URL. Must not be greater than 255 characters.'
         required: false
-        example: 'http://nienow.com/facilis-earum-dolores-eligendi-inventore-eligendi.html'
+        example: 'http://www.stiedemann.com/eum-minima-ipsum-porro-veritatis-nobis-et-excepturi.html'
         type: string
         custom: []
       privacy_policy_content:
         name: privacy_policy_content
         description: 'This field is required when <code>privacy_policy_type</code> is <code>==</code> or <code>Content</code>. Must not be greater than 65000 characters.'
         required: false
-        example: cdyjxjfuwcigiwopa
+        example: k
         type: string
         custom: []
       primary_color:
@@ -1537,18 +2053,53 @@ endpoints:
         example: 'Open Sans'
         type: string
         custom: []
+      auto_approve:
+        name: auto_approve
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
+      activity_title_text:
+        name: activity_title_text
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: nyrdqkgqfmmcfsriqcqqlbfqf
+        type: string
+        custom: []
+      activity_title_placeholder:
+        name: activity_title_placeholder
+        description: 'Must not be greater than 255 characters.'
+        required: false
+        example: fzebpoe
+        type: string
+        custom: []
+      h5p_embed_option:
+        name: h5p_embed_option
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
+      h5p_reuse_option:
+        name: h5p_reuse_option
+        description: ''
+        required: false
+        example: false
+        type: boolean
+        custom: []
       'users[].user_id':
         name: 'users[].user_id'
         description: 'This field is required when <code>users.*.role_id</code> is present.'
         required: false
-        example: 16
+        example: 20
         type: integer
         custom: []
       'users[].role_id':
         name: 'users[].role_id'
         description: 'This field is required when <code>users.*.user_id</code> is present.'
         required: false
-        example: 7
+        example: 2
         type: integer
         custom: []
     cleanBodyParameters:
@@ -1566,24 +2117,29 @@ endpoints:
         - 3
         - 4
       users:
-        - accusamus
+        - aliquam
       parent_id: 1
       self_registration: false
-      account_id: heavgyrzyn
-      api_key: futpmlqgnogbin
-      unit_path: emdlzzb
+      account_id: kioroxxsdoyltyjbmu
+      api_key: fi
+      unit_path: vphi
       noovo_client_id: oldcampus
       tos_type: URL
-      tos_url: 'http://www.eichmann.com/aut-quasi-sunt-cumque-expedita'
-      tos_content: iuqx
-      privacy_policy_type: URL
-      privacy_policy_url: 'http://nienow.com/facilis-earum-dolores-eligendi-inventore-eligendi.html'
-      privacy_policy_content: cdyjxjfuwcigiwopa
+      tos_url: 'http://www.harris.com/ducimus-possimus-illo-officia'
+      tos_content: abb
+      privacy_policy_type: Parent
+      privacy_policy_url: 'http://www.stiedemann.com/eum-minima-ipsum-porro-veritatis-nobis-et-excepturi.html'
+      privacy_policy_content: k
       primary_color: '#515151'
       secondary_color: '#515151'
       tertiary_color: '#515151'
       primary_font_family: 'Open Sans'
       secondary_font_family: 'Open Sans'
+      auto_approve: false
+      activity_title_text: nyrdqkgqfmmcfsriqcqqlbfqf
+      activity_title_placeholder: fzebpoe
+      h5p_embed_option: false
+      h5p_reuse_option: false
     fileParameters: []
     responses:
       -
@@ -1599,7 +2155,65 @@ endpoints:
         custom: []
       -
         status: 201
-        content: "{\r\n    \"suborganization\": {\r\n        \"id\": 1,\r\n        \"name\": \"Curriki Studio\",\r\n        \"description\": \"test\",\r\n        \"account_id\": \"1\",\r\n        \"api_key\": \"test\",\r\n        \"unit_path\": \"path\",\r\n        \"noovo_client_id\": \"1\",\r\n        \"parent\": \"1\",\r\n        \"image\": \"/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg\",\r\n        \"favicon\": \"/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n        \"domain\": \"currikistudio\",\r\n        \"self_registration\": true,\r\n        \"gcr_project_visibility\": true,\r\n        \"gcr_playlist_visibility\": false,\r\n        \"gcr_activity_visibility\": false,\r\n        \"organization_role\": \"Administrator\",\r\n        \"organization_role_id\": 1,\r\n        \"projects_count\": 4,\r\n        \"suborganization_count\": 5,\r\n        \"users_count\": 1,\r\n        \"groups_count\": 0,\r\n        \"teams_count\": 2,\r\n        \"tos_type\": \"URL\",\r\n        \"tos_url\": \"https://curriki.org\",\r\n        \"tos_content\": \"Test content\",\r\n        \"privacy_policy_type\": \"Parent\",\r\n        \"privacy_policy_url\": null,\r\n        \"privacy_policy_content\": null,\r\n        \"branding\": {\r\n            \"primary_color\": \"#515151\",\r\n            \"secondary_color\": \"#515151\",\r\n            \"tertiary_color\": \"#515151\",\r\n            \"primary_font_family\": \"open sans\",\r\n            \"secondary_font_family\": \"open sans\"\r\n        },\r\n        \"allowed_visibility_type_id\": [\r\n            {\r\n                \"id\": 1,\r\n                \"name\": \"private\",\r\n                \"display_name\": \"Private (only Me)\"\r\n            },\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"global\",\r\n                \"display_name\": \"My Org + Parent and Child Org\"\r\n            }\r\n        ],\r\n        \"msteam_client_id\" : null,\r\n        \"msteam_secret_id\" : null,\r\n        \"msteam_tenant_id\" : null,\r\n        \"msteam_secret_id_expiry\": null,\r\n        \"msteam_project_visibility\": true,\r\n        \"msteam_playlist_visibility\": false,\r\n        \"msteam_activity_visibility\": false\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "suborganization": {
+                  "id": 1,
+                  "name": "Curriki Studio",
+                  "description": "test",
+                  "account_id": "1",
+                  "api_key": "test",
+                  "unit_path": "path",
+                  "noovo_client_id": "1",
+                  "parent": "1",
+                  "image": "/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+                  "favicon": "/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+                  "domain": "currikistudio",
+                  "self_registration": true,
+                  "gcr_project_visibility": true,
+                  "gcr_playlist_visibility": false,
+                  "gcr_activity_visibility": false,
+                  "organization_role": "Administrator",
+                  "organization_role_id": 1,
+                  "projects_count": 4,
+                  "suborganization_count": 5,
+                  "users_count": 1,
+                  "groups_count": 0,
+                  "teams_count": 2,
+                  "tos_type": "URL",
+                  "tos_url": "https://curriki.org",
+                  "tos_content": "Test content",
+                  "privacy_policy_type": "Parent",
+                  "privacy_policy_url": null,
+                  "privacy_policy_content": null,
+                  "branding": {
+                      "primary_color": "#515151",
+                      "secondary_color": "#515151",
+                      "tertiary_color": "#515151",
+                      "primary_font_family": "open sans",
+                      "secondary_font_family": "open sans"
+                  },
+                  "allowed_visibility_type_id": [
+                      {
+                          "id": 1,
+                          "name": "private",
+                          "display_name": "Private (only Me)"
+                      },
+                      {
+                          "id": 3,
+                          "name": "global",
+                          "display_name": "My Org + Parent and Child Org"
+                      }
+                  ],
+                  "msteam_client_id" : null,
+                  "msteam_secret_id" : null,
+                  "msteam_tenant_id" : null,
+                  "msteam_secret_id_expiry": null,
+                  "msteam_project_visibility": true,
+                  "msteam_playlist_visibility": false,
+                  "msteam_activity_visibility": false
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1632,7 +2246,7 @@ endpoints:
         name: id
         description: 'The ID of the suborganization.'
         required: true
-        example: 4
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1643,7 +2257,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1653,7 +2267,65 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"suborganization\": {\r\n        \"id\": 1,\r\n        \"name\": \"Curriki Studio\",\r\n        \"description\": \"test\",\r\n        \"account_id\": \"1\",\r\n        \"api_key\": \"test\",\r\n        \"unit_path\": \"path\",\r\n        \"noovo_client_id\": \"1\",\r\n        \"parent\": \"1\",\r\n        \"image\": \"/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg\",\r\n        \"favicon\": \"/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n        \"domain\": \"currikistudio\",\r\n        \"self_registration\": true,\r\n        \"gcr_project_visibility\": true,\r\n        \"gcr_playlist_visibility\": false,\r\n        \"gcr_activity_visibility\": false,\r\n        \"organization_role\": \"Administrator\",\r\n        \"organization_role_id\": 1,\r\n        \"projects_count\": 4,\r\n        \"suborganization_count\": 5,\r\n        \"users_count\": 1,\r\n        \"groups_count\": 0,\r\n        \"teams_count\": 2,\r\n        \"tos_type\": \"URL\",\r\n        \"tos_url\": \"https://curriki.org\",\r\n        \"tos_content\": \"Test content\",\r\n        \"privacy_policy_type\": \"Parent\",\r\n        \"privacy_policy_url\": null,\r\n        \"privacy_policy_content\": null,\r\n        \"branding\": {\r\n            \"primary_color\": \"#515151\",\r\n            \"secondary_color\": \"#515151\",\r\n            \"tertiary_color\": \"#515151\",\r\n            \"primary_font_family\": \"open sans\",\r\n            \"secondary_font_family\": \"open sans\"\r\n        },\r\n        \"allowed_visibility_type_id\": [\r\n            {\r\n                \"id\": 1,\r\n                \"name\": \"private\",\r\n                \"display_name\": \"Private (only Me)\"\r\n            },\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"global\",\r\n                \"display_name\": \"My Org + Parent and Child Org\"\r\n            }\r\n        ],\r\n        \"msteam_client_id\" : null,\r\n        \"msteam_secret_id\" : null,\r\n        \"msteam_tenant_id\" : null,\r\n        \"msteam_secret_id_expiry\": null,\r\n        \"msteam_project_visibility\": true,\r\n        \"msteam_playlist_visibility\": false,\r\n        \"msteam_activity_visibility\": false\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "suborganization": {
+                  "id": 1,
+                  "name": "Curriki Studio",
+                  "description": "test",
+                  "account_id": "1",
+                  "api_key": "test",
+                  "unit_path": "path",
+                  "noovo_client_id": "1",
+                  "parent": "1",
+                  "image": "/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+                  "favicon": "/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+                  "domain": "currikistudio",
+                  "self_registration": true,
+                  "gcr_project_visibility": true,
+                  "gcr_playlist_visibility": false,
+                  "gcr_activity_visibility": false,
+                  "organization_role": "Administrator",
+                  "organization_role_id": 1,
+                  "projects_count": 4,
+                  "suborganization_count": 5,
+                  "users_count": 1,
+                  "groups_count": 0,
+                  "teams_count": 2,
+                  "tos_type": "URL",
+                  "tos_url": "https://curriki.org",
+                  "tos_content": "Test content",
+                  "privacy_policy_type": "Parent",
+                  "privacy_policy_url": null,
+                  "privacy_policy_content": null,
+                  "branding": {
+                      "primary_color": "#515151",
+                      "secondary_color": "#515151",
+                      "tertiary_color": "#515151",
+                      "primary_font_family": "open sans",
+                      "secondary_font_family": "open sans"
+                  },
+                  "allowed_visibility_type_id": [
+                      {
+                          "id": 1,
+                          "name": "private",
+                          "display_name": "Private (only Me)"
+                      },
+                      {
+                          "id": 3,
+                          "name": "global",
+                          "display_name": "My Org + Parent and Child Org"
+                      }
+                  ],
+                  "msteam_client_id" : null,
+                  "msteam_secret_id" : null,
+                  "msteam_tenant_id" : null,
+                  "msteam_secret_id_expiry": null,
+                  "msteam_project_visibility": true,
+                  "msteam_playlist_visibility": false,
+                  "msteam_activity_visibility": false
+              }
+          }
         headers: []
         description: ''
         custom: []
@@ -1686,7 +2358,7 @@ endpoints:
         name: id
         description: 'The ID of the suborganization.'
         required: true
-        example: 15
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1697,7 +2369,7 @@ endpoints:
         type: integer
         custom: []
     cleanUrlParameters:
-      id: 15
+      id: 63
       suborganization: 1
     queryParameters: []
     cleanQueryParameters: []
@@ -1754,7 +2426,7 @@ endpoints:
         name: id
         description: 'The ID of the suborganization.'
         required: true
-        example: 7
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1765,7 +2437,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1807,7 +2479,60 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"suborganization\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Curriki Studio\",\r\n            \"description\": \"test\",\r\n            \"account_id\": \"1\",\r\n            \"api_key\": \"test\",\r\n            \"unit_path\": \"path\",\r\n            \"noovo_client_id\": \"1\",\r\n            \"parent\": \"1\",\r\n            \"image\": \"/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg\",\r\n            \"favicon\": \"/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png\",\r\n            \"domain\": \"currikistudio\",\r\n            \"self_registration\": true,\r\n            \"gcr_project_visibility\": true,\r\n            \"gcr_playlist_visibility\": false,\r\n            \"gcr_activity_visibility\": false,\r\n            \"organization_role\": \"Administrator\",\r\n            \"organization_role_id\": 1,\r\n            \"projects_count\": 4,\r\n            \"suborganization_count\": 5,\r\n            \"users_count\": 1,\r\n            \"groups_count\": 0,\r\n            \"teams_count\": 2,\r\n            \"tos_type\": \"URL\",\r\n            \"tos_url\": \"https://curriki.org\",\r\n            \"tos_content\": \"Test content\",\r\n            \"privacy_policy_type\": \"Parent\",\r\n            \"privacy_policy_url\": null,\r\n            \"privacy_policy_content\": null,\r\n            \"branding\": {\r\n                \"primary_color\": \"#515151\",\r\n                \"secondary_color\": \"#515151\",\r\n                \"tertiary_color\": \"#515151\",\r\n                \"primary_font_family\": \"open sans\",\r\n                \"secondary_font_family\": \"open sans\"\r\n            },\r\n            \"allowed_visibility_type_id\": [\r\n                {\r\n                    \"id\": 1,\r\n                    \"name\": \"private\",\r\n                    \"display_name\": \"Private (only Me)\"\r\n                },\r\n                {\r\n                    \"id\": 3,\r\n                    \"name\": \"global\",\r\n                    \"display_name\": \"My Org + Parent and Child Org\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "suborganization": [
+                  {
+                      "id": 1,
+                      "name": "Curriki Studio",
+                      "description": "test",
+                      "account_id": "1",
+                      "api_key": "test",
+                      "unit_path": "path",
+                      "noovo_client_id": "1",
+                      "parent": "1",
+                      "image": "/storage/organizations/03wNdqJIt0zGUvtBUFxF7VuIF1eCnNGO77g0ykAo.jpeg",
+                      "favicon": "/storage/organizations/favicon/PlPVBtEVfKEU8PBI1eknYgW3kjIf5YdpILBS0Yyr.png",
+                      "domain": "currikistudio",
+                      "self_registration": true,
+                      "gcr_project_visibility": true,
+                      "gcr_playlist_visibility": false,
+                      "gcr_activity_visibility": false,
+                      "organization_role": "Administrator",
+                      "organization_role_id": 1,
+                      "projects_count": 4,
+                      "suborganization_count": 5,
+                      "users_count": 1,
+                      "groups_count": 0,
+                      "teams_count": 2,
+                      "tos_type": "URL",
+                      "tos_url": "https://curriki.org",
+                      "tos_content": "Test content",
+                      "privacy_policy_type": "Parent",
+                      "privacy_policy_url": null,
+                      "privacy_policy_content": null,
+                      "branding": {
+                          "primary_color": "#515151",
+                          "secondary_color": "#515151",
+                          "tertiary_color": "#515151",
+                          "primary_font_family": "open sans",
+                          "secondary_font_family": "open sans"
+                      },
+                      "allowed_visibility_type_id": [
+                          {
+                              "id": 1,
+                              "name": "private",
+                              "display_name": "Private (only Me)"
+                          },
+                          {
+                              "id": 3,
+                              "name": "global",
+                              "display_name": "My Org + Parent and Child Org"
+                          }
+                      ]
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -1840,7 +2565,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 11
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1851,7 +2576,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 11
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1861,7 +2586,37 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"mediaSources\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"My device\",\r\n            \"media_type\": \"Video\",\r\n            \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n            \"updated_at\": null,\r\n            \"deleted_at\": null,\r\n            \"pivot\": {\r\n                \"organization_id\": 1,\r\n                \"media_source_id\": 1,\r\n                \"h5p_library\": \"H5P.AudioRecorder 1.0\"\r\n            }\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"YouTube\",\r\n            \"media_type\": \"Video\",\r\n            \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n            \"updated_at\": null,\r\n            \"deleted_at\": null,\r\n            \"pivot\": {\r\n                \"organization_id\": 1,\r\n                \"media_source_id\": 2,\r\n                \"h5p_library\": \"H5P.CoursePresentation 1.22\"\r\n            }\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "mediaSources": [
+                  {
+                      "id": 1,
+                      "name": "My device",
+                      "media_type": "Video",
+                      "created_at": "2022-05-09T10:18:09.000000Z",
+                      "updated_at": null,
+                      "deleted_at": null,
+                      "pivot": {
+                          "organization_id": 1,
+                          "media_source_id": 1,
+                          "h5p_library": "H5P.AudioRecorder 1.0"
+                      }
+                  },
+                  {
+                      "id": 2,
+                      "name": "YouTube",
+                      "media_type": "Video",
+                      "created_at": "2022-05-09T10:18:09.000000Z",
+                      "updated_at": null,
+                      "deleted_at": null,
+                      "pivot": {
+                          "organization_id": 1,
+                          "media_source_id": 2,
+                          "h5p_library": "H5P.CoursePresentation 1.22"
+                      }
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -1894,7 +2649,7 @@ endpoints:
         name: suborganization_id
         description: 'The ID of the suborganization.'
         required: true
-        example: 5
+        example: 63
         type: integer
         custom: []
       suborganization:
@@ -1905,7 +2660,7 @@ endpoints:
         type: string
         custom: []
     cleanUrlParameters:
-      suborganization_id: 5
+      suborganization_id: 63
       suborganization: '1'
     queryParameters: []
     cleanQueryParameters: []
@@ -1921,7 +2676,7 @@ endpoints:
         name: 'media_source_ids[].media_source_id'
         description: ''
         required: true
-        example: nam
+        example: hic
         type: string
         custom: []
       'media_source_ids[].h5p_library':
@@ -1947,7 +2702,7 @@ endpoints:
         status: 200
         content: |-
           {
-             'message' => 'Media sources has been updated successfully.',
+             'message' => 'Media sources have been updated successfully.',
           }
         headers: []
         description: ''
@@ -1965,7 +2720,38 @@ endpoints:
         custom: []
       -
         status: 200
-        content: "{\r\n    \"message\": \"Media sources has been updated successfully.\",\r\n    \"mediaSources\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"My device\",\r\n            \"media_type\": \"Video\",\r\n            \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n            \"updated_at\": null,\r\n            \"deleted_at\": null,\r\n            \"pivot\": {\r\n                \"organization_id\": 1,\r\n                \"media_source_id\": 1,\r\n                \"h5p_library\": \"H5P.AudioRecorder 1.0\"\r\n            }\r\n        },\r\n        {\r\n            \"id\": 7,\r\n            \"name\": \"My device\",\r\n            \"media_type\": \"Image\",\r\n            \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n            \"updated_at\": null,\r\n            \"deleted_at\": null,\r\n            \"pivot\": {\r\n                \"organization_id\": 1,\r\n                \"media_source_id\": 7,\r\n                \"h5p_library\": \"H5P.CoursePresentation 1.22\"\r\n            }\r\n        }\r\n    ]\r\n}\r\n"
+        content: |
+          {
+              "message": "Media sources has been updated successfully.",
+              "mediaSources": [
+                  {
+                      "id": 1,
+                      "name": "My device",
+                      "media_type": "Video",
+                      "created_at": "2022-05-09T10:18:09.000000Z",
+                      "updated_at": null,
+                      "deleted_at": null,
+                      "pivot": {
+                          "organization_id": 1,
+                          "media_source_id": 1,
+                          "h5p_library": "H5P.AudioRecorder 1.0"
+                      }
+                  },
+                  {
+                      "id": 7,
+                      "name": "My device",
+                      "media_type": "Image",
+                      "created_at": "2022-05-09T10:18:09.000000Z",
+                      "updated_at": null,
+                      "deleted_at": null,
+                      "pivot": {
+                          "organization_id": 1,
+                          "media_source_id": 7,
+                          "h5p_library": "H5P.CoursePresentation 1.22"
+                      }
+                  }
+              ]
+          }
         headers: []
         description: ''
         custom: []
@@ -2003,7 +2789,87 @@ endpoints:
     responses:
       -
         status: 200
-        content: "{\r\n    \"mediaSources\": {\r\n        \"Video\": [\r\n            {\r\n                \"id\": 1,\r\n                \"name\": \"My device\",\r\n                \"media_type\": \"Video\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 2,\r\n                \"name\": \"YouTube\",\r\n                \"media_type\": \"Video\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 3,\r\n                \"name\": \"Kaltura\",\r\n                \"media_type\": \"Video\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 4,\r\n                \"name\": \"Safari Montage\",\r\n                \"media_type\": \"Video\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 5,\r\n                \"name\": \"BrightCove\",\r\n                \"media_type\": \"Video\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 6,\r\n                \"name\": \"Vimeo\",\r\n                \"media_type\": \"Video\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            }\r\n        ],\r\n        \"Image\": [\r\n            {\r\n                \"id\": 7,\r\n                \"name\": \"My device\",\r\n                \"media_type\": \"Image\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 8,\r\n                \"name\": \"Pexels\",\r\n                \"media_type\": \"Image\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            },\r\n            {\r\n                \"id\": 9,\r\n                \"name\": \"Safari Montage\",\r\n                \"media_type\": \"Image\",\r\n                \"created_at\": \"2022-05-09T10:18:09.000000Z\",\r\n                \"updated_at\": null,\r\n                \"deleted_at\": null\r\n            }\r\n        ]\r\n    }\r\n}\r\n"
+        content: |
+          {
+              "mediaSources": {
+                  "Video": [
+                      {
+                          "id": 1,
+                          "name": "My device",
+                          "media_type": "Video",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 2,
+                          "name": "YouTube",
+                          "media_type": "Video",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 3,
+                          "name": "Kaltura",
+                          "media_type": "Video",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 4,
+                          "name": "Safari Montage",
+                          "media_type": "Video",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 5,
+                          "name": "BrightCove",
+                          "media_type": "Video",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 6,
+                          "name": "Vimeo",
+                          "media_type": "Video",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      }
+                  ],
+                  "Image": [
+                      {
+                          "id": 7,
+                          "name": "My device",
+                          "media_type": "Image",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 8,
+                          "name": "Pexels",
+                          "media_type": "Image",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      },
+                      {
+                          "id": 9,
+                          "name": "Safari Montage",
+                          "media_type": "Image",
+                          "created_at": "2022-05-09T10:18:09.000000Z",
+                          "updated_at": null,
+                          "deleted_at": null
+                      }
+                  ]
+              }
+          }
         headers: []
         description: ''
         custom: []
