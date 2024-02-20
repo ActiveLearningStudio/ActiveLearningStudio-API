@@ -41,6 +41,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Google Classroom" => "Edit",
             "Microsoft Teams" => "Edit",
             "C2E Publishers" => "Edit",
+            "C2E Media Catalog API Settings" => "Edit",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -54,7 +55,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Search Existing Activity" => "View",
             "Export xAPI" => "View",
             "Export H5P" => "View",
-            "C2E Publisher" => "View"
+            "C2E Publisher" => "View",
+            "C2E Media Catalog API Setting" => "View"
         ];
 
         $courseCreatorUiPermissions = [
@@ -78,6 +80,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Google Classroom" => "None",
             "Microsoft Teams" => "None",
             "C2E Publishers" => "None",
+            "C2E Media Catalog API Settings" => "None",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -91,7 +94,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Search Existing Activity" => "View",
             "Export xAPI" => "View",
             "Export H5P" => "View",
-            "C2E Publisher" => "View"
+            "C2E Publisher" => "View",
+            "C2E Media Catalog API Setting" => "View"
         ];
 
         $memberUiPermissions = [
@@ -115,6 +119,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Google Classroom" => "None",
             "Microsoft Teams" => "None",
             "C2E Publishers" => "None",
+            "C2E Media Catalog API Settings" => "None",
             "Project" => "View",
             "Playlist" => "View",
             "Activity" => "View",
@@ -128,7 +133,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Search Existing Activity" => "None",
             "Export xAPI" => "None",
             "Export H5P" => "None",
-            "C2E Publisher" => "None"
+            "C2E Publisher" => "None",
+            "C2E Media Catalog API Setting" => "None"
         ];
 
         $selfRegisteredUiPermissions = [
@@ -152,6 +158,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Google Classroom" => "None",
             "Microsoft Teams" => "None",
             "C2E Publishers" => "None",
+            "C2E Media Catalog API Settings" => "None",
             "Project" => "Edit",
             "Playlist" => "Edit",
             "Activity" => "Edit",
@@ -165,7 +172,8 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Search Existing Activity" => "View",
             "Export xAPI" => "View",
             "Export H5P" => "View",
-            "C2E Publisher" => "None"
+            "C2E Publisher" => "None",
+            "C2E Media Catalog API Setting" => "None"
         ];
 
         $roleTypes = OrganizationRoleType::whereIn('name', ['admin', 'course_creator', 'member', 'self_registered'])->get();
