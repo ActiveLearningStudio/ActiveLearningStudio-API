@@ -216,6 +216,18 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'organization:edit-c2e-publisher'
                     ],
                     "None" => []
+                ],
+                "C2E Media Catalog API Settings" => [
+                    "View" => [
+                        'organization:view-c2e-media-catalog-api-setting'
+                    ],
+                    "Edit" => [
+                        'organization:view-c2e-media-catalog-api-setting',
+                        'organization:create-c2e-media-catalog-api-setting',
+                        'organization:delete-c2e-media-catalog-api-setting',
+                        'organization:edit-c2e-media-catalog-api-setting'
+                    ],
+                    "None" => []
                 ]
             ],
             "Users" => [
@@ -406,6 +418,12 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                         'c2e-publisher:view-author',
                         'c2e-publisher:view-stores',
                         'c2e-publisher:publish-independent-activity'
+                    ],
+                    "None" => []
+                ],
+                "C2E Media Catalog API Setting" => [
+                    "View" => [
+                        'c2e-media-catalog-api-setting:view-author'
                     ],
                     "None" => []
                 ]

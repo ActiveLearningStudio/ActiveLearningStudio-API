@@ -256,6 +256,30 @@ class OrganizationAdminPanelPermissionTypeSeeder extends Seeder
         ]);
 
         DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:edit-c2e-media-catalog-api-setting',
+            'display_name' => 'Edit C2E Media Catalog API Setting',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:delete-c2e-media-catalog-api-setting',
+            'display_name' => 'Delete C2E Media Catalog API Setting',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:view-c2e-media-catalog-api-setting',
+            'display_name' => 'View C2E Media Catalog API Setting',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
+            'name' => 'organization:create-c2e-media-catalog-api-setting',
+            'display_name' => 'Create C2E Media Catalog API Setting',
+            'feature' => 'Organization'
+        ]);
+
+        DB::table('organization_permission_types')->insertOrIgnore([
             'name' => 'organization:edit-media',
             'display_name' => 'Edit Organization Media',
             'feature' => 'Organization'

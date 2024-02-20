@@ -1,0 +1,128 @@
+{
+    "data": [
+        {
+            "id": 8,
+            "user_id": 23,
+            "organization_id": 1,
+            "media_source_id": 6,
+            "name": "Brightcove APIs",
+            "api_setting_id": "6282550302001",
+            "email": "mike@curriki.org",
+            "url": "https://4186473.kaf.kaltura.com",
+            "description": "Settings for Kaltura Videos",
+            "client_key": "176ede29-4aed-4844-8f3e-ee6947bfc982",
+            "secret_key": "69fe402f3429ede6dbf4b4f928767bf6",
+            "custom_metadata": "test",
+            "created_at": "2024-02-20T12:40:18.000000Z",
+            "updated_at": "2024-02-20T12:42:07.000000Z",
+            "deleted_at": null,
+            "organization": {
+                "id": 1,
+                "name": "Curriki Studio",
+                "description": "Curriki Studio, default organization.",
+                "domain": "currikistudio",
+                "parent_id": null,
+                "image": null,
+                "created_at": null,
+                "updated_at": null,
+                "deleted_at": null,
+                "self_registration": true,
+                "account_id": null,
+                "api_key": null,
+                "unit_path": null,
+                "noovo_client_id": null,
+                "gcr_project_visibility": true,
+                "gcr_playlist_visibility": false,
+                "gcr_activity_visibility": false,
+                "tos_type": null,
+                "tos_url": null,
+                "tos_content": null,
+                "privacy_policy_type": null,
+                "privacy_policy_url": null,
+                "privacy_policy_content": null,
+                "primary_color": null,
+                "secondary_color": null,
+                "tertiary_color": null,
+                "primary_font_family": null,
+                "secondary_font_family": null,
+                "favicon": null,
+                "msteam_client_id": null,
+                "msteam_secret_id": null,
+                "msteam_tenant_id": null,
+                "msteam_secret_id_expiry": null,
+                "msteam_project_visibility": true,
+                "msteam_playlist_visibility": false,
+                "msteam_activity_visibility": false,
+                "auto_approve": false,
+                "activity_title_text": "Title",
+                "activity_title_placeholder": "Give your layout a name...",
+                "h5p_reuse_option": true,
+                "h5p_embed_option": true
+            },
+            "media_sources": {
+                "id": 6,
+                "name": "Brightcove",
+                "media_type": "Video",
+                "created_at": "2022-05-09T08:18:12.000000Z",
+                "updated_at": null,
+                "deleted_at": null
+            },
+            "user": {
+                "id": 23,
+                "name": "asim",
+                "email": "asim@curriki.org",
+                "email_verified_at": "2021-09-09T12:22:36.000000Z",
+                "created_at": "2021-09-09T12:22:37.000000Z",
+                "updated_at": "2021-09-09T12:23:12.000000Z",
+                "first_name": "Asim",
+                "last_name": "Sarwar",
+                "organization_name": "Curriki",
+                "job_title": "Admin",
+                "address": null,
+                "phone_number": null,
+                "organization_type": "Other",
+                "website": null,
+                "deleted_at": null,
+                "role": "Admin",
+                "hubspot": false,
+                "subscribed": true,
+                "subscribed_ip": "127.0.0.1",
+                "gapi_access_token": null,
+                "membership_type_id": 2,
+                "msteam_access_token": null
+            }
+        }
+    ],
+    "links": {
+        "first": "http://127.0.0.1:8082/api/v1/c2e/media-catalog/suborganizations/1/settings?page=1",
+        "last": "http://127.0.0.1:8082/api/v1/c2e/media-catalog/suborganizations/1/settings?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "links": [
+            {
+                "url": null,
+                "label": "&laquo; Previous",
+                "active": false
+            },
+            {
+                "url": "http://127.0.0.1:8082/api/v1/c2e/media-catalog/suborganizations/1/settings?page=1",
+                "label": "1",
+                "active": true
+            },
+            {
+                "url": null,
+                "label": "Next &raquo;",
+                "active": false
+            }
+        ],
+        "path": "http://127.0.0.1:8082/api/v1/c2e/media-catalog/suborganizations/1/settings",
+        "per_page": 10,
+        "to": 1,
+        "total": 1
+    }
+}

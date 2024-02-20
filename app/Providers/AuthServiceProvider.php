@@ -12,6 +12,8 @@ use App\Models\Playlist;
 use App\Models\Project;
 use App\Models\Organization;
 use App\Models\Team;
+use App\Models\C2E\MediaCatalog\MediaCatalogAPISetting;
+use App\Policies\C2E\MediaCatalog\MediaCatalogAPISettingPolicy;
 use App\Policies\ActivityItemPolicy;
 use App\Policies\ActivityPolicy;
 use App\Policies\IndependentActivityPolicy;
@@ -47,6 +49,7 @@ class AuthServiceProvider extends ServiceProvider
         Team::class => TeamPolicy::class,
         DefaultSsoIntegrationSettings::class => DefaultSsoIntegrationSettingsPolicy::class,
         IndependentActivity::class => IndependentActivityPolicy::class,
+        MediaCatalogAPISetting::class => MediaCatalogAPISettingPolicy::class,
     ];
 
     /**

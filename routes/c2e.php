@@ -23,6 +23,11 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 Route::get('{publisher}/stores', 'PublisherController@getStores');
                 Route::post('{publisher}/independent-activities/{independent_activity}/publish', 'PublisherController@publish');
             });
+
+            // Media Catalog APIs
+            Route::group(['prefix' => 'media-catalog', 'namespace' => 'MediaCatalog'], function () {
+                Route::apiResource('suborganizations/{suborganization}/settings', 'MediaCatalogAPISettingsController');
+            });
         });
     });
 });
