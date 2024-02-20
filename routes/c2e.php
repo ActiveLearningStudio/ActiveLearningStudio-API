@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                 Route::apiResource('suborganizations/{suborganization}/settings', 'PublisherController');
                 Route::get('{publisher}/stores', 'PublisherController@getStores');
                 Route::post('{publisher}/independent-activities/{independent_activity}/publish', 'PublisherController@publish');
+                Route::get('{publisher}/independent-activities/{independent_activity}/publish-media', 'PublisherController@getPublishMedia');
             });
         });
     });

@@ -111,10 +111,20 @@ class PublisherService implements PublisherServiceInterface
      */
 	public function extractMedia(IndependentActivity $independentActivity, $h5pContentsParameters, $mediaArray)
 	{
+		$contentTypes = [
+			'Image',
+			'Video',
+			'Audio',
+			'Interactive Video'
+		];
+
 		foreach ($h5pContentsParameters as $key => $value) {
 			if (is_array($value) || is_object($value)) {
 				// If the current value is an array or object, recursively search within it
-				if ($key === "content" && isset($value['metadata'])) {
+				if (
+					($key === "content" || $key === "action")
+					&& (isset($value['metadata']) && in_array($value['metadata']['contentType'], $contentTypes))
+				) {
 					$mediaArray[] = $this->extractMediaData($independentActivity, $value);
 				} else {
 					$mediaArray = $this->extractMedia($independentActivity, $value, $mediaArray);
@@ -181,30 +191,27 @@ class PublisherService implements PublisherServiceInterface
 		);
 
 		if ($mediaContent['metadata']['contentType'] === 'Image') {
-			$resource = $resourcePath . $mediaContent['params']['file']['path'];
+			$mediaContentPath = $mediaContent['params']['file']['path'];
 			$encodingFormat = $mediaContent['params']['file']['mime'];
 		} 
 		else if ($mediaContent['metadata']['contentType'] === 'Video') {
 			$mediaContentPath = $mediaContent['params']['sources'][0]['path'];
-			if (str_contains($mediaContentPath, 'http')) {
-				$resource = $mediaContentPath;
-			}
-			else {
-				$resource = $resourcePath . $mediaContentPath;
-			}
-
 			$encodingFormat = $mediaContent['params']['sources'][0]['mime'];
 		}
 		else if ($mediaContent['metadata']['contentType'] === 'Audio') {
 			$mediaContentPath = $mediaContent['params']['files'][0]['path'];
-			if (str_contains($mediaContentPath, 'http')) {
-				$resource = $mediaContentPath;
-			}
-			else {
-				$resource = $resourcePath . $mediaContentPath;
-			}
-
 			$encodingFormat = $mediaContent['params']['files'][0]['mime'];
+		}
+		else if ($mediaContent['metadata']['contentType'] === 'Interactive Video') {
+			$mediaContentPath = $mediaContent['params']['interactiveVideo']['video']['files'][0]['path'];
+			$encodingFormat = $mediaContent['params']['interactiveVideo']['video']['files'][0]['mime'];
+		}
+
+		if (str_contains($mediaContentPath, 'http')) {
+			$resource = $mediaContentPath;
+		}
+		else {
+			$resource = $resourcePath . $mediaContentPath;
 		}
 
 		if (isset($mediaContent['metadata']['licenseExtras'])) {
@@ -256,9 +263,17 @@ class PublisherService implements PublisherServiceInterface
 		}
 
 		if (isset($mediaContent['metadata']['authors'][0]['name'])) {
-			$authorData = explode(" ", $mediaContent['metadata']['authors'][0]['name']);
-			$authorName = $authorData[0];
-			$authorEmail = $authorData[1];
+			$authorMetadata = $mediaContent['metadata']['authors'][0]['name'];
+
+			if (str_contains($authorMetadata, '@')) {
+				$authorData = explode(" ", $authorMetadata);
+				$authorName = $authorData[0];
+				$authorEmail = $authorData[count($authorData) - 1];
+			}
+			else {
+				$authorName = $authorMetadata;
+				$authorEmail = '';
+			}
 		}
 
 		$mediaData = [

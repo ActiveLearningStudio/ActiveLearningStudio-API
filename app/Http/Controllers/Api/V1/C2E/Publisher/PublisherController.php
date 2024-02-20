@@ -214,14 +214,14 @@ class PublisherController extends Controller
     /**
      * Publish Independent Activity To Store
      *
-     * Publish the specified activity to selected store of a user.
+     * Publish the specified independent activity to selected store of a user.
      *
      * @urlParam publisher required The Id of a publisher Example: 1
      * @urlParam independent_activity required The Id of a independent_activity Example: 1
      * @bodyParam store_id integer required The Id of store Example: 2
      *
      * @response {
-     *   "message": "Your request to publish independent Activity [title] has been received and is being processed."
+     *   "message": "Independent activity published successfully!"
      * }
      *
      * @param IndependentActivityPublishRequest $request
@@ -236,11 +236,49 @@ class PublisherController extends Controller
         $requestData = $request->validated();
 
         // pushed cloning of activity in background
-        PublishIndependentActivityToStore::dispatch(auth()->user(), $publisher, $independent_activity, $requestData['store_id'])->delay(now()->addSecond());
+        // PublishIndependentActivityToStore::dispatch(auth()->user(), $publisher, $independent_activity, $requestData['store_id'])->delay(now()->addSecond());
+
+        $message = 'Failed to publish independent activity!';
+
+        try {
+            $response = $this->publisherRepository
+                                ->publishIndependentActivity(
+                                    auth()->user(),
+                                    $publisher,
+                                    $independent_activity,
+                                    $requestData['store_id']
+                                );
+
+            if ($response['message'] === 'success') {
+                $message = 'Independent activity published successfully!';
+            }
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+        }
 
         return response([
-            'message' =>  "Your request to publish independent Activity [$independent_activity->title] has been received and is being processed. <br>
-                            You will be alerted in the notification section in the title bar when complete.",
+            'message' =>  $message,
         ], 200);
+    }
+
+    /**
+     * Get independent activity publish media
+     *
+     * Display a listing of the media to be published for the specified independent activity
+     *
+     * @urlParam publisher required The Id of a publisher Example: 1
+     * @urlParam independent_activity required The Id of a independent_activity Example: 1
+     *
+     * @responseFile responses/c2e/publisher/publish-media.json
+     *
+     * @param Publisher $publisher
+     * @param IndependentActivity $independent_activity
+     * @return Response
+     */
+    public function getPublishMedia(Publisher $publisher, IndependentActivity $independent_activity)
+    {
+        $this->authorize('publishIndependentActivity', $publisher);
+
+        return $this->publisherRepository->getPublishMedia($independent_activity);
     }
 }

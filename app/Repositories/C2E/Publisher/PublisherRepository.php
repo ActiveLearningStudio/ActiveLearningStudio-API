@@ -180,4 +180,15 @@ class PublisherRepository extends BaseRepository implements PublisherRepositoryI
     {
         return $this->publisherService->getStores($publisher);
     }
+
+    /**
+     * Get independent activity publish media
+     *
+     * @param IndependentActivity $independentActivity
+     * @throws GeneralException
+     */
+    public function getPublishMedia(IndependentActivity $independentActivity)
+    {
+        return $this->publisherService->extractMedia($independentActivity, json_decode($independentActivity->h5p_content->parameters, true), []);
+    }
 }

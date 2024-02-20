@@ -1,0 +1,277 @@
+[
+    {
+        "identifier": "7095dcb8-0dac-47c1-9af4-0d9834e2b13f",
+        "identifierType": "UUID",
+        "name": "Chronicles of the Scientific Revolution",
+        "description": "",
+        "resource": "https://youtu.be/Q5TqmzHlZAs",
+        "encodingFormat": "video/YouTube",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "15c9ea2a-6ab1-48bf-a7f9-e4e72c26b22a",
+        "identifierType": "UUID",
+        "name": "SR C/E 1",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/audios/files-654fce7001598.mp3",
+        "encodingFormat": "audio/mpeg",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "5885a486-c3a7-476a-974b-7bcd87cb2ec5",
+        "identifierType": "UUID",
+        "name": "Calculus meme",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/images/file-65ae07bab4161.png",
+        "encodingFormat": "image/png",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Attribution-ShareAlike (CC BY-SA)",
+            "licenseVersion": "4.0 International",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "Copernicus Himself",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "40f2f124-0956-4ec5-b129-2a041d9b6e11",
+        "identifierType": "UUID",
+        "name": "Printing press",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/images/file-65ae088f6c387.png",
+        "encodingFormat": "image/png",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Attribution (CC BY)",
+            "licenseVersion": "4.0 International",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "Fahad",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "0b87381f-7c46-4aa3-8306-aea8718cdf5c",
+        "identifierType": "UUID",
+        "name": "SR C/E 2",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/audios/files-654fce8bac5a7.mp3",
+        "encodingFormat": "audio/mpeg",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "ce64dd8b-2a2e-42de-855c-5ac81d62378a",
+        "identifierType": "UUID",
+        "name": "Francis Bacon",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/images/file-65ae09589a3fa.png",
+        "encodingFormat": "image/png",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Public Domain Mark (PDM)",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "Mike Francis(2)",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "2a44fc1b-01e2-43b0-8086-022ba99f3c91",
+        "identifierType": "UUID",
+        "name": "SR C/E 3",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/audios/files-654fceb0de0f5.mp3",
+        "encodingFormat": "audio/mpeg",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "096b4cc9-e058-47cb-bcdb-117f51d88268",
+        "identifierType": "UUID",
+        "name": "Heliocentric Model",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/images/file-65ae0a6a11751.png",
+        "encodingFormat": "image/png",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "5df9a3a6-b2aa-473b-8410-c9ec0b097aa7",
+        "identifierType": "UUID",
+        "name": "Copernicus meme",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/images/file-65ae0ad0c01cf.png",
+        "encodingFormat": "image/png",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "a9447ff0-bc3f-4f5a-b35f-ac6fc63ed0ae",
+        "identifierType": "UUID",
+        "name": "2.1 Wr-up",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/audios/files-654fe137927d8.mp3",
+        "encodingFormat": "audio/mpeg",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    },
+    {
+        "identifier": "0f3f6ebc-fcc5-4042-8f8a-874ddadaec06",
+        "identifierType": "UUID",
+        "name": "Telescope",
+        "description": "",
+        "resource": "http://localhost:8082/api/storage/h5p/content/84133/images/file-65ae0c543dcee.png",
+        "encodingFormat": "image/png",
+        "royalty": {
+            "type": "",
+            "terms": "",
+            "amount": 0,
+            "currency": "",
+            "copyrightNotice": "",
+            "license": "",
+            "licenseUrl": "",
+            "licenseType": "Undisclosed",
+            "licenseVersion": "",
+            "yearFrom": "",
+            "yearTo": ""
+        },
+        "owner": {
+            "name": "",
+            "email": ""
+        }
+    }
+]
