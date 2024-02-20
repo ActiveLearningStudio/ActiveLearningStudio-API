@@ -91,4 +91,12 @@ interface PublisherRepositoryInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function getStores(Publisher $publisher);
+
+    /**
+     * Get independent activity publish media
+     *
+     * @param IndependentActivity $independentActivity
+     * @throws GeneralException
+     */
+    public function getPublishMedia(IndependentActivity $independentActivity);
 }

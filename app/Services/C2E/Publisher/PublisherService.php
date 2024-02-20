@@ -111,10 +111,20 @@ class PublisherService implements PublisherServiceInterface
      */
 	public function extractMedia(IndependentActivity $independentActivity, $h5pContentsParameters, $mediaArray)
 	{
+		$contentTypes = [
+			'Image',
+			'Video',
+			'Audio',
+			'Interactive Video'
+		];
+
 		foreach ($h5pContentsParameters as $key => $value) {
 			if (is_array($value) || is_object($value)) {
 				// If the current value is an array or object, recursively search within it
-				if ($key === "content" && isset($value['metadata'])) {
+				if (
+					($key === "content" || $key === "action")
+					&& (isset($value['metadata']) && in_array($value['metadata']['contentType'], $contentTypes))
+				) {
 					$mediaArray[] = $this->extractMediaData($independentActivity, $value);
 				} else {
 					$mediaArray = $this->extractMedia($independentActivity, $value, $mediaArray);
@@ -137,41 +147,160 @@ class PublisherService implements PublisherServiceInterface
 	public function extractMediaData(IndependentActivity $independentActivity, $mediaContent)
 	{
 		$mediaData = [];
+		$identifier = '';
+		$encodingFormat = '';
+		$licenseExtras = '';
+		$resource = '';
+		$resourcePath = config('app.url') . '/storage/h5p/content/' . $independentActivity->h5p_content_id . '/';
+		$royaltyType = '';
+		$royaltyTermsViews = '';
+		$amount = 0;
+		$currency = '';
+		$copyrightNotice = '';
+		$creditText = '';
+		$authorName = '';
+		$authorEmail = '';
+		$licenseUrl = '';
+		$licenseType = '';
+		$licenseVersion = '';
+		$yearFrom = '';
+		$yearTo = '';
+
+		$licenceArray = array(
+			"U" => "Undisclosed",
+			"CC BY" => "Attribution (CC BY)",
+			"CC BY-SA" => "Attribution-ShareAlike (CC BY-SA)",
+			"CC BY-ND" => "Attribution-NoDerivs (CC BY-ND)",
+			"CC BY-NC" => "Attribution-NonCommercial (CC BY-NC)",
+			"CC BY-NC-SA" => "Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)",
+			"CC BY-NC-ND" => "Attribution-NonCommercial-NoDerivs (CC BY-NC-ND)",
+			"CC0 1.0" => "Public Domain Dedication (CC0)",
+			"CC PDM" => "Public Domain Mark (PDM)",
+			"GNU GPL" => "General Public License v3",
+			"PD" => "Public Domain",
+			"ODC PDDL" => "Public Domain Dedication and Licence",
+			"C" => "Copyright"
+		);
+
+		$licenceVersions = array(
+			"4.0" => "4.0 International",
+			"3.0" => "3.0 Unported",
+			"2.5" => "2.5 Generic",
+			"2.0" => "2.0 Generic",
+			"1.0" => "1.0 Generic"
+		);
 
 		if ($mediaContent['metadata']['contentType'] === 'Image') {
-			$mediaData = [
-				"identifier" => config('app.url') . '/storage/h5p/content/' . $independentActivity->h5p_content_id . '/' . $mediaContent['params']['file']['path'],
-				"identifierType" => "URL",
-				"name" => $mediaContent['metadata']['title'],
-				"description" => $mediaContent['metadata']['licenseExtras'],
-				"encodingFormat" => $mediaContent['params']['file']['mime'],
-				"royalty" => [
-					"type" => "usage",
-					"terms" => "10.00",
-					"amount" => "usage",
-					"currency" => "usage",
-					"copyrightNotice" => "usage",
-					"creditText" => "usage"
-				]
-			];
+			$mediaContentPath = $mediaContent['params']['file']['path'];
+			$encodingFormat = $mediaContent['params']['file']['mime'];
 		} 
 		else if ($mediaContent['metadata']['contentType'] === 'Video') {
-			$mediaData = [
-				"identifier" => $mediaContent['params']['sources']['path'],
-				"identifierType" => "URL",
-				"name" => $mediaContent['metadata']['title'],
-				"description" => $mediaContent['metadata']['licenseExtras'],
-				"encodingFormat" => $mediaContent['params']['sources']['mime'],
-				"royalty" => [
-					"type" => "usage",
-					"terms" => "10.00",
-					"amount" => "usage",
-					"currency" => "usage",
-					"copyrightNotice" => "usage",
-					"creditText" => "usage"
-				]
-			];
+			$mediaContentPath = $mediaContent['params']['sources'][0]['path'];
+			$encodingFormat = $mediaContent['params']['sources'][0]['mime'];
 		}
+		else if ($mediaContent['metadata']['contentType'] === 'Audio') {
+			$mediaContentPath = $mediaContent['params']['files'][0]['path'];
+			$encodingFormat = $mediaContent['params']['files'][0]['mime'];
+		}
+		else if ($mediaContent['metadata']['contentType'] === 'Interactive Video') {
+			$mediaContentPath = $mediaContent['params']['interactiveVideo']['video']['files'][0]['path'];
+			$encodingFormat = $mediaContent['params']['interactiveVideo']['video']['files'][0]['mime'];
+		}
+
+		if (str_contains($mediaContentPath, 'http')) {
+			$resource = $mediaContentPath;
+		}
+		else {
+			$resource = $resourcePath . $mediaContentPath;
+		}
+
+		if (isset($mediaContent['metadata']['licenseExtras'])) {
+			$licenseExtras = $mediaContent['metadata']['licenseExtras'];
+		}
+
+		if (isset($mediaContent['metadata']['royaltyType'])) {
+			$royaltyType = $mediaContent['metadata']['royaltyType'];
+		}
+
+		if (isset($mediaContent['metadata']['royaltyTermsViews'])) {
+			$royaltyTermsViews = $mediaContent['metadata']['royaltyTermsViews'];
+		}
+
+		if (isset($mediaContent['metadata']['amount'])) {
+			$amount = $mediaContent['metadata']['amount'];
+		}
+
+		if (isset($mediaContent['metadata']['currency'])) {
+			$currency = $mediaContent['metadata']['currency'];
+		}
+
+		if (isset($mediaContent['metadata']['copyrightNotice'])) {
+			$copyrightNotice = $mediaContent['metadata']['copyrightNotice'];
+		}
+
+		if (isset($mediaContent['metadata']['creditText'])) {
+			$creditText = $mediaContent['metadata']['creditText'];
+		}
+
+		if (isset($mediaContent['metadata']['source'])) {
+			$licenseUrl = $mediaContent['metadata']['source'];
+		}
+
+		if (isset($mediaContent['metadata']['license'])) {
+			$licenseType = $licenceArray[$mediaContent['metadata']['license']];
+		}
+
+		if (isset($mediaContent['metadata']['licenseVersion'])) {
+			$licenseVersion = $licenceVersions[$mediaContent['metadata']['licenseVersion']];
+		}
+
+		if (isset($mediaContent['metadata']['yearFrom'])) {
+			$yearFrom = $mediaContent['metadata']['yearFrom'];
+		}
+
+		if (isset($mediaContent['metadata']['yearTo'])) {
+			$yearTo = $mediaContent['metadata']['yearTo'];
+		}
+
+		if (isset($mediaContent['metadata']['authors'][0]['name'])) {
+			$authorMetadata = $mediaContent['metadata']['authors'][0]['name'];
+
+			if (str_contains($authorMetadata, '@')) {
+				$authorData = explode(" ", $authorMetadata);
+				$authorName = $authorData[0];
+				$authorEmail = $authorData[count($authorData) - 1];
+			}
+			else {
+				$authorName = $authorMetadata;
+				$authorEmail = '';
+			}
+		}
+
+		$mediaData = [
+			"identifier" => $mediaContent['subContentId'],
+			"identifierType" => "UUID",
+			"name" => $mediaContent['metadata']['title'],
+			"description" => $licenseExtras,
+			"resource" => $resource,
+			"encodingFormat" => $encodingFormat,
+			"royalty" => [
+				"type" => $royaltyType,
+				"terms" => $royaltyTermsViews,
+				"amount" => $amount,
+				"currency" => $currency,
+				"copyrightNotice" => $copyrightNotice,
+				"license" => $creditText,
+				"licenseUrl" => $licenseUrl,
+				"licenseType" => $licenseType,
+				"licenseVersion" => $licenseVersion,
+				"yearFrom" => $yearFrom,
+				"yearTo" => $yearTo
+			],
+			"owner" => [
+				"name" => $authorName,
+				"email" => $authorEmail
+			]
+		];
 
 		return $mediaData;
 	}
