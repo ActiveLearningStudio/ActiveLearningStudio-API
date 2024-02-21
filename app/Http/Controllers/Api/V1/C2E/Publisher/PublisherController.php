@@ -249,7 +249,7 @@ class PublisherController extends Controller
                                     $requestData['store_id']
                                 );
 
-            if ($response['message'] === 'success') {
+            if (isset($response['message']) && $response['message'] === 'success') {
                 $message = 'Independent activity published successfully!';
             }
         } catch (\Exception $e) {

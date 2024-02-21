@@ -73,6 +73,7 @@ class PublisherService implements PublisherServiceInterface
 		$educationLevels = [];
 		$keywords = [];
 		$url = config('app.front_end_url') . '/activity/' . $independentActivity->id . '/shared?type=ind';
+		$activityThumb = (strpos($independentActivity->thumb_url, '://') === false ? config('app.url') . $independentActivity->thumb_url : $independentActivity->thumb_url);
 
 		foreach ($independentActivity->subjects as $subject) {
 			$subjects[] = $subject->name;
@@ -94,7 +95,7 @@ class PublisherService implements PublisherServiceInterface
 			"educationLevel" => $educationLevels,
 			"keywords" => $keywords,
 			"url" => $url,
-			"thumbnailUrl" => config('app.url') . $independentActivity->thumb_url,
+			"thumbnailUrl" => $activityThumb,
 			"media" => $this->extractMedia($independentActivity, json_decode($independentActivity->h5p_content->parameters, true), [])
 		];
 
