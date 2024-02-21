@@ -1778,12 +1778,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ActiveLearningStudio/h5p-core.git",
-                "reference": "6913f25ddbb67ad903f979e88dd402e5eea65c3d"
+                "reference": "84316ef3b607e5a3c8587296f7f07aa07061f65a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ActiveLearningStudio/h5p-core/zipball/6913f25ddbb67ad903f979e88dd402e5eea65c3d",
-                "reference": "6913f25ddbb67ad903f979e88dd402e5eea65c3d",
+                "url": "https://api.github.com/repos/ActiveLearningStudio/h5p-core/zipball/84316ef3b607e5a3c8587296f7f07aa07061f65a",
+                "reference": "84316ef3b607e5a3c8587296f7f07aa07061f65a",
                 "shasum": ""
             },
             "require": {
@@ -1830,7 +1830,7 @@
                 "source": "https://github.com/ActiveLearningStudio/h5p-core/tree/cee-ref",
                 "issues": "https://github.com/ActiveLearningStudio/h5p-core/issues"
             },
-            "time": "2024-02-14T22:53:53+00:00"
+            "time": "2024-02-21T20:14:30+00:00"
         },
         {
             "name": "h5p/h5p-editor",
