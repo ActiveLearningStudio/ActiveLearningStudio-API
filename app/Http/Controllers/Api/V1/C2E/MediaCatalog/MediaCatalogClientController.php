@@ -30,7 +30,7 @@ class MediaCatalogClientController extends Controller
     /**
      * MediaCatalogClientController constructor.
      * @param MediaCatalogAPISettingInterface $mediaCatalogAPISettingRepository
-     * @param mediaSourcesInterface $mediaSourcesRepository
+     * @param MediaSourcesInterface $mediaSourcesRepository
      */
     public function __construct(MediaCatalogAPISettingInterface $mediaCatalogAPISettingRepository, MediaSourcesInterface $mediaSourcesRepository)
     {
@@ -48,7 +48,7 @@ class MediaCatalogClientController extends Controller
      * @bodyParam query_param string optional Valid brightcove query param Example: query=name=file&limit=0&offset=0
      * 
      * @param BrightcoveAPIRequest $request
-     * 
+     * @param Organization $suborganization
      * @return json
      * 
      * @throws GeneralException
@@ -60,7 +60,7 @@ class MediaCatalogClientController extends Controller
         $validated = $request->validated();
         $setting = $this->getAPISettings('brightcove', $suborganization->id);
       
-        if ( $setting ) {
+        if ($setting) {
             $queryParam = isset($validated['query_param']) ? '?' . $validated['query_param'] : '';
 
             // Implement Command Design Pattern to access Brightcove API
@@ -82,7 +82,7 @@ class MediaCatalogClientController extends Controller
      * @bodyParam video_ids string comma seperated ids required Valid brightcove video ids Example: 6346785961112,6343680181112
      * 
      * @param BrightcoveAPIVideoByIdsRequest $request
-     * 
+     * @param Organization $suborganization
      * @return json
      * 
      * @throws GeneralException
@@ -94,7 +94,7 @@ class MediaCatalogClientController extends Controller
         $validated = $request->validated();
         $setting = $this->getAPISettings('brightcove', $suborganization->id);
       
-        if ( $setting ) {
+        if ($setting) {
             // Implement Command Design Pattern to access Brightcove API
             $bcAPIClient = new Client($setting, $this->type);
             $bcInstance = new GetVideoListByIds($bcAPIClient);
@@ -114,7 +114,7 @@ class MediaCatalogClientController extends Controller
      * @bodyParam query_param string optional Valid brightcove query param Example: query=q=name:test&limit=0&offset=0
      * 
      * @param BrightcoveAPIRequest $request
-     * 
+     * @param Organization $suborganization
      * @return json
      * 
      * @throws GeneralException
@@ -126,7 +126,7 @@ class MediaCatalogClientController extends Controller
         $validated = $request->validated();
         $setting = $this->getAPISettings('brightcove', $suborganization->id);
 
-        if ( $setting ) {
+        if ($setting) {
             $queryParam = isset($validated['query_param']) ? '?' . $validated['query_param'] : '';
         
             // Implement Command Design Pattern to access Brightcove API
@@ -149,7 +149,7 @@ class MediaCatalogClientController extends Controller
      * @bodyParam query_param string optional Valid brightcove query param Example: query=limit=0&offset=0
      * 
      * @param BrightcoveAPIPlaylistVideosRequest $request
-     * 
+     * @param Organization $suborganization
      * @return json
      * 
      * @throws GeneralException
@@ -161,7 +161,7 @@ class MediaCatalogClientController extends Controller
         $validated = $request->validated();
         $setting = $this->getAPISettings('brightcove', $suborganization->id);
 
-        if ( $setting ) {
+        if ($setting) {
             $playlistId = $validated['palylist_id'];
             $queryParam = isset($validated['query_param']) ? '?' . $validated['query_param'] : '';
 
