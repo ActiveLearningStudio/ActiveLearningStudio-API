@@ -20,7 +20,7 @@ class MediaCatalogAPISettingPolicy
      */
     public function viewAny(User $user, Organization $organization)
     {
-        if ($user->hasPermissionTo('c2e-media-catalog-api-setting:view-author', $organization)) {
+        if ($user->hasPermissionTo('c2e-media-catalog:view-author', $organization)) {
             return true;
         }
 

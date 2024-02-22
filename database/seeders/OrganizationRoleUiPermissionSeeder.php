@@ -56,7 +56,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Export xAPI" => "View",
             "Export H5P" => "View",
             "C2E Publisher" => "View",
-            "C2E Media Catalog API Setting" => "View"
+            "C2E Media Catalog" => "View"
         ];
 
         $courseCreatorUiPermissions = [
@@ -95,7 +95,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Export xAPI" => "View",
             "Export H5P" => "View",
             "C2E Publisher" => "View",
-            "C2E Media Catalog API Setting" => "View"
+            "C2E Media Catalog" => "View"
         ];
 
         $memberUiPermissions = [
@@ -134,7 +134,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Export xAPI" => "None",
             "Export H5P" => "None",
             "C2E Publisher" => "None",
-            "C2E Media Catalog API Setting" => "None"
+            "C2E Media Catalog" => "None"
         ];
 
         $selfRegisteredUiPermissions = [
@@ -173,7 +173,7 @@ class OrganizationRoleUiPermissionSeeder extends Seeder
             "Export xAPI" => "View",
             "Export H5P" => "View",
             "C2E Publisher" => "None",
-            "C2E Media Catalog API Setting" => "None"
+            "C2E Media Catalog" => "None"
         ];
 
         $roleTypes = OrganizationRoleType::whereIn('name', ['admin', 'course_creator', 'member', 'self_registered'])->get();

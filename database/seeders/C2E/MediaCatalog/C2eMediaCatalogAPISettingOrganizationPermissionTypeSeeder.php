@@ -15,9 +15,9 @@ class C2eMediaCatalogAPISettingOrganizationPermissionTypeSeeder extends Seeder
     public function run()
     {
         DB::table('organization_permission_types')->insertOrIgnore([
-            'name' => 'c2e-media-catalog-api-setting:view-author',
-            'display_name' => 'Author View Of C2E Media Catalog API Settings',
-            'feature' => 'C2E Media Catalog API Setting'
+            'name' => 'c2e-media-catalog:view-author',
+            'display_name' => 'Author View Of C2E Media Catalog',
+            'feature' => 'C2E Media Catalog'
         ]);
     }
 }

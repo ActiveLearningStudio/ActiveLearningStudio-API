@@ -29,12 +29,13 @@ class GetVideoListByIds
 
     /**
      * Fetch a video list by ids from Brightcove
-     * @param object $setting, string $videoIds
+     * @param object $setting, string $videoIds, string $type
      * @return array
      * @throws GeneralException
      */
-    public function fetch($setting, $videoIds = '')
+    public function fetch($setting, $videoIds = '', $type = '')
     {
+        $setting->account_id = ( $type === 'media_catalog' ) ? $setting->api_setting_id : $setting->account_id;
         $getToken = $this->bcAPIClient->run(new GetAPITokenCommand($setting));
         if ( isset($getToken['Authorization']) ) {            
             $response = $this->bcAPIClient->run(new GetVideoListByIdsCommand($setting, $getToken, $videoIds));
