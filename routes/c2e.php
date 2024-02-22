@@ -28,6 +28,16 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
             // Media Catalog APIs
             Route::group(['prefix' => 'media-catalog', 'namespace' => 'MediaCatalog'], function () {
                 Route::apiResource('suborganizations/{suborganization}/settings', 'MediaCatalogAPISettingsController');
+                // Brightcove Video Integration
+                Route::group(['prefix' => 'brightcove'], function () {                    
+                    Route::post('suborganizations/{suborganization}/videos', 'MediaCatalogClientController@getBrightcoveVideos');
+
+                    Route::post('suborganizations/{suborganization}/video-by-ids', 'MediaCatalogClientController@getBrightcoveVideoByIds');
+
+                    Route::post('suborganizations/{suborganization}/playlists', 'MediaCatalogClientController@getBrightcovePlaylists');
+                    
+                    Route::post('suborganizations/{suborganization}/playlist-videos', 'MediaCatalogClientController@getBrightcovePlaylistVideos');
+                });
             });
         });
     });

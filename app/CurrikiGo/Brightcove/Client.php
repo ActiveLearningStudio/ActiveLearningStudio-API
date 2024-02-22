@@ -15,15 +15,22 @@ class Client
      * Brightcove API Setting object 
      */
     private $setting;
+
+    /**
+     * Brightcove API Type string 
+     */
+    private $type;
     
     /**
      * Create a new Client instance.
      * @param  object $setting
+     * @param  string $type
      * @return void
      */
-    public function __construct($setting)
+    public function __construct($setting, $type = '')
     {
         $this->setting = $setting;
+        $this->type = $type;
     }
 
     /**
@@ -33,8 +40,8 @@ class Client
      */
     public function run(Command $command)
     {
-        $command->clientId = $this->setting->client_id;
-        $command->clientSecret = $this->setting->client_secret;
+        $command->clientId = ( $this->type === 'media_catalog' ) ? $this->setting->client_key : $this->setting->client_id;
+        $command->clientSecret = ( $this->type === 'media_catalog' ) ? $this->setting->secret_key : $this->setting->client_secret;
         return $command->execute();
     }
 }

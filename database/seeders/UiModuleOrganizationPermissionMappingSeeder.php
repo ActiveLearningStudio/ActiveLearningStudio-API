@@ -421,9 +421,9 @@ class UiModuleOrganizationPermissionMappingSeeder extends Seeder
                     ],
                     "None" => []
                 ],
-                "C2E Media Catalog API Setting" => [
+                "C2E Media Catalog" => [
                     "View" => [
-                        'c2e-media-catalog-api-setting:view-author'
+                        'c2e-media-catalog:view-author'
                     ],
                     "None" => []
                 ]

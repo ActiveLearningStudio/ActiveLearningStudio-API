@@ -30,12 +30,13 @@ class GetPlaylistVideos
 
     /**
      * Fetch a Playlists list from Brightcove
-     * @param object $setting, string $queryParam
+     * @param object $setting, string $queryParam, string $type
      * @return array
      * @throws GeneralException
      */
-    public function fetch($setting, $playlistId, $queryParam = '')
+    public function fetch($setting, $playlistId, $queryParam = '', $type = '')
     {
+        $setting->account_id = ( $type === 'media_catalog' ) ? $setting->api_setting_id : $setting->account_id;
         $getToken = $this->bcAPIClient->run(new GetAPITokenCommand($setting));
         if ( isset($getToken['Authorization']) ) {
             $getCountResponse = $this->bcAPIClient->run(new GetPlaylistVideosCountCommand($setting, $getToken, $playlistId, $queryParam));
