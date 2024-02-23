@@ -125,7 +125,7 @@ class PublisherService implements PublisherServiceInterface
 			if (is_array($value) || is_object($value)) {
 				// If the current value is an array or object, recursively search within it
 				if (
-					($key === "content" || $key === "action")
+					($key === "content" || $key === "action" || $key === "type")
 					&& (isset($value['metadata']) && in_array($value['metadata']['contentType'], $contentTypes))
 				) {
 					$mediaArray[] = $this->extractMediaData($independentActivity, $value);
