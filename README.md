@@ -21,4 +21,4 @@ https://github.com/ActiveLearningStudio/curriki-eks
 
 The API end points are documented here:
 <a href="https://my.currikistudio.org/api/docs/" target="new">https://my.currikistudio.org/api/docs/</a> 
-__
+
