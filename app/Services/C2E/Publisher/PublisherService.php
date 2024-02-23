@@ -117,7 +117,8 @@ class PublisherService implements PublisherServiceInterface
 			'Image',
 			'Video',
 			'Audio',
-			'Interactive Video'
+			'Interactive Video',
+			'CEE-Epub'
 		];
 
 		foreach ($h5pContentsParameters as $key => $value) {
@@ -192,7 +193,7 @@ class PublisherService implements PublisherServiceInterface
 			"1.0" => "1.0 Generic"
 		);
 
-		if ($mediaContent['metadata']['contentType'] === 'Image') {
+		if (in_array($mediaContent['metadata']['contentType'], ['Image', 'CEE-Epub'])) {
 			$mediaContentPath = $mediaContent['params']['file']['path'];
 			$encodingFormat = $mediaContent['params']['file']['mime'];
 		} 
