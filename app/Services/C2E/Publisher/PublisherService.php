@@ -118,7 +118,13 @@ class PublisherService implements PublisherServiceInterface
 			'Video',
 			'Audio',
 			'Interactive Video',
-			'CEE-Epub'
+			'CEE-Epub',
+			'Brightcove Interactive Video'
+		];
+
+		$contentTypesWithNestedMedia = [
+			'Interactive Video',
+			'Brightcove Interactive Video'
 		];
 
 		foreach ($h5pContentsParameters as $key => $value) {
@@ -129,6 +135,9 @@ class PublisherService implements PublisherServiceInterface
 					&& (isset($value['metadata']) && in_array($value['metadata']['contentType'], $contentTypes))
 				) {
 					$mediaArray[] = $this->extractMediaData($independentActivity, $value);
+					if (in_array($value['metadata']['contentType'], $contentTypesWithNestedMedia)) {
+						$mediaArray = $this->extractMedia($independentActivity, $value, $mediaArray);
+					}
 				} else {
 					$mediaArray = $this->extractMedia($independentActivity, $value, $mediaArray);
 				}
@@ -210,11 +219,13 @@ class PublisherService implements PublisherServiceInterface
 			$encodingFormat = $mediaContent['params']['interactiveVideo']['video']['files'][0]['mime'];
 		}
 
-		if (str_contains($mediaContentPath, 'http')) {
-			$resource = $mediaContentPath;
-		}
-		else {
-			$resource = $resourcePath . $mediaContentPath;
+		if (isset($mediaContentPath)) {
+			if (str_contains($mediaContentPath, 'http')) {
+				$resource = $mediaContentPath;
+			}
+			else {
+				$resource = $resourcePath . $mediaContentPath;
+			}
 		}
 
 		if (isset($mediaContent['metadata']['licenseExtras'])) {
