@@ -371,4 +371,31 @@ class PublisherService implements PublisherServiceInterface
             return response()->json(['error' => 'Failed to get stores from the publisher.'], $response->status());
         }
 	}
+
+	/**
+     * Get publisher stores
+     *
+     * @param Publisher $publisher
+	 * @param String $token
+	 * @param String $ceeId
+     *
+     * @return bool
+     */
+	public function verifyC2EToken(Publisher $publisher, $token, $ceeId)
+	{
+		$params = [
+			"token" => $token,
+			"ceeId" => $ceeId
+		];
+        $response = Http::withHeaders([
+			'x-api-key' => $publisher->key,
+		])->get($publisher->url . '/api/v1/stream/token/verify', $params);
+		$responseData = $response->json();
+
+        if ($response->successful()) {
+            return true;
+        } else {
+			return false;
+        }
+	}
 }
