@@ -20,10 +20,12 @@ use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\Playlist;
 use App\Models\Activity;
+use App\Models\C2E\Publisher;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
 use App\Services\CurrikiGo\LMSIntegrationServiceInterface;
+use App\Services\C2E\Publisher\PublisherServiceInterface;
 use Djoudi\LaravelH5p\Events\H5pEvent;
 use Djoudi\LaravelH5p\Exceptions\H5PException;
 use Illuminate\Http\Request;
@@ -66,13 +68,15 @@ class IndependentActivityController extends Controller
         IndependentActivityRepositoryInterface $independentActivityRepository,
         H5pContentRepositoryInterface $h5pContentRepository,
         ActivityItemRepositoryInterface $activityItemRepository,
-        LMSIntegrationServiceInterface $lms
+        LMSIntegrationServiceInterface $lms,
+        PublisherServiceInterface $publisherService
     )
     {
         $this->independentActivityRepository = $independentActivityRepository;
         $this->h5pContentRepository = $h5pContentRepository;
         $this->activityItemRepository = $activityItemRepository;
         $this->lms = $lms;
+        $this->publisherService = $publisherService;
     }
 
     /**
@@ -804,10 +808,19 @@ class IndependentActivityController extends Controller
      * @param IndependentActivity $independent_activity
      * @return Response
      */
-    public function getH5pResourceSettingsShared(IndependentActivity $independent_activity)
+    public function getH5pResourceSettingsShared(Request $req, IndependentActivity $independent_activity)
     {
+        $token = $req->input('token');
+        $ceeId = $req->input('ceeid');
+        $authorizeC2E = false;
+        if (!empty($token) && !empty($ceeId)) {
+            $publisher = Publisher::where('organization_id', $independent_activity->organization_id)->first();
+            if($publisher) {
+                $authorizeC2E = $this->publisherService->verifyC2EToken($publisher, $token, $ceeId);
+            }
+        }
         // 3 is for indexing approved - see IndependentActivity Model @indexing property
-        if ($independent_activity->shared) {
+        if ($independent_activity->shared || $authorizeC2E) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();

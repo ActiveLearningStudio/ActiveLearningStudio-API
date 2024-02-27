@@ -87,4 +87,15 @@ interface PublisherServiceInterface
      * @return mixed
      */
 	public function getStores(Publisher $publisher);
+     
+	/**
+     * Get publisher stores
+     *
+     * @param Publisher $publisher
+     * @param String $token
+     * @param String $ceeId
+     *
+     * @return mixed
+     */
+     public function verifyC2EToken(Publisher $publisher, $token, $ceeId);
 }
