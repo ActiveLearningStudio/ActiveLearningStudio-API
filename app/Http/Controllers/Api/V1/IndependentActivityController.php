@@ -20,7 +20,7 @@ use App\Models\IndependentActivity;
 use App\Models\ActivityItem;
 use App\Models\Playlist;
 use App\Models\Activity;
-use App\Models\C2E\Publisher;
+use App\Models\C2E\Publisher\Publisher;
 use App\Repositories\IndependentActivity\IndependentActivityRepositoryInterface;
 use App\Repositories\ActivityItem\ActivityItemRepositoryInterface;
 use App\Repositories\H5pContent\H5pContentRepositoryInterface;
