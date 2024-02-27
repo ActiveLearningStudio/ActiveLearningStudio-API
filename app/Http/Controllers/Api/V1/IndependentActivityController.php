@@ -817,6 +817,15 @@ class IndependentActivityController extends Controller
             $publisher = Publisher::where('organization_id', $independent_activity->organization_id)->first();
             if($publisher) {
                 $authorizeC2E = $this->publisherService->verifyC2EToken($publisher, $token, $ceeId);
+                if (!$authorizeC2E) {
+                    return response([
+                        'errors' => ['C2E session authorization failed']
+                    ], 400);
+                }
+            } else {
+                return response([
+                    'errors' => ['No publisher found for selected C2E']
+                ], 400);
             }
         }
         // 3 is for indexing approved - see IndependentActivity Model @indexing property
