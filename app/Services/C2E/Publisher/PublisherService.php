@@ -395,7 +395,7 @@ class PublisherService implements PublisherServiceInterface
         if ($response->successful()) {
             return true;
         } else {
-			return false;
+			return $responseData;
         }
 	}
 }

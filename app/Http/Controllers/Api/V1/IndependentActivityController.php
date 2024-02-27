@@ -817,9 +817,9 @@ class IndependentActivityController extends Controller
             $publisher = Publisher::where('organization_id', $independent_activity->organization_id)->first();
             if($publisher) {
                 $authorizeC2E = $this->publisherService->verifyC2EToken($publisher, $token, $ceeId);
-                if (!$authorizeC2E) {
+                if ($authorizeC2E !== true) {
                     return response([
-                        'errors' => ['C2E session authorization failed']
+                        'errors' => ['C2E session authorization failed', $authorizeC2E]
                     ], 400);
                 }
             } else {
@@ -829,7 +829,7 @@ class IndependentActivityController extends Controller
             }
         }
         // 3 is for indexing approved - see IndependentActivity Model @indexing property
-        if ($independent_activity->shared || $authorizeC2E) {
+        if ($independent_activity->shared || $authorizeC2E === true) {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $settings = $h5p::get_editor();
