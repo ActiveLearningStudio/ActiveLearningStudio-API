@@ -38,6 +38,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                     
                     Route::post('suborganizations/{suborganization}/playlist-videos', 'MediaCatalogClientController@getBrightcovePlaylistVideos');
                 });
+
+                // Video SRT Content
+                Route::group(['prefix' => 'srt-content'], function () {
+                    Route::post('api-settings/{apisetting}/create', 'MediaCatalogAPISettingsController@storeVideoSrtContent');
+                });
+
             });
         });
     });

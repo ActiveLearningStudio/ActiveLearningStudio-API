@@ -6,6 +6,8 @@ use App\Exceptions\GeneralException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\C2E\MediaCatalog\StoreMediaCatalogAPISettingRequest;
 use App\Http\Requests\V1\C2E\MediaCatalog\UpdateMediaCatalogAPISettingRequest;
+use App\Http\Requests\V1\C2E\MediaCatalog\SrtContent\StoreMediaCatalogSrtContentRequest;
+use App\Http\Requests\V1\C2E\MediaCatalog\SrtContent\UpdateMediaCatalogSrtContentRequest;
 use App\Http\Resources\V1\C2E\MediaCatalog\MediaCatalogAPISettingCollection;
 use App\Http\Resources\V1\C2E\MediaCatalog\MediaCatalogAPISettingResource;
 use App\Models\C2E\MediaCatalog\MediaCatalogAPISetting;
@@ -187,5 +189,38 @@ class MediaCatalogAPISettingsController extends Controller
         $this->authorize('delete', $setting);
         
         return response(['message' => $this->mediaCatalogAPISettingRepository->destroy($setting)], 200);
+    }
+
+    /**
+     * Create Media Catalog Video SRT Content
+     * 
+     * Creates the media catalog video srt content in database
+     * 
+     * @urlParam apisetting required The Id of a media_catalog_api_settings Example: 1
+     * @bodyParam video_id string required Example: 6343680181112
+     * @bodyParam content text required video srt content Example: contain start, end time and text
+     *
+     * @responseFile 200 responses/c2e/media-catalog/srt-content/srt-content-create.json
+     * 
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to create media catalog srt content, please try again later!"
+     *   ]
+     * }
+     *
+     * @param StoreMediaCatalogSrtContentRequest $request
+     * @param MediaCatalogAPISetting $apisetting
+     * @return MediaCatalogAPISettingResource
+     */
+    public function storeVideoSrtContent(StoreMediaCatalogSrtContentRequest $request, MediaCatalogAPISetting $apisetting)
+    {
+        
+        $this->authorize('create', [MediaCatalogAPISetting::class, $apisetting->organization]);
+        
+        $validated = $request->validated();
+        $validated['media_catalog_api_setting_id'] = $apisetting->id;
+        $validated['content'] = $request->file('content')->get();
+        $response = $this->mediaCatalogAPISettingRepository->createMediaCatalogSrtContent($validated);
+        return response(['message' => $response['message'], 'data' => new MediaCatalogAPISettingResource($response['data']->load('apiSetting'))], 200);        
     }
 }

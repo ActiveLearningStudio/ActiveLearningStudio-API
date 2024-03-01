@@ -70,4 +70,26 @@ interface MediaCatalogAPISettingInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function getRowRecordByOrgAndSourceType($orgId, $mediaSourcesId);
+
+    /**
+     * Create media catalog video srt content
+     *
+     * @param array $data
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function createMediaCatalogSrtContent($data);
+
+    /**
+     * Get media catalog srt search based record
+     *
+     * @param int apiSettingId, string $srtSearch
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function getMediaCatalogSrtSearchRecord($apiSettingId, $srtSearch);
 }

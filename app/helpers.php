@@ -352,3 +352,31 @@ if (!function_exists('cloneIndependentActivityThumbnail')) {
         return $newImageUrl;
     }
 }
+
+if (!function_exists('formatVideoSrtContentTime')) {
+    /**
+     * Parse the .srt time format (hh:mm:ss,mmm)
+     *
+     * @param string $duration
+     * @return string
+     */
+    function formatVideoSrtContentTime($srtTime)
+    {
+        // Parse the .srt time format (hh:mm:ss,mmm)
+        list($hours, $minutes, $secondsMilliseconds) = explode(':', $srtTime);
+        list($seconds, $milliseconds) = explode(',', $secondsMilliseconds);
+
+        // Calculate the total number of seconds
+        $totalSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
+
+        // Format the total seconds into a human-readable format (hh:mm:ss)
+        $readableTime = gmdate('H:i:s', $totalSeconds);
+
+        // Append milliseconds if needed
+        if ($milliseconds !== null) {
+            $readableTime .= '.' . $milliseconds;
+        }
+
+        return $readableTime;
+    }
+}
