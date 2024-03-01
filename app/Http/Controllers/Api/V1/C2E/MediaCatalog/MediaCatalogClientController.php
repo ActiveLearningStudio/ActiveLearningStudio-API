@@ -15,6 +15,7 @@ use App\CurrikiGo\Brightcove\Videos\GetVideoList;
 use App\CurrikiGo\Brightcove\Playlists\GetPlaylist;
 use App\CurrikiGo\Brightcove\Playlists\GetPlaylistVideos;
 use App\CurrikiGo\Brightcove\Videos\GetVideoListByIds;
+use App\CurrikiGo\Brightcove\Videos\GetSrtVideoById;
 use App\Exceptions\GeneralException;
 use App\Http\Requests\V1\C2E\MediaCatalog\BrightcoveAPI\BrightcoveAPIRequest;
 use App\Http\Requests\V1\C2E\MediaCatalog\BrightcoveAPI\BrightcoveAPIVideoByIdsRequest;
@@ -59,8 +60,44 @@ class MediaCatalogClientController extends Controller
         
         $validated = $request->validated();
         $setting = $this->getAPISettings('brightcove', $suborganization->id);
-      
+        $srtSearch = $request->input('srt_search');
+
         if ($setting) {
+
+            if (isset($srtSearch) && $srtSearch != '') {                
+                $matchingSubtitles = [];
+                $matchingBcVideosList = [];
+                $getSearchRecord = $this->mediaCatalogAPISettingRepository->getMediaCatalogSrtSearchRecord($setting->id, $srtSearch);
+                if ($getSearchRecord->count() > 0) {
+                    foreach ($getSearchRecord as $result) {
+                        $content = $result->content;
+                        // Extract start and end times when text matches
+                        preg_match_all('/(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})\n' . $srtSearch . '/s', $content, $matches, PREG_SET_ORDER);    
+                        foreach ($matches as $match) {
+                            $matchingSubtitles[$result->video_id][] = [
+                                'vido_id' => $result->video_id,
+                                'start_time' => formatVideoSrtContentTime($match[1]),
+                                'end_time' => formatVideoSrtContentTime($match[2]),
+                                'text' => $srtSearch,
+                            ];
+                        }
+                        if (array_key_exists($result->video_id, $matchingSubtitles)) {
+                            $srtContent = '';                        
+                            foreach($matchingSubtitles[$result->video_id] as $res) {
+                                $srtContent .= $res['text'] . ' - ' . $res['start_time'] . ",";
+                            }
+                            // Implement Command Design Pattern to access Brightcove API
+                            $bcAPIClient = new Client($setting, $this->type);
+                            $bcInstance = new GetSrtVideoById($bcAPIClient);
+                            $matchingBcVideosList['data'][] = $bcInstance->fetch($setting, $result->video_id, $this->type, $srtContent);
+                        }                    
+                    }
+                    return response()->json($matchingBcVideosList);
+                } else {
+                    throw new GeneralException('No Record Found!');
+                }
+            }
+
             $queryParam = isset($validated['query_param']) ? '?' . $validated['query_param'] : '';
 
             // Implement Command Design Pattern to access Brightcove API

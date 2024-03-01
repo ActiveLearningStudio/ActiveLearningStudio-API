@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\User;
 use App\Models\MediaSource;
+use App\Models\C2E\MediaCatalog\MediaCatalogSrtContent;
 
 class MediaCatalogAPISetting extends Model
 {
@@ -60,5 +61,15 @@ class MediaCatalogAPISetting extends Model
     public function mediaSources()
     {
         return $this->belongsTo(MediaSource::class, 'media_source_id', 'id');
+    }
+
+    /** 
+    * @author        Asim Sarwar
+    * Detail         Define belongs to relationship with media catalog srt contents table,
+    * @return        Relationship
+    */
+    public function srtContent()
+    {
+        return $this->hasMany(MediaCatalogSrtContent::class, 'media_catalog_api_setting_id');
     }
 }

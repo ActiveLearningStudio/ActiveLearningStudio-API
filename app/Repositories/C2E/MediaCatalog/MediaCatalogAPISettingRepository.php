@@ -4,6 +4,7 @@ namespace App\Repositories\C2E\MediaCatalog;
 
 use App\Exceptions\GeneralException;
 use App\Models\C2E\MediaCatalog\MediaCatalogAPISetting;
+use App\Models\C2E\MediaCatalog\MediaCatalogSrtContent;
 use App\Repositories\C2E\MediaCatalog\MediaCatalogAPISettingInterface;
 use App\Models\Organization;
 use App\Repositories\BaseRepository;
@@ -15,14 +16,20 @@ use Illuminate\Support\Facades\Log;
  */
 class MediaCatalogAPISettingRepository extends BaseRepository implements MediaCatalogAPISettingInterface
 {
+    /**
+     * Media Catalog Srt Content model object 
+     */
+    private $mediaCatalogSrtContentModel;
 
     /**
      * MediaCatalogAPISettingRepository constructor
      * @param MediaCatalogAPISetting $model
+     * @param MediaCatalogSrtContent $mediaCatalogSrtContentModel
      */
-    public function __construct(MediaCatalogAPISetting $model)
+    public function __construct(MediaCatalogAPISetting $model, MediaCatalogSrtContent $mediaCatalogSrtContentModel)
     {
         parent::__construct($model);
+        $this->mediaCatalogSrtContentModel = $mediaCatalogSrtContentModel;
     }
 
     /**
@@ -158,5 +165,49 @@ class MediaCatalogAPISettingRepository extends BaseRepository implements MediaCa
         } catch (\Exception $e) {
             Log::error($e->getMessage());
         }
+    }
+
+    /**
+     * Create media catalog video srt content
+     *
+     * @param array $data
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function createMediaCatalogSrtContent($data)
+    {
+        try {
+            if ($createSetting = $this->mediaCatalogSrtContentModel->create($data)) {
+                return ['message' => 'Media catalog video srt content created successfully!', 'data' => $createSetting];
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to create media catalog video srt content, please try again later!');
+    }
+
+    /**
+     * Get media catalog srt search based record
+     *
+     * @param int apiSettingId, string $srtSearch
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function getMediaCatalogSrtSearchRecord($apiSettingId, $srtSearch)
+    {
+        try {
+            $results = $this->mediaCatalogSrtContentModel::
+                            whereRaw("to_tsvector('english', content) @@ plainto_tsquery('english', ?)", [$srtSearch])
+                            ->where('media_catalog_api_setting_id', $apiSettingId)
+                            ->get();
+            return $results;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to find media catalog srt conent search record!');
     }
 }
