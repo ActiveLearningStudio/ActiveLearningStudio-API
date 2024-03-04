@@ -119,12 +119,12 @@ class PublisherService implements PublisherServiceInterface
 			'Audio',
 			'Interactive Video',
 			'CEE-Epub',
-			'Brightcove Interactive Video'
+			'Media Catalog'
 		];
 
 		$contentTypesWithNestedMedia = [
 			'Interactive Video',
-			'Brightcove Interactive Video'
+			'Media Catalog'
 		];
 
 		foreach ($h5pContentsParameters as $key => $value) {
