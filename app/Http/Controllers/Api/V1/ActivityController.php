@@ -423,7 +423,7 @@ class ActivityController extends Controller
             $data['user_id'] = $activity->playlist->project->id;
         }
 
-        if ($activity->type === 'h5p') {
+        if ($activity->type === 'h5p' || $activity->type === 'h5p_standalone') {
             $h5p = App::make('LaravelH5p');
             $core = $h5p::$core;
             $editor = $h5p::$h5peditor;
