@@ -205,7 +205,6 @@ class MediaCatalogAPISettingsController extends Controller
      *
      * @param Request $request
      * @param MediaCatalogAPISetting $apisetting
-     * 
      * @return MediaCatalogAPISettingCollection
      */
     public function getAllVideoSrtContent(Request $request, MediaCatalogAPISetting $apisetting)
@@ -237,7 +236,7 @@ class MediaCatalogAPISettingsController extends Controller
      * @param MediaCatalogAPISetting $apisetting
      * @return MediaCatalogAPISettingResource
      */
-    public function storeVideoSrtContent(StoreMediaCatalogSrtContentRequest $request, MediaCatalogAPISetting $apisetting, MediaCatalogSrtContent $id)
+    public function storeVideoSrtContent(StoreMediaCatalogSrtContentRequest $request, MediaCatalogAPISetting $apisetting)
     {
         
         $this->authorize('create', [MediaCatalogAPISetting::class, $apisetting->organization]);
