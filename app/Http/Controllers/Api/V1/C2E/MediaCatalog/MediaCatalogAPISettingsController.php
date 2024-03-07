@@ -11,6 +11,7 @@ use App\Http\Requests\V1\C2E\MediaCatalog\SrtContent\UpdateMediaCatalogSrtConten
 use App\Http\Resources\V1\C2E\MediaCatalog\MediaCatalogAPISettingCollection;
 use App\Http\Resources\V1\C2E\MediaCatalog\MediaCatalogAPISettingResource;
 use App\Models\C2E\MediaCatalog\MediaCatalogAPISetting;
+use App\Models\C2E\MediaCatalog\MediaCatalogSrtContent;
 use App\Models\Organization;
 use App\Repositories\C2E\MediaCatalog\MediaCatalogAPISettingInterface;
 use Illuminate\Contracts\Foundation\Application;
@@ -192,6 +193,29 @@ class MediaCatalogAPISettingsController extends Controller
     }
 
     /**
+     * Get All Media Catalog SRT Content for listing.
+     *
+     * Returns the paginated response with pagination links (DataTables are fully supported - All Params).
+     *
+     * @urlParam apisetting required The Id of a media_catalog_api_settings Example: 1
+     * @queryParam start Offset for getting the paginated response, Default 0. Example: 0
+     * @queryParam length Limit for getting the paginated records, Default 25. Example: 25
+     *
+     * @responseFile 200 responses/c2e/media-catalog/srt-content/srt-contents.json
+     *
+     * @param Request $request
+     * @param MediaCatalogAPISetting $apisetting
+     * @return MediaCatalogAPISettingCollection
+     */
+    public function getAllVideoSrtContent(Request $request, MediaCatalogAPISetting $apisetting)
+    {
+        $this->authorize('viewAny', [MediaCatalogAPISetting::class, $apisetting->organization]);
+
+        $collections = $this->mediaCatalogAPISettingRepository->getAllVideoSrtContent($request->all(), $apisetting);
+        return new MediaCatalogAPISettingCollection($collections);
+    }
+
+    /**
      * Create Media Catalog Video SRT Content
      * 
      * Creates the media catalog video srt content in database
@@ -222,5 +246,90 @@ class MediaCatalogAPISettingsController extends Controller
         $validated['content'] = $request->file('content')->get();
         $response = $this->mediaCatalogAPISettingRepository->createMediaCatalogSrtContent($validated);
         return response(['message' => $response['message'], 'data' => new MediaCatalogAPISettingResource($response['data']->load('apiSetting'))], 200);        
+    }
+
+    /**
+     * Update Media Catalog Video SRT Content
+     * 
+     * Update the media catalog video srt content in database
+     * 
+     * @urlParam apisetting required The Id of a media_catalog_api_settings Example: 1
+     * @urlParam setting required The Id of a media_catalog_srt_contents Example: 1
+     * @bodyParam video_id string required Example: 6343680181112
+     * @bodyParam content text required video srt content Example: contain start, end time and text
+     *
+     * @responseFile 200 responses/c2e/media-catalog/srt-content/srt-content-update.json
+     * 
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to update media catalog srt content, please try again later!"
+     *   ]
+     * }
+     *
+     * @param UpdateMediaCatalogSrtContentRequest $request
+     * @param MediaCatalogAPISetting $apisetting
+     * @param MediaCatalogSrtContent $setting
+     * @return MediaCatalogAPISettingResource
+     */
+    public function updateVideoSrtContent(UpdateMediaCatalogSrtContentRequest $request, MediaCatalogAPISetting $apisetting, MediaCatalogSrtContent $setting)
+    {
+        
+        $this->authorize('update', $apisetting);
+        
+        $validated = $request->validated();
+        $validated['media_catalog_api_setting_id'] = $apisetting->id;
+        $validated['content'] = $request->file('content')->get();
+        $response = $this->mediaCatalogAPISettingRepository->updateMediaCatalogSrtContent($setting, $validated);
+        return response(['message' => $response['message'], 'data' => new MediaCatalogAPISettingResource($response['data']->load('apiSetting'))], 200);        
+    }
+
+    /**
+     * Get Media Catalog SRT Content
+     *
+     * Get the specified media catalog srt content from database
+     *
+     * @urlParam apisetting required The Id of a media_catalog_api_settings Example: 1
+     * @urlParam setting required The Id of a media_catalog_srt_contents Example: 1
+     *
+     * @responseFile 200 responses/c2e/media-catalog/srt-content/srt-content.json
+     *
+     * @param MediaCatalogAPISetting $apisetting
+     * @param MediaCatalogSrtContent $setting
+     * @return MediaCatalogAPISettingResource
+     */
+    public function showVideoSrtContent(MediaCatalogAPISetting $apisetting, MediaCatalogSrtContent $setting)
+    {
+        $this->authorize('view', $apisetting);
+
+        return new MediaCatalogAPISettingResource($setting->load('apiSetting'));
+    }
+
+    /**
+     * Delete Media Catalog SRT Content
+     *
+     * Deletes the media catalog srt content from database.
+     *
+     * @urlParam apisetting required The Id of a media_catalog_api_settings Example: 1
+     * @urlParam setting required The Id of a media_catalog_srt_contents Example: 1
+     *
+     * @response {
+     *   "message": "Media catalog srt content deleted!",
+     * }
+     *
+     * @response 500 {
+     *   "errors": [
+     *     "Unable to delete media catalog srt content, please try again later!"
+     *   ]
+     * }
+     *
+     * @param MediaCatalogAPISetting $apisetting
+     * @param MediaCatalogSrtContent $setting
+     * @return Application|Factory|View
+     */
+    public function destroyVideoSrtContent(MediaCatalogAPISetting $apisetting, MediaCatalogSrtContent $setting)
+    {
+        $this->authorize('delete', $apisetting);
+        
+        return response(['message' => $this->mediaCatalogAPISettingRepository->destroyVideoSrtContent($setting)], 200);
     }
 }

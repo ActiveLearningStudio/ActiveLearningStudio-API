@@ -72,6 +72,16 @@ interface MediaCatalogAPISettingInterface extends EloquentRepositoryInterface
     public function getRowRecordByOrgAndSourceType($orgId, $mediaSourcesId);
 
     /**
+     * Get all media catalog srt contents
+     *
+     * @param array $data
+     * @param MediaCatalogAPISetting $apisetting
+     * 
+     * @return mixed
+     */
+    public function getAllVideoSrtContent($data, $apisetting);
+
+    /**
      * Create media catalog video srt content
      *
      * @param array $data
@@ -81,6 +91,29 @@ interface MediaCatalogAPISettingInterface extends EloquentRepositoryInterface
      * @throws GeneralException
      */
     public function createMediaCatalogSrtContent($data);
+
+    /**
+     * Update media catalog srt content
+     *
+     * @param MediaCatalogSrtContent $setting
+     * @param array $data
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function updateMediaCatalogSrtContent($setting, $data);
+
+    /**
+     * Delete media catalog srt content
+     *
+     * @param MediaCatalogSrtContent $setting
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function destroyVideoSrtContent($setting);
 
     /**
      * Get media catalog srt search based record

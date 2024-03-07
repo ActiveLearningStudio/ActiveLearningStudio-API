@@ -168,6 +168,42 @@ class MediaCatalogAPISettingRepository extends BaseRepository implements MediaCa
     }
 
     /**
+     * Get all media catalog srt contents
+     *
+     * @param array $data
+     * @param MediaCatalogAPISetting $apisetting
+     * 
+     * @return mixed
+     */
+    public function getAllVideoSrtContent($data, $apisetting)
+    {
+       $perPage = isset($data['size']) ? $data['size'] : config('constants.default-pagination-per-page');
+        $query = $this->mediaCatalogSrtContentModel->with(['apiSetting']);
+        if (isset($data['query']) && $data['query'] !== '') {
+            $query->where(function ($query) use ($data) {
+                $query->orWhere('video_id', 'iLIKE', '%' . $data['query'] . '%');                
+                $query->orWhere('content', 'iLIKE', '%' . $data['query'] . '%');
+            });
+        }
+        if (isset($data['order_by_column']) && $data['order_by_column'] !== '')
+        {
+            $orderByType = isset($data['order_by_type']) ? $data['order_by_type'] : 'ASC';
+            $query->orderBy($data['order_by_column'], $orderByType);
+        } else {
+            $query->orderBy('id', 'DESC');
+        }
+
+        if (isset($data['filter']) && $data['filter'] > 0) {
+            $query = $query->whereHas('apiSetting', function ($qry) use ($data) {
+                $qry->where('id', $data['filter']);
+            });
+        }
+        return $query->with(['apiSetting'])
+                     ->where('media_catalog_api_setting_id', $apisetting->id)
+                     ->paginate($perPage)->withQueryString(); 
+    }
+
+    /**
      * Create media catalog video srt content
      *
      * @param array $data
@@ -186,6 +222,48 @@ class MediaCatalogAPISettingRepository extends BaseRepository implements MediaCa
             Log::error($e->getMessage());
         }
         throw new GeneralException('Unable to create media catalog video srt content, please try again later!');
+    }
+
+    /**
+     * Update media catalog srt content
+     *
+     * @param MediaCatalogSrtContent $setting
+     * @param array $data
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function updateMediaCatalogSrtContent($setting, $data)
+    {
+        try {            
+            if ($setting->update($data)) {                
+                return ['message' => 'Media catalog srt content updated successfully!', 'data' => $this->mediaCatalogSrtContentModel->find($setting->id)];
+            }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to update media catalog srt content, please try again later!');
+    }
+
+    /**
+     * Delete media catalog srt content
+     *
+     * @param MediaCatalogSrtContent $setting
+     * 
+     * @return mixed
+     * 
+     * @throws GeneralException
+     */
+    public function destroyVideoSrtContent($setting)
+    {
+        try {
+            $setting->delete();
+            return ['message' => 'Media catalog srt content deleted!', 'data' => []];
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+        throw new GeneralException('Unable to delete media catalog srt content, please try again later!');
     }
 
     /**

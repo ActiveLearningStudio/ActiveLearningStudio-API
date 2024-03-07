@@ -30,7 +30,6 @@ class StoreMediaCatalogSrtContentRequest extends FormRequest
     {
         return [
             'video_id' => 'required|unique:media_catalog_srt_contents,video_id',
-
             'content' => 'required'
         ];
     }
