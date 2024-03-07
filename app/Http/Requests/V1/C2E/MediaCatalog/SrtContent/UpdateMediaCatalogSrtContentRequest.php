@@ -28,11 +28,10 @@ class UpdateMediaCatalogSrtContentRequest extends FormRequest
      */
     public function rules()
     {
-        $srtContent = $this->route('id');
+        $srtContent = $this->route('setting');        
         $id = $srtContent->id;
         return [
             'video_id' => 'required|unique:media_catalog_srt_contents,video_id, ' . $id . ' ,id,deleted_at,NULL',
-            
             'content' => 'required'
         ];
     }

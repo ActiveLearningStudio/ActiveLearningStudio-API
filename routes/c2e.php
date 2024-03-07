@@ -39,9 +39,13 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api\V1'], function () {
                     Route::post('suborganizations/{suborganization}/playlist-videos', 'MediaCatalogClientController@getBrightcovePlaylistVideos');
                 });
 
-                // Video SRT Content
+                // Video SRT Content CRUD Routes
                 Route::group(['prefix' => 'srt-content'], function () {
+                    Route::get('api-settings/{apisetting}/settings', 'MediaCatalogAPISettingsController@getAllVideoSrtContent');
                     Route::post('api-settings/{apisetting}/create', 'MediaCatalogAPISettingsController@storeVideoSrtContent');
+                    Route::post('api-settings/{apisetting}/setting/{setting}/update', 'MediaCatalogAPISettingsController@updateVideoSrtContent');                    
+                    Route::get('api-settings/{apisetting}/setting/{setting}', 'MediaCatalogAPISettingsController@showVideoSrtContent');
+                    Route::delete('api-settings/{apisetting}/setting/{setting}', 'MediaCatalogAPISettingsController@destroyVideoSrtContent');
                 });
 
             });
