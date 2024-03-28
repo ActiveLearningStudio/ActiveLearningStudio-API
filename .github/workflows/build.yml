@@ -24,6 +24,9 @@ env:
   CRON_IMAGE: studio-cron:${{ github.sha }}
   AWS_ACCOUNT_ID: ${{vars.AWS_ACCOUNT_ID}}
   DEV_SSH_HOST: ${{secrets.DEV_SSH_HOST}}
+  H5P_DEV_BRANCH: develop
+  H5P_STAGE_BRANCH: staging
+  H5P_PROD_BRANCH: master
 
 
 jobs:
@@ -48,9 +51,16 @@ jobs:
           -t $CONTAINER_IMAGE \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE -f Dockerfile.8.1 ./
 
-        docker build \
+        if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+          docker build \
           -t $CRON_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE -f Dockerfile.cron.8.1 ./
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE -f Dockerfile.cron.8.1 --build-arg H5PBRANCH=$H5P_DEV_BRANCH ./
+        elif [ ${{ github.ref }} = 'refs/heads/master' ]; then
+          echo "In Master"
+        else
+          echo "No specific config."
+        fi
+        
 
     - name: Push Image
       run: |
