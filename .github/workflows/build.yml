@@ -90,7 +90,7 @@ jobs:
         chmod 600 ssh_key.pem
         
         if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
-          ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${DEV_SSH_HOST} "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username $ECR_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com && cd /curriki && docker service update currikistack_currikiprod-api && docker service update currikistack_currikiprod-cron && docker service update currikistack_currikiprod-queue && docker service update currikistack_currikiprod-migrate"
+          ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${DEV_SSH_HOST} "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username $ECR_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com && cd /curriki && docker service update currikistack_currikiprod-api --with-registry-auth && docker service update currikistack_currikiprod-cron --with-registry-auth && docker service update currikistack_currikiprod-queue --with-registry-auth && docker service update currikistack_currikiprod-migrate --with-registry-auth"
         elif [ ${{ github.ref }} = 'refs/heads/master' ]; then
           echo "In Master"
         else
