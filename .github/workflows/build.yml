@@ -20,8 +20,11 @@ env:
   AWS_ACCESS_KEY_ID: ${{ vars.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   ECR_USERNAME: ${{vars.ECR_USERNAME}}
-  CONTAINER_IMAGE: studio-api:${{ github.sha }}
-  CRON_IMAGE: studio-cron:${{ github.sha }}
+  CONTAINER_IMAGE_DEVELOP: studio-api:develop
+  CONTAINER_IMAGE_STAGE: studio-api:stage
+  CONTAINER_IMAGE_STUDIO: studio-api:studio
+  CONTAINER_IMAGE_PROD: studio-api:prod
+  CRON_IMAGE_DEVELOP: studio-cron:develop
   AWS_ACCOUNT_ID: ${{vars.AWS_ACCOUNT_ID}}
   DEV_SSH_HOST: ${{secrets.DEV_SSH_HOST}}
   H5P_DEV_BRANCH: develop
@@ -48,11 +51,13 @@ jobs:
       run: |
         # Build and tag the image
 
-        docker build \
-          -t $CONTAINER_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE -f Dockerfile.8.1 ./
+        
 
         if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+          docker build \
+          -t $CONTAINER_IMAGE_DEVELOP \
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE_DEVELOP -f Dockerfile.8.1 ./
+
           docker build \
           -t $CRON_IMAGE \
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE -f Dockerfile.cron.8.1 --build-arg H5PBRANCH=$H5P_DEV_BRANCH ./
@@ -66,19 +71,28 @@ jobs:
     - name: Push Image
       run: |
         # Push image to AWS ECR
-        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
-        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE
+        
+        
+
+        if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE_DEVELOP
+          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE_DEVELOP
+        elif [ ${{ github.ref }} = 'refs/heads/master' ]; then
+          echo "In Master"
+        else
+          echo "No specific config."
+        fi
 
     - name: Deploy
       run: |
         # Deploy to Instance
-        
-        export DOCKER_CRON_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE
+        export DOCKER_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE_DEVELOP
+        export DOCKER_CRON_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE_DEVELOP
         echo "$SSH_PRIVATE_KEY" | base64 -d > ssh_key.pem
         chmod 600 ssh_key.pem
         
         if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
-          ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${DEV_SSH_HOST} "export DOCKER_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE && cd /curriki && docker service update --image $DOCKER_IMAGE_NAME currikistack_currikiprod-api"
+          ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${DEV_SSH_HOST} "aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username $ECR_USERNAME --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com && cd /curriki && docker service update currikistack_currikiprod-api"
         elif [ ${{ github.ref }} = 'refs/heads/master' ]; then
           echo "In Master"
         else
