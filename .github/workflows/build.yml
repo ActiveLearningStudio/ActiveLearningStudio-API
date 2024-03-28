@@ -59,8 +59,8 @@ jobs:
           -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE_DEVELOP -f Dockerfile.8.1 ./
 
           docker build \
-          -t $CRON_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE -f Dockerfile.cron.8.1 --build-arg H5PBRANCH=$H5P_DEV_BRANCH ./
+          -t $CRON_IMAGE_DEVELOP \
+          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE_DEVELOP -f Dockerfile.cron.8.1 --build-arg H5PBRANCH=$H5P_DEV_BRANCH ./
         elif [ ${{ github.ref }} = 'refs/heads/master' ]; then
           echo "In Master"
         else
