@@ -27,6 +27,7 @@ env:
   H5P_DEV_BRANCH: develop
   H5P_STAGE_BRANCH: staging
   H5P_PROD_BRANCH: master
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
 
 jobs:
