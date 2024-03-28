@@ -4,8 +4,8 @@ on:
   #   paths:
   #   - "**"
   push:
-    paths:
-    - "**"
+    # paths:
+    # - "**"
     branches:         # array of glob patterns matching against refs/heads. Optional; defaults to all
     - develop          # triggers on pushes that contain changes in develop
     - staging          # triggers on pushes that contain changes in staging
