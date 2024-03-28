@@ -72,13 +72,13 @@ jobs:
     - name: Deploy
       run: |
         # Deploy to Instance
-        export DOCKER_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
+        
         export DOCKER_CRON_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CRON_IMAGE
         echo "$SSH_PRIVATE_KEY" | base64 -d > ssh_key.pem
         chmod 600 ssh_key.pem
         
         if [ ${{ github.ref }} = 'refs/heads/develop' ]; then
-          ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${DEV_SSH_HOST} 'cd /curriki && docker service update --image $DOCKER_IMAGE_NAME currikistack_currikiprod-api'
+          ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${DEV_SSH_HOST} 'export DOCKER_IMAGE_NAME=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE && cd /curriki && docker service update --image $DOCKER_IMAGE_NAME currikistack_currikiprod-api'
         elif [ ${{ github.ref }} = 'refs/heads/master' ]; then
           echo "In Master"
         else
